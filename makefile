@@ -39,4 +39,7 @@ $(TDIR)/testFolder:
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(HDIR)/*~
+	rm -f $(ODIR)/*.o
+	rm -f *~ core
+	rm -f $(HDIR)/*~
+	rm -f $(TDIR)/testFolder

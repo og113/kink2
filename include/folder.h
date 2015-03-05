@@ -100,6 +100,13 @@ public:
 		System(){}										// constructor
 		virtual string		message() const;			// message to be passed for printing
 	};
+	class Add: public SimpleError{
+	public:
+		Add(const string s): Filename(s) {}				// constructor
+		virtual string		message() const;			// message to be passed for printing
+	private:
+		string				Filename;					// filename that cannot be added
+	};
 };
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -182,6 +189,7 @@ public:
 	ConstFolderIterator begin() const;
 	FolderIterator 		end();
 	ConstFolderIterator end() const;
+	void				add(const Filename&);
 	void 				erase(FolderIterator);
 	Filename 			operator[](const int&) const;
 	bool 				isPresent(const Filename&);

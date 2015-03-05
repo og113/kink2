@@ -112,7 +112,11 @@ string FilenameComparatorError::LU::message() const {
 }
 
 string FolderError::System::message() const {
-	return "Folder error: system call failure, finding dataFiles.";
+	return "Folder error: system call failure, finding dataFiles";
+}
+
+string FolderError::Add::message() const {
+	return "Folder error: cannot add " + Filename + " as not consistent with Comparator";
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -360,6 +364,7 @@ ostream& operator<<(ostream& os, const FilenameComparator& fc){
 		- update
 		- begin
 		- end
+		- add
 		- erase
 		- copy
 		- copy constructor
@@ -425,6 +430,18 @@ void Folder::refresh() {
 // update
 void Folder::update() {
 	refresh();
+}
+
+// add
+void Folder::add(const Filename& f) {
+	if(Comparator(f)) {
+		Filenames.push_back(f);
+		sort();
+	}
+	else {
+		FolderError::Add e(f());
+		cerr << e;
+	}
 }
 
 // erase
