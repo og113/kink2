@@ -1,0 +1,14 @@
+what needs doing next in terms of the coding?
+DONE      - write a proper reduceTo (or removeUnsharedTimenumbers) which removes files with superfluous Timenumbers. should be symmetric (neither arg const)
+      - go through main and pi and pi3 and sphaleron and sphaleron4 and introduce folder stuff
+      - a key point is to encorporate more things into data/stable, like omega and the negative eigenvector and eigenvalue, with key Extras
+      - save other data files with a couple more Extras, at least a pot one
+      - write an overloaded save function which takes arguments from a folder, or a filenameAttributes and some extra ones too, or just a filename?
+      - write an overloaded load function which parallels the above
+      - finish Parameters (generating secondary parameters) and introduce to pi.cc, sphaleron4.cc, main.cc etc, write MainParameters and introduce to main.cc
+
+really, once some of this is done, what is more important is:
+      - to login to the imperial hpc
+      - write some bash code for parallelization
+      - run a bunch of periodic instantons on a single core
+      - step out in theta on a bunch of cores from each periodic instanton

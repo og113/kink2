@@ -501,18 +501,26 @@ ostream& operator<<(ostream& os, const Folder& f) {
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. functions acting on Filenames and Folders
-		- reduceTo
+		- removeUnshared
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// reduceTo
-void reduceTo(Folder& toReduce,const Folder& toCompare) {
-	if (toCompare.size()<toReduce.size() && toCompare.size()>0) {
-		for (unsigned int j=0;j<toReduce.size();j++) {
-			if(find(toCompare.begin(), toCompare.end(), toReduce[j]) == toCompare.end()) {
-				toReduce.erase(toReduce.begin()+j);
+// removeUnshared
+void removeUnshared(Folder& f1,Folder& f2) {
+	if (f1.size()==0) 		f2 = f1;
+	else if (f2.size()==0) 	f1 = f2;
+	else{
+		for (unsigned int j=0;j<f1.size();j++) {
+			if(find(f2.begin(), f2.end(), f1[j]) == f2.end()) {
+				f1.erase(f1.begin()+j);
+			}
+		}
+		for (unsigned int j=0;j<f2.size();j++) {
+			if(find(f1.begin(), f1.end(), f2[j]) == f1.end()) {
+				f2.erase(f2.begin()+j);
 			}
 		}
 	}
-	else if (toCompare.size()==0) toReduce = toCompare;
+	f1.sort();
+	f2.sort();
 }
 

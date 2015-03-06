@@ -207,9 +207,9 @@ ostream& operator<<(ostream&, const Folder&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. functions acting on Filenames and Folders
-		- reduceTo
+		- removeUnshared
 -------------------------------------------------------------------------------------------------------------------------*/
 
-void reduceTo(Folder&,const Folder&);
+void removeUnshared(Folder&,Folder&);
 
 #endif // __FOLDER_H_INCLUDED__

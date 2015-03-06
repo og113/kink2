@@ -8,8 +8,8 @@ CFLAGS 			= -Wall -g
 LFLAGS 			= 
 INCLUDES		= -I$(HDIR)
 LIBS 			= 
-_SRC			= simple.cc error.cc bag.cc test.cc
-_HEADERS 		= simple.h error.h bag.h
+_SRC			= simple.cc error.cc
+_HEADERS 		= simple.h error.h
 _OBJS 			= $(_SRC:.cc=.o)
 SRC 			= $(patsubst %,$(SDIR)/%,$(_SRC))
 HEADERS 		= $(patsubst %,$(HDIR)/%,$(_HEADERS))
