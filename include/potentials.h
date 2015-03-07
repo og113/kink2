@@ -1,6 +1,6 @@
-/*
+/*-------------------------------------------------------------------------------------------------------------------------
 	declarations for functions giving potentials and their derivatives
-*/
+-------------------------------------------------------------------------------------------------------------------------*/
 
 #ifndef __POTENTIALS_H_INCLUDED__
 #define __POTENTIALS_H_INCLUDED__
@@ -12,14 +12,25 @@ using namespace std;
 typedef complex<double> comp;
 
 /*-------------------------------------------------------------------------------------------------------------------------
-small structs containing required parameters
-	- params_for_V
-	- void_params
+-------------------------------------------------------------------------------------------------------------------------
+CONTENTS
+	1 - small parameters structs
+	2 - Potential class
+	3 - Vs
+	4 - dVs
+	5 - ddVs
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	1. small structs containing required parameters
+		- params_for_V
+		- void_params
 	
-also defined some extern instances
-	- params_for_V - paramsV, paramsV0
-	- void_params - paramsVoid
-N.B. the extern word is to prevent problems with multiple definitions.
+	also defined some extern instances
+		- params_for_V - paramsV, paramsV0
+		- void_params - paramsVoid
+	N.B. the extern word is to prevent problems with multiple definitions.
 -------------------------------------------------------------------------------------------------------------------------*/
 
 struct params_for_V {
@@ -30,8 +41,8 @@ struct params_for_V {
 struct void_params {};
 
 /*-------------------------------------------------------------------------------------------------------------------------
-potential class
-	- Potential
+	 2. potential class
+		- Potential
 -------------------------------------------------------------------------------------------------------------------------*/
 
 typedef comp(*PotentialType)(const comp&, const struct params_for_V&);
@@ -49,15 +60,15 @@ private:
 };
 
 /*-------------------------------------------------------------------------------------------------------------------------
-potential functions
-	- V1
-	- Z
-	- V2
-	- V3
-	- VrFn
+	3. potential functions
+		- V1
+		- Z
+		- V2
+		- V3
+		- VrFn
 	
-NB - gsl doesn't like const T &; default parameters set
-template <class T>
+	NB - gsl doesn't like const T &; default parameters set
+	template <class T>
 -------------------------------------------------------------------------------------------------------------------------*/
 
 //V1
@@ -76,12 +87,12 @@ template <class T> T V3 (const T&, const struct params_for_V&);
 comp VrFn (const comp & phi, const double & minimaL, const double & minimaR);
 
 /*-------------------------------------------------------------------------------------------------------------------------
-first derivatives of potential functions
-	- dV1
-	- dZ
-	- dV2
-	- dV3
-	- dVrFn
+	4. first derivatives of potential functions
+		- dV1
+		- dZ
+		- dV2
+		- dV3
+		- dVrFn
 
 -------------------------------------------------------------------------------------------------------------------------*/
 //dV1
@@ -100,12 +111,12 @@ template <class T> T dV3 (const T&, const struct params_for_V&);
 comp dVrFn (const comp & phi, const double & minimaL, const double & minimaR);
 	
 /*-------------------------------------------------------------------------------------------------------------------------
-second derivatives of potential functions
-	- dV1
-	- dZ
-	- dV2
-	- dV3
-	- dVrFn
+	5. second derivatives of potential functions
+		- ddV1
+		- ddZ
+		- ddV2
+		- ddV3
+		- ddVrFn
 	
 -------------------------------------------------------------------------------------------------------------------------*/
 

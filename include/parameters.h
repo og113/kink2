@@ -1,6 +1,6 @@
-/*
+/*-------------------------------------------------------------------------------------------------------------------------
 	declarations for functions and classes for dealing with parameters
-*/
+-------------------------------------------------------------------------------------------------------------------------*/
 
 #ifndef __PARAMETERS_H_INCLUDED__
 #define __PARAMETERS_H_INCLUDED__
@@ -14,7 +14,17 @@
 typedef unsigned int uint;
 
 /*-------------------------------------------------------------------------------------------------------------------------
-parameter related errors
+-------------------------------------------------------------------------------------------------------------------------
+CONTENTS
+	1 - errors
+	2 - PrimaryParameters
+	3 - SecondaryParameters
+	4 - Parameters
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	1. parameter related errors
 -------------------------------------------------------------------------------------------------------------------------*/
 
 class ParameterError {
@@ -38,13 +48,10 @@ public:
 };
 
 /*-------------------------------------------------------------------------------------------------------------------------
-the parameter structs
-	- PrimaryParameters
-	- SecondaryParameters
-	- Parameters
+	2. PrimaryParameters
 	
-N.B. for structs the compiler automatically writes the following member functions, unless user provided:
- empty constructor; copy constructor; assignment operator=; destructor
+	N.B. for structs the compiler automatically writes the following member functions, unless user provided:
+	 empty constructor; copy constructor; assignment operator=; destructor
 -------------------------------------------------------------------------------------------------------------------------*/
 
 struct PrimaryParameters {
@@ -62,20 +69,31 @@ struct PrimaryParameters {
 	void load(const string& filename);
 };
 
+/*-------------------------------------------------------------------------------------------------------------------------
+	3. SecondaryParameters
+-------------------------------------------------------------------------------------------------------------------------*/
+
 struct SecondaryParameters {
 	uint NT;
 	double epsilon;						// determined by dE
 	double R; 							// size of bubble
 	double Gamma; 						// equals exp(-theta)
+	double r0;							// minumum r (or x)
 	double L;
 	double a; 							// step sizes in each spatial dimension
 	double b; 							// step sizes in time
 	double Ta;
 	double Tc;
+	double A;							// mostly relevant for pot=3
 	vector<double> minima(2);			// minima of V
 	double mass2; 						// as derived from V''
+	double action_0;					// action normalisation
 	void setSecondaryParameters (const struct PrimaryParameters&);				// sets secondary parameters using primary ones
 };
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	4. Parameters
+-------------------------------------------------------------------------------------------------------------------------*/
 
 struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters();																// empty constructor

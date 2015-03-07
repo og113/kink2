@@ -26,21 +26,21 @@ potential functions and their derivatives
 -------------------------------------------------------------------------------------------------------------------------*/
 
 //function pointer V
-comp (*V) (const comp phi, const params_for_V&  parameters); 
+comp (*V) (const comp& phi, const params_for_V& parameters); 
 
 //function pointer Vd, for gsl
-double (*Vd) (const double phi, const params_for_V&  parameters);
+double (*Vd) (double phi, void* parameters);
 
 //function pointer dV
-comp (*dV) (const comp phi, const params_for_V&  parameters);
+comp (*dV) (const comp& phi, const params_for_V& parameters);
 
-//function pointer dVd
-double (*dVd) (const double phi, const params_for_V&  parameters);
+//function pointer dVd, for gsl
+double (*dVd) (double phi, void* parameters);
 
 ////function pointer ddV
-comp (*ddV) (const comp phi);
+comp (*ddV) (const comp& phi, const params_for_V& parameters);
 
-//function pointer ddVd
-double (*ddVd) (const double phi, const params_for_V&  parameters);
+//function pointer ddVd, for gsl
+double (*ddVd) (double phi, void* parameters);
 
 #endif // __FNPTRS_H_INCLUDED__

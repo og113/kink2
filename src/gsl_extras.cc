@@ -1,7 +1,7 @@
-/*
+/*-------------------------------------------------------------------------------------------------------------------------
 	definitions for functions using gnu standard library functions
 	must compile with -lgsl and -lgslcblas
-*/
+-------------------------------------------------------------------------------------------------------------------------*/
 
 #include <complex>
 #include <iostream>
@@ -17,12 +17,18 @@
 #include "potentials.h"
 
 /*-------------------------------------------------------------------------------------------------------------------------
-generic functions packaging gsl functions
-	- double rootFinder(gsl_function_fdf * xFDF, double rootGuess)
-	- double brentRootFinder(gsl_function * xF, const double & rootGuess, const double & rootLower, const double &rootUpper)
-	- double brentMinimum (gsl_function * xF, const double & minimumGuess, const double & minimumLower, const double & minimumUpper)
-	- vector <double> rootsFn (gsl_function_fdf * xFDF, const double & lowLimit, const double & highLimit,\
-							const unsigned int & rootLoops)
+-------------------------------------------------------------------------------------------------------------------------
+CONTENTS
+	1 - rootFinders
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	1. rootfinders
+		- rootFinder
+		- brentRootFinder
+		- brentMinimum
+		- rootsFn
 -------------------------------------------------------------------------------------------------------------------------*/
 
 //function to find a root of function FDF, given initial guess, using newton method
