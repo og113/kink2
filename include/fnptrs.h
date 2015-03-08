@@ -29,18 +29,18 @@ potential functions and their derivatives
 comp (*V) (const comp& phi, const params_for_V& parameters); 
 
 //function pointer Vd, for gsl
-double (*Vd) (double phi, void* parameters);
+double (*Vd) (double phi,  params_for_V parameters);
 
 //function pointer dV
 comp (*dV) (const comp& phi, const params_for_V& parameters);
 
 //function pointer dVd, for gsl
-double (*dVd) (double phi, void* parameters);
+double (*dVd) (double phi,  params_for_V parameters);
 
 ////function pointer ddV
 comp (*ddV) (const comp& phi, const params_for_V& parameters);
 
 //function pointer ddVd, for gsl
-double (*ddVd) (double phi, void* parameters);
+double (*ddVd) (double phi,  params_for_V parameters);
 
 #endif // __FNPTRS_H_INCLUDED__

@@ -26,6 +26,7 @@ CONTENTS
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	1. specific functions F, FDF etc
+		- wrapped functions
 		- VdV
 		- dVddV
 		- struct ec_params
@@ -33,20 +34,28 @@ CONTENTS
 		- S1 integrand
 		- rho integrand
 -------------------------------------------------------------------------------------------------------------------------*/
+
+// wrapped functions
+// wrapped functions
+#define WRAP(FN) double FN##_wrapped(double x, void* parameters) { return FN(x, *((params_for_V*)parameters)); }
+WRAP(Vd)
+WRAP(dVd)
+WRAP(ddVd)
+
 //V FDF gsl function
 void VdV (double x, void * parameters, double * f, double* df) 
 	{
 	struct params_for_V * params = (struct params_for_V *)parameters;
-	*f =  Vd(x,*params);
-	*df = dVd(x,*params);
+	*f =  Vd_wrapped(x,params);
+	*df = dVd_wrapped(x,params);
 	}
 	
 //dV FDF gsl functions
 void dVddV (double x, void * parameters, double * f, double* df) 
 	{
 	struct params_for_V * params = (struct params_for_V *)parameters;
-	*f =  dVd(x,*params);
-	*df = ddVd(x,*params);
+	*f =  dVd_wrapped(x,params);
+	*df = ddVd_wrapped(x,params);
 	}
 
 //energy change gsl function : V(minima[1])-V(minima[0])-dE
@@ -79,7 +88,7 @@ double rhoIntegrand (double x, void * parameters)
 -------------------------------------------------------------------------------------------------------------------------*/
 
 //program to find epsilon given gsl functions df and dE
-void epsilonFn (gsl_function * xF, gsl_function * xEC, double * xdE, double * xEpsilon, vector<double>* xMinima)
+void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE, double * xEpsilon, vector<double>* xMinima)
 	{
 	double closenessdE = 1.0e-14;
 	vector<double> dE_test(1);	dE_test[0] = 1.0;
@@ -118,6 +127,6 @@ void epsilonFn (gsl_function * xF, gsl_function * xEC, double * xdE, double * xE
 			break;
 			}
 		}
-	*xdE = newdE;
+	//*xdE = newdE;
 	}
 

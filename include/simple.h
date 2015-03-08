@@ -13,8 +13,14 @@ declarations of some very simple functions and classes
 
 using namespace std;
 
+#ifndef pi
+#define pi 3.14159265359
+#endif
+#ifndef MIN_NUMBER
 #define MIN_NUMBER 1.0e-16
+#endif
 
+typedef unsigned int uint;
 typedef complex<double> comp;
 typedef Eigen::VectorXd vec;
 typedef Eigen::VectorXcd cVec;

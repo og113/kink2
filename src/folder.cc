@@ -361,6 +361,7 @@ ostream& operator<<(ostream& os, const FilenameComparator& fc){
 		- isPresent(Filename)
 		- refresh
 		- sort
+		- order
 		- update
 		- begin
 		- end
@@ -407,6 +408,11 @@ ConstFolderIterator Folder::end() const{
 // sort
 void Folder::sort() {
 	std::sort(Filenames.begin(),Filenames.end());
+}
+
+// order
+void Folder::order() {
+	Folder::sort();
 }
 
 // refresh
@@ -520,7 +526,7 @@ void removeUnshared(Folder& f1,Folder& f2) {
 			}
 		}
 	}
-	f1.sort();
-	f2.sort();
+	f1.order();
+	f2.order();
 }
 

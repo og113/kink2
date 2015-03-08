@@ -7,8 +7,7 @@
 
 #include <iostream>
 #include <iomanip>
-#include <map>
-#include "map_extras.h"
+#include <vector>
 #include "error.h"
 
 typedef unsigned int uint;
@@ -38,7 +37,7 @@ public:
 		string	pName;
 	};
 	
-	class Save: public SimpleError{
+	class Load: public SimpleError{
 	public:
 		Load(const string& s) : filename(s) {}					// constructor
 		virtual string		message() const;					// message to be passed for printing
@@ -65,7 +64,7 @@ struct PrimaryParameters {
 	double Tb;  						// BC section includes both corner points
 	double theta;
 	double reg;
-	void save(const string& filename);
+	void save(const string& filename) const;
 	void load(const string& filename);
 };
 
@@ -85,7 +84,7 @@ struct SecondaryParameters {
 	double Ta;
 	double Tc;
 	double A;							// mostly relevant for pot=3
-	vector<double> minima(2);			// minima of V
+	vector<double> minima;				// minima of V
 	double mass2; 						// as derived from V''
 	double action_0;					// action normalisation
 	void setSecondaryParameters (const struct PrimaryParameters&);				// sets secondary parameters using primary ones
@@ -97,10 +96,11 @@ struct SecondaryParameters {
 
 struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters();																// empty constructor
-	Parameters(const PrimaryParameters& p1, const SecondaryParmeters& p2);		// constructor using primary and secondary parameters
+	Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2);		// constructor using primary and secondary parameters
 	void updateSecondaryParameters ();											// uses setSecondaryParameters
-	void changeParameters (const string& pName, const T& pValue, struct Parameters&); // change all due to change in one
-	void print(const struct Parameters&);
+	void changeParameters (const string& pName, const double& pValue, struct Parameters&); // change all due to change in one
+	void changeParameters (const string& pName, const uint& pValue, struct Parameters&); // change all due to change in one
+	void print();
 };
 
 #endif // __PARAMETERS_H_INCLUDED__

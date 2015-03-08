@@ -3,6 +3,8 @@ definitions of some very simple functions and classes
 -------------------------------------------------------------------------------------------------------------------------*/
 #include <string>
 #include <sstream>
+#include <iostream>
+#include <fstream>
 #include <cmath>
 #include <vector>
 #include <complex>
@@ -19,6 +21,7 @@ CONTENTS
 	3 - factorial
 	4 - currentDateTime
 	5 - copyFile
+	6 - explicit instantiation
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -145,3 +148,18 @@ void copyFile(const string & inputFile, const string & outputFile) {
 	ofstream  os(outputFile.c_str(), ios::binary);
 	os << is.rdbuf();
 }
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	6. explicit instantiation
+		- numberToString, stringToNumber
+-------------------------------------------------------------------------------------------------------------------------*/
+
+template string numberToString<int>(const int&);
+template string numberToString<uint>(const uint&);
+template string numberToString<double>(const double&);
+template string numberToString<comp>(const comp&);
+
+template int stringToNumber<int>(const string&);
+template uint stringToNumber<uint>(const string&);
+template double stringToNumber<double>(const string&);
+template comp stringToNumber<comp>(const string&);

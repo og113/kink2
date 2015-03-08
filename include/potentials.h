@@ -25,11 +25,9 @@ CONTENTS
 /*-------------------------------------------------------------------------------------------------------------------------
 	1. small structs containing required parameters
 		- params_for_V
-		- void_params
 	
 	also defined some extern instances
 		- params_for_V - paramsV, paramsV0
-		- void_params - paramsVoid
 	N.B. the extern word is to prevent problems with multiple definitions.
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -37,8 +35,6 @@ struct params_for_V {
 	double epsi;
 	double aa;
 };
-
-struct void_params {};
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	 2. potential class

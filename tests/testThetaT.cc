@@ -17,9 +17,9 @@ struct params_for_V paramsV;
 paramsV.epsi = 0.05;
 paramsV.aa = 0.4;
 
-struct void_params paramsVoid;
+//struct void_params paramsVoid;
 
-double d = 0.9;
+//double d = 0.9;
 comp c(-1.0,0.0);
 
 PotentialType pot = &V2<comp>;

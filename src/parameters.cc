@@ -5,10 +5,12 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
-#include <map>
 #include <cmath>
 #include "simple.h"
 #include "potentials.h"
+#include "fnptrs.h"
+#include "gsl_extras.h"
+#include "thetaT.h"
 #include "parameters.h"
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -77,9 +79,10 @@ void PrimaryParameters::load(const string& filename) {
 	string line;
 	bool set = false;
 	while(getline(is,line)) {
-		if (line[0]=="#") continue;
+		if (line[0]=='#') continue;
 		if (line.empty()) break;
 		set = true;
+		istringstream ss(line);
 		ss >> "pot" >> pot;
 		ss >> "N" >> N;
 		ss >> "Na" >> Na;
@@ -100,20 +103,23 @@ void PrimaryParameters::load(const string& filename) {
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3.SecondaryParameters member functions
+		- wrapped functions to take void* instead of a parameter struct, declared and defined here
 		- set SecondaryParameters from PrimaryParameters
 -------------------------------------------------------------------------------------------------------------------------*/
 
+// wrapped functions
+#define WRAP(FN) double FN##_wrapped(double x, void* parameters) { return FN(x, (params_for_V*)parameters); }
+WRAP(Vd)
+
 // set secondary parameters
 void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters& pp) {
-	NT = Na + Nb + Nc;
-	A = 0.4;
-	Gamma = exp(-pp.theta);
-	
-	#define WRAP(FN, TYPE) double FN##_wrapped(double x, void* parameters) { return FN(x, (TYPE*)parameters); }
-	WRAP(float_function, float)
-	WRAP(double_function, double)
+	NT = Na + Nb + Nc; 										////////// NT
+	A = 0.4;												////////// A
+	Gamma = exp(-pp.theta);									////////// Gamma
 	
 	double epsilon0;
+	params_for_V paramsV, paramsV0;
+	minima.reserve(2);
 	//potential functions
 	if (pp.pot==1) {
 		Vd = &V1;
@@ -121,7 +127,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		ddVd = &ddV1;
 		epsilon0 = 0.0;
 		epsilon = pp.dE;
-		r0 = 0.0;
+		r0 = 0.0;											////////// r0
 	}
 	else if (pp.pot==2) {
 		Vd = &V2;
@@ -129,7 +135,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		ddVd = &ddV2;
 		epsilon0 = 0.74507774287199924;
 		epsilon = 0.75;
-		r0 = 0.0;
+		r0 = 0.0;											////////// r0
 	}
 	else if (pp.pot==3) {
 		Vd = &V3;
@@ -137,47 +143,44 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		ddVd = &ddV3;
 		epsilon0 = 0.0;
 		epsilon = 0.0;
-		r0 = MIN_NUMBER;
+		r0 = MIN_NUMBER;									////////// r0
 	}
 	else
-		cerr << "pot option not available, pot = " << pot << endl;
+		cerr << "pot option not available, pot = " << pp.pot << endl;
 	paramsV  = {epsilon, A};
 	paramsV0 = {epsilon0, A};
-	paramsVoid = {};
 	
 	// epsilon, minima, mass2, action_0
 	if (pp.pot!=3) {
-		//gsl function for dV(phi)
+		//gsl function for V(phi)
 		gsl_function F;
-		F.function = Vd;
+		F.function = Vd_wrapped;
 		F.params = &paramsV;	
 
-		//finding preliminary roots of dV(phi)=0
-		minima[0] = brentMinimum(&F, -1.0, -3.0, 0.0);
-		minima[1] = brentMinimum(&F, 1.2, 0.5, 3.0);
+		//finding preliminary minima of V(phi)
+		minima[0] = brentMinimum(&F, -1.0, -3.0, 0.0);		////////// minima
+		minima[1] = brentMinimum(&F, 1.2, 0.5, 3.0);		////////// minima
 
 		//gsl function for V(root2)-V(root1)-dE
-		struct ec_params ec_params = { A, minima[0], minima[1], dE};
+		struct ec_params ec_params = { A, minima[0], minima[1], pp.dE};
 		gsl_function EC;
 		EC.function = &ec;
 		EC.params = &ec_params;
 
 		//evaluating epsilon, new root and dE may change slightly
-		epsilonFn(&F,&EC,&dE,&epsilon,&minima);
+		epsilonFn(&F,&EC,&pp.dE,&epsilon,&minima);
 
 		//evaluating mass about false vac
-		mass2 = ddVd(minima[0],&paramsV);
+		mass2 = ddVd(minima[0],&paramsV);					////////// mass2
 
 		//finding root0 of dV0(phi)=0;
 		vector<double> minima0(3);
-		if (pot[0]=='1')
-			{
+		if (pp.pot==1) {
 			minima0[0] = -1.0; minima0[1] = 1.0;
-			}
-		else if (pot[0]=='2')
-			{
+		}
+		else if (pp.pot==2) {
 			gsl_function V0;
-			V0.function = Vd;
+			V0.function = Vd_wrapped;
 			V0.params = &paramsV0;	
 			minima0[0] = brentMinimum(&V0, -1.0, -3.0, 0.0);
 			minima0[0] = brentMinimum(&V0, 1.2, 0.5, 3.0);
@@ -187,26 +190,39 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 			EC0.params = &ec0_params;
 			double dE0 = 0.0;
 			epsilonFn(&V0,&EC0,&dE0,&epsilon0,&minima0);
-			}
+		}
 
 		//finding S1
-		double S1error;
+		double S1, S1error;
 		gsl_function S1_integrand;
 		S1_integrand.function = &s1Integrand;
 		S1_integrand.params = &paramsV0;
 		gsl_integration_workspace *w = gsl_integration_workspace_alloc(1e4);
 		gsl_integration_qag(&S1_integrand, minima0[0], minima0[1], MIN_NUMBER, 1.0e-8, 1e4, 4, w, &S1, &S1error);
 		gsl_integration_workspace_free(w);
-		if (S1error>1.0e-8) { cout << "S1 error = " << S1error << endl;}
+		if (S1error>1.0e-8) cerr << "S1 error = " << S1error << endl;
+		
+		R = dE/S1;											////////// R
+		action0 = -pi*epsilon*pow(R,2)/2.0 + pi*R*S1;		////////// action0
+		L = pp.LoR*R;										////////// L
+		if (pp.Tb<R) {
+			double angle = asin(Tb/R);
+			double Ltemp = 1.5*(1.5*Tb*tan(angle));
+			if (Ltemp<L) L=Ltemp; //making sure to use the smaller of the two possible Ls
+		}
 	}
-	else {
-		mass2 = 1.0;
-		minima[0] = 0.0; //only one minimum
-		R = 10.0; alpha = 0.0; //not used
+	else if (pot==3) {
+		mass2 = 1.0;										////////// mass2
+		minima[0] = 0.0, minima[1] = 0.0; 					////////// minima
+		R = 10.0;											////////// R
+		action0 = 8.0*pow(pi,2.0)/3.0;						////////// action0
+		L = pp.LoR*R;										////////// L
 	}
 	
-	// R, L, a, b, Ta, Tc
-
+	a = L/(N-1.0);											////////// a
+	b = Tb/(Nb-1.0);										////////// b
+	Ta = b*(double)Na;										////////// Ta
+	Tc = b*(double)Nc;										////////// Tc
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -219,18 +235,33 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // empty constructor
-Parameters::Parameters(): PrimaryParmaeters(), SecondaryParameters()	{}			
+Parameters::Parameters(): PrimaryParameters(), SecondaryParameters()	{}			
 
 // constructor using primary and secondary parameters
 Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParmeters& p2): \
 					PrimaryParmaeters(p1), SecondaryParameters(p2)	{}				
 
 // print to shell
-void Parameters::printParameters() const {
-	printf("%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s\n","N","Na","Nb","Nc","L","Ta","Tb","R","dE","theta","reg");
-	printf("%8i%8i%8i%8i%8g%8g%8g%8g%8g%8g%8g\n",\
+void Parameters::print() const {
+	printf("%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s8s%8s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
+	printf("%8i%8i%8i%8i%8.4g%8.4g%8.4g%8.4g%8.4g%8.4g%8.4g%8.4g\n",\
 			N,Na,Nb,Nc,\
-			L,Ta,Tb,R,\
+			L,Ta,Tb,Tc,R,\
 			dE,theta,reg);
 	printf("\n");
+}
+
+// update parameters, uses setSecondaryParameters
+void updateSecondaryParameters () {
+	SecondaryParameters::setSecondaryParameters(PrimaryParameters);
+}
+
+// change all parameters due to change in one, uint
+void changeParameters (const string& pName, const uint& pValue, struct Parameters&) {
+
+}
+
+// change all parameters due to change in one, double
+void changeParameters (const string& pName, const double& pValue, struct Parameters&) {
+
 }
