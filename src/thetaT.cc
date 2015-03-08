@@ -36,26 +36,25 @@ CONTENTS
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // wrapped functions
-// wrapped functions
-#define WRAP(FN) double FN##_wrapped(double x, void* parameters) { return FN(x, *((params_for_V*)parameters)); }
-WRAP(Vd)
-WRAP(dVd)
-WRAP(ddVd)
+#define WRAP1(FN) double FN##_wrapped1(double x, void* parameters) { return FN(x, *((params_for_V*)parameters)); }
+WRAP1(Vd)
+WRAP1(dVd)
+WRAP1(ddVd)
 
 //V FDF gsl function
 void VdV (double x, void * parameters, double * f, double* df) 
 	{
 	struct params_for_V * params = (struct params_for_V *)parameters;
-	*f =  Vd_wrapped(x,params);
-	*df = dVd_wrapped(x,params);
+	*f =  Vd_wrapped1(x,params);
+	*df = dVd_wrapped1(x,params);
 	}
 	
 //dV FDF gsl functions
 void dVddV (double x, void * parameters, double * f, double* df) 
 	{
 	struct params_for_V * params = (struct params_for_V *)parameters;
-	*f =  dVd_wrapped(x,params);
-	*df = ddVd_wrapped(x,params);
+	*f =  dVd_wrapped1(x,params);
+	*df = ddVd_wrapped1(x,params);
 	}
 
 //energy change gsl function : V(minima[1])-V(minima[0])-dE

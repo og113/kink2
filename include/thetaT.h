@@ -56,6 +56,6 @@ double rhoIntegrand (double x, void * parameters);
 -------------------------------------------------------------------------------------------------------------------------*/
 
 //program to find epsilon given gsls function df and dE
-void epsilonFn (gsl_function * xF, gsl_function * xEC, double * xdE, double * xEpsilon, vector<double>* xMinima);
+void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE, double * xEpsilon, vector<double>* xMinima);
 	
 #endif // __THETAT_H_INCLUDED__

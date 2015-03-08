@@ -83,18 +83,19 @@ void PrimaryParameters::load(const string& filename) {
 		if (line.empty()) break;
 		set = true;
 		istringstream ss(line);
-		ss >> "pot" >> pot;
-		ss >> "N" >> N;
-		ss >> "Na" >> Na;
-		ss >> "Nb" >> Nb;
-		ss >> "Nc" >> Nc;
-		ss >> "LoR" >> LoR;
-		ss >> "dE" >> dE;
-		ss >> "Tb" >> Tb;
-		ss >> "theta" >> theta;
-		ss >> "reg" >> reg;
-		ss.close();
+		string dross;
+		ss >> dross >> pot;
+		ss >> dross >> N;
+		ss >> dross >> Na;
+		ss >> dross >> Nb;
+		ss >> dross >> Nc;
+		ss >> dross >> LoR;
+		ss >> dross >> dE;
+		ss >> dross >> Tb;
+		ss >> dross >> theta;
+		ss >> dross >> reg;
 	}
+	is.close();
 	if (!set) {
 		ParameterError::Load e(filename);
 		throw e;
@@ -108,12 +109,12 @@ void PrimaryParameters::load(const string& filename) {
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // wrapped functions
-#define WRAP(FN) double FN##_wrapped(double x, void* parameters) { return FN(x, (params_for_V*)parameters); }
-WRAP(Vd)
+#define WRAP2(FN) double FN##_wrapped2(double x, void* parameters) { return FN(x, *((params_for_V*)parameters)); }
+WRAP2(Vd)
 
 // set secondary parameters
 void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters& pp) {
-	NT = Na + Nb + Nc; 										////////// NT
+	NT = pp.Na + pp.Nb + pp.Nc; 							////////// NT
 	A = 0.4;												////////// A
 	Gamma = exp(-pp.theta);									////////// Gamma
 	
@@ -147,14 +148,16 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 	}
 	else
 		cerr << "pot option not available, pot = " << pp.pot << endl;
-	paramsV  = {epsilon, A};
-	paramsV0 = {epsilon0, A};
+	paramsV.epsi = epsilon;
+	paramsV.aa = A;
+	paramsV0.epsi = epsilon0;
+	paramsV0.aa = A;
 	
 	// epsilon, minima, mass2, action_0
 	if (pp.pot!=3) {
 		//gsl function for V(phi)
 		gsl_function F;
-		F.function = Vd_wrapped;
+		F.function = Vd_wrapped2;
 		F.params = &paramsV;	
 
 		//finding preliminary minima of V(phi)
@@ -171,7 +174,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		epsilonFn(&F,&EC,&pp.dE,&epsilon,&minima);
 
 		//evaluating mass about false vac
-		mass2 = ddVd(minima[0],&paramsV);					////////// mass2
+		mass2 = ddVd(minima[0],paramsV);					////////// mass2
 
 		//finding root0 of dV0(phi)=0;
 		vector<double> minima0(3);
@@ -180,7 +183,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		}
 		else if (pp.pot==2) {
 			gsl_function V0;
-			V0.function = Vd_wrapped;
+			V0.function = Vd_wrapped2;
 			V0.params = &paramsV0;	
 			minima0[0] = brentMinimum(&V0, -1.0, -3.0, 0.0);
 			minima0[0] = brentMinimum(&V0, 1.2, 0.5, 3.0);
@@ -202,27 +205,27 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		gsl_integration_workspace_free(w);
 		if (S1error>1.0e-8) cerr << "S1 error = " << S1error << endl;
 		
-		R = dE/S1;											////////// R
-		action0 = -pi*epsilon*pow(R,2)/2.0 + pi*R*S1;		////////// action0
+		R = pp.dE/S1;											////////// R
+		action_0 = -pi*epsilon*pow(R,2)/2.0 + pi*R*S1;		////////// action0
 		L = pp.LoR*R;										////////// L
 		if (pp.Tb<R) {
-			double angle = asin(Tb/R);
-			double Ltemp = 1.5*(1.5*Tb*tan(angle));
+			double angle = asin(pp.Tb/R);
+			double Ltemp = 1.5*(1.5*pp.Tb*tan(angle));
 			if (Ltemp<L) L=Ltemp; //making sure to use the smaller of the two possible Ls
 		}
 	}
-	else if (pot==3) {
+	else if (pp.pot==3) {
 		mass2 = 1.0;										////////// mass2
 		minima[0] = 0.0, minima[1] = 0.0; 					////////// minima
 		R = 10.0;											////////// R
-		action0 = 8.0*pow(pi,2.0)/3.0;						////////// action0
+		action_0 = 8.0*pow(pi,2.0)/3.0;						////////// action0
 		L = pp.LoR*R;										////////// L
 	}
 	
-	a = L/(N-1.0);											////////// a
-	b = Tb/(Nb-1.0);										////////// b
-	Ta = b*(double)Na;										////////// Ta
-	Tc = b*(double)Nc;										////////// Tc
+	a = L/(pp.N-1.0);										////////// a
+	b = pp.Tb/(pp.Nb-1.0);									////////// b
+	Ta = b*(double)pp.Na;									////////// Ta
+	Tc = b*(double)pp.Nc;									////////// Tc
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -230,7 +233,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		- empty constructor
 		- constructor from PrimaryParameters and SecondaryParameters
 		- print to shell
-		- update secondary parameters
+		- set secondary parameters
 		- change parameters based on change in one
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -238,12 +241,12 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 Parameters::Parameters(): PrimaryParameters(), SecondaryParameters()	{}			
 
 // constructor using primary and secondary parameters
-Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParmeters& p2): \
-					PrimaryParmaeters(p1), SecondaryParameters(p2)	{}				
+Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2): \
+					PrimaryParameters(p1), SecondaryParameters(p2)	{}				
 
 // print to shell
 void Parameters::print() const {
-	printf("%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s8s%8s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
+	printf("%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s8s%8s%8s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
 	printf("%8i%8i%8i%8i%8.4g%8.4g%8.4g%8.4g%8.4g%8.4g%8.4g%8.4g\n",\
 			N,Na,Nb,Nc,\
 			L,Ta,Tb,Tc,R,\
@@ -251,17 +254,28 @@ void Parameters::print() const {
 	printf("\n");
 }
 
-// update parameters, uses setSecondaryParameters
-void updateSecondaryParameters () {
-	SecondaryParameters::setSecondaryParameters(PrimaryParameters);
+// set parameters from PrimaryParameters
+void Parameters::setSecondaryParameters () {
+	PrimaryParameters p1;
+	p1.pot = pot;
+	p1.N = N;
+	p1.Na = Na;
+	p1.Nb = Nb;
+	p1.Nc = Nc;
+	p1.LoR = LoR;
+	p1.dE = dE;
+	p1.Tb = Tb;
+	p1.theta = theta;
+	p1.reg = reg;
+	SecondaryParameters::setSecondaryParameters(p1);
 }
 
 // change all parameters due to change in one, uint
-void changeParameters (const string& pName, const uint& pValue, struct Parameters&) {
+void Parameters::changeParameters (const string& pName, const uint& pValue, struct Parameters&) {
 
 }
 
 // change all parameters due to change in one, double
-void changeParameters (const string& pName, const double& pValue, struct Parameters&) {
+void Parameters::changeParameters (const string& pName, const double& pValue, struct Parameters&) {
 
 }
