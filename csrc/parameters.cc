@@ -6,10 +6,17 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <iostream>
+#include <vector>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_poly.h>
+#include <gsl/gsl_roots.h>
+#include <gsl/gsl_integration.h>
+#include <gsl/gsl_min.h>
 #include "simple.h"
 #include "potentials.h"
 #include "gsl_extras.h"
-#include "thetaT.h"
 #include "parameters.h"
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -100,20 +107,113 @@ void PrimaryParameters::load(const string& filename) {
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3.SecondaryParameters member functions
-		- wrapped functions to take void* instead of a parameter struct, declared and defined here
+		- wrapped functions
+		- VdV
+		- dVddV
+		- struct ec_params
+		- ec (energy change: V(minima[1])-V(minima[0])-dE)
+		- S1 integrand
+		- rho integrand
 		- set SecondaryParameters from PrimaryParameters
 		- operator<<
+		
+	N.B. "static" before a function makes it local to the .cc file
 -------------------------------------------------------------------------------------------------------------------------*/
 
-//function pointer Vd, for gsl
+//function pointer Vd, dVd, ddVd for gsl
 static double (*Vd_local) (const double& phi, const params_for_V& parameters);
 static double (*dVd_local) (const double& phi, const params_for_V& parameters);
 static double (*ddVd_local) (const double& phi, const params_for_V& parameters);
 
 // wrapped functions
-#define WRAP2(FN) double FN##_wrapped2(double x, void* parameters) { return FN(x, *((params_for_V*)parameters)); }
-WRAP2(Vd_local)
-#undef WRAP2
+#define WRAP(FN) double FN##_wrapped(double x, void* parameters) { return FN(x, *((params_for_V*)parameters)); }
+WRAP(Vd_local)
+WRAP(dVd_local)
+WRAP(ddVd_local)
+#undef WRAP
+
+//V FDF gsl function
+void VdV (double x, void * parameters, double * f, double* df) 
+	{
+	struct params_for_V * params = (struct params_for_V *)parameters;
+	*f =  Vd_local_wrapped(x,params);
+	*df = dVd_local_wrapped(x,params);
+	}
+	
+//dV FDF gsl functions
+void dVddV (double x, void * parameters, double * f, double* df) 
+	{
+	struct params_for_V * params = (struct params_for_V *)parameters;
+	*f =  dVd_local_wrapped(x,params);
+	*df = ddVd_local_wrapped(x,params);
+	}
+
+//energy change gsl function : V(minima[1])-V(minima[0])-dE
+double ec (double epsi, void * parameters) {
+	struct ec_params * paramsIn = (struct ec_params *)parameters;
+	struct params_for_V paramsOut;
+	paramsOut.epsi = epsi;
+	paramsOut.aa = (paramsIn->aa);
+	double minima1 = (paramsIn->minima1);
+	double minima0 = (paramsIn->minima0);
+	double de = (paramsIn->de);
+	return Vd_local(minima0,paramsOut) - Vd_local(minima1,paramsOut) - de;
+}
+	
+//S1 integrand
+double s1Integrand (double x, void * parameters) {
+	struct params_for_V * params = (struct params_for_V *)parameters;
+	return pow(2.0*Vd_local(x,*params),0.5);
+}
+
+//rho integrand
+double rhoIntegrand (double x, void * parameters) {
+	struct params_for_V * params = (struct params_for_V *)parameters;
+	return pow(2.0*Vd_local(x,*params),-0.5);
+}
+
+//program to find epsilon given gsl functions df and dE
+void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE, double * xEpsilon, vector<double>* xMinima)
+	{
+	double closenessdE = 1.0e-14;
+	vector<double> dE_test(1);	dE_test[0] = 1.0;
+	double newdE = *xdE;
+	struct params_for_V * Fparameters = (struct params_for_V *) (*xF).params;
+	struct ec_params * ECparameters = (struct ec_params *) (*xEC).params;
+	unsigned int counter = 0;
+	unsigned int maxCounter = 1e4;
+	while (dE_test.back()>closenessdE)
+		{
+		//find roots of ec(epsilon)=0
+		*xEpsilon = brentRootFinder(xEC,*xEpsilon,*xEpsilon/2.0,*xEpsilon*2.0);
+		//assign new value of epsilon to xF
+		(*Fparameters).epsi = *xEpsilon;
+		(*xF).params = Fparameters;
+		//finding new roots of dV(phi)=0
+		(*xMinima)[0] = brentMinimum(xF,-1.0,-3.0,0.0);
+		(*xMinima)[1] = brentMinimum(xF,1.2,0.5,3.0);
+		//assign new roots to xECDF
+		(*ECparameters).minima0 = (*xMinima)[0];
+		(*ECparameters).minima1 = (*xMinima)[1];
+		(*xEC).params = ECparameters;
+		//evaluating new dE
+		newdE = (*(*xEC).function)(*xEpsilon,ECparameters) + *xdE;
+		//evaluating test
+		if (abs(*xdE)>1.0e-16) dE_test.push_back(abs((newdE-(*xdE))/(*xdE)));
+		else 						dE_test.push_back(abs(newdE-(*xdE)));
+		counter++;
+		//test if too many runs
+		if (counter>maxCounter)
+			{
+			cout << "epsilonFn error, more that " << maxCounter << " loops, consider reducing closenessdE" << endl;
+			cout << "dE_test.back() = " << dE_test.back() << " , closenessdE = " << closenessdE << endl;
+			cout << "dE = " << *xdE << " , minima[0] = " << (*xMinima)[0] << " , minima[1] = " << (*xMinima)[1];
+			cout << " , epsilon = " << *xEpsilon << endl << endl;
+			break;
+			}
+		}
+	//*xdE = newdE;
+	}
 
 // set secondary parameters
 void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters& pp) {
@@ -160,7 +260,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 	if (pp.pot!=3) {
 		//gsl function for V(phi)
 		gsl_function F;
-		F.function = Vd_local_wrapped2;
+		F.function = Vd_local_wrapped;
 		F.params = &paramsV;	
 
 		//finding preliminary minima of V(phi)
@@ -189,7 +289,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		}
 		else if (pp.pot==2) {
 			gsl_function V0;
-			V0.function = Vd_local_wrapped2;
+			V0.function = Vd_local_wrapped;
 			V0.params = &paramsV0;	
 			minima0[0] = brentMinimum(&V0, -1.0, -3.0, 0.0);
 			minima0[0] = brentMinimum(&V0, 1.2, 0.5, 3.0);
@@ -211,7 +311,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		gsl_integration_workspace_free(w);
 		if (S1error>1.0e-8) cerr << "S1 error = " << S1error << endl;
 		
-		R = pp.dE/S1;											////////// R
+		R = S1/pp.dE;										////////// R
 		action0 = -pi*epsilon*pow(R,2)/2.0 + pi*R*S1;		////////// action0
 		L = pp.LoR*R;										////////// L
 		if (pp.Tb<R) {

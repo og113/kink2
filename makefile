@@ -26,10 +26,10 @@ LFLAGS 			=
 INCLUDES		= -I$(HDIR) -I/home/og/Documents/c++/eigen-eigen-1306d75b4a21 -I/home/og/Documents/c++/gnuplot/gnuplot-cpp
 LIBS 			= -lm -lgsl -lgslcblas
 
-_HEADERS 		= error.h fnptrs.h folder.h gsl_extras.h parameters.h potentials.h simple.h thetaT.h 
+_HEADERS 		= error.h fnptrs.h folder.h gsl_extras.h parameters.h potentials.h simple.h 
 HEADERS 		= $(patsubst %,$(HDIR)/%,$(_HEADERS))
 
-_COMMONSRC		= error.cc folder.cc gsl_extras.cc parameters.cc potentials.cc simple.cc thetaT.cc
+_COMMONSRC		= error.cc folder.cc gsl_extras.cc parameters.cc potentials.cc simple.cc
 _COMMONOBJS		= $(_COMMONSRC:.cc=.o)
 COMMONSRC		= $(patsubst %,$(CSDIR)/%,$(_COMMONSRC))
 COMMONOBJS 		= $(patsubst %,$(CODIR)/%,$(_COMMONOBJS))
