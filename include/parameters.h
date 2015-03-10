@@ -48,11 +48,14 @@ public:
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. PrimaryParameters
+		- PrimaryParameters
+		- operator<<
 	
 	N.B. for structs the compiler automatically writes the following member functions, unless user provided:
 	 empty constructor; copy constructor; assignment operator=; destructor
 -------------------------------------------------------------------------------------------------------------------------*/
 
+// PrimaryParameters
 struct PrimaryParameters {
 	uint pot;							// potential
 	uint N;
@@ -68,10 +71,16 @@ struct PrimaryParameters {
 	void load(const string& filename);
 };
 
+// operator<<
+ostream& operator<<(ostream&, const PrimaryParameters&);
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	3. SecondaryParameters
+		- SecondaryParameters
+		- operator<<
 -------------------------------------------------------------------------------------------------------------------------*/
 
+// SecondaryParameters
 struct SecondaryParameters {
 	uint NT;
 	double epsilon;						// determined by dE
@@ -86,9 +95,12 @@ struct SecondaryParameters {
 	double A;							// mostly relevant for pot=3
 	vector<double> minima;				// minima of V
 	double mass2; 						// as derived from V''
-	double action_0;					// action normalisation
+	double action0;					// action normalisation
 	void setSecondaryParameters (const struct PrimaryParameters&);				// sets secondary parameters using primary ones
 };
+
+// operator<<
+ostream& operator<<(ostream&, const SecondaryParameters&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. Parameters
@@ -97,7 +109,7 @@ struct SecondaryParameters {
 struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters();																// empty constructor
 	Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2);		// constructor using primary and secondary parameters
-	void setSecondaryParameters ();												// uses setSecondaryParameters
+	void setSecondaryParameters();												// uses setSecondaryParameters
 	void changeParameters (const string& pName, const double& pValue, struct Parameters&); // change all due to change in one
 	void changeParameters (const string& pName, const uint& pValue, struct Parameters&); // change all due to change in one
 	void print() const;

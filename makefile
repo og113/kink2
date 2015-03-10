@@ -1,7 +1,10 @@
+# N.B. the makefile will not work if there are spaces or tabs after variables, in their defintion
 SDIR		   	= src
 HDIR			= include
-ODIR			= objects
-TDIR			= tests
+ODIR			= objs
+CSDIR			= csrc
+CODIR			= cobjs
+TSDIR			= tests
 CC 				= g++
 OPTIM 			= 
 CFLAGS 			= -Wall -g
@@ -26,96 +29,59 @@ LIBS 			= -lm -lgsl -lgslcblas
 _HEADERS 		= error.h fnptrs.h folder.h gsl_extras.h parameters.h potentials.h simple.h thetaT.h 
 HEADERS 		= $(patsubst %,$(HDIR)/%,$(_HEADERS))
 
-_COMMONSRC		= error.cc folder.cc gsl_extras.cc parameters.cc potentials.cc simple.cc  thetaT.cc
+_COMMONSRC		= error.cc folder.cc gsl_extras.cc parameters.cc potentials.cc simple.cc thetaT.cc
 _COMMONOBJS		= $(_COMMONSRC:.cc=.o)
-COMMONSRC		= $(patsubst %,$(SDIR)/%,$(_COMMONSRC))
-COMMONOBJS 		= $(patsubst %,$(ODIR)/%,$(_COMMONOBJS))
-
-_MAINSRC		= main.cc
-_MAINOBJS		= $(_MAINSRC:.cc=.o)
-MAINSRC			= $(patsubst %,$(SDIR)/%,$(_MAINSRC))
-MAINOBJS 		= $(patsubst %,$(ODIR)/%,$(_MAINOBJS))
-MAIN			= $(_MAINSRC:.cc=)
-
-_PISRC			= pi.cc
-_PIOBJ			= $(_PISRC:.cc=.o)
-PISRC			= $(patsubst %,$(SDIR)/%,$(_PISRC))
-PIOBJS 			= $(patsubst %,$(ODIR)/%,$(_PIOBJS))
-PI				= $(_PISRC:.cc=)
-
-_TSRC			= testFolder.cc testPotentials.cc testThetaT.cc testGsl_extras.cc
-_TOBJS			= $(_TSRC:.cc=.o)
-TSRC			= $(patsubst %,$(TDIR)/%,$(_TSRC))
-TOBJS	 		= $(patsubst %,$(TDIR)/%,$(_TOBJS))
-T				= $(_TSRC:.cc=)
+COMMONSRC		= $(patsubst %,$(CSDIR)/%,$(_COMMONSRC))
+COMMONOBJS 		= $(patsubst %,$(CODIR)/%,$(_COMMONOBJS))
 
 #------------------------------------------------------------------------------------------------------------------------
 	
-main: $(MAINOBJS) $(COMMONOBJS)
+common: $(COMMONOBJS)
+	@echo made common objects $(COMMONOBJS)
+	
+main: $(SDIR)/main.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named $(MAIN) has been compiled
 	
-pi: $(PIOBJS) $(COMMONOBJS)
+pi: $(SDIR)/pi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named $(PI) has been compiled
+	
+#------------------------------------------------------------------------------------------------------------------------
+	
+$(TSDIR)/%: $(ODIR)/%.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	
+$(SDIR)/%: $(ODIR)/%.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	
+$(CSDIR)/%: $(CSDIR)/%.cc
+	$(CC) -c -o $@ $< $(CFLAGS) $(INCLUDES) $(LIBS)
+	
+$(CODIR)/%.o: $(CSDIR)/%.cc
+	$(CC) -c -o $@ $< $(CFLAGS) $(INCLUDES) $(LIBS)
 	
 $(ODIR)/%.o: $(SDIR)/%.cc
 	$(CC) -c -o $@ $< $(CFLAGS) $(INCLUDES) $(LIBS)
 	
-#------------------------------------------------------------------------------------------------------------------------
-	
-$(TDIR)/%.o: $(TDIR)/%.cc
+$(ODIR)/%.o: $(TSDIR)/%.cc
 	$(CC) -c -o $@ $< $(CFLAGS) $(INCLUDES) $(LIBS)
-	
-#------------------------------------------------------------------------------------------------------------------------
 
-testFolder: $(TDIR)/testFolder
-	@echo Simple compiler named $(TDIR)/testFolder has been compiled
-	
-$(TDIR)/testFolder: $(TDIR)/testFolder.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-
-#------------------------------------------------------------------------------------------------------------------------
-	
-testPotentials: $(TDIR)/testPotentials
-	@echo Simple compiler named $(TDIR)/testPotentials has been compiled
-	
-$(TDIR)/testPotentials: $(TDIR)/testPotentials.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	
-#------------------------------------------------------------------------------------------------------------------------
-	
-testThetaT: $(TDIR)/testThetaT
-	@echo Simple compiler named $(TDIR)/testThetaT has been compiled
-
-$(TDIR)/testThetaT: $(TDIR)/testThetaT.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	
-#------------------------------------------------------------------------------------------------------------------------
-	
-testGsl_extras: $(TDIR)/testGsl_extras
-	@echo Simple compiler named $(TDIR)/testGsl_extras has been compiled
-
-$(TDIR)/testGsl_extras: $(TDIR)/testGsl_extras.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)	
-	
-#------------------------------------------------------------------------------------------------------------------------
-testParameters: $(TDIR)/testParameters
-	@echo Simple compiler named $(TDIR)/testParameters has been compiled
-
-$(TDIR)/testParameters: $(TDIR)/testParameters.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)	
 #------------------------------------------------------------------------------------------------------------------------
 	
 .PHONY: clean
 
 clean:
 	rm -f $(ODIR)/*.o
+	rm -f $(CODIR)/*.o
+	rm -f $(TSDIR)/*.o
 	rm -f *~ core
 	rm -f $(HDIR)/*~
-	rm -f $(TDIR)/testFolder
-	rm -f $(TDIR)/testPotentials
-	rm -f $(TDIR)/testThetaT
+	rm -f $(TSDIR)/testFolder
+	rm -f $(TSDIR)/testPotentials
+	rm -f $(TSDIR)/testThetaT
+	rm -f $(TSDIR)/testGsl_extras
+	rm -f $(TSDIR)/testParameters
 
 #------------------------------------------------------------------------------------------------------------------------
 	
