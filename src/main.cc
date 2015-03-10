@@ -17,7 +17,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
 	CONTENTS
-		1 - loading mainInputs
+		1 - loading options
 		2 - Folders
 		3 - beginning file loop
 		4 - assigning potentials
@@ -28,37 +28,11 @@
 int main()
 {
 /*----------------------------------------------------------------------------------------------------------------------------
-	1. loading mainInputs
+	1. loading options
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-// loading mainInputs
-unsigned long long int timenumberMin, timenumberMax;
-unsigned int loops;
-double minTb, maxTb, minTheta, maxTheta;
-ifstream fmainin;
-fmainin.open("mainInputs", ios::in);
-if (fmainin.is_open()) {
-	string line;
-	unsigned int lineNumber = 0;
-	while(getline(fmainin,line)) {
-		if(line[0] == '#') continue;
-		else if(line.empty()) continue;
-		istringstream ss(line);
-		if (lineNumber==0) {
-			ss >> inF >> timenumberMin >> timenumberMax >> loopMin >> loopMax;
-			lineNumber++;
-		}
-		else if (lineNumber==1) {
-			ss >> minTb >> maxTb >> minTheta >> maxTheta >> loops >> zmt >> zmx >> bds;
-			lineNumber++;
-		}
-	}
-}
-else {
-	cerr << "unable to open mainInputs" << endl;
-	return 1;
-}
-fmainin.close();
+Options opts;
+opts.load("options");
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. initiating folders to load
@@ -74,37 +48,37 @@ fmainin.close();
 
 // FilenameAttributes for defining FilenameComparator
 FilenameAttributes fa_low, fa_high;
-fa_low.Timenumber = timenumberMin;
-fa_high.Timenumber = timenumberMax;
-(fa_low.Extras).push_back(stringPair("Loop",numberToString<unsigned int>(loopMin));
-(fa_high.Extras).push_back(stringPair("Loop",numberToString<unsigned int>(loopMax));
+fa_low.Timenumber = opts.minTimenumberLoad;
+fa_high.Timenumber = opts.minTimenumberLoad;
+(fa_low.Extras).push_back(stringPair("Loop",opts.minLoopLoad);
+(fa_high.Extras).push_back(stringPair("Loop",opts.maxLoopLoad);
 
 // FilenameComparator
 FilenameComparator fc(fa_low,fa_high);
 Folder allFiles(fc);
 
 // pFolder
-if (inF.compare("p")==0) {
+if ((opts.inF).compare("p")==0) {
 	fa_low.ID = "tpip";
 	fa_high.ID = "tpip";
 }
-else if (inF.compare("m")==0) {
+else if ((opts.inF).compare("m")==0) {
 	fa_low.ID = "mainpi";
 	fa_high.ID = "mainpi";
 }
 else {
-	cerr << "inF error" << endl;
+	cerr << "inF error: " << opts.inF << " not recognised" << endl;
 	return 1;
 }
 fc(fa_low,fa_high);
 Folder pFolder(fc);
 
 // inputsFolder
-if (inF.compare("p")==0) {
+if ((opts.inF).compare("p")==0) {
 	fa_low.ID = "inputsPi";
 	fa_high.ID = "inputsPi";
 }
-else if (inF.compare("m")==0) {
+else if ((opts.inF).compare("m")==0) {
 	fa_low.ID = "inputsM";
 	fa_high.ID = "inputsM";
 }
@@ -120,102 +94,6 @@ cout << "inputs: " << pFolder << inputsFolder << endl;
 //defining timenumber
 string timenumber = currentDateTime();
 
-/*
-
-//getting list of relevant data files, with timeNumbers between timenumberMin and timenumberMax
-int systemCall = system("dir ./data/* > dataFiles");
-if (systemCall==-1){
-	cerr << "system call failure, finding dataFiles" << endl;
-	return 1;
-}
-vector<string> filenames, piFiles, inputsFiles, eigenvectorFiles, eigenvalueFiles;
-filenames = readDataFiles(timenumberMin,timenumberMax);
-
-//picking subset based on core of filename, using inF
-if (inF.compare("p")==0)
-	{
-	piFiles = findStrings(filenames,"tpip");
-	inputsFiles = findStrings(filenames,"inputsPi");
-	eigenvectorFiles = findStrings(filenames,"eigVec");
-	eigenvalueFiles = findStrings(filenames,"eigValue");
-	if  (eigenvectorFiles.size()==0 || eigenvalueFiles.size()==0)
-		{
-		cout << "eigen files not available" << endl;
-		cout << "eigenvalueFiles.size() = " << eigenvalueFiles.size() << endl;
-		for (unsigned int j=0; j<eigenvalueFiles.size(); j++) cout << eigenvalueFiles[j] << endl;
-		cout << "eigenvectorFiles.size() = " << eigenvectorFiles.size() << endl;
-		for (unsigned int j=0; j<eigenvectorFiles.size(); j++) cout << eigenvectorFiles[j] << endl;
-		}
-	}
-else if (inF.compare("m")==0)
-	{
-	piFiles = findStrings(filenames,"mainpi_");
-	inputsFiles = findStrings(filenames,"inputsM");
-	}
-else
-	{
-	cerr << "inF error" << endl;
-	return 1;
-	}
-
-//picking subset based on loopNumbers being above loopMin
-vector <vector<string>*> files;
-files.reserve(2);
-files.push_back(&piFiles); files.push_back(&inputsFiles);
-if (files.size()==0)
-	{
-	cerr << "no files found" << endl;
-	return 1;
-	}
-for (unsigned int k=0;k<files.size();k++)
-	{
-	vector <string>* tempVecStr = files[k];
-	vector <int> loopNumbers = getLastInts(tempVecStr); //not unsigned so that -1 can be used
-	unsigned int l=0;
-	while(l<(*tempVecStr).size())
-		{
-		if (loopNumbers[l]<loopMin || loopNumbers[l]>loopMax)
-			{
-			(*tempVecStr).erase((*tempVecStr).begin()+l);
-			loopNumbers.erase(loopNumbers.begin()+l);
-			}
-		else l++;
-		}
-	}
-
-//reducing to minimum lists with all the same timeNumbers
-if (piFiles.size()!=inputsFiles.size() || piFiles.size()==0)
-	{
-	for (unsigned int j=0;j<files.size();j++)
-		{
-		for (unsigned int k=0;k<files.size();k++) *files[j] = reduceTo(*files[j],*files[k]);
-		}
-	if (piFiles.size()!=inputsFiles.size() || piFiles.size()==0)
-		{
-		cout << "required files not available" << endl;
-		cout << "piFiles.size() = " << piFiles.size() << endl;
-		cout << "inputsFiles.size() = " << inputsFiles.size() << endl;
-		return 1;
-		}
-	}
-
-//sorting files		
-sort(piFiles.begin(), piFiles.end());
-sort(inputsFiles.begin(), inputsFiles.end());
-
-//getting timeNumbers
-vector <unsigned long long int> fileNumbers = getInts(piFiles);
-
-//printing filenames
-cout << endl;
-for (unsigned int j=0; j<inputsFiles.size();j++) cout << inputsFiles[j] << " " << piFiles[j] << endl;
-cout << endl;
-
-//defining the timeNumber
-string timeNumber = currentDateTime();
-
-*/
-
 /*----------------------------------------------------------------------------------------------------------------------------
 	3. beginning file loop
 		- beginning file loop
@@ -228,73 +106,30 @@ string timeNumber = currentDateTime();
 or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 	{
 
+	Parameters params;
+	params.load(inputsFolder[fileLoop]);
+
 	//copying a version of mainInputs with timeNumber
-	string runInputs = "./data/" + timeNumber + "mainInputs";
-	copyFile("mainInputs",runInputs);
-
-	// loading inputs
-	ifstream fin;
-	fin.open(inputsFiles[fileLoop].c_str());
-	if (fin.is_open())
-		{
-		string line;
-		unsigned int lineNumber = 0;
-		while(getline(fin,line))
-			{
-			if(line[0] == '#') continue;
-			else if(line.empty()) continue;
-			istringstream ss(line);
-			if (lineNumber==0)
-				{
-				ss >> N >> Na >> Nb >> Nc >> dE >> LoR >> Tb >> theta;
-				lineNumber++;
-				}
-			else if (lineNumber==1)
-				{
-				ss >> aq.inputChoice >> aq.inputTimeNumber >> aq.inputLoop >> aq.totalLoops >> aq.loopChoice >> aq.minValue >> aq.maxValue >> aq.printChoice >> aq.printRun;
-				lineNumber++;
-				}
-			else if(lineNumber==2)
-				{
-				ss >> alpha >> open >> amp >> pot >> A >> reg;
-				lineNumber++;
-				}
-			else if(lineNumber==3)
-				{
-				double temp;
-				ss >> temp >> temp >> negEigDone;
-				lineNumber++;
-				}
-			}
-		}
-	else
-		{
-		cerr << "unable to open " << inputsFiles[fileLoop] << endl;
-		return 1;
-		}
-	fin.close();
-	inP = aq.inputChoice;
-
-	string loop_choice = aq.loopChoice; //just so that we don't have two full stops when comparing strings
-	string print_choice = aq.printChoice;
+	/*string runInputs = "./data/" + timeNumber + "mainInputs";
+	copyFile("mainInputs",runInputs);*/
 	
 // assigning closenesses
-	closenessA = 1.0;
-	closenessS = 1.0e-6;
-	closenessSM = 1.0e-5;
-	closenessD = 1.0;
-	closenessC = 1.0e-16*N*NT;
-	closenessCon = 1.0/3.0;
-	closenessL = 1.0e-2;
-	closenessT = 5.0e-2;
-	closenessP = 0.5;
-	closenessR = 1.0e-2;
-	closenessIE = 1.0e-5;
-	closenessCL = 5.0e-2;
-	closenessON = 5.0e-2;
-	closenessAB = 1.0e-2;
-	closenessLR = 1.0e-12;
-	closenessABNE = 5.0e-2;
+	double closenessA = 1.0;
+	double closenessS = 1.0e-6;
+	double closenessSM = 1.0e-5;
+	double closenessD = 1.0;
+	double closenessC = 1.0e-16*N*NT;
+	double closenessCon = 1.0/3.0;
+	double closenessL = 1.0e-2;
+	double closenessT = 5.0e-2;
+	double closenessP = 0.5;
+	double closenessR = 1.0e-2;
+	double closenessIE = 1.0e-5;
+	double closenessCL = 5.0e-2;
+	double closenessON = 5.0e-2;
+	double closenessAB = 1.0e-2;
+	double closenessLR = 1.0e-12;
+	double closenessABNE = 5.0e-2;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. assigning potential functions
@@ -303,7 +138,7 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // assigning potential functions
-	if (pot[0]=='1') {
+	if (params.pot==1) {
 		neigh = &periodic;
 		simpleSpace = &simpleSpaceBox;
 		V = &V1c;
@@ -312,11 +147,8 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 		Vd = &V1;
 		dVd = &dV1;
 		ddVd = &ddV1;
-		epsilon0 = 0.0;
-		epsilon = dE;
-		r0 = 0.0;
 	}
-	else if (pot[0]=='2') {
+	else if (params.pot==2) {
 		neigh = &periodic;
 		simpleSpace = &simpleSpaceBox;
 		V = &V2c;
@@ -325,11 +157,8 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 		Vd = &V2;
 		dVd = &dV2;
 		ddVd = &ddV2;
-		epsilon0 = 0.74507774287199924;
-		epsilon = 0.75;
-		r0 = 0.0;
 	}
-	else if (pot[0]=='3') {
+	else if (params.pot==2) {
 		neigh = &spherical;
 		simpleSpace = &simpleSpaceSphere;
 		V = &V3c;
@@ -338,129 +167,28 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 		Vd = &V3;
 		dVd = &dV3;
 		ddVd = &ddV3;
-		epsilon0 = 0.0;
-		epsilon = 0.0;
-		r0 = MIN_NUMBER;
 		}
 	else {
-		cerr << "pot option not available, pot = " << pot << endl;
+		cerr << "pot option not available, pot = " << params.pot << endl;
 		return 1;
 	}
 	
 // assigning preliminary parameter structs
-	paramsV  = {epsilon, A};
-	paramsV0 = {epsilon0, A};
-	paramsVoid = {};
-
-/*----------------------------------------------------------------------------------------------------------------------------
-	5. calculating secondary parameters
-		- calculating epsilon, mass2 and minima
-		- calculating simpler derived quantities
-----------------------------------------------------------------------------------------------------------------------------*/
+	params_for_V paramsV  = {params.epsilon, params.A};
 	
-// calculating epsilon and minima
-	vector<double> minima0(2);
-	
-	if (pot[0]!='3') {
-		//gsl function for dV(phi)
-		gsl_function F;
-		F.function = Vd;
-		F.params = &paramsV;	
-	
-		//finding preliminary roots of dV(phi)=0
-		minima[0] = brentMinimum(&F, -1.0, -3.0, 0.0);
-		minima[1] = brentMinimum(&F, 1.2, 0.5, 3.0);
-	
-		//gsl function for V(root2)-V(root1)-dE
-		struct ec_params ec_params = { A, minima[0], minima[1], dE};
-		gsl_function EC;
-		EC.function = &ec;
-		EC.params = &ec_params;
-
-		//evaluating epsilon, new root and dE may change slightly
-		epsilonFn(&F,&EC,&dE,&epsilon,&minima);
-	
-		//evaluating mass about false vac
-		mass2 = ddVd(minima[0],&paramsV);
-	
-		//finding root0 of dV0(phi)=0;
-		vector<double> minima0(3);
-		if (pot[0]=='1')
-			minima0[0] = -1.0; minima0[1] = 1.0;
-		else if (pot[0]=='2') {
-			gsl_function V0;
-			V0.function = Vd;
-			V0.params = &paramsV0;	
-			minima0[0] = brentMinimum(&V0, -1.0, -3.0, 0.0);
-			minima0[0] = brentMinimum(&V0, 1.2, 0.5, 3.0);
-			struct ec_params ec0_params = { A, minima0[0], minima0[1], 0.0};
-			gsl_function EC0;
-			EC0.function = &ec;
-			EC0.params = &ec0_params;
-			double dE0 = 0.0;
-			epsilonFn(&V0,&EC0,&dE0,&epsilon0,&minima0);
-		}
-	
-		//finding S1
-		double S1error;
-		gsl_function S1_integrand;
-		S1_integrand.function = &s1Integrand;
-		S1_integrand.params = &paramsV0;
-		gsl_integration_workspace *w = gsl_integration_workspace_alloc(1e4);
-		gsl_integration_qag(&S1_integrand, minima0[0], minima0[1], MIN_NUMBER, 1.0e-8, 1e4, 4, w, &S1, &S1error);
-		gsl_integration_workspace_free(w);
-		if (S1error>1.0e-8) cerr << "S1 error = " << S1error << endl;
-	}
-	else {
-		mass2 = 1.0;
-		minima[0] = 0.0; //only one minimum
-		R = 10.0; alpha = 0.0; //not used
-	}
-
-	// calculating simpler derived quantities
-	NT = Na + Nb + Nc;
-	double twaction;
-	L = LoR*R;
-	if (pot[0]!='3')
-		{
-		R = S1/dE;
-		twaction = -pi*epsilon*pow(R,2)/2.0 + pi*R*S1;
-		alpha *= R;
-		L = LoR*R;
-		if (Tb<R)
-			{
-			angle = asin(Tb/R);
-			double Ltemp = 1.5*(1.5*Tb*tan(angle));
-			if (Ltemp<L) L=Ltemp;//making sure to use the smaller of the two possible Ls
-			}
-		}
-	else
-		{
-		twaction = 8.0*pow(pi,2.0)/3.0; //massless limit
-		//no need for R or alpha
-		}
-	Gamma = exp(-theta);
-	vec negVec(2*N*Nb+1);
-	a = (L-r0)/(N-1.0);
-	b = Tb/(Nb-1.0);
-	if (a>0.5*pow(mass2,0.5) || b>0.5*pow(mass2,0.5)) {cerr << endl << "a = " << a << " , b = " << b << endl << endl;}
-	Ta = b*Na;
-	Tc = b*Nc;
+// zero of energy
 	double ergZero = 0.0;
-	if (pot[0]!='3') ergZero = N*a*Vd(minima[0],&paramsV);
+	if (params.pot!=3) ergZero = N*a*Vd(minima[0],&paramsV);
 	
 	//lambda functions for pot_r
-auto Vr = [&] (const comp & phi)
-	{
-	return -ii*reg*VrFn(phi,minima[0],minima[1]);
+	auto Vr = [&] (const comp & phi) {
+		return -ii*reg*VrFn(phi,minima[0],minima[1]);
 	};
-auto dVr = [&] (const comp & phi)
-	{
-	return -ii*reg*dVrFn(phi,minima[0],minima[1]);
+	auto dVr = [&] (const comp & phi) {
+		return -ii*reg*dVrFn(phi,minima[0],minima[1]);
 	};
-auto ddVr = [&] (const comp & phi)
-	{
-	return -ii*reg*ddVrFn(phi,minima[0],minima[1]);
+	auto ddVr = [&] (const comp & phi) {
+		return -ii*reg*ddVrFn(phi,minima[0],minima[1]);
 	};
 
 	//deterimining omega matrices for fourier transforms in spatial direction
@@ -494,7 +222,7 @@ auto ddVr = [&] (const comp & phi)
 		for (unsigned int l=0; l<N; l++) {
 			eigenValues(l) = 1.0+pow(2.0*sin(pi*l/(N-1.0)/2.0)/a,2.0);
 			for (unsigned int m=0; m<N; m++) {
-				if (pot[0]=='3') eigenVectors(l,m) = normalisation*sin(pi*l*m/(N-1.0));
+				if (params.pot==3) eigenVectors(l,m) = normalisation*sin(pi*l*m/(N-1.0));
 				else			 eigenVectors(l,m) = normalisation*cos(pi*l*m/(N-1.0));
 			}
 		}
@@ -517,7 +245,7 @@ auto ddVr = [&] (const comp & phi)
 
 	if (zmt[0]=='n' || zmx[0]=='n')
 		{
-		if (pot[0]=='3') {
+		if (params.pot==3) {
 			vec negVecFull = loadVectorColumn("data/stable/sphaleronEigVec.dat",0); // nb may need to check that r1 is correct
 			negVec = interpolate1d(negVecFull,negVecFull.size(),N);
 		}
@@ -728,8 +456,8 @@ auto ddVr = [&] (const comp & phi)
 						posT = posMap.at(zmt[1+l]);
 						for (unsigned int k=0;k<slicesT;k++)
 							{
-							if (zmt[0]=='n' && pot[0]!='3') 	chiT(posT+k) = negVec(2*(posCe+k));
-							else if (zmt[0]=='n' && pot[0]=='3')
+							if (zmt[0]=='n' && params.pot!=3) 	chiT(posT+k) = negVec(2*(posCe+k));
+							else if (zmt[0]=='n' && params.pot==3)
 								{
 								double r = r0 + j*a;
 								chiT(posT+k) = negVec(j)*r;
@@ -756,13 +484,13 @@ auto ddVr = [&] (const comp & phi)
 						posX = posMap.at(zmx[1+l]);
 						for (unsigned int k=0;k<slicesX;k++)
 							{
-							if (zmx[0]=='n' && pot[0]!='3')		chiX(posX+k) = negVec(2*(posCe+k));
-							else if (zmx[0]=='n' && pot[0]=='3')
+							if (zmx[0]=='n' && params.pot!=3)		chiX(posX+k) = negVec(2*(posCe+k));
+							else if (zmx[0]=='n' && params.pot==3)
 								{
 								double r = r0 + j*a;
 								chiX(posX+k) = negVec(j)*r;
 								}
-							else if (zmx[0]=='d' && pot[0]!='3') chiX(posX+k) = p(2*neigh(posX+k,1,1,NT,N))-p(2*neigh(posX+k,1,-1,NT,N));
+							else if (zmx[0]=='d' && params.pot!=3) chiX(posX+k) = p(2*neigh(posX+k,1,1,NT,N))-p(2*neigh(posX+k,1,-1,NT,N));
 							else
 								{
 								cerr << "choice of zmx not allowed" << endl;
@@ -820,7 +548,7 @@ auto ddVr = [&] (const comp & phi)
 			linNumContm = 0.0;
 			
 			//testing that the potential term is working for pot3
-			if (pot[0]=='3' && false)
+			if (params.pot==3 && false)
 				{
 				comp Vtrial = 0.0, Vcontrol = 0.0;
 				for (unsigned int j=0; j<N; j++)
@@ -852,9 +580,9 @@ auto ddVr = [&] (const comp & phi)
 				double dx 		= dxFn(x);
 				double dxm 		= (x>0? dxFn(x-1): a);
 				
-				if (pot[0]=='3') paramsV  = {r0+x*a, 0.0};
+				if (params.pot==3) paramsV  = {r0+x*a, 0.0};
 			
-				if (abs(chiX(j))>MIN_NUMBER && pot[0]!='3') //spatial zero mode lagrange constraint
+				if (abs(chiX(j))>MIN_NUMBER && params.pot!=3) //spatial zero mode lagrange constraint
 					{
 					DDS.insert(2*j,2*N*NT) 			= Dx*chiX(j); 
 					DDS.insert(2*N*NT,2*j) 			= Dx*chiX(j);
@@ -899,12 +627,12 @@ auto ddVr = [&] (const comp & phi)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//boundaries
-				if (pot[0]=='3' && x==(N-1))
+				if (params.pot==3 && x==(N-1))
 					{
 					DDS.insert(2*j,2*j) 	= 1.0; // p=0 at r=R
 					DDS.insert(2*j+1,2*j+1) = 1.0;
 					}
-				else if (pot[0]=='3' && x==0)
+				else if (params.pot==3 && x==0)
 					{
 					kineticS 				+= 	Dt*pow(Cp(neighPosX),2.0)/dx/2.0;
 					derivErg(t) 			+= 	pow(Cp(neighPosX),2.0)/dx/2.0; //n.b. the Dt/dt difference is ignored for erg(t)
@@ -1148,12 +876,12 @@ auto ddVr = [&] (const comp & phi)
 		            DDS.insert(2*j+1,2*j+1) = real(-temp2 + temp0);
 		            }
 		        }
-		    if (pot[0]=='3') DDS.insert(2*N*NT,2*N*NT) = 1.0;
+		    if (params.pot==3) DDS.insert(2*N*NT,2*N*NT) = 1.0;
 		    action = kineticT - kineticS - potV - pot_r;
 		    linErgOffShell(NT-1) = linErgOffShell(NT-2);
 	    	linNumOffShell(NT-1) = linNumOffShell(NT-2);
 	    	
-		    if (pot[0]=='3') {
+		    if (params.pot==3) {
 		    	action 		*= 4.0*pi;
 		    	derivErg 	*= 4.0*pi;
 		    	potErg 		*= 4.0*pi;
@@ -1183,7 +911,7 @@ auto ddVr = [&] (const comp & phi)
 			}
 			
 			//calculating continuum approx to linErg and linNum on initial time slice
-			if (pot[0]=='3') {
+			if (params.pot==3) {
 				for (unsigned int k=1; k<N; k++) {
 					double momtm = k*pi/(L-r0);
 					double freqSqrd = 1.0+pow(momtm,2.0);
@@ -1481,7 +1209,7 @@ auto ddVr = [&] (const comp & phi)
 		//checking lattice small enough
 		if (mom_test.back()>closenessP) cout << endl << "momTest = "<< mom_test.back()  << endl;
 		
-		if (pot[0]=='3' && abs(theta)<MIN_NUMBER) {
+		if (params.pot==3 && abs(theta)<MIN_NUMBER) {
 			comp temp = linErg(0);
 			if (absDiff(temp,linErgContm)>closenessCL) 
 				cout << "linErg(0) = " << temp << " and linErgContm = " << linErgContm << " don't agree. E_exact = " << E_exact << endl;

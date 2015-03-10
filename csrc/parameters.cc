@@ -52,7 +52,6 @@ string ParameterError::Load::message() const{
 		- load
 -------------------------------------------------------------------------------------------------------------------------*/
 
-
 // operator<<
 ostream& operator<<(ostream& os, const PrimaryParameters& p1) {
 	os << left;
@@ -274,10 +273,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		EC.params = &ec_params;
 
 		//evaluating epsilon, new root and dE may change slightly
-		cout << "ec = " << endl;
-		//cout << ec(epsilon,&ec_params) << endl;
 		epsilonFn(&F,&EC,&pp.dE,&epsilon,&minima);
-		cout << "test5" << endl;
 
 		//evaluating mass about false vac
 		mass2 = ddVd_local(minima[0],paramsV);					////////// mass2
@@ -362,6 +358,7 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 		- constructor from PrimaryParameters and SecondaryParameters
 		- print to shell
 		- set secondary parameters
+		- load
 		- change parameters based on change in one
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -370,7 +367,7 @@ Parameters::Parameters(): PrimaryParameters(), SecondaryParameters()	{}
 
 // constructor using primary and secondary parameters
 Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2): \
-					PrimaryParameters(p1), SecondaryParameters(p2)	{}				
+					PrimaryParameters(p1), SecondaryParameters(p2)	{}			
 
 // print to shell
 void Parameters::print() const {
@@ -398,12 +395,160 @@ void Parameters::setSecondaryParameters () {
 	SecondaryParameters::setSecondaryParameters(p1);
 }
 
-// change all parameters due to change in one, uint
-void Parameters::changeParameters (const string& pName, const uint& pValue, struct Parameters&) {
+// load
+void Parameters::load() {
+	PrimaryParameters::load();
+	setSecondaryParameters();
+}	
 
-}
+// change all parameters due to change in one, uint
+void Parameters::changeParameters (const string& pName, const uint& pValue) {
+	if ( pName.compare("N")==0) {
+			N = pValue;
+			a = L/(N-1);
+		}
+		else if ( pName.compare("Na")==0) {
+			Na = pValue;
+			NT = Na + Nb + Nc;
+			Ta = b*(double)Na;
+			}
+		else if ( pName.compare("Nb")==0) {
+			Nb = pValue;
+			NT = Na + Nb + Nc;
+			b = Tb/(Nb-1.0);
+			Ta = b*(double)Na;
+			Tc = b*(double)Nc;
+		}
+		else if ( pName.compare("Nc")==0) {
+			Nc = pValue;
+			NT = Nc + Nb + Nc;
+			Tc = b*(double)Nc;
+		}
+		else if ( pName.compare("pot")==0) {
+			pot = pValue;
+		}
+		else {
+			cerr << "Parameters::changeParameters error: " << pName << " not changed" << endl;
+		}
+	}
 
 // change all parameters due to change in one, double
-void Parameters::changeParameters (const string& pName, const double& pValue, struct Parameters&) {
+void Parameters::changeParameters (const string& pName, const double& pValue) {
+	if ( pName.compare("L")==0) { //this does not changes the physics but simply the size of the box in space
+		L = pValue;
+		LoR = L/R;
+		a = L/(N-1);
+	}
+	if ( pName.compare("LoR")==0) { //this changes L, as above
+		LoR = pValue;
+		L = LoR*R;
+		a = L/(N-1);
+	}
+	else if ( pName.compare("Tb")==0) { //this paramter changes the physics for the periodic instanton,											//as Tb/R changes where R = R(epsilon)
+		b = b*pValue/Tb;
+		Ta = Ta*pValue/Tb;
+		Tc = Tc*pValue/Tb;
+		Tb = pValue;
+		if (Tb<R && pot!=3){
+			double angle = asin(Tb/R);
+			if (2.0*(1.5*Tb*tan(angle))<L) L=2.0*(1.5*Tb*tan(angle));
+			a = L/(N-1.0);
+			}
+	}
+	else if ( pName.compare("R")==0) { //this parameter changes the initial guess
+		L = L*pValue/R; //all length scales scale with R
+		a = a*pValue/R;
+		b = b*pValue/R;
+		Ta = Ta*pValue/R;
+		Tb = Tb*pValue/R;
+		Tc = Tc*pValue/R;
+		R = pValue;
+	}
+	else if ( pName.compare("dE")==0) { //this parameter changes the physics of the potential
+													//but it does not change Tb/R, where R(epsilon)
+		R = R*dE/pValue; //R scales with 1/dE and the other length scales scale with R
+		L = L*dE/pValue;
+		a = a*dE/pValue;
+		b = b*dE/pValue;
+		Ta = Ta*dE/pValue;
+		Tb = Tb*dE/pValue;
+		Tc = Tc*dE/pValue;
+		epsilon = epsilon*pValue/dE;
+		dE = pValue;
+	}
+	else if ( pName.compare("theta")==0) {
+		theta = pValue;
+		Gamma = exp(-theta);
+	}
+	else {
+			cerr << "Parameters::changeParameters error: " << pName << " not changed" << endl;
+		}
+}
 
+/*-------------------------------------------------------------------------------------------------------------------------
+	5. Options
+		- operator<<
+		- save
+		- load
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// operator<<
+ostream& operator<<(ostream& os, const Options& o) {
+	os << left;
+	os << setw(20) << "alpha" << setw(20) << o.alpha << endl;
+	os << setw(20) << "open" << setw(20) << o.open << endl;
+	os << setw(20) << "amp" << setw(20) << o.amp << endl;
+	os << setw(20) << "zmx" << setw(20) << o.zmx << endl;
+	os << setw(20) << "zmt" << setw(20) << o.zmt << endl;
+	os << setw(20) << "bds" << setw(20) << o.bds << endl;
+	os << setw(20) << "inF" << setw(20) << o.inF << endl;
+	os << setw(20) << "minTimenumberLoad" << setw(20) << o.minTimenumberLoad << endl;
+	os << setw(20) << "maxTimenumberLoad" << setw(20) << o.maxTimenumberLoad << endl;
+	os << setw(20) << "minLoopLoad" << setw(20) << o.minLoopLoad << endl;
+	os << setw(20) << "maxLoopLoad" << setw(20) << o.maxLoopLoad << endl;
+	os << setw(20) << "loopMin" << setw(20) << o.loopMin << endl;
+	os << setw(20) << "loopMax" << setw(20) << o.loopMax << endl;
+	os << setw(20) << "printChoice" << setw(20) << o.printChoice << endl;
+	os << endl;
+	return os;
+}
+
+//save
+void Options::save(const string& filename) const {
+	ofstream os;
+	os.open(filename.c_str());
+	if (!os.good()) {
+		FileError::StreamNotGood e(filename);
+		throw e;
+	}
+	os << *this;
+	os << endl;
+	os.close();
+}
+
+//load
+void Options::load(const string& filename) {
+	ifstream is;
+	is.open(filename.c_str());
+	if (!is.good()) {
+		FileError::StreamNotGood e(filename);
+		throw e;
+	}
+	string dross;
+	is >> dross >> alpha;
+	is >> dross >> open;
+	is >> dross >> amp;
+	is >> dross >> zmx;
+	is >> dross >> zmt;
+	is >> dross >> bds;
+	is >> dross >> inF;
+	is >> dross >> minTimenumberLoad;
+	is >> dross >> maxTimenumberLoad;
+	is >> dross >> minLoopLoad;
+	is >> dross >> maxLoopLoad;
+	is >> dross >> loopChoice;
+	is >> dross >> loopMin;
+	is >> dross >> loopMax;
+	is >> dross >> printChoice;
+	is.close();
 }
