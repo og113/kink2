@@ -2,11 +2,16 @@
  	definitions for the functions to calculate omega
  -------------------------------------------------------------------------------------------------------------------------*/
  
+ #include <iostream>
+ #include <cmath>
+ #include <complex>
 #include <Eigen/Dense>
 #include "parameters.h"
 #include "lattice.h" // for DxFn
 
 using namespace std;
+
+typedef unsigned int uint;
 
 /*-------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------
@@ -29,7 +34,7 @@ mat	hFn(const Parameters& p) {
 	mat xh(p.N,p.N);	xh = Eigen::MatrixXd::Zero(p.N,p.N);
 	double diag = p.mass2 + 2.0/pow(p.a,2.0);
 	double offDiag1 = -1.0/pow(p.a,2.0);
-	double offDiag2 = (p.pot[0]=='3'? -pow(2.0,0.5)/pow(p.a,2.0): -1.0/pow(p.a,2.0) );
+	double offDiag2 = (p.pot==3? -pow(2.0,0.5)/pow(p.a,2.0): -1.0/pow(p.a,2.0) );
 	for (unsigned int l=0; l<p.N; l++)
 		{
 		if (l==0)
@@ -59,12 +64,13 @@ mat	hFn(const Parameters& p) {
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // analytic modes
-void analyticModes(const mat& h, mat& modes, vec& freqs, const Parameters& p) {
+void analyticModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) {
 	double normalisation = sqrt(2.0/(p.N-1.0));
 	for (unsigned int l=0; l<p.N; l++) {
 		freqs(l) = 1.0+pow(2.0*sin(pi*l/(p.N-1.0)/2.0)/p.a,2.0);
+		freqs_exp(l) = (2.0/p.b)*asin(p.b*sqrt(freqs(l))/2.0);
 		for (unsigned int m=0; m<p.N; m++) {
-			if (pot[0]=='3') modes(l,m) = normalisation*sin(pi*l*m/(p.N-1.0));
+			if (p.pot==3) modes(l,m) = normalisation*sin(pi*l*m/(p.N-1.0));
 			else			 modes(l,m) = normalisation*cos(pi*l*m/(p.N-1.0));
 		}
 	}
@@ -76,7 +82,7 @@ void analyticModes(const mat& h, mat& modes, vec& freqs, const Parameters& p) {
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // numerical modes
-void numericalModes(const mat& h, mat& modes, vec& freqs, const Parameters& p) {
+void numericalModes(const mat& h, mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) {
 	Eigen::EigenSolver<mat> eigensolver(h);
 	cVec cFreqs(p.N);
 	cMat cModes(p.N,p.N);
@@ -90,6 +96,7 @@ void numericalModes(const mat& h, mat& modes, vec& freqs, const Parameters& p) {
 	}
 	for (unsigned int j=0; j<p.N; j++) {
 		freqs(j) = real(cFreqs(j));
+		freqs_exp(j) = (2.0/p.b)*asin(p.b*sqrt(freqs(j))/2.0);
 		for (unsigned int k=0; k<p.N; k++) {
 			modes(j,k) = real(cModes(j,k));
 		}
@@ -100,13 +107,12 @@ void numericalModes(const mat& h, mat& modes, vec& freqs, const Parameters& p) {
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // omegasFn
-void omegasFn(const mat& modes, const mat& freqs, mat& omega_m1, mat& omega_0, mat& omega_1, mat& omega_2, const Parameters& p) {
+void omegasFn(const bool& analytic, const mat& modes, const mat& freqs, mat& omega_m1, mat& omega_0, mat& omega_1, mat& omega_2, const Parameters& p) {
 	double djdk;
 	for (unsigned int j=0; j<p.N; j++) {
-		w_n_exp(j) = (2.0/p.b)*asin(p.b*sqrt(real(freqs(j)))/2.0);
 		for (unsigned int k=0; k<p.N; k++) {
 			for (unsigned int l=0; l<p.N; l++) {
-				if (approxOmega) djdk = p.a;
+				if (analytic) djdk = p.a;
 				else 			 djdk = sqrt(DxFn(j,p)*DxFn(k,p));
 				omega_m1(j,k) += djdk*pow(real(freqs(l)),-0.5)*real(modes(j,l))*real(modes(k,l));
 				omega_0(j,k)  += djdk*real(modes(j,l))*real(modes(k,l));

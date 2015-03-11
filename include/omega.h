@@ -39,7 +39,7 @@ mat	hFn(const Parameters&);
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // analytic modes
-void analyticModes(const mat& h, mat& modes, vec& freqs, const Parameters& p);
+void analyticModes(mat& modes, vec& freqs, const Parameters& p);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3. numerical modes

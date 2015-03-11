@@ -1,5 +1,3 @@
-#include <Eigen/Sparse>
-#include <Eigen/Dense>
 #include <vector>
 #include <fstream>
 #include <iostream>
@@ -7,12 +5,16 @@
 #include <string>
 #include <map>
 #include <cmath>
+#include <Eigen/Sparse>
+#include <Eigen/Dense>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_poly.h>
 #include <gsl/gsl_roots.h>
-#include "pf.h"
-#include "files.h"
+#include "parameters.h"
+#include "lattice.h"
+#include "folder.h"
+#include "omega.h"
 
 /*----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
@@ -106,12 +108,13 @@ string timenumber = currentDateTime();
 or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 	{
 
+	// loading parameters
 	Parameters params;
 	params.load(inputsFolder[fileLoop]);
 
-	//copying a version of mainInputs with timeNumber
-	/*string runInputs = "./data/" + timeNumber + "mainInputs";
-	copyFile("mainInputs",runInputs);*/
+	//copying a version of params with timenumber
+	string runParamsFile = "./data/" + timenumber + "inputsM";
+	params.save(runParamsFile);
 	
 // assigning closenesses
 	double closenessA = 1.0;
@@ -140,7 +143,6 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 // assigning potential functions
 	if (params.pot==1) {
 		neigh = &periodic;
-		simpleSpace = &simpleSpaceBox;
 		V = &V1c;
 		dV = &dV1c;
 		ddV = &ddV1c;
@@ -150,7 +152,6 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 	}
 	else if (params.pot==2) {
 		neigh = &periodic;
-		simpleSpace = &simpleSpaceBox;
 		V = &V2c;
 		dV = &dV2c;
 		ddV = &ddV2c;
@@ -160,7 +161,6 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 	}
 	else if (params.pot==2) {
 		neigh = &spherical;
-		simpleSpace = &simpleSpaceSphere;
 		V = &V3c;
 		dV = &dV3c;
 		ddV = &ddV3c;
@@ -173,10 +173,10 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 		return 1;
 	}
 	
-// assigning preliminary parameter structs
+	// assigning preliminary parameter structs
 	params_for_V paramsV  = {params.epsilon, params.A};
 	
-// zero of energy
+	// zero of energy
 	double ergZero = 0.0;
 	if (params.pot!=3) ergZero = N*a*Vd(minima[0],&paramsV);
 	
@@ -192,56 +192,22 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 	};
 
 	//deterimining omega matrices for fourier transforms in spatial direction
-	mat omega_m1(N,N);
-	mat omega_0(N,N);
-	mat omega_1(N,N);
-	mat omega_2(N,N);
+	vec freqs(N), exp_freqs(N);
+	mat modes(N,N);
+	mat omega_m1(N,N), omega_0(N,N), omega_1(N,N), omega_2(N,N);
 	omega_m1 = Eigen::MatrixXd::Zero(N,N);
 	omega_0 = Eigen::MatrixXd::Zero(N,N);
 	omega_1 = Eigen::MatrixXd::Zero(N,N);
 	omega_2 = Eigen::MatrixXd::Zero(N,N);
-	cVec eigenValues(N);
-	vec w_n_exp(N);
-	cMat eigenVectors(N,N); //eigenvectors correspond to columns of this matrix - so the nth eigenvector is v_n(j) = eigenVectors(j,n)
-	bool approxOmega = true;
+	bool approxOmega = false;
 	if (!approxOmega) {
-		mat h(N,N);
-		h = hFn(N,a,mass2);
-		Eigen::EigenSolver<mat> eigensolver(h);
-		if (eigensolver.info() != Eigen::Success) {
-			cerr << "h eigensolver failed" << endl;
-			cerr << "N = " << N << ", a = " << a << ", mass2 = " << mass2 << endl;
-		}
-		else {
-			eigenValues = eigensolver.eigenvalues();
-			eigenVectors = eigensolver.eigenvectors(); //automatically normalised to have unit norm
-		}
+		mat h = hFn(params);
+		numericalModes(h,modes,freqs,exp_freqs,params);
 	}
 	else {
-		double normalisation = sqrt(2.0/(N-1.0));
-		for (unsigned int l=0; l<N; l++) {
-			eigenValues(l) = 1.0+pow(2.0*sin(pi*l/(N-1.0)/2.0)/a,2.0);
-			for (unsigned int m=0; m<N; m++) {
-				if (params.pot==3) eigenVectors(l,m) = normalisation*sin(pi*l*m/(N-1.0));
-				else			 eigenVectors(l,m) = normalisation*cos(pi*l*m/(N-1.0));
-			}
-		}
-		eigenValues(N-1) = 1.0;		
+		analyticModes(modes,freqs,exp_freqs,params);
 	}
-	double djdk;	
-	for (unsigned int j=0; j<N; j++) {
-		w_n_exp(j) = (2.0/b)*asin(b*sqrt(real(eigenValues(j)))/2.0);
-		for (unsigned int k=0; k<N; k++) {
-			for (unsigned int l=0; l<N; l++) {
-				if (approxOmega) djdk = a;
-				else 			 djdk = sqrt(DxFn(j)*DxFn(k));
-				omega_m1(j,k) += djdk*pow(real(eigenValues(l)),-0.5)*real(eigenVectors(j,l))*real(eigenVectors(k,l));
-				omega_0(j,k)  += djdk*real(eigenVectors(j,l))*real(eigenVectors(k,l));
-				omega_1(j,k)  += djdk*pow(real(eigenValues(l)),0.5)*real(eigenVectors(j,l))*real(eigenVectors(k,l));
-				omega_2(j,k)  += djdk*real(eigenValues(l))*real(eigenVectors(j,l))*real(eigenVectors(k,l));
-			}
-		}
-	}
+	omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,params);
 
 	if (zmt[0]=='n' || zmx[0]=='n')
 		{

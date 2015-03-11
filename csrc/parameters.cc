@@ -396,8 +396,8 @@ void Parameters::setSecondaryParameters () {
 }
 
 // load
-void Parameters::load() {
-	PrimaryParameters::load();
+void Parameters::load(const string& f) {
+	PrimaryParameters::load(f);
 	setSecondaryParameters();
 }	
 
