@@ -132,7 +132,7 @@ WRAP(ddVd_local)
 #undef WRAP
 
 //V FDF gsl function
-void VdV (double x, void * parameters, double * f, double* df) 
+static void VdV (double x, void * parameters, double * f, double* df) 
 	{
 	struct params_for_V * params = (struct params_for_V *)parameters;
 	*f =  Vd_local_wrapped(x,params);
@@ -140,15 +140,18 @@ void VdV (double x, void * parameters, double * f, double* df)
 	}
 	
 //dV FDF gsl functions
-void dVddV (double x, void * parameters, double * f, double* df) 
+static void dVddV (double x, void * parameters, double * f, double* df) 
 	{
 	struct params_for_V * params = (struct params_for_V *)parameters;
 	*f =  dVd_local_wrapped(x,params);
 	*df = ddVd_local_wrapped(x,params);
 	}
+	
+//energy change parameter struct
+struct ec_params {double aa; double minima0; double minima1; double de; };
 
 //energy change gsl function : V(minima[1])-V(minima[0])-dE
-double ec (double epsi, void * parameters) {
+static double ec (double epsi, void * parameters) {
 	struct ec_params * paramsIn = (struct ec_params *)parameters;
 	struct params_for_V paramsOut;
 	paramsOut.epsi = epsi;
@@ -160,19 +163,19 @@ double ec (double epsi, void * parameters) {
 }
 	
 //S1 integrand
-double s1Integrand (double x, void * parameters) {
+static double s1Integrand (double x, void * parameters) {
 	struct params_for_V * params = (struct params_for_V *)parameters;
 	return pow(2.0*Vd_local(x,*params),0.5);
 }
 
 //rho integrand
-double rhoIntegrand (double x, void * parameters) {
+static double rhoIntegrand (double x, void * parameters) {
 	struct params_for_V * params = (struct params_for_V *)parameters;
 	return pow(2.0*Vd_local(x,*params),-0.5);
 }
 
 //program to find epsilon given gsl functions df and dE
-void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE, double * xEpsilon, vector<double>* xMinima)
+static void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE, double * xEpsilon, vector<double>* xMinima)
 	{
 	double closenessdE = 1.0e-14;
 	vector<double> dE_test(1);	dE_test[0] = 1.0;

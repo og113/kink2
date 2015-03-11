@@ -30,33 +30,33 @@ CONTENTS
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // hFn
-mat	hFn(const Parameters& p) {
+static mat	hFn(const Parameters& p) {
 	mat xh(p.N,p.N);	xh = Eigen::MatrixXd::Zero(p.N,p.N);
 	double diag = p.mass2 + 2.0/pow(p.a,2.0);
 	double offDiag1 = -1.0/pow(p.a,2.0);
 	double offDiag2 = (p.pot==3? -pow(2.0,0.5)/pow(p.a,2.0): -1.0/pow(p.a,2.0) );
-	for (unsigned int l=0; l<p.N; l++)
-		{
-		if (l==0)
-			{
-			xh(l,l) = 1.0; 					// taking into account boundary conditions
-			//xh(l,l) = diag;
-			//xh(l,l+1) = offDiag2;			
+	for (unsigned int l=0; l<p.N; l++) {
+		if (l==0) {
+			if (p.pot==3) 	xh(l,l) = 1.0; 					// taking into account boundary conditions
+			else {
+							xh(l,l) = diag;
+							xh(l,l+1) = offDiag2;	
+			}		
+		}
+		else if (l==(p.N-1)) {
+			if (p.pot==3) 	xh(l,l) = 1.0; 					// taking into account boundary conditions
+			else {
+							xh(l,l) = diag;
+							xh(l,l-1) = offDiag2;
 			}
-		else if (l==(p.N-1))
-			{
-			xh(l,l) = 1.0; 					// taking into account boundary conditions
-			//xh(l,l) = diag;
-			//xh(l,l-1) = offDiag2;
-			}
-		else
-			{
+		}
+		else {
 			xh(l,l) = diag;
 			xh(l,l+1) = ((l+1)==(p.N-1)? 	offDiag2: offDiag1);
 			xh(l,l-1) = ((l-1)==0?			offDiag2: offDiag1);
-			}
-	return xh;
+		}
 	}
+	return xh;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -82,7 +82,8 @@ void analyticModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) 
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // numerical modes
-void numericalModes(const mat& h, mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) {
+void numericalModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) {
+	mat h = hFn(p);
 	Eigen::EigenSolver<mat> eigensolver(h);
 	cVec cFreqs(p.N);
 	cMat cModes(p.N,p.N);
@@ -114,10 +115,10 @@ void omegasFn(const bool& analytic, const mat& modes, const mat& freqs, mat& ome
 			for (unsigned int l=0; l<p.N; l++) {
 				if (analytic) djdk = p.a;
 				else 			 djdk = sqrt(DxFn(j,p)*DxFn(k,p));
-				omega_m1(j,k) += djdk*pow(real(freqs(l)),-0.5)*real(modes(j,l))*real(modes(k,l));
-				omega_0(j,k)  += djdk*real(modes(j,l))*real(modes(k,l));
-				omega_1(j,k)  += djdk*pow(real(freqs(l)),0.5)*real(modes(j,l))*real(modes(k,l));
-				omega_2(j,k)  += djdk*real(freqs(l))*real(modes(j,l))*real(modes(k,l));
+				omega_m1(j,k) += djdk*pow(freqs(l),-0.5)*modes(j,l)*modes(k,l);
+				omega_0(j,k)  += djdk*modes(j,l)*modes(k,l);
+				omega_1(j,k)  += djdk*pow(freqs(l),0.5)*modes(j,l)*modes(k,l);
+				omega_2(j,k)  += djdk*freqs(l)*modes(j,l)*modes(k,l);
 			}
 		}
 	}

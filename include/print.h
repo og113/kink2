@@ -1,14 +1,19 @@
 /*-------------------------------------------------------------------------------------------------------------------------
- 	declarations for the functions to calculate omega
+ 	definitions for functions to save, load and plot
  -------------------------------------------------------------------------------------------------------------------------*/
  
-#ifndef __OMEGA_H_INCLUDED__
-#define __OMEGA_H_INCLUDED__
+#ifndef __PRINT_H_INCLUDED__
+#define __PRINT_H_INCLUDED__
 
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include "parameters.h"
+#include "lattice.h"
 
 using namespace std;
+
+typedef unsigned int uint;
+typedef unsigned long lint;
 
 typedef Eigen::VectorXd vec;
 typedef Eigen::VectorXcd cVec;
@@ -18,41 +23,65 @@ typedef Eigen::MatrixXcd cMat;
 /*-------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------
 CONTENTS
-	1. h matrix
-	2. analytic modes
-	3. numerical modes
-	4. constructing omegas
+	1. saveOptions
+	2. save
+	3. load
+	4. plot
 	
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	1. h matrix
-		- hFn
+	1. saveOptions
+		- saveOptions
+	
+	n.b. saveOptions will also serve as loadOptions
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// hFn
-//static mat	hFn(const Parameters&);
+// saveOptions
+struct saveOptions {
+	enum vectorType { simple=0, real=1, complex=2, realB=3, complexB=4 };
+	enum extras { none=0, loc=1, coords=2};
+	uint column;
+	Parameters paramsIn;
+	Parameters paramsOut;
+};
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	2. analytic modes
+	2. save
+		- vec
+		- cVec
+		- mat
+		- cMat
+		- spMat
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// analytic modes
-void analyticModes(mat& modes, vec& freqs, const Parameters& p);
+// save vec
+void save(const string&, const saveOptions&, const vec&);
+
+// save cVec
+void save(const string&, const saveOptions&, const cVec&);
+
+// save mat
+void save(const string&, const saveOptions&, const mat&);
+
+// save cMat
+void save(const string&, const saveOptions&, const cMat&);
+
+// save spMat
+void save(const string&, const saveOptions&, const spMat&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	3. numerical modes
+	3. load
+		- vec
+		- cVec
+		- mat
+		- cMat
+		- spMat
 -------------------------------------------------------------------------------------------------------------------------*/
-
-// numerical modes
-void numericalModes(mat& modes, vec& freqs, const Parameters& p);
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	4. constructing omegas
+	4. plot
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// omegasFn
-void omegasFn(const mat& modes, const mat& freqs, mat& omega_m1, mat& omega_0, mat& omega_1, mat& omega_2, const Parameters& p);
-
-#endif // __OMEGA_H_INCLUDED__
+#endif // __PRINT_H_INCLUDED__

@@ -117,25 +117,25 @@ struct SecondaryParameters {
 ostream& operator<<(ostream&, const SecondaryParameters&);
 
 //V FDF gsl function	
-void VdV (double x, void * parameters, double * f, double* df);
+//void VdV (double x, void * parameters, double * f, double* df);
 
 //dV FDF gsl function	
-void dVddV (double x, void * parameters, double * f, double* df);
+//void dVddV (double x, void * parameters, double * f, double* df);
 	
 //energy change parameter struct
-struct ec_params {double aa; double minima0; double minima1; double de; };
+//struct ec_params {double aa; double minima0; double minima1; double de; };
 
 //energy change F gsl function : V(minima[1])-V(minima[0])-dE
-double ec (double epsi, void * parameters);
+//double ec (double epsi, void * parameters);
 	
 //S1 integrand
-double s1Integrand (double x, void * parameters);
+//double s1Integrand (double x, void * parameters);
 
 //rho integrand
-double rhoIntegrand (double x, void * parameters);
+//double rhoIntegrand (double x, void * parameters);
 
 //program to find epsilon given gsls function df and dE
-void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE, double * xEpsilon, vector<double>* xMinima);
+//void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE, double * xEpsilon, vector<double>* xMinima);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. Parameters

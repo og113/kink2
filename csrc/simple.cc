@@ -21,7 +21,8 @@ CONTENTS
 	3 - factorial
 	4 - currentDateTime
 	5 - copyFile
-	6 - explicit instantiation
+	6 - countLines
+	7 - explicit instantiation
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -150,7 +151,28 @@ void copyFile(const string & inputFile, const string & outputFile) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	6. explicit instantiation
+	6. countLines
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// count lines
+//count non-empty lines of a file
+uint countLines(const string & file_to_count) {
+	ifstream fin;
+	fin.open(file_to_count.c_str());
+	if (!fin.good()) cerr << "countLines error: " << file_to_count << " not opened properly." << endl;
+	string line;
+	unsigned int counter = 0;
+	while(!fin.eof()) {
+		getline(fin,line);
+		if(line.empty()) continue;
+		counter++;
+	}		
+	fin.close();
+    return counter;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	7. explicit instantiation
 		- numberToString, stringToNumber
 -------------------------------------------------------------------------------------------------------------------------*/
 

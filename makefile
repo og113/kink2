@@ -79,7 +79,6 @@ clean:
 	rm -f $(HDIR)/*~
 	rm -f $(TSDIR)/testFolder
 	rm -f $(TSDIR)/testPotentials
-	rm -f $(TSDIR)/testThetaT
 	rm -f $(TSDIR)/testGsl_extras
 	rm -f $(TSDIR)/testParameters
 
