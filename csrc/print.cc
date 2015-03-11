@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------------------------------------------------------------------
+	/*-------------------------------------------------------------------------------------------------------------------------
  	definitions for functions to save, load and plot
  -------------------------------------------------------------------------------------------------------------------------*/
  
@@ -59,35 +59,39 @@ static void simpleSaveVector(const string& f, const saveOptions& opts, const vec
 // save vec - saveVecB
 static void saveVecB (const string& f, const saveOptions& opts, const vec& v) {
 	Parameters pi = opts.ParamsIn, po = opts.ParamsOut;
+	vec vo;
+	if ((pi.N!=po.N && po.N!=0) || (pi.Nb!=po.Nb && po.Nb!=0)) {
+		vo = interpolate(v,pi,po);
+	}
+	else {
+		vo = v;
+	}
 	fstream F;
 	F.open((f).c_str(), ios::out);
-	int x0 = intCoord(0,1,pi.Nb);
+	int x0 = intCoord(0,1,po.Nb);
 	F.precision(16);
-	for (lint j=0; j<pi.Nb; j++) {
-		uint x = intCoord(j,1,pi.Nb);
+	for (lint j=0; j<po.Nb; j++) {
+		uint x = intCoord(j,1,po.Nb);
 		if (x!=x0) { //this is put in for gnuplot
 			F << endl;
 			x0 = x;
 		}
 		F << left;
-		F << setw(24) << real(coordB(j,0)) << setw(25) << imag(coordB(j,0));
-		F << setw(25) << real(coordB(j,1));
-		if (vecToPrint.size()>N*Nb) {
-			F << setw(25) << vecToPrint(2*j) << setw(25) << vecToPrint(2*j+1)  << endl;
+		F << setw(24) << real(coordB(j,0,po)) << setw(25) << imag(coordB(j,0,po));
+		F << setw(25) << real(coordB(j,1,po));
+		if (vecToPrint.size()>po.N*po.Nb) {
+			F << setw(25) << vo(2*j) << setw(25) << vo(2*j+1)  << endl;
 		}
-		else
-			{
-			F << setw(25) << vecToPrint(j) << endl;
-			}
+		else {
+			F << setw(25) << vo(j) << endl;
 		}
-	if (vecToPrint.size()>2*N*Nb)
-		{
+	}
+	if (vo.size()>2*po.N*po.Nb) {
 		F << endl;
-		for (unsigned int k=0; k<(vecToPrint.size()-2*N*Nb);k++)
-			{
-			F << setw(25) << vecToPrint(2*N*Nb+k) << endl;
-			}
+		for (unsigned int k=0; k<(vo.size()-2*po.N*po.Nb);k++) {
+			F << setw(25) << vo(2*po.N*po.Nb+k) << endl;
 		}
+	}
 	F.close();
 }
 

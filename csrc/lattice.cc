@@ -215,8 +215,15 @@ double DxFn (const unsigned int& space, const Parameters& p) {
 vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 	uint N_old = p_old.N, Nt_old = p_old.NT, N_new = p_new.N, Nt_new = p_new.NT;
 	uint old_size = vec_old.size();
-	if (old_size<2*N_old*Nt_old)
-		cerr << "interpolate error: vec_old.size() = " << old_size << " , 2*N_old*Nt_old = " << 2*N_old*Nt_old << endl;
+	if (old_size<2*N_old*Nt_old) {
+		if (old_size>=2*N_old*p_old.Nb) {
+			Nt_old = p_old.Nb;
+			Nt_new = p_new.Nb;
+		}
+		else {
+			cerr << "interpolate error: vec_old.size() = " << old_size << " , 2*N_old*Nt_old = " << 2*N_old*Nt_old << endl;
+		}
+	}
 	uint zero_modes = old_size - 2*N_old*Nt_old;
 	vec vec_new (2*N_new*Nt_new+zero_modes);
 	
@@ -279,8 +286,15 @@ vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 vec interpolateReal(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 	uint N_old = p_old.N, Nt_old = p_old.NT, N_new = p_new.N, Nt_new = p_new.NT;
 	uint old_size = vec_old.size();
-	if (old_size<N_old*Nt_old)
-		cerr << "interpolateReal error: vec_old.size() = " << old_size << " , N_old*Nt_old = " << N_old*Nt_old << endl;
+	if (old_size<N_old*Nt_old) {
+		if (old_size>=N_old*p_old.Nb) {
+			Nt_old = p_old.Nb;
+			Nt_new = p_new.Nb;
+		}
+		else {
+			cerr << "interpolateReal error: vec_old.size() = " << old_size << " , N_old*Nt_old = " << N_old*Nt_old << endl;
+		}
+	}
 	vec vec_new(N_old*Nt_old);
 	uint x_new, t_new, x_old, t_old;
 	double exact_x_old, exact_t_old, rem_x_old, rem_t_old;
