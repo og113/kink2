@@ -49,110 +49,110 @@ static void saveVecSimple(const string& f, const saveOptions& opts, const vec& v
 	F.open(f.c_str(), ios::out);
 	F.precision(16);
 	F << left;
-	uint length = vecToPrint.size();
-	if (opts.vectorType==complex && !length%2) length = (uint)(length/2);
+	uint length = v.size();
+	if (opts.vectorType==saveOptions::complex && !length%2) length = (uint)(length/2);
 	for (uint j=0; j<length; j++) {
-		if (opts.extras==loc) 			F << setw(25) << j;
-		if (opts.vectorType==complex)	F << setw(25) << v(2*j) << setw(25) << v(2*j+1);
-		else							F << setw(25) << v(j);
-										F << endl;
+		if (opts.extras==saveOptions::loc) 			F << setw(25) << j;
+		if (opts.vectorType==saveOptions::complex)	F << setw(25) << v(2*j) << setw(25) << v(2*j+1);
+		else										F << setw(25) << v(j);
+													F << endl;
 	}
 	F.close();
 }
 
 // save vec - saveVecB
 static void saveVecB (const string& f, const saveOptions& opts, const vec& v) {
-	Parameters pi = opts.ParamsIn, po = opts.ParamsOut;
+	Parameters pin = opts.paramsIn, pout = opts.paramsOut;
 	vec vo;
-	if ((pi.N!=po.N && po.N!=0) || (pi.Nb!=po.Nb && po.Nb!=0)) {
-		vo = interpolate(v,pi,po);
+	if ((pin.N!=pout.N && pout.N!=0) || (pin.Nb!=pout.Nb && pout.Nb!=0)) {
+		vo = interpolate(v,pin,pout);
 	}
 	else {
 		vo = v;
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
-	int x0 = intCoord(0,1,po.Nb);
+	uint x0 = intCoord(0,1,pout.Nb);
 	F.precision(16);
 	F << left;
-	for (lint j=0; j<po.N*po.Nb; j++) {
-		uint x = intCoord(j,1,po.Nb);
+	for (lint j=0; j<pout.N*pout.Nb; j++) {
+		uint x = intCoord(j,1,pout.Nb);
 		if (x!=x0) { //this is put in for gnuplot
 			F << endl;
 			x0 = x;
 		}
-		switch(objs.extras) {
-			case none:	break;
-			case loc: 	F << setw(25) << j;
-						break;
-			case coord:	F << setw(25) << real(coordB(j,0,po)) << setw(25) << imag(coordB(j,0,po));
-						F << setw(25) << real(coordB(j,1,po)); 
-						break;
-			default:	cerr << "save error: print extras option(" << objs.extras << ") not possible" << endl;
-						break;
+		switch(opts.extras) {
+			case saveOptions::none:		break;
+			case saveOptions::loc: 		F << setw(25) << j;
+										break;
+			case saveOptions::coords:	F << setw(25) << real(coordB(j,0,pout)) << setw(25) << imag(coordB(j,0,pout));
+										F << setw(25) << real(coordB(j,1,pout)); 
+										break;
+			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+										break;
 		}
-		switch(objs.vectorType) {
-			case realB:		F << setw(25) << vo(j) << endl;
-							break;
-			case complexB:	F << setw(25) << vo(2*j) << setw(25) << vo(2*j+1)  << endl;
-							break;
-			default:		cerr << "save error: print vectorType option(" << objs.vectorType << ") not possible" << endl;
-							break;
+		switch(opts.vectorType) {
+			case saveOptions::realB:	F << setw(25) << vo(j) << endl;
+										break;
+			case saveOptions::complexB:	F << setw(25) << vo(2*j) << setw(25) << vo(2*j+1)  << endl;
+										break;
+			default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+										break;
 		}
 	}
-	if (vo.size()>2*po.N*po.Nb) {
+	if (vo.size()>2*pout.N*pout.Nb) {
 		F << endl;
-		for (unsigned int k=0; k<(vo.size()-2*po.N*po.Nb);k++) {
-			F << setw(25) << vo(2*po.N*po.Nb+k) << endl;
+		for (unsigned int k=0; k<(vo.size()-2*pout.N*pout.Nb);k++) {
+			F << setw(25) << vo(2*pout.N*pout.Nb+k) << endl;
 		}
 	}
 	F.close();
 }
 
 // save vec - saveVec
-static void saveVec(const string& f, const saveOptions&, const vec& v) {
-	Parameters pi = opts.ParamsIn, po = opts.ParamsOut;
+static void saveVec(const string& f, const saveOptions& opts, const vec& v) {
+	Parameters pin = opts.paramsIn, pout = opts.paramsOut;
 	vec vo;
-	if ((pi.N!=po.N && po.N!=0) || (pi.NT!=po.NT && po.NT!=0)) {
-		vo = interpolate(v,pi,po);
+	if ((pin.N!=pout.N && pout.N!=0) || (pin.NT!=pout.NT && pout.NT!=0)) {
+		vo = interpolate(v,pin,pout);
 	}
 	else {
 		vo = v;
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
-	unsigned int x0 = intCoord(0,1,po.NT);
+	unsigned int x0 = intCoord(0,1,pout.NT);
 	F.precision(16);
 	F << left;
-	for (unsigned long int j=0; j<po.N*po.NT; j++) {
-		unsigned int x = intCoord(j,1,po.NT);
+	for (unsigned long int j=0; j<pout.N*pout.NT; j++) {
+		unsigned int x = intCoord(j,1,pout.NT);
 		if (x!=x0) { //this is put in for gnuplot
 			F << endl;
 			x0 = x;
 		}
-		switch(objs.extras) {
-			case none:	break;
-			case loc: 	F << setw(25) << j;
-						break;
-			case coord:	F << setw(25) << real(coord(j,0,po)) << setw(25) << imag(coord(j,0,po));
-						F << setw(25) << real(coord(j,1,po)); 
-						break;
-			default:	cerr << "save error: print extras option(" << objs.extras << ") not possible" << endl;
-						break;
+		switch(opts.extras) {
+			case saveOptions::none:		break;
+			case saveOptions::loc: 		F << setw(25) << j;
+										break;
+			case saveOptions::coords:	F << setw(25) << real(coord(j,0,pout)) << setw(25) << imag(coord(j,0,pout));
+										F << setw(25) << real(coord(j,1,pout)); 
+										break;
+			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+										break;
 		}
-		switch(objs.vectorType) {
-			case realB:		F << setw(25) << vo(j) << endl;
-							break;
-			case complexB:	F << setw(25) << vo(2*j) << setw(25) << vo(2*j+1)  << endl;
-							break;
-			default:		cerr << "save error: print vectorType option(" << objs.vectorType << ") not possible" << endl;
-							break;
+		switch(opts.vectorType) {
+			case saveOptions::realB:	F << setw(25) << vo(j) << endl;
+										break;
+			case saveOptions::complexB:	F << setw(25) << vo(2*j) << setw(25) << vo(2*j+1)  << endl;
+										break;
+			default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+										break;
 		}
 	}
-	if (vecToPrint.size()>2*N*NT) {
+	if (vo.size()>2*pout.N*pout.NT) {
 		F << endl;
-		for (unsigned int j=0; j<(vecToPrint.size()-2*N*NT);j++) {
-			F << setw(25) << vecToPrint(2*N*NT+j) << endl;
+		for (unsigned int j=0; j<(vo.size()-2*pout.N*pout.NT);j++) {
+			F << setw(25) << vo(2*pout.N*pout.NT+j) << endl;
 		}
 	}
 	F.close();
@@ -160,19 +160,19 @@ static void saveVec(const string& f, const saveOptions&, const vec& v) {
 
 // save vec
 void save(const string& f, const saveOptions& opts, const vec& v) {
-	switch(vectorType) {
-		case simple:	saveVecSimple(f, opts, v);
-						break;
-		case real:		saveVec(f,opts,v);
-						break;
-		case complex:	saveVec(f,opts,v);
-						break;
-		case realB:		saveVecB(f,opts,v);
-						break;
-		case complexB:	saveVecB(f,opts,v);
-						break;
-		default:		cerr << "save error: print vectorType option(" << objs.vectorType << ") not possible" << endl;
-						break;
+	switch(opts.vectorType) {
+		case saveOptions::simple:	saveVecSimple(f, opts, v);
+									break;
+		case saveOptions::real:		saveVec(f,opts,v);
+									break;
+		case saveOptions::complex:	saveVec(f,opts,v);
+									break;
+		case saveOptions::realB:	saveVecB(f,opts,v);
+									break;
+		case saveOptions::complexB:	saveVecB(f,opts,v);
+									break;
+		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+									break;
 	}	
 }
 
@@ -182,168 +182,369 @@ static void savecVecSimple(const string& f, const saveOptions& opts, const cVec&
 	F.open((f).c_str(), ios::out);
 	F.precision(16);
 	F << left;
-	unsigned int length = vecToPrint.size();
-	for (unsigned int j=0; j<length; j++) {
-		if (opts.extras==loc) 	F << setw(25) << j;
-								F << setw(25) << real(v(j)) << setw(25) << imag(v(j)) << endl;
+	uint length = v.size();
+	for (uint j=0; j<length; j++) {
+		if (opts.extras==saveOptions::loc) 	F << setw(25) << j;
+											F << setw(25) << real(v(j)) << setw(25) << imag(v(j)) << endl;
 	}
 	F.close();
 }
 
 // save cVec - saveVecB
-static void saveVecB (const string& f, const saveOptions& opts, const cVec& v) {
-	Parameters pi = opts.ParamsIn, po = opts.ParamsOut;
+static void savecVecB (const string& f, const saveOptions& opts, const cVec& v) {
+	Parameters pin = opts.paramsIn, pout = opts.paramsOut;
 	cVec vo;
-	if ((pi.N!=po.N && po.N!=0) || (pi.Nb!=po.Nb && po.Nb!=0)) {
-		vo = interpolate(v,pi,po);
+	if ((pin.N!=pout.N && pout.N!=0) || (pin.Nb!=pout.Nb && pout.Nb!=0)) {
+		vo = interpolate(v,pin,pout);
 	}
 	else {
 		vo = v;
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
-	int x0 = intCoord(0,1,po.Nb);
+	uint x0 = intCoord(0,1,pout.Nb);
 	F.precision(16);
 	F << left;
-	for (lint j=0; j<po.N*po.Nb; j++) {
-		uint x = intCoord(j,1,po.Nb);
+	for (lint j=0; j<pout.N*pout.Nb; j++) {
+		uint x = intCoord(j,1,pout.Nb);
 		if (x!=x0) { //this is put in for gnuplot
 			F << endl;
 			x0 = x;
 		}
-		switch(objs.extras) {
-			case none:	break;
-			case loc: 	F << setw(25) << j;
-						break;
-			case coord:	F << setw(25) << real(coordB(j,0,po)) << setw(25) << imag(coordB(j,0,po));
-						F << setw(25) << real(coordB(j,1,po)); 
-						break;
-			default:	cerr << "save error: print extras option(" << objs.extras << ") not possible" << endl;
-						break;
+		switch(opts.extras) {
+			case saveOptions::none:		break;
+			case saveOptions::loc: 		F << setw(25) << j;
+										break;
+			case saveOptions::coords:	F << setw(25) << real(coordB(j,0,pout)) << setw(25) << imag(coordB(j,0,pout));
+										F << setw(25) << real(coordB(j,1,pout)); 
+										break;
+			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+										break;
 		}
 		F << setw(25) << real(vo(j)) << setw(25) << imag(vo(j))  << endl;
 	}
-	if (vo.size()>po.N*po.Nb) {
+	if (vo.size()>pout.N*pout.Nb) {
 		F << endl;
-		for (unsigned int k=0; k<(vo.size()-po.N*po.Nb);k++) {
-			F << setw(25) << vo(po.N*po.Nb+k) << endl;
+		for (unsigned int k=0; k<(vo.size()-pout.N*pout.Nb);k++) {
+			F << setw(25) << vo(pout.N*pout.Nb+k) << endl;
 		}
 	}
 	F.close();
 }
 
 // save cVec - saveVec
-static void saveVec(const string& f, const saveOptions&, const cVec& v) {
-	Parameters pi = opts.ParamsIn, po = opts.ParamsOut;
+static void savecVec(const string& f, const saveOptions& opts, const cVec& v) {
+	Parameters pin = opts.paramsIn, pout = opts.paramsOut;
 	cVec vo;
-	if ((pi.N!=po.N && po.N!=0) || (pi.NT!=po.NT && po.NT!=0)) {
-		vo = interpolate(v,pi,po);
+	if ((pin.N!=pout.N && pout.N!=0) || (pin.NT!=pout.NT && pout.NT!=0)) {
+		vo = interpolate(v,pin,pout);
 	}
 	else {
 		vo = v;
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
-	unsigned int x0 = intCoord(0,1,po.NT);
+	uint x0 = intCoord(0,1,pout.NT);
 	F.precision(16);
 	F << left;
-	for (unsigned long int j=0; j<po.N*po.NT; j++) {
-		unsigned int x = intCoord(j,1,po.NT);
+	for (lint j=0; j<pout.N*pout.NT; j++) {
+		uint x = intCoord(j,1,pout.NT);
 		if (x!=x0) { //this is put in for gnuplot
 			F << endl;
 			x0 = x;
 		}
-		switch(objs.extras) {
-			case none:	break;
-			case loc: 	F << setw(25) << j;
-						break;
-			case coord:	F << setw(25) << real(coord(j,0,po)) << setw(25) << imag(coord(j,0,po));
-						F << setw(25) << real(coord(j,1,po)); 
-						break;
-			default:	cerr << "save error: print extras option(" << objs.extras << ") not possible" << endl;
-						break;
+		switch(opts.extras) {
+			case saveOptions::none:		break;
+			case saveOptions::loc: 		F << setw(25) << j;
+										break;
+			case saveOptions::coords:	F << setw(25) << real(coord(j,0,pout)) << setw(25) << imag(coord(j,0,pout));
+										F << setw(25) << real(coord(j,1,pout)); 
+										break;
+			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+										break;
 		}
 		F << setw(25) << real(vo(j)) << setw(25) << imag(vo(j))  << endl;
 	}
-	if (vecToPrint.size()>N*NT) {
+	if (vo.size()>pout.N*pout.NT) {
 		F << endl;
-		for (unsigned int j=0; j<(vecToPrint.size()-N*NT);j++) {
-			F << setw(25) << vecToPrint(N*NT+j) << endl;
+		for (uint j=0; j<(vo.size()-pout.N*pout.NT);j++) {
+			F << setw(25) << vo(pout.N*pout.NT+j) << endl;
 		}
 	}
 	F.close();
 }
 
 // save cVec
-void save(const string&, const saveOptions&, const cVec&) {
-	switch(vectorType) {
-		case simple:	saveVecSimple(f, opts, v);
-						break;
-		case real:		saveVec(f,opts,v);
-						break;
-		case complex:	saveVec(f,opts,v);
-						break;
-		case realB:		saveVecB(f,opts,v);
-						break;
-		case complexB:	saveVecB(f,opts,v);
-						break;
-		default:		cerr << "save error: print vectorType option(" << objs.vectorType << ") not possible" << endl;
-						break;
+void save(const string& f, const saveOptions& opts, const cVec& v) {
+	switch(opts.vectorType) {
+		case saveOptions::simple:	savecVecSimple(f, opts, v);
+									break;
+		case saveOptions::real:		savecVec(f,opts,v);
+									break;
+		case saveOptions::complex:	savecVec(f,opts,v);
+									break;
+		case saveOptions::realB:	savecVecB(f,opts,v);
+									break;
+		case saveOptions::complexB:	savecVecB(f,opts,v);
+									break;
+		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+									break;
 	}	
 }
 
 // save mat
 void save(const string& f, const saveOptions& opts, const mat& m) {
 	fstream F;
-	F.open((f).c_str(), ios::out);
+	F.open(f.c_str(), ios::out);
 	F << left;
 	F.precision(16);
-	for (uint j=0; j<m.rows(); j++)
-		{
-		for (uint k=0; k<m.cols(); k++)
-			{
+	for (uint j=0; j<m.rows(); j++) {
+		for (uint k=0; k<m.cols(); k++) {
+			F << setw(25) << j << setw(25) << k;
 			F << setw(25) << m(j,k) << endl;
-			}
 		}
+	}
 	F.close();
 }
 
 // save cMat
-void save(const string&, const saveOptions&, const cMat&) {
+void save(const string& f, const saveOptions& opts, const cMat& m) {
 	fstream F;
-	F.open((f).c_str(), ios::out);
+	F.open(f.c_str(), ios::out);
 	F << left;
 	F.precision(16);
-	for (uint j=0; j<m.rows(); j++)
-		{
-		for (uint k=0; k<m.cols(); k++)
-			{
+	for (uint j=0; j<m.rows(); j++) {
+		for (uint k=0; k<m.cols(); k++) {
+			F << setw(25) << j << setw(25) << k;
 			F << setw(25) << real(m(j,k)) << setw(25) << imag(m(j,k)) << endl;
-			}
 		}
+	}
 	F.close();
 }
 
 // save spMat
 void save(const string& f, const saveOptions& opts, const spMat& m) {
 	fstream F;
-	F.open((f).c_str(), ios::out);
+	F.open(f.c_str(), ios::out);
 	F << left;
 	F.precision(16);
-	for (int l=0; l<m.outerSize(); ++l)
-		{
-		for (Eigen::SparseMatrix<double>::InnerIterator it(m,l); it; ++it)
-			{
+	for (int l=0; l<m.outerSize(); ++l) {
+		for (Eigen::SparseMatrix<double>::InnerIterator it(m,l); it; ++it) {
 			F << setw(25) << it.row()+1 << setw(25) << it.col()+1 << setw(25) << it.value() << endl;
-			}
 		}
+	}
 	F.close();
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3. load
+		- vec
+		- cVec
+		- mat
+		- cMat
+		- spMat
 -------------------------------------------------------------------------------------------------------------------------*/
 
+// load vec
+void load(const string& f, const saveOptions& opts, vec& v) {
+	uint col = opts.column;
+	if (col==0) {
+		switch(opts.extras) {
+			case saveOptions::none:		col = 1;
+										break;
+			case saveOptions::loc:		col = 2;
+										break;
+			case saveOptions::coords:	col = 4;
+										break;
+			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+										break;
+		}
+	}
+	uint fileLength = countLines(f);
+	uint vLength;
+	switch(opts.vectorType) {
+		case saveOptions::simple:	vLength = fileLength;
+									break;
+		case saveOptions::real:		vLength = fileLength;
+									break;
+		case saveOptions::complex:	vLength = 2*(fileLength-opts.zeroModes);
+									break;
+		case saveOptions::realB:	vLength = fileLength;
+									break;
+		case saveOptions::complexB:	vLength = 2*(fileLength-opts.zeroModes);
+									break;
+		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+									break;
+	}	
+	v = Eigen::VectorXd::Zero(vLength);
+	fstream F;
+	F.open(f.c_str(), ios::in);
+	string line, temp;
+	unsigned int j=0;
+	while (getline(F, line)) {
+		if (!line.empty()) {
+			istringstream ss(line);
+			if (col>1) for (unsigned int l=0; l<(col-1); l++) ss >> temp;
+			if (opts.vectorType==saveOptions::complex || opts.vectorType==saveOptions::complexB) {
+				if (j>=(fileLength-opts.zeroModes)) 	ss >> v(j);
+				else 							ss >> v(2*j) >> v(2*j+1);
+				
+			}
+			else ss >> v(j);
+			j++;
+		}
+	}
+	F.close();
+}
+
+// load cVec
+void load(const string& f, const saveOptions& opts, cVec& v) {
+	uint col = opts.column;
+	if (col==0) {
+		switch(opts.extras) {
+			case saveOptions::none:		col = 1;
+										break;
+			case saveOptions::loc:		col = 2;
+										break;
+			case saveOptions::coords:	col = 4;
+										break;
+			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+										break;
+		}
+	}
+	uint fileLength = countLines(f);
+	uint vLength = fileLength;
+	v = Eigen::VectorXcd::Zero(vLength);
+	fstream F;
+	F.open(f.c_str(), ios::in);
+	string line, temp;
+	uint j=0;
+	double realPart, imagPart;
+	while (getline(F, line)) {
+		if (!line.empty()) {
+			istringstream ss(line);
+			if (col>1) for (unsigned int l=0; l<(col-1); l++) ss >> temp;
+			ss >> realPart >> imagPart;
+			v(j) = realPart + comp(0.0,1.0)*imagPart;
+			j++;
+		}
+	}
+	F.close();
+}
+
+// load mat - assumes square matrix
+void load(const string& f, const saveOptions& opts, mat& m) {
+	uint fileLength = countLines(f);
+	uint matLength = (uint)sqrt(fileLength);
+	fstream F;
+	F.open(f.c_str(), ios::in);
+	string line;
+	uint j, k;
+	double v;
+	m = Eigen::MatrixXd::Zero(matLength,matLength);
+	while (getline(F, line)) {
+		if (!line.empty()) {
+			istringstream ss(line);
+			ss >> j >> k >> v;
+			if (j>matLength || k>matLength) cerr << "load error: matrix index > sqrt(fileLength)" << endl;
+			m(j,k) = v;
+		}
+	}
+	F.close();
+}
+
+// load cMat
+void load(const string& f, const saveOptions& opts, cMat& m) {
+	uint fileLength = countLines(f);
+	uint matLength = (uint)sqrt(fileLength);
+	fstream F;
+	F.open(f.c_str(), ios::in);
+	string line;
+	uint j, k;
+	double realPart, imagPart;
+	m = Eigen::MatrixXcd::Zero(matLength,matLength);
+	while (getline(F, line)) {
+		if (!line.empty()) {
+			istringstream ss(line);
+			ss >> j >> k >> realPart >> imagPart;
+			if (j>matLength || k>matLength) cerr << "load error: matrix index > sqrt(fileLength)" << endl;
+			m(j,k) = realPart + comp(0.0,1.0)*imagPart;;
+		}
+	}
+	F.close();
+}
+
+// load spMat
+void load(const string& f , const saveOptions& opts, spMat& m) {
+	uint fileLength = countLines(f);
+	Eigen::VectorXi to_reserve(fileLength); //an overestimate
+	to_reserve.setZero(fileLength);
+	fstream F;
+	F.open(f.c_str(), ios::in);
+	string line;
+	unsigned int nnz = 0, length = 0, count = 0, row, column;
+	double value;	
+	Eigen::VectorXi rowVec(fileLength), columnVec(fileLength);
+	vec valueVec(fileLength);
+	while (getline(F, line)) {
+		if (!line.empty()) {
+			istringstream ss(line);
+			ss >> row >> column >> value;
+			if (abs(value)>MIN_NUMBER) {
+				rowVec(count) = row-1;
+				columnVec(count) = column-1;
+				valueVec(count) = value;
+				to_reserve(row-1) = to_reserve(row-1) + 1;
+				nnz++;
+				count++;
+				if (row>length) {
+					length = row;
+				}
+			}
+		}
+	}
+	if (nnz==0) {
+		cerr << "loadSpMat failed, no data in file: " << f << endl;
+		}
+	to_reserve.conservativeResize(length);
+	rowVec.conservativeResize(count);
+	columnVec.conservativeResize(count);
+	valueVec.conservativeResize(count);
+	spMat M(length,length);
+	M.setZero(); //just making sure
+	M.reserve(to_reserve);
+	for (unsigned int l=0;l<count;l++) {
+		M.insert(rowVec(l),columnVec(l)) = valueVec(l);
+	}
+	M.makeCompressed();
+	m = M;
+}
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. plot
 -------------------------------------------------------------------------------------------------------------------------*/
+
+// plot
+void plot(const string& f, const plotOptions& opts) {
+	string style = ((opts.style).empty()? "linespoints": opts.style);
+	string output = ((opts.output).empty()? "pic": opts.output);
+	uint col = (opts.column==0? 1: opts.column);
+	if ((opts.gp).empty()) {		
+		string commandOpenStr = "gnuplot -persistent";
+		const char * commandOpen = commandOpenStr.c_str();
+		FILE * gnuplotPipe = popen (commandOpen,"w");
+		string command1Str = "plot \"" + f + "\" using " + numberToString<uint>(col) + " with " + style;
+		string command2Str = "pause -1";
+		const char * command1 = command1Str.c_str();
+		const char * command2 = command2Str.c_str();
+		fprintf(gnuplotPipe, "%s \n", command1);
+		fprintf(gnuplotPipe, "%s \n", command2);
+		pclose(gnuplotPipe);
+	}
+	else {
+		string commandStr = "gnuplot -e \"f='" + f + "'\" \"o='" + output + "'\" " + opts.gp + " -persistent";
+		const char * command = commandStr.c_str();
+		FILE * gnuplotPipe = popen (command,"w");
+		fprintf(gnuplotPipe, "%s \n", " ");
+		pclose(gnuplotPipe);
+	}
+}

@@ -339,7 +339,7 @@ cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new)
 		}
 	}
 	for (uint l=0; l<zero_modes; l++) {
-		vec_new(N_new*Nt_new+l) = vec_old*N_old*Nt_old+l);
+		vec_new(N_new*Nt_new+l) = vec_old(N_old*Nt_old+l);
 	}
 	return vec_new;
 }

@@ -112,12 +112,15 @@ double DxFn (const unsigned int& space, const Parameters& p);
 
 //interpolate 2d (real representation of ) complex vector
 vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new);
+cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new);
 
 //interpolate 2d real vector function
-vec interpolateReal(vec vec_old, const Parameters& p_old, const Parameters& p_new);
+vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new);
+cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new);
 
 // interpolate1d	
 vec interpolate1d(vec vec_old, const unsigned int & N_old, const unsigned int & N_new);
+cVec interpolate1d(cVec vec_old, const unsigned int & N_old, const unsigned int & N_new);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. vecComplex etc
