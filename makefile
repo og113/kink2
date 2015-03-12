@@ -23,7 +23,7 @@ CFLAGS 			= -Wall -g
 #-fopenmp 			: so can use openmp parallelisation
 #-pg 				: also known as gprof, the gcc profiling tool 
 LFLAGS 			= 
-INCLUDES		= -I$(HDIR) -I/home/og/Documents/c++/eigen-eigen-1306d75b4a21 -I/home/og/Documents/c++/gnuplot/gnuplot-cpp
+INCLUDES		= -I$(HDIR) -I/home/og113/Documents/c++/eigen-eigen-1306d75b4a21 -I/home/og113/Documents/c++/gnuplot/gnuplot-cpp
 LIBS 			= -lm -lgsl -lgslcblas
 
 _HEADERS 		= error.h fnptrs.h folder.h gsl_extras.h lattice.h omega.h parameters.h potentials.h simple.h 

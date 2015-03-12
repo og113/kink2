@@ -281,6 +281,68 @@ vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 	}
 	return vec_new;
 }
+
+// interpolate -  2d (real representation of ) complex vector
+cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new) {
+	uint N_old = p_old.N, Nt_old = p_old.NT, N_new = p_new.N, Nt_new = p_new.NT;
+	uint old_size = vec_old.size();
+	if (old_size<N_old*Nt_old) {
+		if (old_size>=N_old*p_old.Nb) {
+			Nt_old = p_old.Nb;
+			Nt_new = p_new.Nb;
+		}
+		else {
+			cerr << "interpolate error: vec_old.size() = " << old_size << " , N_old*Nt_old = " << N_old*Nt_old << endl;
+		}
+	}
+	uint zero_modes = old_size - N_old*Nt_old;
+	cVec vec_new (N_new*Nt_new+zero_modes);
+	
+	uint x_new, t_new, x_old, t_old;
+	double exact_x_old, exact_t_old, rem_x_old, rem_t_old;
+	lint pos;
+	int neigh_t, neigh_x, neigh_tx;
+	
+	for (lint l=0;l<N_new*Nt_new;l++) {
+		t_new = intCoord(l,0,Nt_new);
+		x_new = intCoord(l,1,Nt_new);
+		exact_t_old = t_new*(Nt_old-1.0)/(Nt_new-1.0);
+		exact_x_old = x_new*(N_old-1.0)/(N_new-1.0);
+		t_old = (unsigned int)exact_t_old;
+		x_old = (unsigned int)exact_x_old;
+		rem_t_old = exact_t_old;
+		rem_t_old -= (double)(t_old);
+		rem_x_old = exact_x_old;
+		rem_x_old -= (double)(x_old);
+		pos = t_old + Nt_old*x_old;
+		neigh_t = neigh(pos,0,1,p_old);
+		neigh_x = neigh(pos,1,1,p_old);
+		neigh_tx = neigh(neigh_t,1,1,p_old);
+		if  (t_old<(Nt_old-1) ) {
+			if (neigh_t!=-1 && neigh_x) {
+				vec_new(l) = (1.0-rem_t_old)*(1.0-rem_x_old)*vec_old(pos) \
+							+ (1.0-rem_t_old)*rem_x_old*vec_old(neigh_x) \
+							+ rem_t_old*(1.0-rem_x_old)*vec_old(neigh_t) \
+							+ rem_t_old*rem_x_old*vec_old(neigh_tx);
+			}
+			else if (neigh_t!=-1) {
+				vec_new(l) = (1.0-rem_t_old)*vec_old(pos) \
+							+ rem_t_old*vec_old(neigh_t);
+			}
+			else if(neigh_x!=-1) {
+				vec_new(l) = (1.0-rem_x_old)*vec_old(pos) \
+							+ rem_x_old*vec_old(neigh_x);
+			}
+			else {
+				vec_new(l) = vec_old(pos);				
+			}
+		}
+	}
+	for (uint l=0; l<zero_modes; l++) {
+		vec_new(N_new*Nt_new+l) = vec_old*N_old*Nt_old+l);
+	}
+	return vec_new;
+}
 	
 // interpolateReal -  2d real vector function
 vec interpolateReal(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
@@ -344,6 +406,25 @@ vec interpolate1d(vec vec_old, const unsigned int & N_old, const unsigned int & 
 	uint old_size = vec_old.size();
 	if (old_size<N_old) cerr << "interpolate error, vec_old.size() = " << old_size << " , N_old = " << N_old << endl;
 	vec vec_new (N_new);
+	
+	uint x_old;
+	double exact_x_old, rem_x_old;
+	
+	for (lint l=0;l<N_new;l++) {
+		exact_x_old = l*(N_old-1.0)/(N_new-1.0);
+		x_old = (unsigned int)exact_x_old;
+		rem_x_old = exact_x_old - (double)(x_old);
+		if  (x_old<(N_old-1)) vec_new[l] = (1.0-rem_x_old)*vec_old[x_old] + rem_x_old*vec_old[x_old+1];
+		else vec_new[l] = vec_old[x_old];
+	}
+	return vec_new;
+}
+
+// interpolate1d	
+cVec interpolate1d(cVec vec_old, const unsigned int & N_old, const unsigned int & N_new) {
+	uint old_size = vec_old.size();
+	if (old_size<N_old) cerr << "interpolate error, vec_old.size() = " << old_size << " , N_old = " << N_old << endl;
+	cVec vec_new (N_new);
 	
 	uint x_old;
 	double exact_x_old, rem_x_old;
