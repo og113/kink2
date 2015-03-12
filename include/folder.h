@@ -195,6 +195,7 @@ public:
 	Filename 			operator[](const int&) const;
 	bool 				isPresent(const Filename&);
 	void 				update();
+	void				order();
 private:
 	FilenameComparator 	Comparator;
 	vector<Filename> 	Filenames;

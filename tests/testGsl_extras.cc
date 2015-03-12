@@ -1,25 +1,21 @@
 /*
-	program to test thetaT.cc and thetaT.h
+	main for program to test gsl_extras.cc and gsl_extras.h
 */
 
 #include <iostream>
-#include <complex>
 #include "potentials.h"
-#include "thetaT.h"
+#include "gsl_extras.h"
 
 using namespace std;
 
-typedef complex<double> comp;
-
 int main() {
+cout << "test: " << endl;
 
 struct params_for_V paramsV;
 paramsV.epsi = 0.05;
 paramsV.aa = 0.4;
 
-struct void_params paramsVoid;
-
-double d = 0.9;
+//double d = 0.9;
 comp c(-1.0,0.0);
 
 PotentialType pot = &V2<comp>;
@@ -27,7 +23,6 @@ PotentialType pot = &V2<comp>;
 Potential classV(paramsV,pot);
 
 cout << classV(c) << endl;
-
 
 return 0;
 }

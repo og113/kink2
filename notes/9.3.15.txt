@@ -1,0 +1,6 @@
+working on parameters.cc
+	- current problem is to do with *(Vd) et al
+	- before these were defined in one file and so the same functions were accessed by all, now they are not. this leads to inconsistencies.
+	- to solve this put thetaT into parameters
+	
+	SOLVED
