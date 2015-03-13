@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------------------------------------------------------
- 	definitions for functions to save, load and plot
+ 	declarations for functions to save, load and plot
  -------------------------------------------------------------------------------------------------------------------------*/
  
 #ifndef __PRINT_H_INCLUDED__
@@ -25,7 +25,7 @@ typedef Eigen::SparseMatrix<double> spMat;
 /*-------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------
 CONTENTS
-	1. saveOptions
+	1. SaveOptions
 	2. save
 	3. load
 	4. plot
@@ -34,14 +34,14 @@ CONTENTS
 -------------------------------------------------------------------------------------------------------------------------*/
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	1. saveOptions
-		- saveOptions
+	1. SaveOptions
+		- SaveOptions
 	
-	n.b. saveOptions will also serve as loadOptions
+	n.b. SaveOptions will also serve as loadOptions
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// saveOptions
-struct saveOptions {
+// SaveOptions
+struct SaveOptions {
 	enum vectorTypeList { simple=0, real=1, complex=2, realB=3, complexB=4 };
 	enum extrasList { none=0, loc=1, coords=2};
 	vectorTypeList vectorType;
@@ -62,19 +62,19 @@ struct saveOptions {
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // save vec
-void save(const string&, const saveOptions&, const vec&);
+void save(const string&, const SaveOptions&, const vec&);
 
 // save cVec
-void save(const string&, const saveOptions&, const cVec&);
+void save(const string&, const SaveOptions&, const cVec&);
 
 // save mat
-void save(const string&, const saveOptions&, const mat&);
+void save(const string&, const SaveOptions&, const mat&);
 
 // save cMat
-void save(const string&, const saveOptions&, const cMat&);
+void save(const string&, const SaveOptions&, const cMat&);
 
 // save spMat
-void save(const string&, const saveOptions&, const spMat&);
+void save(const string&, const SaveOptions&, const spMat&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3. load
@@ -86,28 +86,28 @@ void save(const string&, const saveOptions&, const spMat&);
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // load vec
-void load(const string&, const saveOptions&, vec&);
+void load(const string&, const SaveOptions&, vec&);
 
 // load cVec
-void load(const string&, const saveOptions&, cVec&);
+void load(const string&, const SaveOptions&, cVec&);
 
 // load mat
-void load(const string&, const saveOptions&, mat&);
+void load(const string&, const SaveOptions&, mat&);
 
 // load cMat
-void load(const string&, const saveOptions&, cMat&);
+void load(const string&, const SaveOptions&, cMat&);
 
 // load spMat
-void load(const string&, const saveOptions&, spMat&);
+void load(const string&, const SaveOptions&, spMat&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. plot
-		- plotOptions
+		- PlotOptions
 		- plot
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// plotOptions
-struct plotOptions {
+// PlotOptions
+struct PlotOptions {
 	string gp;
 	uint column;
 	string style;
@@ -115,6 +115,6 @@ struct plotOptions {
 };
 
 // plot
-void plot (const string& filename, const plotOptions& opts);
+void plot (const string& filename, const PlotOptions& opts);
 
 #endif // __PRINT_H_INCLUDED__

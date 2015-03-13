@@ -115,8 +115,8 @@ vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new);
 cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new);
 
 //interpolate 2d real vector function
-vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new);
-cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new);
+vec interpolateReal(vec vec_old, const Parameters& p_old, const Parameters& p_new);
+cVec interpolateReal(cVec vec_old, const Parameters& p_old, const Parameters& p_new);
 
 // interpolate1d	
 vec interpolate1d(vec vec_old, const unsigned int & N_old, const unsigned int & N_new);
@@ -129,15 +129,15 @@ cVec interpolate1d(cVec vec_old, const unsigned int & N_old, const unsigned int 
 -------------------------------------------------------------------------------------------------------------------------*/
 
 //complexify a real vector - tDim
-cVec vecComplex(vec realVec, const uint & tDim);
+cVec vecComplex(vec realVec, const uint& tDim);
 
 //complexify a real vector - parameters
 cVec vecComplex(vec realVec, const Parameters& p);
 	
 //make a complex vector real - tDim
-vec vecReal(cVec complexVec, const uint &  tDim);
+vec vecReal(cVec complexVec, const uint& tDim);
 
 //make a complex vector real - parameters
-vec vecReal(cVec complexVec, const Parameters&  p);
+vec vecReal(cVec complexVec, const Parameters& p);
 
 #endif // __LATTICE_H_INCLUDED__

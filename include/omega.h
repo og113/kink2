@@ -39,14 +39,14 @@ CONTENTS
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // analytic modes
-void analyticModes(mat& modes, vec& freqs, const Parameters& p);
+void analyticModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3. numerical modes
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // numerical modes
-void numericalModes(mat& modes, vec& freqs, const Parameters& p);
+void numericalModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. constructing omegas

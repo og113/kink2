@@ -40,9 +40,8 @@ p2.setSecondaryParameters(P1);
 
 cout << "p2: " << endl << p2;
 
-Parameters p;
-p.load(filename);
-p.setSecondaryParameters();
+Parameters p(p1);
+//p.load(filename);
 p.changeParameters("theta",0.1);
 p.changeParameters("Tb",17.9);
 

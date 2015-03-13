@@ -14,6 +14,8 @@
 #include "parameters.h"
 #include "lattice.h"
 #include "folder.h"
+#include "check.h"
+#include "print.h"
 #include "omega.h"
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -101,7 +103,7 @@ string timenumber = currentDateTime();
 		- beginning file loop
 		- copying a version of mainInputs with timenumber
 		- loading inputs
-		- assigning closenesses
+		- declaring checks
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // beginning file loop
@@ -109,182 +111,148 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 	{
 
 	// loading parameters
-	Parameters params;
-	params.load(inputsFolder[fileLoop]);
+	Parameters ps;
+	ps.load(inputsFolder[fileLoop]);
 
-	//copying a version of params with timenumber
+	//copying a version of ps with timenumber
 	string runParamsFile = "./data/" + timenumber + "inputsM";
-	params.save(runParamsFile);
+	ps.save(runParamsFile);
 	
-// assigning closenesses
-	double closenessA = 1.0;
-	double closenessS = 1.0e-6;
-	double closenessSM = 1.0e-5;
-	double closenessD = 1.0;
-	double closenessC = 1.0e-16*N*NT;
-	double closenessCon = 1.0/3.0;
-	double closenessL = 1.0e-2;
-	double closenessT = 5.0e-2;
-	double closenessP = 0.5;
-	double closenessR = 1.0e-2;
-	double closenessIE = 1.0e-5;
-	double closenessCL = 5.0e-2;
-	double closenessON = 5.0e-2;
-	double closenessAB = 1.0e-2;
-	double closenessLR = 1.0e-12;
-	double closenessABNE = 5.0e-2;
-
+	// declaring Checks
+	Check checkAction("action",1.0e-2);
+	Check checkSoln("solution",1.0e-6);
+	Check checkSolnMax("solution max",1.0e-5);
+	Check checkDelta("delta",1.0);
+	Check checkInv("matrix inversion",1.0e-16*ps.N*ps.NT);
+	Check checkCon("energy conservation",1.0e-2);
+	Check checkLin("linear energy flat",5.0e-2);
+	Check checkTrue("linear energy equal true energy",5.0e-2);
+	Check checkLatt("lattice small enough for energy",0.2);
+	Check checkReg("regularisation term",1.0e-2);
+	Check checkIE("imaginary part of energy",1.0e-5);
+	Check checkContm("linear energy equal continuum expression",5.0e-2);
+	Check checkOS("linear energy equal on shell expression",5.0e-2);
+	Check checkAB("a_k = Gamma*b_k",1.0e-2);
+	Check checkABNE("N = Sum(a_k*b_k), E = Sum(w_k*a_k*b_k)",5.0e-2);
+	Check checkLR("linear representation of phi",1.0e-12);
+	
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. assigning potential functions
+		- typedef PotentialType
 		- assigning potential functions
 		- assigning preliminary parameter structs
 ----------------------------------------------------------------------------------------------------------------------------*/
+	
+	// typedef PotentialType
+	typedef comp(*PotentialType)(const comp&, const struct ps_for_V&);
 
+	// assigning potential functions
+	Potential V, dV, ddV;
 // assigning potential functions
-	if (params.pot==1) {
-		neigh = &periodic;
-		V = &V1c;
-		dV = &dV1c;
-		ddV = &ddV1c;
-		Vd = &V1;
-		dVd = &dV1;
-		ddVd = &ddV1;
+	if (ps.pot==1) {
+		V((PotentialType)&V1<comp>,ps);
+		dV((PotentialType)&dV1<comp>,ps);
+		ddV((PotentialType)&ddV1<comp>,ps);
 	}
-	else if (params.pot==2) {
-		neigh = &periodic;
-		V = &V2c;
-		dV = &dV2c;
-		ddV = &ddV2c;
-		Vd = &V2;
-		dVd = &dV2;
-		ddVd = &ddV2;
+	else if (ps.pot==2) {
+		V((PotentialType)&V2<comp>,ps);
+		dV((PotentialType)&dV2<comp>,ps);
+		ddV((PotentialType)&ddV2<comp>,ps);
 	}
-	else if (params.pot==2) {
-		neigh = &spherical;
-		V = &V3c;
-		dV = &dV3c;
-		ddV = &ddV3c;
-		Vd = &V3;
-		dVd = &dV3;
-		ddVd = &ddV3;
+	else if (ps.pot==3) {
+		V((PotentialType)&V3<comp>,ps);
+		dV((PotentialType)&dV3<comp>,ps);
+		ddV((PotentialType)&ddV3<comp>,ps);
 		}
 	else {
-		cerr << "pot option not available, pot = " << params.pot << endl;
+		cerr << "pot option not available, pot = " << ps.pot << endl;
 		return 1;
 	}
 	
 	// assigning preliminary parameter structs
-	params_for_V paramsV  = {params.epsilon, params.A};
+	ps_for_V paramsV  = {ps.epsilon, ps.A};
 	
 	// zero of energy
 	double ergZero = 0.0;
-	if (params.pot!=3) ergZero = N*a*Vd(minima[0],&paramsV);
+	if (ps.pot!=3) ergZero = N*a*real(V(ps.minima[0]));
 	
 	//lambda functions for pot_r
-	auto Vr = [&] (const comp & phi) {
-		return -ii*reg*VrFn(phi,minima[0],minima[1]);
+	auto Vr = [&] (const comp& phi) {
+		return -ii*reg*VrFn(phi,ps.minima[0],ps.minima[1]);
 	};
-	auto dVr = [&] (const comp & phi) {
-		return -ii*reg*dVrFn(phi,minima[0],minima[1]);
+	auto dVr = [&] (const comp& phi) {
+		return -ii*reg*dVrFn(phi,ps.minima[0],ps.minima[1]);
 	};
-	auto ddVr = [&] (const comp & phi) {
-		return -ii*reg*ddVrFn(phi,minima[0],minima[1]);
+	auto ddVr = [&] (const comp& phi) {
+		return -ii*reg*ddVrFn(phi,ps.minima[0],ps.minima[1]);
 	};
 
 	//deterimining omega matrices for fourier transforms in spatial direction
-	vec freqs(N), exp_freqs(N);
-	mat modes(N,N);
-	mat omega_m1(N,N), omega_0(N,N), omega_1(N,N), omega_2(N,N);
-	omega_m1 = Eigen::MatrixXd::Zero(N,N);
-	omega_0 = Eigen::MatrixXd::Zero(N,N);
-	omega_1 = Eigen::MatrixXd::Zero(N,N);
-	omega_2 = Eigen::MatrixXd::Zero(N,N);
+	vec freqs(ps.N), freqs_exp(ps.N);
+	mat modes(ps.N,ps.N);
+	mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
 	bool approxOmega = false;
 	if (!approxOmega) {
-		mat h = hFn(params);
-		numericalModes(h,modes,freqs,exp_freqs,params);
+		numericalModes(modes,freqs,freqs_exp,ps);
 	}
 	else {
-		analyticModes(modes,freqs,exp_freqs,params);
+		analyticModes(modes,freqs,freqs_exp,ps);
 	}
-	omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,params);
+	omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,ps);
 
-	if (zmt[0]=='n' || zmx[0]=='n')
-		{
-		if (params.pot==3) {
-			vec negVecFull = loadVectorColumn("data/stable/sphaleronEigVec.dat",0); // nb may need to check that r1 is correct
-			negVec = interpolate1d(negVecFull,negVecFull.size(),N);
+	vec negVec;
+	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
+		if (ps.pot==3) {
+			Filename eigVecFile = "data/stable/eigVec_pot_1_L_" + numberToString<double>(ps.L) + ".dat";	
+			SaveOptions eigVecOpts;
+			eigVecOpts.vectorType = SaveOptions::simple;
+			eigVecOpts.extras = SaveOptions::none;
+			eigVecOpts.paramsOut = ps;
+			load(eigVecFile(),eigVecOpts,&negVec);
 		}
-		else
-			{
-			if (negEigDone==0)
-				{
-				//system("./negEig"); //negEig now needs timeNumber
-				//char * fileNumber = (char *)(fileNumbers[fileLoop]);
-				//system(fileNumber); //won't work if inF=='m', as needs fileNumber of pi run
-				//cout << "negEig run" << endl;
-				cerr << "negEigDone==0, run negEig and then set negEigDone=1" << endl;
-				return 1;
-				}
-		string tempPot = pot.substr(0,1);
-		string eigVecFilename = "./data/stable/eigVec_" + tempPot + ".dat";
-		unsigned int fileLength = countLines(eigVecFilename);
-		if (fileLength==(N*Nb+1)) negVec = loadVector(eigVecFilename,Nb,N,1);
-		else if (fileLength % 2) //if its odd
-			{
-			string eigVecInputs = "data/stable/eigVecInputs" + tempPot + ".dat";
-			unsigned int NEig, NtEig;
-			ifstream fin;
-			fin.open(eigVecInputs.c_str());
-			if (!fin.good()) {
-				cerr << eigVecInputs << " didn't open successfully" << endl;
+		else {
+			Filename eigVecFile;
+			string N_load;
+			string Nb_load;
+			Filename lower = "data/stable/eigVec_pot_" + numberToString<uint>(ps.pot)\
+								 + "_N_100_Nb_100_L_" + numberToString<double>(ps.L) + ".dat";
+			Filename upper = lower;
+			vector<StringPair> upperExtras = lower.Extras;
+			upper.Extras[1] = StringPair("N","1000");
+			upper.Extras[2] = StringPair("Nb","1000");
+			Folder eigVecFolder(lower,upper);
+			if (eigVecFolder.size()==0) {
+				cerr << "no negative eigenvector files found between:" << endl << lower << endl << upper << endl;
 				return 1;
 			}
-			if (fin.is_open())
-				{
-				string line, tempStr;
-				while(getline(fin,line))
-					{
-					if(line[0] == '#') continue;
-					if(line.empty()) continue;
-					istringstream ss(line);
-					ss >> NEig >> tempStr >> NtEig;
-					break;
+			else {
+				eigVecFile = eigVecFolder[0];
+				Nt
+				for (uint j=1; j<eigVecFolder.size(); j++) {
+					// picking the file with the largest N, for some reason
+					if (((eigVecFolder[j].Extras)[0]).second>((eigVecFile.Extras)[0]).second) {
+						eigVecFile = eigVecFolder[j];
+						N_load = ((eigVecFile.Extras)[1]).second;
+						Nb_load = ((eigVecFile.Extras)[2]).second;
 					}
 				}
-			else {
-				cerr << "unable to open " << eigVecInputs << endl;
-				return 1;
 			}
-			fin.close();
-			vec tempEig = loadVector(eigVecFilename,NtEig,NEig,1);
-			negVec = interpolate(tempEig,NtEig,NEig,Nb,N);
-			}
-		else
-			{
-			cerr << "eigVec not the right length, cannot interpolate" << endl;
-			return 1;
-			}
-			ifstream eigFile;
-			eigFile.open("data/stable/eigValue.dat");
-			string lastLine = getLastLine(eigFile);
-			istringstream ss(lastLine);
-			double temp;
-			double eigError; //should be <<1
-			ss >> temp >> temp >> temp >> eigError >> negVal;
-			if (eigError>1.0)
-				{
-				cout << "error in negEig = " << eigError << endl;
-				cout << "consider restarting with different values of P and c" << endl;
-				}
-			}
+			SaveOptions eigVecOpts;
+			eigVecOpts.vectorType = SaveOptions::realB;
+			eigVecOpts.extras = SaveOptions::coords;
+			eigVecOpts.paramsOut = ps;
+			Parameters pIn = ps;
+			pIn.N = stringToNumber<uint>(N_load);
+			pIn.Nb = stringToNumber<uint>(Nb_load);
+			pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
+			load(eigVecFile(),eigVecOpts,&negVec);
 		}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//beginning theta or Tb loop
-	for (unsigned int loop=0; loop<loops; loop++)
+	for (unsigned int loop=0; loop<opts.loops; loop++)
 		{
-		if (loops>1)
+		if (opts.loops>1)
 			{
 			if ((abs(theta-minTheta)>MIN_NUMBER || abs(Tb-minTb)>MIN_NUMBER) && loop==0)
 				{
@@ -337,21 +305,6 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 		comp action_last = action;
 		unsigned int runs_count = 0;
 		unsigned int min_runs = 3;
-		vector<double> action_test(1);	action_test[0] = 1.0;
-		vector<double> sol_test(1);	sol_test[0] = 1.0;
-		vector<double> solM_test(1);	solM_test[0] = 1.0;
-		vector<double> delta_test(1); delta_test[0] = 1.0;
-		vector<double> calc_test(1); calc_test[0] = 1.0;
-	 	vector<double> conserv_test(1); conserv_test[0] = 1.0;
-		vector<double> lin_test(1); lin_test[0] = 1.0;
-		vector<double> true_test(1); true_test[0] = 1.0;
-		vector<double> mom_test(1); mom_test[0] = 1.0;
-		vector<double> reg_test(1); reg_test[0] = 1.0;
-		vector<double> imErg_test(1); imErg_test[0] = 1.0;
-		vector<double> onShell_test(1); onShell_test[0] = 1.0;
-		vector<double> AB_test(1); AB_test[0] = 1.0;
-		vector<double> linRep_test(1); linRep_test[0] = 1.0;
-		vector<double> ABNE_test(1); ABNE_test[0] = 1.0;
 
 		//initializing phi (=p)
 		vec p(2*N*NT+2);
@@ -422,8 +375,8 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 						posT = posMap.at(zmt[1+l]);
 						for (unsigned int k=0;k<slicesT;k++)
 							{
-							if (zmt[0]=='n' && params.pot!=3) 	chiT(posT+k) = negVec(2*(posCe+k));
-							else if (zmt[0]=='n' && params.pot==3)
+							if (zmt[0]=='n' && ps.pot!=3) 	chiT(posT+k) = negVec(2*(posCe+k));
+							else if (zmt[0]=='n' && ps.pot==3)
 								{
 								double r = r0 + j*a;
 								chiT(posT+k) = negVec(j)*r;
@@ -450,13 +403,13 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 						posX = posMap.at(zmx[1+l]);
 						for (unsigned int k=0;k<slicesX;k++)
 							{
-							if (zmx[0]=='n' && params.pot!=3)		chiX(posX+k) = negVec(2*(posCe+k));
-							else if (zmx[0]=='n' && params.pot==3)
+							if (zmx[0]=='n' && ps.pot!=3)		chiX(posX+k) = negVec(2*(posCe+k));
+							else if (zmx[0]=='n' && ps.pot==3)
 								{
 								double r = r0 + j*a;
 								chiX(posX+k) = negVec(j)*r;
 								}
-							else if (zmx[0]=='d' && params.pot!=3) chiX(posX+k) = p(2*neigh(posX+k,1,1,NT,N))-p(2*neigh(posX+k,1,-1,NT,N));
+							else if (zmx[0]=='d' && ps.pot!=3) chiX(posX+k) = p(2*neigh(posX+k,1,1,NT,N))-p(2*neigh(posX+k,1,-1,NT,N));
 							else
 								{
 								cerr << "choice of zmx not allowed" << endl;
@@ -514,7 +467,7 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 			linNumContm = 0.0;
 			
 			//testing that the potential term is working for pot3
-			if (params.pot==3 && false)
+			if (ps.pot==3 && false)
 				{
 				comp Vtrial = 0.0, Vcontrol = 0.0;
 				for (unsigned int j=0; j<N; j++)
@@ -546,9 +499,9 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 				double dx 		= dxFn(x);
 				double dxm 		= (x>0? dxFn(x-1): a);
 				
-				if (params.pot==3) paramsV  = {r0+x*a, 0.0};
+				if (ps.pot==3) paramsV  = {r0+x*a, 0.0};
 			
-				if (abs(chiX(j))>MIN_NUMBER && params.pot!=3) //spatial zero mode lagrange constraint
+				if (abs(chiX(j))>MIN_NUMBER && ps.pot!=3) //spatial zero mode lagrange constraint
 					{
 					DDS.insert(2*j,2*N*NT) 			= Dx*chiX(j); 
 					DDS.insert(2*N*NT,2*j) 			= Dx*chiX(j);
@@ -593,12 +546,12 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//boundaries
-				if (params.pot==3 && x==(N-1))
+				if (ps.pot==3 && x==(N-1))
 					{
 					DDS.insert(2*j,2*j) 	= 1.0; // p=0 at r=R
 					DDS.insert(2*j+1,2*j+1) = 1.0;
 					}
-				else if (params.pot==3 && x==0)
+				else if (ps.pot==3 && x==0)
 					{
 					kineticS 				+= 	Dt*pow(Cp(neighPosX),2.0)/dx/2.0;
 					derivErg(t) 			+= 	pow(Cp(neighPosX),2.0)/dx/2.0; //n.b. the Dt/dt difference is ignored for erg(t)
@@ -842,12 +795,12 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 		            DDS.insert(2*j+1,2*j+1) = real(-temp2 + temp0);
 		            }
 		        }
-		    if (params.pot==3) DDS.insert(2*N*NT,2*N*NT) = 1.0;
+		    if (ps.pot==3) DDS.insert(2*N*NT,2*N*NT) = 1.0;
 		    action = kineticT - kineticS - potV - pot_r;
 		    linErgOffShell(NT-1) = linErgOffShell(NT-2);
 	    	linNumOffShell(NT-1) = linNumOffShell(NT-2);
 	    	
-		    if (params.pot==3) {
+		    if (ps.pot==3) {
 		    	action 		*= 4.0*pi;
 		    	derivErg 	*= 4.0*pi;
 		    	potErg 		*= 4.0*pi;
@@ -877,7 +830,7 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 			}
 			
 			//calculating continuum approx to linErg and linNum on initial time slice
-			if (params.pot==3) {
+			if (ps.pot==3) {
 				for (unsigned int k=1; k<N; k++) {
 					double momtm = k*pi/(L-r0);
 					double freqSqrd = 1.0+pow(momtm,2.0);
@@ -1175,7 +1128,7 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 		//checking lattice small enough
 		if (mom_test.back()>closenessP) cout << endl << "momTest = "<< mom_test.back()  << endl;
 		
-		if (params.pot==3 && abs(theta)<MIN_NUMBER) {
+		if (ps.pot==3 && abs(theta)<MIN_NUMBER) {
 			comp temp = linErg(0);
 			if (absDiff(temp,linErgContm)>closenessCL) 
 				cout << "linErg(0) = " << temp << " and linErgContm = " << linErgContm << " don't agree. E_exact = " << E_exact << endl;

@@ -3,6 +3,7 @@
 */
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <utility>
 #include "folder.h"
@@ -28,9 +29,10 @@ h.Timenumber = "0";
 cout << h << endl;
 Filename p("data/data1.dat");
 cout << p << " " << p.Directory << " " << p.Timenumber << " " << p.ID << " " << p.Suffix << endl;
-FilenameAttributes j, k;
+FilenameAttributes j;
+Filename k = (string)"data/30thingy.dat";
 k.Timenumber = "40";
-Folder folder1(j), folder2(k);
+Folder folder1(j), folder2(k); // test may die here if not run from the folder tests
 folder2.set(k);
 //folder2.update();
 if (folder2.isPresent(p)) cout << "Present" << endl;

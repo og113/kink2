@@ -358,6 +358,7 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. Parameters member functions
 		- empty constructor
+		- constructor from PrimaryParameters
 		- constructor from PrimaryParameters and SecondaryParameters
 		- print to shell
 		- set secondary parameters
@@ -367,6 +368,11 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 
 // empty constructor
 Parameters::Parameters(): PrimaryParameters(), SecondaryParameters()	{}			
+
+// constructor from PrimaryParameters
+Parameters::Parameters(const PrimaryParameters& p1): PrimaryParameters(p1) {
+	setSecondaryParameters();
+}
 
 // constructor using primary and secondary parameters
 Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2): \
@@ -511,6 +517,7 @@ ostream& operator<<(ostream& os, const Options& o) {
 	os << setw(20) << "maxLoopLoad" << setw(20) << o.maxLoopLoad << endl;
 	os << setw(20) << "loopMin" << setw(20) << o.loopMin << endl;
 	os << setw(20) << "loopMax" << setw(20) << o.loopMax << endl;
+	os << setw(20) << "loops" << setw(20) << o.loops << endl;
 	os << setw(20) << "printChoice" << setw(20) << o.printChoice << endl;
 	os << endl;
 	return os;
@@ -552,6 +559,7 @@ void Options::load(const string& filename) {
 	is >> dross >> loopChoice;
 	is >> dross >> loopMin;
 	is >> dross >> loopMax;
+	is >> dross >> loops;
 	is >> dross >> printChoice;
 	is.close();
 }

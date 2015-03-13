@@ -134,9 +134,9 @@ string FolderError::Add::message() const {
 void Filename::set(const string& f) {
 	string temp = f;
 	size_t stop;
-	stop = f.find("/");
+	stop = temp.find_last_of("/");
 	if (stop!=string::npos) {
-		Directory = f.substr(0,stop);
+		Directory = temp.substr(0,stop);
 		temp = temp.substr(stop+1);
 	}
 	if (temp.find_first_of("0123456789")==0) {
@@ -468,7 +468,16 @@ Folder::Folder(const Folder& f): Comparator(), Filenames() {
 
 // constructor(FilenameComparator)
 Folder::Folder(const FilenameComparator& fc): Comparator(fc), Filenames() {
-	Comparator = fc;
+	refresh();
+}
+
+// constructor(FilenameAttributes)
+Folder::Folder(const FilenameAttributes& l): Comparator(l), Filenames() {
+	refresh();
+}
+
+// constructor(FilenameAttributes, FilenameAttributes)
+Folder::Folder(const FilenameAttributes& l, const FilenameAttributes& u): Comparator(l,u), Filenames() {
 	refresh();
 }
 

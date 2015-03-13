@@ -19,12 +19,35 @@ CONTENTS
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	1. potential class member function
-		- constructor
+		- constructors
 		- operator()
 		- setParams
 -------------------------------------------------------------------------------------------------------------------------*/
 
-Potential::Potential(const params_for_V& p, PotentialType v) {
+Potential::Potential(): parameters(), potential(){}
+
+Potential::Potential(PotentialType v, const Parameters& p) {
+	params_for_V pfv;
+	pfv.epsi = p.epsilon;
+	pfv.aa = p.A;
+	parameters = pfv;
+	potential = v;
+}
+
+Potential::Potential(PotentialType v, const params_for_V& p) {
+	parameters = p;
+	potential = v;
+}
+
+void Potential::operator()(PotentialType v, const Parameters& p) {
+	params_for_V pfv;
+	pfv.epsi = p.epsilon;
+	pfv.aa = p.A;
+	parameters = pfv;
+	potential = v;
+}
+
+void Potential::operator()(PotentialType v, const params_for_V& p) {
 	parameters = p;
 	potential = v;
 }

@@ -6,6 +6,7 @@
 #define __POTENTIALS_H_INCLUDED__
 
 #include <complex>
+#include "parameters.h"
 
 using namespace std;
 
@@ -45,7 +46,11 @@ typedef comp(*PotentialType)(const comp&, const struct params_for_V&);
 
 class Potential {
 public:
-	Potential(const params_for_V&, PotentialType);
+	Potential();
+	Potential (PotentialType, const Parameters&);
+	Potential(PotentialType, const params_for_V&);
+	void operator()(PotentialType, const params_for_V&);
+	void operator()(PotentialType, const Parameters&);
 	~Potential() {}
 	comp operator()(const comp&) const;
 	comp operator()(const comp&, const params_for_V&) const;

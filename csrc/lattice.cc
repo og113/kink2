@@ -37,14 +37,14 @@ lint c(const uint& t, const uint& x, const uint& Nt) {
 }
 
 // intCoord - (t,x,p)
-uint intCoord(const uint& loc, const uint& direc, const Parameters& p) {
+uint intCoord(const lint& loc, const uint& direc, const Parameters& p) {
 	uint x = floor(loc/p.NT);
 	if (direc==1) 		return x;
 	else 				return loc - x*p.NT;
 }
 
 // intCoord - (t,x,Nt)
-uint intCoord(const int& loc, const uint& direc, const uint& Nt) {
+uint intCoord(const lint& loc, const uint& direc, const uint& Nt) {
 	uint x = floor(loc/Nt);
 	if (direc==1) 		return x;
 	else 				return loc - x*Nt;
@@ -94,8 +94,8 @@ static double simpleSpace (const uint& x, const Parameters& p) {
 
 // coord
 comp coord(const lint& loc, const int& direction, const Parameters& p) {
-	if (direction==0)		return simpleTime(intCoord(loc,0,p.NT),p);
-	else if (direction==1)	return simpleSpace(intCoord(loc,1,p.NT),p);
+	if (direction==0)		return simpleTime(intCoord(loc,0,p),p);
+	else if (direction==1)	return simpleSpace(intCoord(loc,1,p),p);
 	else return 0.0;
 }
 
@@ -110,7 +110,7 @@ comp coordB(const lint& loc, const int& direction, const Parameters& p)
 		XcoordB = comp(0.0,1.0)*(p.Tb - p.b*temp);
 	}
 	if (direction==1) {
-		unsigned int x = intCoord(loc,1,p.Nb);
+		uint x = intCoord(loc,1,p.Nb);
 		XcoordB = simpleSpace(x,p);
 	}
 	return XcoordB;
@@ -215,6 +215,7 @@ double DxFn (const unsigned int& space, const Parameters& p) {
 vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 	uint N_old = p_old.N, Nt_old = p_old.NT, N_new = p_new.N, Nt_new = p_new.NT;
 	uint old_size = vec_old.size();
+	if (N_old == N_new && Nt_old == Nt_new) return vec_old;
 	if (old_size<2*N_old*Nt_old) {
 		if (old_size>=2*N_old*p_old.Nb) {
 			Nt_old = p_old.Nb;
@@ -286,6 +287,7 @@ vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new) {
 	uint N_old = p_old.N, Nt_old = p_old.NT, N_new = p_new.N, Nt_new = p_new.NT;
 	uint old_size = vec_old.size();
+	if (N_old == N_new && Nt_old == Nt_new) return vec_old;
 	if (old_size<N_old*Nt_old) {
 		if (old_size>=N_old*p_old.Nb) {
 			Nt_old = p_old.Nb;
@@ -348,6 +350,7 @@ cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new)
 vec interpolateReal(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 	uint N_old = p_old.N, Nt_old = p_old.NT, N_new = p_new.N, Nt_new = p_new.NT;
 	uint old_size = vec_old.size();
+	if (N_old == N_new && Nt_old == Nt_new) return vec_old;
 	if (old_size<N_old*Nt_old) {
 		if (old_size>=N_old*p_old.Nb) {
 			Nt_old = p_old.Nb;
@@ -403,6 +406,7 @@ vec interpolateReal(vec vec_old, const Parameters& p_old, const Parameters& p_ne
 	
 // interpolate1d	
 vec interpolate1d(vec vec_old, const unsigned int & N_old, const unsigned int & N_new) {
+	if (N_old == N_new) return vec_old;
 	uint old_size = vec_old.size();
 	if (old_size<N_old) cerr << "interpolate error, vec_old.size() = " << old_size << " , N_old = " << N_old << endl;
 	vec vec_new (N_new);
@@ -422,6 +426,7 @@ vec interpolate1d(vec vec_old, const unsigned int & N_old, const unsigned int & 
 
 // interpolate1d	
 cVec interpolate1d(cVec vec_old, const unsigned int & N_old, const unsigned int & N_new) {
+	if (N_old == N_new) return vec_old;
 	uint old_size = vec_old.size();
 	if (old_size<N_old) cerr << "interpolate error, vec_old.size() = " << old_size << " , N_old = " << N_old << endl;
 	cVec vec_new (N_new);

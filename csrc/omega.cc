@@ -109,6 +109,10 @@ void numericalModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p)
 
 // omegasFn
 void omegasFn(const bool& analytic, const mat& modes, const mat& freqs, mat& omega_m1, mat& omega_0, mat& omega_1, mat& omega_2, const Parameters& p) {
+	omega_m1 = Eigen::MatrixXd::Zero(p.N,p.N);
+	omega_0 = Eigen::MatrixXd::Zero(p.N,p.N);
+	omega_1 = Eigen::MatrixXd::Zero(p.N,p.N);
+	omega_2 = Eigen::MatrixXd::Zero(p.N,p.N);
 	double djdk;
 	for (unsigned int j=0; j<p.N; j++) {
 		for (unsigned int k=0; k<p.N; k++) {

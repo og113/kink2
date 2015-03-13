@@ -180,6 +180,8 @@ typedef vector<Filename>::const_iterator ConstFolderIterator;
 class Folder {
 public:
 	Folder(): Comparator(), Filenames() {}
+	Folder(const FilenameAttributes&, const FilenameAttributes&);
+	Folder(const FilenameAttributes&);
 	Folder(const FilenameComparator&);
 	Folder(const Folder&);
 	Folder& operator=(const Folder&);
