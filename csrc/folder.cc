@@ -21,7 +21,7 @@ CONTENTS
 	3. Filename
 	4. FilenameComparator
 	5. Folder
-	6. functions (reduceTo)
+	6. functions (reduceTo, getLastInt)
 	
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -528,6 +528,7 @@ ostream& operator<<(ostream& os, const Folder& f) {
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. functions acting on Filenames and Folders
 		- removeUnshared
+		- getLastInt (used in getting ints from zmx and zmt)
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // removeUnshared
@@ -550,3 +551,25 @@ void removeUnshared(Folder& f1,Folder& f2) {
 	f2.order();
 }
 
+// getLastInt - returns last integer in string
+uint getLastInt(const string& str) {
+	size_t first_index;
+	size_t last_index;
+	if (str.find_last_not_of("0123456789")!=string::npos) first_index = str.find_last_not_of("0123456789");
+	else {
+		cerr << "getLastInt error, no non-numeric characters found in " << str << endl;
+		return -1;
+	}
+	string temp = str.substr(first_index+1);
+	if (isdigit(temp[0])==0) { // zero for false
+		cerr << "getLastInt error, first character of " << temp << " in " << str << " not numeric" << endl;
+		return -1;
+	}
+	if (temp.find_last_of("0123456789")!=string::npos) last_index = temp.find_last_of("0123456789");
+	else {
+		cerr << "getLastInt error, last numeric character not found in " << temp << " in " << str << endl;
+		return -1;
+	}
+	temp = temp.substr(0,last_index+1);
+	return stringToNumber<uint>(temp);
+}

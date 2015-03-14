@@ -6,6 +6,12 @@
 #define __MAIN_H_INCLUDED__
 
 #include <complex>
+#include "parameters.h"
+#include "lattice.h"
+#include "folder.h"
+#include "check.h"
+#include "print.h"
+#include "omega.h"
 
 using namespace std;
 
