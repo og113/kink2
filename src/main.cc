@@ -541,6 +541,7 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- t=0
 		- bulk
 		- extras (*4.0*pi, etc)
+		- E, N, bound, W
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
 			// beginning loop over lattice points
@@ -840,6 +841,15 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		    	linErg = linErgOffShell;
 		    	linNum = linNumOffShell;
 		    }
+		    
+		    //defining E, Num and W
+			E = real(linErg(0));
+			Num = real(linNum(0));
+			E_exact = 0.0;
+			for (unsigned int j=1; j<(linearInt+1); j++) E_exact += real(erg(j));
+			E_exact /= (double)linearInt;
+			W = - E*2.0*Tb - theta*Num - bound + 2.0*imag(action);
+			
 /*----------------------------------------------------------------------------------------------------------------------------
 	10. checks
 		- erg = potErg + derivErg (trivial)
@@ -852,7 +862,6 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- checkOS
 		- checkCon
 		- checkIE
-		- E, N, bound, W
 		- checkTrue
 		- checkLatt
 		
@@ -883,25 +892,28 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					linNumContm += 2.0*pi*Asqrd*pow(freqSqrd,0.5);
 				}
 			}
+			double contmErgTest = absDiff(E,linErgContm);
+			double contmNumTest = absDiff(Num,linNumContm);
+			contmErgTest>contmNumTest? checkContm.add(contmErgTest): checkContm.add(contmNumTest);
 			
 			//calculating a_k and b*_k
 			cVec a_k(ps.N), b_k(ps.N); //ps.N.b. b_k means b*_k but can't put * in the name
 			a_k = Eigen::VectorXcd::Zero(ps.N);
 			b_k = Eigen::VectorXcd::Zero(ps.N);
-			double T0 = real(coord(0,0))+ps.Ta;
-			comp dt0 = dtFn(0);
-			for (unsigned int n=0; n<ps.N; n++) {
-				double w_n = sqrt(real(eigenValues(n)));
-				double w_n_e = w_n_exp(n);
-				for (unsigned int j=0; j<ps.N; j++) {
-					unsigned int m=j*NT;
+			double T0 = 0.0;
+			comp dt0 = dtFn(0,ps);
+			for (uint n=0; n<ps.N; n++) {
+				double w_n = freqs(n);
+				double w_n_e = freqs_exp(n);
+				for (uint j=0; j<ps.N; j++) {
+					lint m=j*ps.NT;
 					double sqrtDj = sqrt(4.0*pi*DxFn(j));
 					if (abs(w_n)>1.0e-16 && abs(w_n_e)>1.0e-16) {
-						a_k(n) += exp(ii*w_n_e*T0)*sqrt(2.0*w_n)*eigenVectors(j,n)* \
-									sqrtDj*((Cp(m+1)-minima[0])-(Cp(m)-minima[0])*exp(ii*w_n_e*dt0)) \
+						a_k(n) += exp(ii*w_n_e*T0)*sqrt(2.0*w_n)*modes(j,n)* \
+									sqrtDj*((Cp(m+1)-ps.minima[0])-(Cp(m)-ps.minima[0])*exp(ii*w_n_e*dt0)) \
 										/(exp(-ii*w_n_e*dt0)-exp(ii*w_n_e*dt0));
-						b_k(n) += exp(-ii*w_n_e*T0)*sqrt(2.0*w_n)*eigenVectors(j,n)* \
-									sqrtDj*((Cp(m+1)-minima[0])-(Cp(m)-minima[0])*exp(-ii*w_n_e*dt0)) \
+						b_k(n) += exp(-ii*w_n_e*T0)*sqrt(2.0*w_n)*modes(j,n)* \
+									sqrtDj*((Cp(m+1)-ps.minima[0])-(Cp(m)-ps.minima[0])*exp(-ii*w_n_e*dt0)) \
 										/(exp(ii*w_n_e*dt0)-exp(-ii*w_n_e*dt0));
 					}
 				}
@@ -915,59 +927,47 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			linRep = Eigen::VectorXcd::Constant(ps.N,minima[0]);
 			for (unsigned int j=0; j<ps.N; j++) {
 				ABtest += absDiff(a_k(j),conj(b_k(j))*Gamma);
-				p0(j) = Cp(j*NT);
+				p0(j) = Cp(j*ps.NT);
 				if (j<ps.N) {
 					linNumAB += a_k(j)*b_k(j);
-					linErgAB += sqrt(eigenValues(j))*a_k(j)*b_k(j);
+					linErgAB += sqrt(modes(j))*a_k(j)*b_k(j);
 				}
 				for (unsigned int n=0; n<ps.N; n++) {
-					double w_n = sqrt(real(eigenValues(n)));
-					double w_n_e = w_n_exp(n);
+					double w_n = freqs(n);
+					double w_n_e = freqs_exp(n);
 					double sqrtDj = sqrt(4.0*pi*DxFn(j));
 					if (abs(w_n)>1.0e-16) {
-						linRep(j) += eigenVectors(j,n)*(a_k(n)*exp(-ii*w_n_e*T0)+b_k(n)*exp(ii*w_n_e*T0)) \
+						linRep(j) += modes(j,n)*(a_k(n)*exp(-ii*w_n_e*T0)+b_k(n)*exp(ii*w_n_e*T0)) \
 										/sqrt(2.0*w_n)/sqrtDj;
 					}
 				}
 			}
-			ABtest /= (double)N;
+			ABtest /= (double)ps.N;
+			checkAB.add(ABtest);
 			linRepTest = absDiff(p0,linRep);
+			checkLR.add(linRepTest);
 			double ABNtest = absDiff(linNumAB,linNum(0));
 			double ABEtest = absDiff(linErgAB,linErg(0));
-			ABNEtest = (ABNtest>ABEtest? ABNtest: ABEtest);
-			AB_test.push_back(ABtest);
-			linRep_test.push_back(linRepTest);
-			ABNE_test.push_back(ABNEtest);
-			/*if (AB_test.back()>closenessAB || !isfinite(AB_test.back())) cerr << "AB_test = " << AB_test.back() << endl;
-			if (linRep_test.back()>closenessLR || !isfinite(linRep_test.back()))cerr << "linRep_test = " << linRep_test.back() << endl;
-			if (ABNE_test.back()>closenessABNE || !isfinite(ABNE_test.back())) {
-				cerr << "linNumAB = " << linNumAB << ", linNum(0) = " << \
-					linNum(0) << ", linNumOffShell(0) = " << linNumOffShell(0) << endl;
-				cerr << "linErg = " << linErgAB << ", linErg(0) = " << linErg(0) \
-					<< ", linErgOffShell(0) = " << linErgOffShell(0) << endl;
-			}*/
+			ABNtest>ABEtest? checkABNE.add(ABNtest): checkABNE.add(ABEtest);
 			
 			//checking pot_r is much smaller than the other potential terms
-			reg_test.push_back(abs(pot_r/potV));
-			if (reg_test.back()>closenessR)
-				{
-				cerr << "regularisation term is too large, regTest = " << reg_test.back() << endl;
-				}
-			
+			checkReg.add(abs(pot_r/potV));
+			checkReg.checkMessage();
+						
 			//checking linearisation of linErg and linNum
-			double linTestE;	double linTestN;
+			double linTestE;		double linTestN;
 			double linEMax = 0.0;	double linEMin = 5.0e15; //surely it's going to be less than this
 			double linNMax = 0.0;	double linNMin = 5.0e15;
-			unsigned int linearInt = (unsigned int)(Na/10);
-			for (unsigned int j=1;j<(linearInt+1);j++)
-				{
+			uint linearInt = (uint)(ps.Na/10);
+			for (uint j=1;j<(linearInt+1);j++) {
 				if (abs(linErgOffShell(j))>linEMax) linEMax = abs(linErgOffShell(j));
 				if (abs(linErgOffShell(j))<linEMin) linEMin = abs(linErgOffShell(j));
 				if (abs(linNumOffShell(j))>linNMax) linNMax = abs(linNumOffShell(j));
 				if (abs(linNumOffShell(j))<linNMin) linNMin = abs(linNumOffShell(j));
-				}
+			}
 			linTestE = absDiff(linEMax,linEMin);
 			linTestN = absDiff(linNMax,linNMin);
+			linTestE>linTestN? checkLin.add(linTestE): checkLin.add(linTestN);
 			lin_test.push_back(linTestE);
 			if (linTestN>linTestE) lin_test.back() = linTestN;
 			
@@ -984,14 +984,6 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			for (unsigned int j=0; j<NT; j++) if (abs(erg(j))>MIN_NUMBER) imErgTest += imag(erg(j))/abs(erg(j));
 			imErgTest /= (double)NT;
 			imErg_test.push_back(imErgTest);
-						
-			//defining E, Num and cW
-			E = real(linErg(0));
-			Num = real(linNum(0));
-			E_exact = 0.0;
-			for (unsigned int j=1; j<(linearInt+1); j++) E_exact += real(erg(j));
-			E_exact /= (double)linearInt;
-			W = - E*2.0*Tb - theta*Num - bound + 2.0*imag(action);
 			
 			//checking agreement between erg and linErg
 			double trueTest = absDiff(E,E_exact);
