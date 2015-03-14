@@ -147,8 +147,8 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2);		// constructor using primary and secondary parameters
 	void load(const string&);													// uses PrimaryParameters::load
 	void setSecondaryParameters();												// uses setSecondaryParameters
-	void changeParameters (const string& pName, const double& pValue); // change all due to change in one
-	void changeParameters (const string& pName, const uint& pValue); // change all due to change in one
+	bool changeParameters (const string& pName, const double& pValue); 			// change all due to change in one
+	bool changeParameters (const string& pName, const uint& pValue); 			// change all due to change in one
 	void print() const;
 };
 

@@ -124,6 +124,7 @@ public:
 	Filename(const Filename& f): FilenameAttributes(f) {}
 	Filename(const string&);
 	~Filename() {}
+						operator string() const;
 	Filename& 			operator=(const Filename&);
 	Filename& 			operator=(const string&);
 	string 				operator()() const;

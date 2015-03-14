@@ -124,6 +124,7 @@ string FolderError::Add::message() const {
 		- set
 		- operator=
 		- constructor(const string& filename)
+		- operator string() - conversion
 		- operator()
 		- operator<<
 		- operator<
@@ -187,6 +188,16 @@ Filename& Filename::operator=(const string& rhs) {
 // constructor(const string& filename)
 Filename::Filename(const string& f): FilenameAttributes() {
 	set(f);
+}
+
+// operator string() - conversion
+Filename::operator string() const {
+	string filename = Directory + "/" + Timenumber + ID;
+	for (unsigned int l=0; l<Extras.size(); l++) {
+		filename += "_" + Extras[l].first + "_" + Extras[l].second;
+	}
+	filename += Suffix;
+	return filename;
 }
 
 // operator()

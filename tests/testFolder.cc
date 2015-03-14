@@ -43,5 +43,8 @@ cout << j << endl << k << endl;
 removeUnshared(folder1,folder2);
 cout << folder1 << endl;
 
+string str = f;
+cout << str << endl;
+
 return 0;
 }

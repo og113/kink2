@@ -17,6 +17,7 @@
 #include "check.h"
 #include "print.h"
 #include "omega.h"
+#include "main.h"
 
 /*----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
@@ -24,8 +25,12 @@
 		1 - loading options
 		2 - Folders
 		3 - beginning file loop
-		4 - assigning potentials
-		5 - secondary parameters
+		4 - beginning parameter loop
+		5 - assigning potential functions
+		6 - omega and negVec
+		7 - defining quantitites
+		8 - beginning newton-raphson loop
+		9 - assigning minusDS, DDS etc
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -39,7 +44,7 @@ Options opts;
 opts.load("options");
 
 /*----------------------------------------------------------------------------------------------------------------------------
-	2. initiating folders to load
+	2. Folders
 		- FilenameAttributes for defining FilenameComparator
 		- FilenameComparator
 		- pFolder
@@ -101,22 +106,48 @@ string timenumber = currentDateTime();
 /*----------------------------------------------------------------------------------------------------------------------------
 	3. beginning file loop
 		- beginning file loop
-		- copying a version of mainInputs with timenumber
-		- loading inputs
-		- declaring checks
+		- loading and printing inputs
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // beginning file loop
-or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
-	{
+for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 	// loading parameters
-	Parameters ps;
-	ps.load(inputsFolder[fileLoop]);
+	Parameters psu;
+	psu.load(inputsFolder[fileLoop]);
+	cout << "input parameters: " << endl;
+	psu.print();
+	cout << endl;
+
+/*----------------------------------------------------------------------------------------------------------------------------
+	4. beginning parameter loop
+		- changing parameters (if required)
+		- copying a verson of parameters with timenumber
+		- declaring checks
+----------------------------------------------------------------------------------------------------------------------------*/
+	
+	for (unsigned int loop=0; loop<opts.loops; loop++) {
+		Parameters ps = psu;
+		if (opts.loops>1) {
+			if ((opts.loopChoice)[0]=='N') {
+				uint pValue = (uint)opts.loopMin + (uint)(opts.loopMax - opts.loopMin)*loop/(opts.loops-1);
+				bool anythingChanged = ps.changeParameters(opts.loopChoice,pValue);
+				if (loop==0 && anythingChanged) {
+					cout << opts.loopChoice << "changed to " << pValue << " on input" << endl;
+				}
+			}
+			else {
+				double pValue = opts.loopMin + (opts.loopMax - opts.loopMin)*loop/(opts.loops-1.0);
+				bool anythingChanged = ps.changeParameters(opts.loopChoice,pValue);
+				if (loop==0 && anythingChanged) {
+					cout << opts.loopChoice << "changed to " << pValue << " on input" << endl;
+				}
+			}
+		}
 
 	//copying a version of ps with timenumber
-	string runParamsFile = "./data/" + timenumber + "inputsM";
-	ps.save(runParamsFile);
+	Filename paramsRunFile = (string)("./data/" + timenumber + "inputsM_" + numberToString<uint>(loop));
+	ps.save(paramsRunFile);
 	
 	// declaring Checks
 	Check checkAction("action",1.0e-2);
@@ -137,7 +168,7 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 	Check checkLR("linear representation of phi",1.0e-12);
 	
 /*----------------------------------------------------------------------------------------------------------------------------
-	4. assigning potential functions
+	5. assigning potential functions
 		- typedef PotentialType
 		- assigning potential functions
 		- assigning preliminary parameter structs
@@ -172,10 +203,6 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 	// assigning preliminary parameter structs
 	ps_for_V paramsV  = {ps.epsilon, ps.A};
 	
-	// zero of energy
-	double ergZero = 0.0;
-	if (ps.pot!=3) ergZero = N*a*real(V(ps.minima[0]));
-	
 	//lambda functions for pot_r
 	auto Vr = [&] (const comp& phi) {
 		return -ii*reg*VrFn(phi,ps.minima[0],ps.minima[1]);
@@ -187,19 +214,62 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 		return -ii*reg*ddVrFn(phi,ps.minima[0],ps.minima[1]);
 	};
 
+/*----------------------------------------------------------------------------------------------------------------------------
+	6. omega and negVec
+		- loading or constructing omega
+		- loading negVec
+----------------------------------------------------------------------------------------------------------------------------*/
+
 	//deterimining omega matrices for fourier transforms in spatial direction
 	vec freqs(ps.N), freqs_exp(ps.N);
 	mat modes(ps.N,ps.N);
 	mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
-	bool approxOmega = false;
-	if (!approxOmega) {
-		numericalModes(modes,freqs,freqs_exp,ps);
+	{
+		Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
+		omegaM1F = (string)"data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
+						+"_L_"+numberToString<double>(ps.L)+".dat";
+		Folder omegaM1Folder(omegaM1F);
+		omega0F = omegaM1F; 		omegaF.ID = "omega0"; 		Folder omega0Folder(omega0F);
+		omega1F = omegaM1F; 		omega1F.ID = "omega1"; 		Folder omega1Folder(omega1F);
+		omega2F = omegaM1F; 		omega2F.ID = "omega2";	 	Folder omega2Folder(omega2F);
+		modesF = omegaM1F;			modes.ID = "modes"; 		Folder modesFolder(modesF);
+		freqsF = omegaM1F;			freqs.ID = "freqs"; 		Folder freqsFolder(freqsF);
+		freqsExpF = omegaM1F;		omegaM1F.ID = "freqsExp";	Folder freqsExpFolder(omegaM1F);
+		SaveOptions so;
+		so.ParamsIn = ps;
+		so.ParamsOut = ps;
+		so.vectorType = SaveOptions::simple; // not sure that this is necessary
+		so.extras = SaveOptions::none;
+		if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()>=1 \
+			modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
+			load(omegaM1Folder[0],so,omega_m1);
+			load(omega0Folder[0],so,omega_0);
+			load(omega1Folder[0],so,omega_1);
+			load(omega2Folder[0],so,omega_2);
+			load(modesFolder[0],so,modes);
+			load(freqsFolder[0],so,freqs);
+			load(freqsExpFolder[0],so,freqs_exp);
+		}
+		else {
+			bool approxOmega = Flse;
+			if (!approxOmega) {
+				numericalModes(modes,freqs,freqs_exp,ps);
+			}
+			else {
+				analyticModes(modes,freqs,freqs_exp,ps);
+			}
+			omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,ps);
+			save(omegaM1F,so,omega_m1);
+			save(omega0F,so,omega_0);
+			save(omega1F,so,omega_1);
+			save(omega2F,so,omega_2);
+			save(modesF,so,modes);
+			save(freqsF,so,freqs);
+			save(freqsExpF,so,freqs_exp);
+		}
 	}
-	else {
-		analyticModes(modes,freqs,freqs_exp,ps);
-	}
-	omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,ps);
 
+	// getting negVec
 	vec negVec;
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 		if (ps.pot==3) {
@@ -208,7 +278,7 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 			eigVecOpts.vectorType = SaveOptions::simple;
 			eigVecOpts.extras = SaveOptions::none;
 			eigVecOpts.paramsOut = ps;
-			load(eigVecFile(),eigVecOpts,&negVec);
+			load(eigVecFile,eigVecOpts,&negVec); // should automatically interpolate
 		}
 		else {
 			Filename eigVecFile;
@@ -227,10 +297,9 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 			}
 			else {
 				eigVecFile = eigVecFolder[0];
-				Nt
 				for (uint j=1; j<eigVecFolder.size(); j++) {
 					// picking the file with the largest N, for some reason
-					if (((eigVecFolder[j].Extras)[0]).second>((eigVecFile.Extras)[0]).second) {
+					if (((eigVecFolder[j].Extras)[1]).second>((eigVecFile.Extras)[1]).second) {
 						eigVecFile = eigVecFolder[j];
 						N_load = ((eigVecFile.Extras)[1]).second;
 						Nb_load = ((eigVecFile.Extras)[2]).second;
@@ -245,56 +314,35 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 			pIn.N = stringToNumber<uint>(N_load);
 			pIn.Nb = stringToNumber<uint>(Nb_load);
 			pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
-			load(eigVecFile(),eigVecOpts,&negVec);
+			load(eigVecFile,eigVecOpts,&negVec);
 		}
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//beginning theta or Tb loop
-	for (unsigned int loop=0; loop<opts.loops; loop++)
-		{
-		if (opts.loops>1)
-			{
-			if ((abs(theta-minTheta)>MIN_NUMBER || abs(Tb-minTb)>MIN_NUMBER) && loop==0)
-				{
-				cout << "input Tb     : " << Tb << endl;
-				cout << "program Tb   : " << minTb << endl;
-				cout << "input theta  : " << theta << endl;
-				cout << "program theta: " << minTheta << endl;
-				cout << endl;
-				}
-			if (abs(maxTheta-minTheta)>MIN_NUMBER)
-				{
-				theta = minTheta + (maxTheta - minTheta)*loop/(loops-1.0);
-				Gamma = exp(-theta);
-				}
-			else if (abs(maxTb-minTb)>MIN_NUMBER)
-				{
-				Tb = minTb + (maxTb - minTb)*loop/(loops-1.0);
-				changeDouble ("Tb",Tb);
-				}
-			else
-				{
-				cout << "nothing to loop over, set loops to 1" << endl;
-				loops = 1;
-				}
-			}
+/*----------------------------------------------------------------------------------------------------------------------------
+	7. defining quantities
+		- time
+		- erg, linErg etc
+		- p, minusDS, DDS
+		- print parameters
+		- print input phi
+----------------------------------------------------------------------------------------------------------------------------*/
 		
 		//defining a time and starting the clock
 		clock_t time;
 		time = clock();
 	
 		//defining energy and number vectors
-		cVec erg(NT);
-		cVec linErg(NT);
-		cVec linNum(NT);
-		cVec linErgOffShell(NT);
-		cVec linNumOffShell(NT);
-		cVec derivErg(NT), potErg(NT);
+		cVec erg(ps.NT);
+		cVec linErg(ps.NT);
+		cVec linNum(ps.NT);
+		cVec linErgOffShell(ps.NT);
+		cVec linNumOffShell(ps.NT);
+		cVec derivErg(ps.NT), potErg(ps.NT);
 		comp linErgContm, linNumContm;
 		comp linNumAB, linErgAB;
 		
-		//defining the action and bound and W
-		comp action = ii*twaction;
+		//defining the action and bound and W and zero of energy
+		double ergZero = (ps.pot==3? 0.0: p.N*ps.a*real(V(ps.minima[0])) );
+		comp action = ii*ps.action0;
 		double bound;
 		double W;
 		double E;
@@ -303,60 +351,71 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 		
 		//defining some quantities used to stop the Newton-Raphson loop when action stops varying
 		comp action_last = action;
-		unsigned int runs_count = 0;
-		unsigned int min_runs = 3;
+		uint runs_count = 0;
+		uint min_runs = 3;
 
 		//initializing phi (=p)
-		vec p(2*N*NT+2);
-		if (loop==0)
-			{
-			p = loadVector(piFiles[fileLoop],NT,N,2);
-			printf("%12s%30s\n","input: ",(piFiles[fileLoop]).c_str());
+		vec p;
+		SaveOptions so_tp;
+		so_tp.ParamsIn = psu;
+		so_tp.ParamsOut = ps;
+		so_tp.vectorType = SaveOptions::complex;
+		so_tp.extras = SaveOptions::coords;
+		so_tp.zeroModes = 2;
+		if (loop==0) {
+			load(pFolder[0],so_tp,p);
+			printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
+		}
+		else {
+			Filename lastPhi = (string)("./data/" + timeNumber + "mainpi_fLoop_" + numberToString<uint>(fileLoop) + "_loop_"\
+								 + numberToString<uint>(loop-1)+".dat");
+			so_tp.ParamsIn = ps;
+			load(lastPhi,so_tp,p);
+			printf("%12s%30s\n","input: ",(lastPhi()).c_str());
 			}
-		else
-			{
-			string loadfile = "./data/" + timeNumber + "mainpi_" + numberToString<unsigned int>(fileLoop) + "_" + numberToString<unsigned int>(loop-1)+".dat";
-			p = loadVector(loadfile,NT,N,2);
-			printf("%12s%30s\n","input: ",loadfile.c_str());
-			}
-			
-		//printing loop name and parameters
-		printf("%12s%12s\n","timeNumber: ",timeNumber.c_str());
-				
-		printParameters();
-		//printMoreParameters();
-			
-		//very early vector print
-		string earlyPrintFile = "data/" + timeNumber + "mainpiE" + "_" + numberToString<unsigned int>(fileLoop) + "_" + numberToString<unsigned int>(loop) + "_" + "0.dat";
-		printVector(earlyPrintFile,p);
 		
 		//defining complexified vector Cp
-		cVec Cp(NT*N);
-		Cp = vecComplex(p,NT*N);
+		cVec Cp;
+		Cp = vecComplex(p,ps);
 	
 		//defining DDS and minusDS
-		spMat DDS(2*N*NT+2,2*N*NT+2);
-		vec minusDS(2*N*NT+2);
+		spMat DDS(2*ps.N*ps.NT+2,2*ps.N*ps.NT+2);
+		vec minusDS(2*ps.N*ps.NT+2);
+			
+		//printing loop name and parameters
+		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
+		printParameters();
+			
+		//very early vector print
+		so_tp.ParamsIn = ps;
+		Filename earlyPrintFile = (string)("data/" + timeNumber + "mainpiE_fLoop_" + numberToString<uint>(fileLoop)\
+				 + "_loop_" + numberToString<unsigned int>(loop) + "_run_" + "0.dat");
+		save(earlyPrintFile,so_tp,p);
 	
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//beginning newton-raphson loop	
-		while ((sol_test.back()>closenessS || solM_test.back()>closenessSM || runs_count<min_runs))
-			{
+/*----------------------------------------------------------------------------------------------------------------------------
+	8. beginning newton-raphson loop
+		- beginning newton-raphson loop	
+		- chiT, chiX
+		- reserving space in DDS
+		- zeroing erg etc
+----------------------------------------------------------------------------------------------------------------------------*/
+	
+		//beginning newton-raphson loop	
+		while (!checkSoln.good() || !checkSolnMax.good() || runs_count<min_runs)) {
 			runs_count++;
 			
 			//defining the zero mode at the final time boundary and the time step before
-			vec chiX(NT*N);	chiX = Eigen::VectorXd::Zero(N*NT); //to fix spatial zero mode
-			vec chiT(NT*N);	chiT = Eigen::VectorXd::Zero(N*NT); //to fix real time zero mode
-			for (unsigned int j=0; j<N; j++)
-				{
-				unsigned int posX, posT, posCe;
-				unsigned int slicesX, slicesT;
-				if (getLastInt(zmx)<0) {
-					cerr << "getLastInt error with zmx = " << zmx << endl;
+			vec chiX(ps.NT*ps.N);	chiX = Eigen::VectorXd::Zero(ps.N*ps.NT); //to fix spatial zero mode
+			vec chiT(ps.NT*ps.N);	chiT = Eigen::VectorXd::Zero(ps.N*ps.NT); //to fix real time zero mode
+			for (uint j=0; j<ps.N; j++) {
+				uint posX, posT, posCe;
+				uint slicesX, slicesT;
+				if (getLastInt(opts.zmx)<0) {
+					cerr << "getLastInt error with zmx = " << opts.zmx << endl;
 					return 1;
 				}
-				if (getLastInt(zmt)<0) {
-					cerr << "getLastInt error with zmt = " << zmt << endl;
+				if (getLastInt(opts.zmt)<0) {
+					cerr << "getLastInt error with zmt = " << opts.zmt << endl;
 					return 1;
 				}
 				slicesX = getLastInt(zmx);
@@ -368,64 +427,53 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 				posMap['C'] = j*NT+Na+Nb-slicesT;
 				posMap['D'] = j*NT+(NT-1)-slicesT;
 				if (zmt.size()<3) { cout << "zmt lacks info, zmt = " << zmt << endl; }
-				for (unsigned int l=0;l<(zmt.size()-2);l++)
-					{
-					if (posMap.find(zmt[1+l])!=posMap.end())
-						{
+				for (unsigned int l=0;l<(zmt.size()-2);l++) {
+					if (posMap.find(zmt[1+l])!=posMap.end()) {
 						posT = posMap.at(zmt[1+l]);
-						for (unsigned int k=0;k<slicesT;k++)
-							{
+						for (unsigned int k=0;k<slicesT;k++) {
 							if (zmt[0]=='n' && ps.pot!=3) 	chiT(posT+k) = negVec(2*(posCe+k));
-							else if (zmt[0]=='n' && ps.pot==3)
-								{
+							else if (zmt[0]=='n' && ps.pot==3) {
 								double r = r0 + j*a;
 								chiT(posT+k) = negVec(j)*r;
-								}
+							}
 							else if (zmt[0]=='d')				chiT(posT+k) = p(2*(posT+k+1))-p(2*(posT+k));
-							else
-								{
+							else {
 								cerr << "choice of zmt not allowed" << endl;
 								return 1;
-								}
 							}
 						}
 					}
+				}
 				posMap.erase('C');
 				posMap.erase('D');
 				posMap['C'] = j*NT+Na+Nb-slicesX;
 				posMap['D'] = j*NT+NT-slicesX;
 				posCe = j*Nb+Nb-slicesX;
 				if (zmx.size()<3) { cout << "zmx lacks info, zmx = " << zmx << endl; }
-				for (unsigned int l=0;l<(zmx.size()-2);l++)
-					{
-					if (posMap.find(zmx[1+l])!=posMap.end())
-						{
+				for (unsigned int l=0;l<(zmx.size()-2);l++) {
+					if (posMap.find(zmx[1+l])!=posMap.end()) {
 						posX = posMap.at(zmx[1+l]);
-						for (unsigned int k=0;k<slicesX;k++)
-							{
+						for (unsigned int k=0;k<slicesX;k++) {
 							if (zmx[0]=='n' && ps.pot!=3)		chiX(posX+k) = negVec(2*(posCe+k));
-							else if (zmx[0]=='n' && ps.pot==3)
-								{
+							else if (zmx[0]=='n' && ps.pot==3) {
 								double r = r0 + j*a;
 								chiX(posX+k) = negVec(j)*r;
-								}
+							}
 							else if (zmx[0]=='d' && ps.pot!=3) chiX(posX+k) = p(2*neigh(posX+k,1,1,NT,N))-p(2*neigh(posX+k,1,-1,NT,N));
-							else
-								{
+							else {
 								cerr << "choice of zmx not allowed" << endl;
 								return 1;
-								}
 							}
 						}
 					}
 				}
+			}
 			double normX = chiX.norm();
 			double normT = chiT.norm();
 			normT = pow(normT,0.5);
-			if (abs(normX)<MIN_NUMBER || abs(normT)<MIN_NUMBER)
-				{
+			if (abs(normX)<MIN_NUMBER || abs(normT)<MIN_NUMBER) {
 				cerr << "norm of chiX = " << normX << ", norm of chiT = " << normT << endl;
-				}
+			}
 			chiX = chiX/normX;
 			chiT = chiT/normT;
 			
@@ -434,16 +482,14 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 			DDS.setZero(); //just making sure
 			Eigen::VectorXi DDS_to_reserve(2*N*NT+2);//number of non-zero elements per column
 			DDS_to_reserve = Eigen::VectorXi::Constant(2*N*NT+2,13);
-			if (abs(theta)<2.0e-16)
-				{
+			if (abs(theta)<2.0e-16) {
 				DDS_to_reserve(0) = N+3;
 				DDS_to_reserve(1) = 11;
-				}
-			else
-				{
+			}
+			else {
 				DDS_to_reserve(0) = N+11;
 				DDS_to_reserve(1) = N+11;
-				}
+			}
 			DDS_to_reserve(2*N*NT-2) = 4;
 			DDS_to_reserve(2*N*NT-1) = 4;
 			DDS_to_reserve(2*N*NT) = N*(zmx.size()-2);
@@ -467,24 +513,24 @@ or (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++)
 			linNumContm = 0.0;
 			
 			//testing that the potential term is working for pot3
-			if (ps.pot==3 && false)
-				{
+			if (ps.pot==3 && false) {
 				comp Vtrial = 0.0, Vcontrol = 0.0;
-				for (unsigned int j=0; j<N; j++)
-					{
+				for (unsigned int j=0; j<N; j++) {
 					double r = r0 + j*a;
 					paramsV  = {r, 0.0};
 					Vcontrol += pow(p(2*j*Nb),2.0)/2.0 - pow(p(2*j*Nb),4.0)/4.0/pow(r,2.0);
 					Vtrial += V(p(2*j*Nb));
-					}
+				}
 				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
 				cout << "potTest = " << potTest << endl;
-				}
+			}
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//assigning values to minusDS and DDS and evaluating action
-			//#pragma omp parallel for
+/*----------------------------------------------------------------------------------------------------------------------------
+	9. assigning minusDS, DDS etc
+		- beginning loop over lattice points
+----------------------------------------------------------------------------------------------------------------------------*/
+			
+			// beginning loop over lattice points
 			for (unsigned long int j = 0; j < N*NT; j++)
 				{		
 				unsigned int t 			= intCoord(j,0,NT); //coordinates
