@@ -874,27 +874,25 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 			
 			//calculating continuum approx to linErg and linNum on initial time slice - redundant
-			if (trivialChecks) {
-				if (ps.pot==3) {
-					for (uint k=1; k<ps.N; k++) {
-						double momtm = k*pi/(ps.L-ps.r0);
-						double freqSqrd = 1.0+pow(momtm,2.0);
-						double Asqrd, integral1 = 0.0, integral2 = 0.0;
-						for (unsigned int l=0; l<ps.N; l++) {
-							double r = ps.r0 + l*ps.a;
-							lint m = l*ps.NT;
-							integral1 += a*p(2*m)*pow(2.0/ps.L,0.5)*sin(momtm*r);
-							integral2 += a*(p(2*(m+1))-p(2*m))*pow(2.0/ps.L,0.5)*sin(momtm*r)/ps.b;
-						}
-						Asqrd = pow(integral1,2.0) + pow(integral2,2.0)/freqSqrd;
-						linErgContm += 2.0*pi*Asqrd*freqSqrd;
-						linNumContm += 2.0*pi*Asqrd*pow(freqSqrd,0.5);
+			if (ps.pot==3 && abs(ps.theta)<MIN_NUMBER) {
+				for (uint k=1; k<ps.N; k++) {
+					double momtm = k*pi/(ps.L-ps.r0);
+					double freqSqrd = 1.0+pow(momtm,2.0);
+					double Asqrd, integral1 = 0.0, integral2 = 0.0;
+					for (unsigned int l=0; l<ps.N; l++) {
+						double r = ps.r0 + l*ps.a;
+						lint m = l*ps.NT;
+						integral1 += a*p(2*m)*pow(2.0/ps.L,0.5)*sin(momtm*r);
+						integral2 += a*(p(2*(m+1))-p(2*m))*pow(2.0/ps.L,0.5)*sin(momtm*r)/ps.b;
 					}
+					Asqrd = pow(integral1,2.0) + pow(integral2,2.0)/freqSqrd;
+					linErgContm += 2.0*pi*Asqrd*freqSqrd;
+					linNumContm += 2.0*pi*Asqrd*pow(freqSqrd,0.5);
 				}
-				double contmErgTest = absDiff(E,linErgContm);
-				double contmNumTest = absDiff(Num,linNumContm);
-				contmErgTest>contmNumTest? checkContm.add(contmErgTest): checkContm.add(contmNumTest);
 			}
+			double contmErgTest = absDiff(E,linErgContm);
+			double contmNumTest = absDiff(Num,linNumContm);
+			contmErgTest>contmNumTest? checkContm.add(contmErgTest): checkContm.add(contmNumTest);
 			
 			//calculating a_k and b*_k
 			cVec a_k(ps.N), b_k(ps.N); //ps.N.b. b_k means b*_k but can't put * in the name
@@ -1151,6 +1149,9 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 /*----------------------------------------------------------------------------------------------------------------------------
 	14. printing output
 		- check messages
+		- stopping clock
+		- printing results to terminal
+		- printing results to file
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -1158,42 +1159,29 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		checkTrue.checkMessage();
 		checkOS.checkMessage();
 		checkABNE.checkMessage();
-		if (trivialChecks) checkContm.checkMessage();
-
-		//checking energy conserved
-		if (conserv_test.back()>closenessCon) cout << endl << "ergTest = " << conserv_test.back() << endl;
-		
-		//checking energy real
-		if (imErg_test.back()>closenessIE) cout << endl << "imErg = "<< imErg_test.back()  << endl;
-		
-		//checking lattice small enough
-		if (mom_test.back()>closenessP) cout << endl << "momTest = "<< mom_test.back()  << endl;
-		
-		if (ps.pot==3 && abs(theta)<MIN_NUMBER) {
-			comp temp = linErg(0);
-			if (absDiff(temp,linErgContm)>closenessCL) 
-				cout << "linErg(0) = " << temp << " and linErgContm = " << linErgContm << " don't agree. E_exact = " << E_exact << endl;
-			temp = linNum(0);
-			if (absDiff(temp,linNumContm)>closenessCL) 
-				cout << "linNum(0) = " << temp << " and linNumContm = " << linNumContm << " don't agree. " << endl;
-		}
+		if (ps.pot==3 && abs(ps.theta)<MIN_NUMBER) checkContm.checkMessage();
+		checkCon.checkMessage();
+		checkIE.checkMessage();
+		checkLatt.checkMessage();
 		
 		//stopping clock
 		time = clock() - time;
 		double realtime = time/1000000.0;
 	
-		//printing to terminal
+		// printing results to terminal
 		printf("\n");
 		printf("%8s%8s%8s%8s%8s%8s%8s%8s%14s%14s%14s%14s\n","runs","time","ps.N","NT","L","Tb","dE","theta","Num","E","im(action)","W");
-		printf("%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",runs_count,realtime,ps.N,NT,L,Tb,dE,theta,Num,E,imag(action),real(W));
+		printf("%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
+				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,Num,E,imag(action),real(W));
 		printf("\n");
-		 printf("%60s\n","%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+		printf("%60s\n","%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 
-		//printing action value
+		// printing results to file
 		FILE * actionfile;
 		actionfile = fopen("./data/mainAction.dat","a");
-		fprintf(actionfile,"%12s%6i%6i%8g%8g%8g%8g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g\n",timeNumber.c_str(),ps.N,NT,L,Tb,dE,theta,E,Num,imag(action)\
-		,real(W),sol_test.back(),lin_test.back(),true_test.back());
+		fprintf(actionfile,"%12s%6i%6i%8g%8g%8g%8g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g\n",\
+					timeNumber.c_str(),ps.N,NT,L,Tb,dE,theta,E,Num,imag(action)\
+					,real(W),sol_test.back(),lin_test.back(),true_test.back());
 		fclose(actionfile);
 		
 		string prefix = "./data/" + timeNumber;
