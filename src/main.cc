@@ -171,6 +171,9 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	Check checkABNE("N = Sum(a_k*b_k), E = Sum(w_k*a_k*b_k)",5.0e-2);
 	Check checkLR("linear representation of phi",1.0e-12);
 	
+	// do trivial or redundant checks?
+	bool trivialChecks = true;
+	
 /*----------------------------------------------------------------------------------------------------------------------------
 	5. assigning potential functions
 		- typedef PotentialType
@@ -228,6 +231,10 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	vec freqs(ps.N), freqs_exp(ps.N);
 	mat modes(ps.N,ps.N);
 	mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
+	SaveOptions so_simple;
+	so_simple.ParamsIn = ps; so_simple.ParamsOut = ps;
+	so_simple.vectorType = SaveOptions::simple;
+	so_simple.extras = SaveOptions::none;
 	{
 		Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
 		omegaM1F = (string)"data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
@@ -239,20 +246,15 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		modesF = omegaM1F;			modes.ID = "modes"; 		Folder modesFolder(modesF);
 		freqsF = omegaM1F;			freqs.ID = "freqs"; 		Folder freqsFolder(freqsF);
 		freqsExpF = omegaM1F;		omegaM1F.ID = "freqsExp";	Folder freqsExpFolder(omegaM1F);
-		SaveOptions so;
-		so.ParamsIn = ps;
-		so.ParamsOut = ps;
-		so.vectorType = SaveOptions::simple; // not sure that this is necessary
-		so.extras = SaveOptions::none;
 		if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()>=1 \
 			modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
-			load(omegaM1Folder[0],so,omega_m1);
-			load(omega0Folder[0],so,omega_0);
-			load(omega1Folder[0],so,omega_1);
-			load(omega2Folder[0],so,omega_2);
-			load(modesFolder[0],so,modes);
-			load(freqsFolder[0],so,freqs);
-			load(freqsExpFolder[0],so,freqs_exp);
+			load(omegaM1Folder[0],so_simple,omega_m1);
+			load(omega0Folder[0],so_simple,omega_0);
+			load(omega1Folder[0],so_simple,omega_1);
+			load(omega2Folder[0],so_simple,omega_2);
+			load(modesFolder[0],so_simple,modes);
+			load(freqsFolder[0],so_simple,freqs);
+			load(freqsExpFolder[0],so_simple,freqs_exp);
 		}
 		else {
 			bool approxOmega = Flse;
@@ -263,13 +265,13 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				analyticModes(modes,freqs,freqs_exp,ps);
 			}
 			omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,ps);
-			save(omegaM1F,so,omega_m1);
-			save(omega0F,so,omega_0);
-			save(omega1F,so,omega_1);
-			save(omega2F,so,omega_2);
-			save(modesF,so,modes);
-			save(freqsF,so,freqs);
-			save(freqsExpF,so,freqs_exp);
+			save(omegaM1F,so_simple,omega_m1);
+			save(omega0F,so_simple,omega_0);
+			save(omega1F,so_simple,omega_1);
+			save(omega2F,so_simple,omega_2);
+			save(modesF,so_simple,modes);
+			save(freqsF,so_simple,freqs);
+			save(freqsExpF,so_simple,freqs_exp);
 		}
 	}
 
@@ -278,11 +280,7 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 		if (ps.pot==3) {
 			Filename eigVecFile = "data/stable/eigVec_pot_1_L_" + numberToString<double>(ps.L) + ".dat";	
-			SaveOptions eigVecOpts;
-			eigVecOpts.vectorType = SaveOptions::simple;
-			eigVecOpts.extras = SaveOptions::none;
-			eigVecOpts.paramsOut = ps;
-			load(eigVecFile,eigVecOpts,&negVec); // should automatically interpolate
+			load(eigVecFile,so_simple,&negVec); // should automatically interpolate
 		}
 		else {
 			Filename eigVecFile;
@@ -868,33 +866,35 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
 			//trivial test that erg=potErg+derivErg
-			if (true) {
+			if (trivialChecks) {
 				for (uint j=0; j<ps.NT; j++) {
 					double diff = absDiff(erg(j),potErg(j)+derivErg(j));
 					if (diff>1.0e-14) cerr << "erg(" << j << ") != potErg + derivErg. absDiff = " << diff << endl;
 				}
 			}
 			
-			//calculating continuum approx to linErg and linNum on initial time slice
-			if (ps.pot==3) {
-				for (uint k=1; k<ps.N; k++) {
-					double momtm = k*pi/(ps.L-ps.r0);
-					double freqSqrd = 1.0+pow(momtm,2.0);
-					double Asqrd, integral1 = 0.0, integral2 = 0.0;
-					for (unsigned int l=0; l<ps.N; l++) {
-						double r = ps.r0 + l*ps.a;
-						lint m = l*ps.NT;
-						integral1 += a*p(2*m)*pow(2.0/ps.L,0.5)*sin(momtm*r);
-						integral2 += a*(p(2*(m+1))-p(2*m))*pow(2.0/ps.L,0.5)*sin(momtm*r)/ps.b;
+			//calculating continuum approx to linErg and linNum on initial time slice - redundant
+			if (trivialChecks) {
+				if (ps.pot==3) {
+					for (uint k=1; k<ps.N; k++) {
+						double momtm = k*pi/(ps.L-ps.r0);
+						double freqSqrd = 1.0+pow(momtm,2.0);
+						double Asqrd, integral1 = 0.0, integral2 = 0.0;
+						for (unsigned int l=0; l<ps.N; l++) {
+							double r = ps.r0 + l*ps.a;
+							lint m = l*ps.NT;
+							integral1 += a*p(2*m)*pow(2.0/ps.L,0.5)*sin(momtm*r);
+							integral2 += a*(p(2*(m+1))-p(2*m))*pow(2.0/ps.L,0.5)*sin(momtm*r)/ps.b;
+						}
+						Asqrd = pow(integral1,2.0) + pow(integral2,2.0)/freqSqrd;
+						linErgContm += 2.0*pi*Asqrd*freqSqrd;
+						linNumContm += 2.0*pi*Asqrd*pow(freqSqrd,0.5);
 					}
-					Asqrd = pow(integral1,2.0) + pow(integral2,2.0)/freqSqrd;
-					linErgContm += 2.0*pi*Asqrd*freqSqrd;
-					linNumContm += 2.0*pi*Asqrd*pow(freqSqrd,0.5);
 				}
+				double contmErgTest = absDiff(E,linErgContm);
+				double contmNumTest = absDiff(Num,linNumContm);
+				contmErgTest>contmNumTest? checkContm.add(contmErgTest): checkContm.add(contmNumTest);
 			}
-			double contmErgTest = absDiff(E,linErgContm);
-			double contmNumTest = absDiff(Num,linNumContm);
-			contmErgTest>contmNumTest? checkContm.add(contmErgTest): checkContm.add(contmNumTest);
 			
 			//calculating a_k and b*_k
 			cVec a_k(ps.N), b_k(ps.N); //ps.N.b. b_k means b*_k but can't put * in the name
@@ -925,27 +925,31 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			linNumAB = 0.0, linErgAB = 0.0;
 			cVec linRep(ps.N), p0(ps.N);
 			linRep = Eigen::VectorXcd::Constant(ps.N,minima[0]);
-			for (unsigned int j=0; j<ps.N; j++) {
+			for (uint j=0; j<ps.N; j++) {
 				ABtest += absDiff(a_k(j),conj(b_k(j))*Gamma);
 				p0(j) = Cp(j*ps.NT);
 				if (j<ps.N) {
 					linNumAB += a_k(j)*b_k(j);
 					linErgAB += sqrt(modes(j))*a_k(j)*b_k(j);
 				}
-				for (unsigned int n=0; n<ps.N; n++) {
-					double w_n = freqs(n);
-					double w_n_e = freqs_exp(n);
-					double sqrtDj = sqrt(4.0*pi*DxFn(j));
-					if (abs(w_n)>1.0e-16) {
-						linRep(j) += modes(j,n)*(a_k(n)*exp(-ii*w_n_e*T0)+b_k(n)*exp(ii*w_n_e*T0)) \
-										/sqrt(2.0*w_n)/sqrtDj;
+				if (trivialChecks) {
+					for (uint n=0; n<ps.N; n++) {
+						double w_n = freqs(n);
+						double w_n_e = freqs_exp(n);
+						double sqrtDj = sqrt(4.0*pi*DxFn(j));
+						if (abs(w_n)>1.0e-16) {
+							linRep(j) += modes(j,n)*(a_k(n)*exp(-ii*w_n_e*T0)+b_k(n)*exp(ii*w_n_e*T0)) \
+											/sqrt(2.0*w_n)/sqrtDj;
+						}
 					}
 				}
 			}
+			if (trivialChecks) {
+				linRepTest = absDiff(p0,linRep);
+				checkLR.add(linRepTest);
+			}
 			ABtest /= (double)ps.N;
 			checkAB.add(ABtest);
-			linRepTest = absDiff(p0,linRep);
-			checkLR.add(linRepTest);
 			double ABNtest = absDiff(linNumAB,linNum(0));
 			double ABEtest = absDiff(linErgAB,linErg(0));
 			ABNtest>ABEtest? checkABNE.add(ABNtest): checkABNE.add(ABEtest);
@@ -968,150 +972,146 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			linTestE = absDiff(linEMax,linEMin);
 			linTestN = absDiff(linNMax,linNMin);
 			linTestE>linTestN? checkLin.add(linTestE): checkLin.add(linTestN);
-			lin_test.push_back(linTestE);
-			if (linTestN>linTestE) lin_test.back() = linTestN;
 			
 			//checking agreement of on and off shell linear energy at initial time
 			double onShellTest = absDiff(linErg(0),linErgOffShell(0));
-			onShell_test.push_back(onShellTest);
+			checkOS.add(onShellTest);
 			
 			//checking conservation of E
-			double conservTest = absDiff(erg(1),erg(NT-2));
+			double conservTest = absDiff(erg(1),erg(ps.NT-2));
 			conserv_test.push_back(conservTest);
 			
 			//testing imaginary part of energy
 			double imErgTest = 0.0;
-			for (unsigned int j=0; j<NT; j++) if (abs(erg(j))>MIN_NUMBER) imErgTest += imag(erg(j))/abs(erg(j));
-			imErgTest /= (double)NT;
-			imErg_test.push_back(imErgTest);
+			for (uint j=0; j<os.NT; j++) if (abs(erg(j))>MIN_NUMBER) imErgTest += imag(erg(j))/abs(erg(j));
+			imErgTest /= (double)ps.NT;
+			checkIE.add(imErgTest);
 			
 			//checking agreement between erg and linErg
 			double trueTest = absDiff(E,E_exact);
-			true_test.push_back(trueTest);
+			checkTrue.add(trueTest);
 			if (!isfinite(trueTest)) cout << "E = " << E << ", E_exact = " << E_exact << ", linearInt = " << linearInt << endl;
 			
 			//checking lattice small enough for E, should have parameter for this
-			double momTest = E*b/Num/pi; //perhaps should have a not b here
-			mom_test.push_back(momTest);
+			double momTest = E*ps.b/Num/pi; //perhaps should have a not b here
+			checkLatt.add(momTest);
 		
 /*----------------------------------------------------------------------------------------------------------------------------
-	11. solving for delta
-		
+	11. solving for delta	
+		- defining delta, solver etc
+		- analysing pattern
+		- factorising
+		- solving
+		- checking matrix inversion
+		- p' = p + delta
+		- Cp'
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
 			//solving for delta in DDS*delta=minusDS, where p' = p + delta		
-			vec delta(2*ps.N*NT+2);
-			delta = Eigen::VectorXd::Zero(2*ps.N*NT+2);
+			vec delta(2*ps.N*ps.NT+2);
+			delta = Eigen::VectorXd::Zero(2*ps.N*ps.NT+2);
 			DDS.prune(MIN_NUMBER);
 			DDS.makeCompressed();
 			Eigen::SparseLU<spMat> solver;
 		
 			solver.analyzePattern(DDS);
-			if(solver.info()!=Eigen::Success)
-				{
+			if(solver.info()!=Eigen::Success) {
 				cerr << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
 				return 1;
-				}		
+			}		
 			solver.factorize(DDS);
-			if(solver.info()!=Eigen::Success) 
-				{
+			if(solver.info()!=Eigen::Success) {
 				cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
 				return 1;
-				}
+			}
 			delta = solver.solve(minusDS);// use the factorization to solve for the given right hand side
-			if(solver.info()!=Eigen::Success)
-				{
+			if(solver.info()!=Eigen::Success) {
 				cerr << "Solving failed, solver.info() = "<< solver.info() << endl;
 				cerr << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
 				cerr << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
 				return 1;
-				}
+			}
 		
 			//independent check on whether calculation worked
-			vec diff(2*ps.N*NT+2);
+			vec diff(2*ps.N*ps.NT+2);
 			diff = DDS*delta-minusDS;
 			double maxDiff = diff.maxCoeff();
 			maxDiff = abs(maxDiff);
-			calc_test.push_back(maxDiff);
-			if (calc_test.back()>closenessC)
-				{
-				cerr << "Calculation failed" << endl;
-				cerr << "calc_test = " << calc_test.back() << endl;
-				return 1;
-				}
+			checkInv.add(maxDiff);
+			checkInv.checkMessage();
+			if (!checkInv.good()) return 1;
 
 			//assigning values to phi
 			p += delta;
 		
 			//passing changes on to complex vector
-			Cp = vecComplex(p,ps.N*NT);
+			Cp = vecComplex(p,ps.N*ps.NT);
 			
 /*----------------------------------------------------------------------------------------------------------------------------
 	12. printing early
+		- filenames and saveoptions
+		- phi
+		- minusDS
+		- DDS
+		- delta
+		- chiX, chiT
+		- energies
+		- a_k, b_k
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 		//printing early if desired
-		if (runs_count == aq.printRun || aq.printRun == 0)
-			{
-			string prefix = "./data/" + timeNumber;
-			string suffix = "_" + numberToString<unsigned int>(fileLoop) + "_" + numberToString<unsigned int>(loop)+"_"+numberToString<unsigned int>(runs_count)+".dat";
-			if ((print_choice.compare("v")==0 || print_choice.compare("e")==0))
-				{
-				string minusDSfile = prefix + "mainminusDSE"+suffix;
-				printVector(minusDSfile,minusDS);
-				}
-			if ((print_choice.compare("p")==0 || print_choice.compare("e")==0) || delta_test.back()>0.2)
-				{
-				string piEarlyFile = prefix + "mainpiE"+suffix;
-				printVector(piEarlyFile,p);
-				//gp(piEarlyFile,"repi.gp");
-				}
-			if ((print_choice.compare("m")==0 || print_choice.compare("e")==0))
-				{
-				string DDSfile = prefix + "mainDDSE"+suffix;
-				printSpmat(DDSfile,DDS);
-				}
-			if ((print_choice.compare("z")==0 || print_choice.compare("e")==0))
-				{
-				string earlychiXFile = prefix + "mainchiXE" + suffix;
-				printVector(earlychiXFile,chiX);
-				//gp(earlychiXFile,"repi.gp");
-				string earlychiTFile = prefix + "mainchiTE" + suffix;
-				printVector(earlychiTFile,chiT);
-				//gp(earlychiTFile,"repi.gp");
-				}
-			if ((print_choice.compare("d")==0 || print_choice.compare("e")==0))
-				{
-				string earlydeltaFile = prefix + "maindeltaE" + suffix;
-				printVector(earlydeltaFile,delta);
-				}
-			if ((print_choice.compare("l")==0 || print_choice.compare("e")==0))
-				{
-				string earlyLinErgFile = prefix + "mainlinErgE"+suffix;
-				simplePrintCVector(earlyLinErgFile,linErg);
-				//gpSimple(earlyLinErgFile);
-				string earlyErgFile = prefix + "mainergE" + suffix;
-				simplePrintCVector(earlyErgFile,erg);
-				//gpSimple(earlyErgFile);
-				string earlyDerivErgFile = prefix + "mainderivErgE"+suffix;
-				//derivErg.conservativeResize(Na);
-				simplePrintCVector(earlyDerivErgFile,derivErg);
-				string earlyPotErgFile = prefix + "mainpotErgE"+suffix;
-				//potErg.conservativeResize(Na);
-				simplePrintCVector(earlyPotErgFile,potErg);
-				}
-			if ((print_choice.compare("ab")==0 || print_choice.compare("e")==0))
-				{
-				string earlya_kFile = prefix + "maina_kE"+suffix;
-				simplePrintCVector(earlya_kFile,a_k);
-				string earlyb_kFile = prefix + "mainb_kE" + suffix;
-				simplePrintCVector(earlyb_kFile,b_k);
-				}
+		if ((opts.printChoice).compare("n")!=0) {
+			Filename basic = (string)("data/"+timenumber+"basic_fLoop_"+numberToString<uint>(fileLoop)\
+								+"_loop_"+numberToString<uint>(loop)+"_run_"+numberToString<uint>(runs_count)+".dat";
+			if ((opts.printChoice).compare("p")==0 || (opts.printChoice).compare("e")==0) {
+				Filename pEfile = basic;
+				pEfile.ID = "mainpiE";
+				save(pEFile,so_tp,p);
 			}
+			if ((opts.printChoice).compare("v")==0 || (opts.printChoice).compare("e")==0) {
+				Filename vEfile = basic;
+				vEfile.ID = "mainminusDSE";
+				save(vEFile,so_tp,minusDS);
+			}
+			if ((opts.printChoice).compare("m")==0 || (opts.printChoice).compare("e")==0) {
+				Filename mEfile = basic;
+				mEfile.ID = "mainDDSE";
+				save(mEFile,so_simple,DDS);
+			}
+			if ((opts.printChoice).compare("d")==0 || (opts.printChoice).compare("e")==0) {
+				Filename dEfile = basic;
+				dEfile.ID = "maindeltaE";
+				save(dEFile,so_tp,delta);
+			}
+			if ((opts.printChoice).compare("z")==0 || (opts.printChoice).compare("e")==0) {
+				Filename zEfile = basic;
+				zEfile.ID = "mainchiTE";
+				save(zEFile,so_tp,chiT);
+				zEfile.ID = "mainchiXE";
+				save(zEFile,so_tp,chiX);
+			}
+			if ((opts.printChoice).compare("l")==0 || (opts.printChoice).compare("e")==0) {
+				Filename lEfile = basic;
+				lEfile.ID = "mainlinErgE";
+				save(lEFile,so_simple,linErg);
+				lEfile.ID = "mainergE";
+				save(lEFile,so_simple,erg);
+			}
+			if ((opts.printChoice).compare("ab")==0 || (opts.printChoice).compare("e")==0) {
+				Filename abEfile = basic;
+				abEfile.ID = "mainakE";
+				save(abEFile,so_simple,a_k);
+				abEfile.ID = "mainbkE";
+				save(abEFile,so_simple,b_k);
+			}
+		}
 		
 /*----------------------------------------------------------------------------------------------------------------------------
 	13. convergence
+		- evaluating norms
+		- adding convergence checks
+		- printing convergence checks
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 			//convergence issues
@@ -1126,41 +1126,39 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			double normP = p.norm();
 			double normDelta = delta.norm();
 		
-			//assigning test values
-			//quantities used to stop newton-raphson loop
-			action_test.push_back(absDiff(action,action_last));
+			// adding convergence checks
+			checkAction.add(absDiff(action,action_last));
 			action_last = action;
-			sol_test.push_back(normDS/normP);
-			solM_test.push_back(maxDS/maxP);
-			delta_test.push_back(normDelta/normP);
+			checkSoln.add(normDS/normP);
+			checkSolnMax.add(maxDS/maxP);
+			checkDelta.add(normDelta/normP);
 			
 			//printing tests to see convergence
-			if (runs_count==1)
-				{
-				printf("%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","solTest","solMTest","deltaTest","linTest","trueTest","shellTest","ABTest","ABNETest","cnsrvTest","momTest");
-				}
-			printf("%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,sol_test.back(),solM_test.back(),delta_test.back(),lin_test.back(),true_test.back(),onShell_test.back(),AB_test.back(),ABNE_test.back(),conserv_test.back(),mom_test.back());
+			if (runs_count==1) {
+				printf("%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","linear"\
+							,"true erg","on shell","AB","ABNE","conserv","latt");
+			}
+			printf("%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,checkSoln.back(),\
+				checkDelta.back(),checkLin.back(),checkTrue.back(),checkOS.back(),checkAB.back(),checkABNE.back(),\
+				checkCon.back(),checkLatt.back());
 			
-			if (delta_test.back()>closenessD) {
-				cerr << "deltaTest > " << closenessD << ", stopping NR loop." << endl;
+			if (!checkDelta.good()) {
+				checkDelta.checkMessage();
 				break;
 			}
 			
-			} //ending while loop
+		} //ending while loop
 /*----------------------------------------------------------------------------------------------------------------------------
 	14. printing output
+		- check messages
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
-//misc end of program tasks - mostly printing
 
-		//checking different measures of energy agree
-		if (true_test.back()>closenessT || onShell_test.back()>closenessON || ABNE_test.back()>closenessABNE || true) {
-			cout << "erg(1)             = " << erg(1) << endl;
-			cout << "linErgOffShell(0)  = " << linErgOffShell(0) << endl;
-			cout << "linErgAB           = " << linErgAB << endl;
-			cout << "linErgContm        = " << linErgContm << endl;
-			cout << "linErg(0)          = " << linErg(0) << endl;
-		}
+		// check messages
+		checkTrue.checkMessage();
+		checkOS.checkMessage();
+		checkABNE.checkMessage();
+		if (trivialChecks) checkContm.checkMessage();
 
 		//checking energy conserved
 		if (conserv_test.back()>closenessCon) cout << endl << "ergTest = " << conserv_test.back() << endl;
