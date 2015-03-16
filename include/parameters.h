@@ -109,7 +109,9 @@ struct SecondaryParameters {
 	double A;							// mostly relevant for pot=3
 	vector<double> minima;				// minima of V
 	double mass2; 						// as derived from V''
-	double action0;					// action normalisation
+	double action0;						// action normalisation
+	double epsilon0;					// value of epsilon at dE=0
+	vector<double> minima0;				// positions of minima of V at dE=0
 	void setSecondaryParameters (const struct PrimaryParameters&);				// sets secondary parameters using primary ones
 };
 

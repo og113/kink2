@@ -75,7 +75,7 @@ void PrimaryParameters::save(const string& filename) const {
 	os.open(filename.c_str());
 	if (!os.good()) {
 		FileError::StreamNotGood e(filename);
-		throw e;
+		cerr << e;
 	}
 	os << *this;
 	os << endl;
@@ -88,7 +88,7 @@ void PrimaryParameters::load(const string& filename) {
 	is.open(filename.c_str());
 	if (!is.good()) {
 		FileError::StreamNotGood e(filename);
-		throw e;
+		cerr << e;
 	}
 	string dross;
 	is >> dross >> pot;
@@ -223,15 +223,15 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 	A = 0.4;												////////// A
 	Gamma = exp(-pp.theta);									////////// Gamma
 	
-	double epsilon0;
 	params_for_V paramsV, paramsV0;
 	minima.reserve(2);
+	minima0.reserve(2);
 	//potential functions
 	if (pp.pot==1) {
 		Vd_local = &V1;
 		dVd_local = &dV1;
 		ddVd_local = &ddV1;
-		epsilon0 = 0.0;
+		epsilon0 = 0.0;										////////// epsilon0
 		epsilon = pp.dE;
 		r0 = 0.0;											////////// r0
 	}
@@ -239,7 +239,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		Vd_local = &V2;
 		dVd_local = &dV2;
 		ddVd_local = &ddV2;
-		epsilon0 = 0.74507774287199924;
+		epsilon0 = 0.74507774287199924;						////////// epsilon0, guess
 		epsilon = 0.75;
 		r0 = 0.0;											////////// r0
 	}
@@ -247,7 +247,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		Vd_local = &V3;
 		dVd_local = &dV3;
 		ddVd_local = &ddV3;
-		epsilon0 = 0.0;
+		epsilon0 = 0.0;										////////// epsilon0
 		epsilon = 0.0;
 		r0 = MIN_NUMBER;									////////// r0
 	}
@@ -282,9 +282,8 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		mass2 = ddVd_local(minima[0],paramsV);					////////// mass2
 
 		//finding root0 of dV0(phi)=0;
-		vector<double> minima0(3);
 		if (pp.pot==1) {
-			minima0[0] = -1.0; minima0[1] = 1.0;
+			minima0[0] = -1.0; minima0[1] = 1.0;				////////// minima0
 		}
 		else if (pp.pot==2) {
 			gsl_function V0;
@@ -297,7 +296,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 			EC0.function = &ec;
 			EC0.params = &ec0_params;
 			double dE0 = 0.0;
-			epsilonFn(&V0,&EC0,&dE0,&epsilon0,&minima0);
+			epsilonFn(&V0,&EC0,&dE0,&epsilon0,&minima0);		////////// epsilon0, minima0
 		}
 
 		//finding S1
@@ -351,6 +350,9 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 	os << setw(20) << "minima[1]" << setw(20) << p2.minima[1] << endl;
 	os << setw(20) << "mass2" << setw(20) << p2.mass2 << endl;
 	os << setw(20) << "action0" << setw(20) << p2.action0 << endl;
+	os << setw(20) << "epsilon0" << setw(20) << p2.epsilon0 << endl;
+	os << setw(20) << "minima0[0]" << setw(20) << p2.minima0[0] << endl;
+	os << setw(20) << "minima0[1]" << setw(20) << p2.minima0[1] << endl;
 	os << endl;
 	return os;
 }
@@ -543,7 +545,7 @@ void Options::save(const string& filename) const {
 	os.open(filename.c_str());
 	if (!os.good()) {
 		FileError::StreamNotGood e(filename);
-		throw e;
+		cerr << e;
 	}
 	os << *this;
 	os << endl;
@@ -556,7 +558,7 @@ void Options::load(const string& filename) {
 	is.open(filename.c_str());
 	if (!is.good()) {
 		FileError::StreamNotGood e(filename);
-		throw e;
+		cerr << e;
 	}
 	string dross;
 	is >> dross >> alpha;

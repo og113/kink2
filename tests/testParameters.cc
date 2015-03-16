@@ -28,7 +28,7 @@ p1.Tb = 18.0;
 p1.theta = 0.0;
 p1.reg = 0.0;
 
-string filename = "data/tests/testParameters_p1";
+string filename = "tests/data/testParameters_p1";
 p1.save(filename);
 cout << filename << " printed" << endl;
 
@@ -47,5 +47,28 @@ p.changeParameters("Tb",17.9);
 
 cout << "p: " << endl;
 p.print();
+
+Options o;
+o.alpha = 0.5;
+o.open = 1.0;
+o.amp = 0.5;
+o.zmx = "nC2";
+o.zmt = "nC2";
+o.bds = "all";
+o.inF = "p";
+o.minTimenumberLoad = "0";
+o.maxTimenumberLoad = "0";
+o.minLoopLoad = 0;
+o.maxLoopLoad = 0;
+o.loopChoice = "n";
+o.loopMin = 0.0;
+o.loopMax = 0.0;
+o.loops = 1;
+o.printChoice = "n";
+
+string str = "tests/data/testParameters_o";
+o.save(str);
+cout << "o: " << endl << o;
+
 return 0;
 }

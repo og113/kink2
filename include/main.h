@@ -7,6 +7,8 @@
 
 #include <complex>
 #include "check.h"
+#include "error.h"
+#include "fnptrs.h"
 #include "folder.h"
 #include "lattice.h"
 #include "omega.h"

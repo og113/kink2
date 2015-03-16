@@ -39,13 +39,13 @@ void Check::add(const double& test) {
 
 // good
 bool Check::good() const {
-	return Tests.push_back()<Closeness;
+	return Tests.back()<Closeness;
 }
 
 // checkMessage
 void Check::checkMessage() const {
 	if (!good()) {
-		cout << "Check " << Message << ": test(" << Tests.push_back() << ") > closeness(" << Closeness << ")" << endl;
+		cout << "Check " << Message << ": test(" << Tests.back() << ") > closeness(" << Closeness << ")" << endl;
 	}
 }
 	

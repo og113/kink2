@@ -156,7 +156,7 @@ void Filename::set(const string& f) {
 			stop = temp.find("_");
 			if (stop==string::npos) {
 				FilenameError::Extras e(f);
-				throw f;
+				cerr << e;
 			}
 			StringPair sp;
 			sp.first = temp.substr(0,stop);

@@ -18,6 +18,8 @@
 #include <gsl/gsl_roots.h>
 #include "main.h"
 
+//#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
+
 /*----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
 	CONTENTS
@@ -38,14 +40,14 @@
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int main()
+int main(int argc, char** argv)
 {
 /*----------------------------------------------------------------------------------------------------------------------------
 	1. loading options
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 Options opts;
-opts.load("options");
+opts.load("optionsM");
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. Folders
@@ -88,8 +90,8 @@ Folder pFolder(fc);
 
 // inputsFolder
 if ((opts.inF).compare("p")==0) {
-	fa_low.ID = "inputsPi";
-	fa_high.ID = "inputsPi";
+	fa_low.ID = "inputsP";
+	fa_high.ID = "inputsP";
 }
 else if ((opts.inF).compare("m")==0) {
 	fa_low.ID = "inputsM";
@@ -105,7 +107,8 @@ removeUnshared(pFolder,inputsFolder);
 cout << "inputs: " << pFolder << inputsFolder << endl;
 
 //defining timenumber
-string timenumber = currentDateTime();
+string timenumber;
+(argc==2) ? timenumber = argv[1] : timenumber = currentDateTime();
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	3. beginning file loop
@@ -114,7 +117,7 @@ string timenumber = currentDateTime();
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // beginning file loop
-for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
+for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 	// loading parameters
 	Parameters psu;
@@ -125,12 +128,20 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. beginning parameter loop
+		- defining a time
 		- changing parameters (if required)
 		- copying a verson of parameters with timenumber
+		- printing parameters
 		- declaring checks
 ----------------------------------------------------------------------------------------------------------------------------*/
 	
-	for (unsigned int loop=0; loop<opts.loops; loop++) {
+	for (uint loop=0; loop<opts.loops; loop++) {
+	
+		//defining a time and starting the clock
+		clock_t time;
+		time = clock();
+	
+		// changing parameters
 		Parameters ps = psu;
 		if (opts.loops>1) {
 			if ((opts.loopChoice)[0]=='N') {
@@ -149,31 +160,35 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 		}
 
-	//copying a version of ps with timenumber
-	Filename paramsRunFile = (string)("./data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
-			+"_loop_"+numberToString<uint>(loop));
-	ps.save(paramsRunFile);
+		//copying a version of ps with timenumber
+		Filename paramsRunFile = (string)("./data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
+				+"_loop_"+numberToString<uint>(loop));
+		ps.save(paramsRunFile);
+		
+		//printing timenumber and parameters
+		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
+		ps.print();
 	
-	// declaring Checks
-	Check checkAction("action",1.0e-2);
-	Check checkSoln("solution",1.0e-6);
-	Check checkSolnMax("solution max",1.0e-5);
-	Check checkDelta("delta",1.0);
-	Check checkInv("matrix inversion",1.0e-16*ps.N*ps.NT);
-	Check checkCon("energy conservation",1.0e-2);
-	Check checkLin("linear energy flat",5.0e-2);
-	Check checkTrue("linear energy equal true energy",5.0e-2);
-	Check checkLatt("lattice small enough for energy",0.2);
-	Check checkReg("regularisation term",1.0e-2);
-	Check checkIE("imaginary part of energy",1.0e-5);
-	Check checkContm("linear energy equal continuum expression",5.0e-2);
-	Check checkOS("linear energy equal on shell expression",5.0e-2);
-	Check checkAB("a_k = Gamma*b_k",1.0e-2);
-	Check checkABNE("N = Sum(a_k*b_k), E = Sum(w_k*a_k*b_k)",5.0e-2);
-	Check checkLR("linear representation of phi",1.0e-12);
+		// declaring Checks
+		Check checkAction("action",1.0e-2);
+		Check checkSoln("solution",1.0e-6);
+		Check checkSolnMax("solution max",1.0e-5);
+		Check checkDelta("delta",1.0);
+		Check checkInv("matrix inversion",1.0e-16*ps.N*ps.NT);
+		Check checkCon("energy conservation",1.0e-2);
+		Check checkLin("linear energy flat",5.0e-2);
+		Check checkTrue("linear energy equal true energy",5.0e-2);
+		Check checkLatt("lattice small enough for energy",0.2);
+		Check checkReg("regularisation term",1.0e-2);
+		Check checkIE("imaginary part of energy",1.0e-5);
+		Check checkContm("linear energy equal continuum expression",5.0e-2);
+		Check checkOS("linear energy equal on shell expression",5.0e-2);
+		Check checkAB("a_k = Gamma*b_k",1.0e-2);
+		Check checkABNE("N = Sum(a_k*b_k), E = Sum(w_k*a_k*b_k)",5.0e-2);
+		Check checkLR("linear representation of phi",1.0e-12);
 	
-	// do trivial or redundant checks?
-	bool trivialChecks = true;
+		// do trivial or redundant checks?
+		bool trivialChecks = true;
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	5. assigning potential functions
@@ -181,41 +196,41 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- assigning preliminary parameter structs
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-	// assigning potential functions
-	Potential V, dV, ddV;
-	if (ps.pot==1) {
-		V((PotentialType)&V1<comp>,ps);
-		dV((PotentialType)&dV1<comp>,ps);
-		ddV((PotentialType)&ddV1<comp>,ps);
-	}
-	else if (ps.pot==2) {
-		V((PotentialType)&V2<comp>,ps);
-		dV((PotentialType)&dV2<comp>,ps);
-		ddV((PotentialType)&ddV2<comp>,ps);
-	}
-	else if (ps.pot==3) {
-		V((PotentialType)&V3<comp>,ps);
-		dV((PotentialType)&dV3<comp>,ps);
-		ddV((PotentialType)&ddV3<comp>,ps);
+		// assigning potential functions
+		Potential V, dV, ddV;
+		if (ps.pot==1) {
+			V((PotentialType)&V1<comp>,ps);
+			dV((PotentialType)&dV1<comp>,ps);
+			ddV((PotentialType)&ddV1<comp>,ps);
 		}
-	else {
-		cerr << "pot option not available, pot = " << ps.pot << endl;
-		return 1;
-	}
+		else if (ps.pot==2) {
+			V((PotentialType)&V2<comp>,ps);
+			dV((PotentialType)&dV2<comp>,ps);
+			ddV((PotentialType)&ddV2<comp>,ps);
+		}
+		else if (ps.pot==3) {
+			V((PotentialType)&V3<comp>,ps);
+			dV((PotentialType)&dV3<comp>,ps);
+			ddV((PotentialType)&ddV3<comp>,ps);
+			}
+		else {
+			cerr << "pot option not available, pot = " << ps.pot << endl;
+			return 1;
+		}
 	
-	// assigning preliminary parameter structs
-	params_for_V paramsV  = {ps.epsilon, ps.A};
+		// assigning preliminary parameter structs
+		params_for_V paramsV  = {ps.epsilon, ps.A};
 	
-	//lambda functions for pot_r
-	auto Vr = [&] (const comp& phi) {
-		return -ii*ps.reg*VrFn(phi,ps.minima[0],ps.minima[1]);
-	};
-	auto dVr = [&] (const comp& phi) {
-		return -ii*ps.reg*dVrFn(phi,ps.minima[0],ps.minima[1]);
-	};
-	auto ddVr = [&] (const comp& phi) {
-		return -ii*ps.reg*ddVrFn(phi,ps.minima[0],ps.minima[1]);
-	};
+		//lambda functions for pot_r
+		auto Vr = [&] (const comp& phi) {
+			return -ii*ps.reg*VrFn(phi,ps.minima[0],ps.minima[1]);
+		};
+		auto dVr = [&] (const comp& phi) {
+			return -ii*ps.reg*dVrFn(phi,ps.minima[0],ps.minima[1]);
+		};
+		auto ddVr = [&] (const comp& phi) {
+			return -ii*ps.reg*ddVrFn(phi,ps.minima[0],ps.minima[1]);
+		};
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	6. omega and negVec
@@ -223,113 +238,107 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- loading negVec
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-	//deterimining omega matrices for fourier transforms in spatial direction
-	vec freqs(ps.N), freqs_exp(ps.N);
-	mat modes(ps.N,ps.N);
-	mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
-	SaveOptions so_simple;
-	so_simple.paramsIn = ps; so_simple.paramsOut = ps;
-	so_simple.vectorType = SaveOptions::simple;
-	so_simple.extras = SaveOptions::none;
-	so_simple.printMessage = false;
-	{
-		Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
-		omegaM1F = (string)"data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
-						+"_L_"+numberToString<double>(ps.L)+".dat";
-		Folder omegaM1Folder(omegaM1F);
-		omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
-		omega1F = omegaM1F; 		omega1F.ID = "omega1"; 		Folder omega1Folder(omega1F);
-		omega2F = omegaM1F; 		omega2F.ID = "omega2";	 	Folder omega2Folder(omega2F);
-		modesF = omegaM1F;			modesF.ID = "modes"; 		Folder modesFolder(modesF);
-		freqsF = omegaM1F;			freqsF.ID = "freqs"; 		Folder freqsFolder(freqsF);
-		freqsExpF = omegaM1F;		omegaM1F.ID = "freqsExp";	Folder freqsExpFolder(omegaM1F);
-		if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()==1 \
-			&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
-			load(omegaM1Folder[0],so_simple,omega_m1);
-			load(omega0Folder[0],so_simple,omega_0);
-			load(omega1Folder[0],so_simple,omega_1);
-			load(omega2Folder[0],so_simple,omega_2);
-			load(modesFolder[0],so_simple,modes);
-			load(freqsFolder[0],so_simple,freqs);
-			load(freqsExpFolder[0],so_simple,freqs_exp);
-		}
-		else {
-			bool approxOmega = false;
-			if (!approxOmega) {
-				numericalModes(modes,freqs,freqs_exp,ps);
+		//deterimining omega matrices for fourier transforms in spatial direction
+		vec freqs(ps.N), freqs_exp(ps.N);
+		mat modes(ps.N,ps.N);
+		mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
+		SaveOptions so_simple;
+		so_simple.paramsIn = ps; so_simple.paramsOut = ps;
+		so_simple.vectorType = SaveOptions::simple;
+		so_simple.extras = SaveOptions::none;
+		so_simple.printMessage = false;
+		{
+			Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
+			omegaM1F = (string)"data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
+							+"_L_"+numberToString<double>(ps.L)+".dat";
+			Folder omegaM1Folder(omegaM1F);
+			omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
+			omega1F = omegaM1F; 		omega1F.ID = "omega1"; 		Folder omega1Folder(omega1F);
+			omega2F = omegaM1F; 		omega2F.ID = "omega2";	 	Folder omega2Folder(omega2F);
+			modesF = omegaM1F;			modesF.ID = "modes"; 		Folder modesFolder(modesF);
+			freqsF = omegaM1F;			freqsF.ID = "freqs"; 		Folder freqsFolder(freqsF);
+			freqsExpF = omegaM1F;		omegaM1F.ID = "freqsExp";	Folder freqsExpFolder(omegaM1F);
+			if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()==1 \
+				&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
+				load(omegaM1Folder[0],so_simple,omega_m1);
+				load(omega0Folder[0],so_simple,omega_0);
+				load(omega1Folder[0],so_simple,omega_1);
+				load(omega2Folder[0],so_simple,omega_2);
+				load(modesFolder[0],so_simple,modes);
+				load(freqsFolder[0],so_simple,freqs);
+				load(freqsExpFolder[0],so_simple,freqs_exp);
 			}
 			else {
-				analyticModes(modes,freqs,freqs_exp,ps);
+				bool approxOmega = false;
+				if (!approxOmega) {
+					numericalModes(modes,freqs,freqs_exp,ps);
+				}
+				else {
+					analyticModes(modes,freqs,freqs_exp,ps);
+				}
+				omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,ps);
+				save(omegaM1F,so_simple,omega_m1);
+				save(omega0F,so_simple,omega_0);
+				save(omega1F,so_simple,omega_1);
+				save(omega2F,so_simple,omega_2);
+				save(modesF,so_simple,modes);
+				save(freqsF,so_simple,freqs);
+				save(freqsExpF,so_simple,freqs_exp);
 			}
-			omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,ps);
-			save(omegaM1F,so_simple,omega_m1);
-			save(omega0F,so_simple,omega_0);
-			save(omega1F,so_simple,omega_1);
-			save(omega2F,so_simple,omega_2);
-			save(modesF,so_simple,modes);
-			save(freqsF,so_simple,freqs);
-			save(freqsExpF,so_simple,freqs_exp);
 		}
-	}
 
-	// loading negVec
-	vec negVec;
-	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
-		if (ps.pot==3) {
-			Filename eigVecFile = "data/stable/eigVec_pot_1_L_" + numberToString<double>(ps.L) + ".dat";	
-			load(eigVecFile,so_simple,negVec); // should automatically interpolate
-		}
-		else {
-			Filename eigVecFile;
-			string N_load;
-			string Nb_load;
-			Filename lower = "data/stable/eigVec_pot_" + numberToString<uint>(ps.pot)\
-								 + "_N_100_Nb_100_L_" + numberToString<double>(ps.L) + ".dat";
-			Filename upper = lower;
-			vector<StringPair> upperExtras = lower.Extras;
-			upper.Extras[1] = StringPair("N","1000");
-			upper.Extras[2] = StringPair("Nb","1000");
-			Folder eigVecFolder(lower,upper);
-			if (eigVecFolder.size()==0) {
-				cerr << "no negative eigenvector files found between:" << endl << lower << endl << upper << endl;
-				return 1;
+		// loading negVec
+		vec negVec;
+		if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
+			if (ps.pot==3) {
+				Filename eigVecFile = "data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";	
+				load(eigVecFile,so_simple,negVec); // should automatically interpolate
 			}
 			else {
-				eigVecFile = eigVecFolder[0];
-				for (uint j=1; j<eigVecFolder.size(); j++) {
-					// picking the file with the largest N, for some reason
-					if (((eigVecFolder[j].Extras)[1]).second>((eigVecFile.Extras)[1]).second) {
-						eigVecFile = eigVecFolder[j];
-						N_load = ((eigVecFile.Extras)[1]).second;
-						Nb_load = ((eigVecFile.Extras)[2]).second;
+				Filename eigVecFile;
+				string N_load;
+				string Nb_load;
+				Filename lower = "data/stable/eigVec_pot_" + numberToString<uint>(ps.pot)\
+									 + "_N_100_Nb_100_L_" + numberToString<double>(ps.L) + ".dat";
+				Filename upper = lower;
+				vector<StringPair> upperExtras = lower.Extras;
+				upper.Extras[1] = StringPair("N","1000");
+				upper.Extras[2] = StringPair("Nb","1000");
+				Folder eigVecFolder(lower,upper);
+				if (eigVecFolder.size()==0) {
+					cerr << "no negative eigenvector files found between:" << endl << lower << endl << upper << endl;
+					return 1;
+				}
+				else {
+					eigVecFile = eigVecFolder[0];
+					for (uint j=1; j<eigVecFolder.size(); j++) {
+						// picking the file with the largest N, for some reason
+						if (((eigVecFolder[j].Extras)[1]).second>((eigVecFile.Extras)[1]).second) {
+							eigVecFile = eigVecFolder[j];
+							N_load = ((eigVecFile.Extras)[1]).second;
+							Nb_load = ((eigVecFile.Extras)[2]).second;
+						}
 					}
 				}
+				SaveOptions eigVecOpts;
+				eigVecOpts.vectorType = SaveOptions::realB;
+				eigVecOpts.extras = SaveOptions::coords;
+				eigVecOpts.paramsOut = ps;
+				eigVecOpts.printMessage = false;
+				Parameters pIn = ps;
+				pIn.N = stringToNumber<uint>(N_load);
+				pIn.Nb = stringToNumber<uint>(Nb_load);
+				pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
+				load(eigVecFile,eigVecOpts,negVec);
 			}
-			SaveOptions eigVecOpts;
-			eigVecOpts.vectorType = SaveOptions::realB;
-			eigVecOpts.extras = SaveOptions::coords;
-			eigVecOpts.paramsOut = ps;
-			eigVecOpts.printMessage = false;
-			Parameters pIn = ps;
-			pIn.N = stringToNumber<uint>(N_load);
-			pIn.Nb = stringToNumber<uint>(Nb_load);
-			pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
-			load(eigVecFile,eigVecOpts,negVec);
 		}
-	}
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	7. defining quantities
-		- time
 		- erg, linErg etc
 		- p, minusDS, DDS
-		- print parameters
 		- print input phi
-----------------------------------------------------------------------------------------------------------------------------*/
-		
-		//defining a time and starting the clock
-		clock_t time;
-		time = clock();
+----------------------------------------------------------------------------------------------------------------------------*/	
 	
 		//defining energy and number vectors
 		cVec erg(ps.NT);
@@ -383,10 +392,6 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//defining DDS and minusDS
 		spMat DDS(2*ps.N*ps.NT+2,2*ps.N*ps.NT+2);
 		vec minusDS(2*ps.N*ps.NT+2);
-			
-		//printing loop name and parameters
-		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
-		ps.print();
 			
 		//very early vector print
 		so_tp.paramsIn = ps;

@@ -26,10 +26,10 @@ LFLAGS 			=
 INCLUDES		= -I$(HDIR) -I/home/og113/Documents/c++/eigen_build/eigen/ -I/home/og113/Documents/c++/gnuplot/gnuplot-cpp
 LIBS 			= -lm -lgsl -lgslcblas
 
-_HEADERS 		= error.h fnptrs.h folder.h gsl_extras.h lattice.h omega.h parameters.h potentials.h print.h simple.h 
+_HEADERS 		= check.h error.h fnptrs.h folder.h gsl_extras.h lattice.h omega.h parameters.h potentials.h print.h simple.h 
 HEADERS 		= $(patsubst %,$(HDIR)/%,$(_HEADERS))
 
-_COMMONSRC		= error.cc folder.cc gsl_extras.cc lattice.cc omega.cc parameters.cc potentials.cc print.cc simple.cc
+_COMMONSRC		= check.cc error.cc folder.cc gsl_extras.cc lattice.cc omega.cc parameters.cc potentials.cc print.cc simple.cc
 _COMMONOBJS		= $(_COMMONSRC:.cc=.o)
 COMMONSRC		= $(patsubst %,$(CSDIR)/%,$(_COMMONSRC))
 COMMONOBJS 		= $(patsubst %,$(CODIR)/%,$(_COMMONOBJS))
@@ -39,11 +39,11 @@ COMMONOBJS 		= $(patsubst %,$(CODIR)/%,$(_COMMONOBJS))
 common: $(COMMONOBJS)
 	@echo made common objects $(COMMONOBJS)
 	
-main: $(SDIR)/main.o $(COMMONOBJS)
+main: $(ODIR)/main.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named $(MAIN) has been compiled
 	
-pi: $(SDIR)/pi.o $(COMMONOBJS)
+pi: $(ODIR)/pi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named $(PI) has been compiled
 	
