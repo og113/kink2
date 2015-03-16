@@ -317,46 +317,63 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	
 	// loading phi (if required)
 	SaveOptions so_p;
-	so_p.paramsIn = psu;
+	so_p.paramsIn = ps;
 	so_p.paramsOut = ps;
 	so_p.vectorType = SaveOptions::complexB;
 	so_p.extras = SaveOptions::coords;
 	so_p.zeroModes = 1;
 	so_p.printMessage = false;
-	if ((opts.inF).compare("f)==0) {
-		
+	if ((opts.inF).compare("f")==0) {
+		Filename inputsPhiFile = (string)("data/"+opts.minTimenumberLoad+"inputsP_loop_"+\
+							minLoopLoad+".dat");
+		Parameters paramsPhiIn;
+		paramsPhiIn.load(inputsPhiFile);
+		so_p.paramsIn = paramsPhiIn;
+		Filename phiFile = inputsPhiFile;
+		phiFile.ID = "p";
+		load(phiFile,so_p,p);
+		so_p.paramsIn = ps;
 	}
-	
-	//finding phi profile between minima
-	uint profileSize = ps.Nb; //more than the minimum
-	vector<double> phiProfile(profileSize);
-	vector<double> rhoProfile(profileSize);
-	double alphaL = ps.alpha, alphaR = ps.alpha;
+	else if (loop>0) {
+		Filename phiFile = (string)("data/"+opts.minTimenumberLoad+"p_loop_"+\
+							numberToString<uint>(loop-1)+".dat");
+		load(phiFile,so_p,p);
+	}
+	else {
+		//finding phi profile between minima
+		uint profileSize = ps.Nb; //more than the minimum
+		vector<double> phiProfile(profileSize);
+		vector<double> rhoProfile(profileSize);
+		double alphaL = ps.alpha, alphaR = ps.alpha;
 
-	if (ps.pot!=3) {
-		if (ps.pot==2) {
-			double phiL = ps.minima0[1]-1.0e-2;
-			double phiR = ps.minima0[0]+1.0e-2;
-			for (uint j=0;j<profileSize;j++) {
-				phiProfile[j] = phiL + (phiR-phiL)*j/(profileSize-1.0);
-			}
+		if (ps.pot!=3) {
+			if (ps.pot==2) {
+				double phiL = ps.minima0[1]-1.0e-2;
+				double phiR = ps.minima0[0]+1.0e-2;
+				for (uint j=0;j<profileSize;j++) {
+					phiProfile[j] = phiL + (phiR-phiL)*j/(profileSize-1.0);
+				}
 	
-			double profileError;
-			gsl_function rho_integrand;
-			rho_integrand.function = &rhoIntegrand;
-			rho_integrand.params = &paramsV0;
-			gsl_integration_workspace *w = gsl_integration_workspace_alloc(1e4);
-			w = gsl_integration_workspace_alloc(1e4);
-			for (uint j=0;j<profileSize;j++) {
-				gsl_integration_qags(&rho_integrand, phiProfile[j], 0, 1.0e-16, 1.0e-6, 1e4, w, &(rhoProfile[j]), &profileError);
-				checkProfile.add(profileError);
-				checkProfile.checkMessage();
+				double profileError;
+				gsl_function rho_integrand;
+				rho_integrand.function = &rhoIntegrand;
+				rho_integrand.params = &paramsV0;
+				gsl_integration_workspace *w = gsl_integration_workspace_alloc(1e4);
+				w = gsl_integration_workspace_alloc(1e4);
+				for (uint j=0;j<profileSize;j++) {
+					gsl_integration_qags(&rho_integrand, phiProfile[j], 0, 1.0e-16, 1.0e-6, 1e4, w,\
+															 &(rhoProfile[j]), &profileError);
+					checkProfile.add(profileError);
+					checkProfile.checkMessage();
+				}
+				gsl_integration_workspace_free(w);
+				alphaL = rhoProfile[0];
+				alphaR = rhoProfile.back();
 			}
-			gsl_integration_workspace_free(w);
-			alphaL = rhoProfile[0];
-			alphaR = rhoProfile.back();
 		}
 	}
+	
+	
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	//assigning input phi

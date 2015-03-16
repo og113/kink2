@@ -171,8 +171,8 @@ struct Options {
 	string inF;						// p, f, m, b - to load
 	string minTimenumberLoad;
 	string maxTimenumberLoad;
-	uint minLoopLoad;
-	uint maxLoopLoad;
+	string minLoopLoad;
+	string maxLoopLoad;
 	string loopChoice;
 	double loopMin;
 	double loopMax;

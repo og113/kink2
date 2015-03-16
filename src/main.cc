@@ -65,8 +65,8 @@ opts.load("optionsM");
 FilenameAttributes fa_low, fa_high;
 fa_low.Timenumber = opts.minTimenumberLoad;
 fa_high.Timenumber = opts.minTimenumberLoad;
-(fa_low.Extras).push_back(StringPair("Loop",numberToString<uint>(opts.minLoopLoad)));
-(fa_high.Extras).push_back(StringPair("Loop",numberToString<uint>(opts.maxLoopLoad)));
+(fa_low.Extras).push_back(StringPair("Loop",minLoopLoad));
+(fa_high.Extras).push_back(StringPair("Loop",maxLoopLoad));
 
 // FilenameComparator
 FilenameComparator fc(fa_low,fa_high);
