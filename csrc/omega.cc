@@ -67,11 +67,11 @@ static mat	hFn(const Parameters& p) {
 void analyticModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) {
 	double normalisation = sqrt(2.0/(p.N-1.0));
 	for (unsigned int l=0; l<p.N; l++) {
-		freqs(l) = 1.0+pow(2.0*sin(pi*l/(p.N-1.0)/2.0)/p.a,2.0);
-		freqs_exp(l) = (2.0/p.b)*asin(p.b*sqrt(freqs(l))/2.0);
+		freqs(l) = sqrt(1.0+pow(2.0*sin(pi*l/(p.N-1.0)/2.0)/p.a,2.0));
+		freqs_exp(l) = (2.0/p.b)*asin(p.b*freqs(l)/2.0);
 		for (unsigned int m=0; m<p.N; m++) {
-			if (p.pot==3) modes(l,m) = normalisation*sin(pi*l*m/(p.N-1.0));
-			else			 modes(l,m) = normalisation*cos(pi*l*m/(p.N-1.0));
+			if (p.pot==3) 	modes(l,m) = normalisation*sin(pi*l*m/(p.N-1.0));
+			else			modes(l,m) = normalisation*cos(pi*l*m/(p.N-1.0));
 		}
 	}
 	freqs(p.N-1) = 1.0;		
@@ -96,8 +96,8 @@ void numericalModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p)
 		cModes = eigensolver.eigenvectors(); //automatically normalised to have unit norm
 	}
 	for (unsigned int j=0; j<p.N; j++) {
-		freqs(j) = real(cFreqs(j));
-		freqs_exp(j) = (2.0/p.b)*asin(p.b*sqrt(freqs(j))/2.0);
+		freqs(j) = sqrt(real(cFreqs(j)));
+		freqs_exp(j) = (2.0/p.b)*asin(p.b*freqs(j)/2.0);
 		for (unsigned int k=0; k<p.N; k++) {
 			modes(j,k) = real(cModes(j,k));
 		}
@@ -109,16 +109,20 @@ void numericalModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p)
 
 // omegasFn
 void omegasFn(const bool& analytic, const mat& modes, const mat& freqs, mat& omega_m1, mat& omega_0, mat& omega_1, mat& omega_2, const Parameters& p) {
+	omega_m1 = Eigen::MatrixXd::Zero(p.N,p.N);
+	omega_0 = Eigen::MatrixXd::Zero(p.N,p.N);
+	omega_1 = Eigen::MatrixXd::Zero(p.N,p.N);
+	omega_2 = Eigen::MatrixXd::Zero(p.N,p.N);
 	double djdk;
 	for (unsigned int j=0; j<p.N; j++) {
 		for (unsigned int k=0; k<p.N; k++) {
 			for (unsigned int l=0; l<p.N; l++) {
 				if (analytic) djdk = p.a;
 				else 			 djdk = sqrt(DxFn(j,p)*DxFn(k,p));
-				omega_m1(j,k) += djdk*pow(freqs(l),-0.5)*modes(j,l)*modes(k,l);
+				omega_m1(j,k) += djdk*pow(freqs(l),-1.0)*modes(j,l)*modes(k,l);
 				omega_0(j,k)  += djdk*modes(j,l)*modes(k,l);
-				omega_1(j,k)  += djdk*pow(freqs(l),0.5)*modes(j,l)*modes(k,l);
-				omega_2(j,k)  += djdk*freqs(l)*modes(j,l)*modes(k,l);
+				omega_1(j,k)  += djdk*freqs(l)*modes(j,l)*modes(k,l);
+				omega_2(j,k)  += djdk*pow(freqs(l),2.0)*modes(j,l)*modes(k,l);
 			}
 		}
 	}

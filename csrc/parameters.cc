@@ -358,6 +358,7 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. Parameters member functions
 		- empty constructor
+		- constructor from PrimaryParameters
 		- constructor from PrimaryParameters and SecondaryParameters
 		- print to shell
 		- set secondary parameters
@@ -367,6 +368,11 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 
 // empty constructor
 Parameters::Parameters(): PrimaryParameters(), SecondaryParameters()	{}			
+
+// constructor from PrimaryParameters
+Parameters::Parameters(const PrimaryParameters& p1): PrimaryParameters(p1) {
+	setSecondaryParameters();
+}
 
 // constructor using primary and secondary parameters
 Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2): \
@@ -405,17 +411,21 @@ void Parameters::load(const string& f) {
 }	
 
 // change all parameters due to change in one, uint
-void Parameters::changeParameters (const string& pName, const uint& pValue) {
+bool Parameters::changeParameters (const string& pName, const uint& pValue) {
+	bool anythingChanged = false;
 	if ( pName.compare("N")==0) {
+			if (N!=pValue) anythingChanged = true;
 			N = pValue;
 			a = L/(N-1);
 		}
 		else if ( pName.compare("Na")==0) {
+			if (Na!=pValue) anythingChanged = true;
 			Na = pValue;
 			NT = Na + Nb + Nc;
 			Ta = b*(double)Na;
 			}
 		else if ( pName.compare("Nb")==0) {
+			if (Nb!=pValue) anythingChanged = true;
 			Nb = pValue;
 			NT = Na + Nb + Nc;
 			b = Tb/(Nb-1.0);
@@ -423,31 +433,38 @@ void Parameters::changeParameters (const string& pName, const uint& pValue) {
 			Tc = b*(double)Nc;
 		}
 		else if ( pName.compare("Nc")==0) {
+			if (Nc!=pValue) anythingChanged = true;
 			Nc = pValue;
 			NT = Nc + Nb + Nc;
 			Tc = b*(double)Nc;
 		}
-		else if ( pName.compare("pot")==0) {
+		else if ( pName.compare("pot")==0) { // would not recommend change pot this way
+			if (pot!=pValue) anythingChanged = true;
 			pot = pValue;
 		}
 		else {
 			cerr << "Parameters::changeParameters error: " << pName << " not changed" << endl;
 		}
-	}
+	return anythingChanged;	
+}
 
 // change all parameters due to change in one, double
-void Parameters::changeParameters (const string& pName, const double& pValue) {
+bool Parameters::changeParameters (const string& pName, const double& pValue) {
+	bool anythingChanged = false;
 	if ( pName.compare("L")==0) { //this does not changes the physics but simply the size of the box in space
+		if (abs(L-pValue)>MIN_NUMBER) anythingChanged = true;
 		L = pValue;
 		LoR = L/R;
 		a = L/(N-1);
 	}
 	if ( pName.compare("LoR")==0) { //this changes L, as above
+		if (abs(LoR-pValue)>MIN_NUMBER) anythingChanged = true;
 		LoR = pValue;
 		L = LoR*R;
 		a = L/(N-1);
 	}
 	else if ( pName.compare("Tb")==0) { //this paramter changes the physics for the periodic instanton,											//as Tb/R changes where R = R(epsilon)
+		if (abs(Tb-pValue)>MIN_NUMBER) anythingChanged = true;
 		b = b*pValue/Tb;
 		Ta = Ta*pValue/Tb;
 		Tc = Tc*pValue/Tb;
@@ -469,6 +486,7 @@ void Parameters::changeParameters (const string& pName, const double& pValue) {
 	}
 	else if ( pName.compare("dE")==0) { //this parameter changes the physics of the potential
 													//but it does not change Tb/R, where R(epsilon)
+		if (abs(dE-pValue)>MIN_NUMBER) anythingChanged = true;
 		R = R*dE/pValue; //R scales with 1/dE and the other length scales scale with R
 		L = L*dE/pValue;
 		a = a*dE/pValue;
@@ -480,12 +498,14 @@ void Parameters::changeParameters (const string& pName, const double& pValue) {
 		dE = pValue;
 	}
 	else if ( pName.compare("theta")==0) {
+		if (abs(theta-pValue)>MIN_NUMBER) anythingChanged = true;
 		theta = pValue;
 		Gamma = exp(-theta);
 	}
 	else {
 			cerr << "Parameters::changeParameters error: " << pName << " not changed" << endl;
 		}
+	return anythingChanged;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -511,6 +531,7 @@ ostream& operator<<(ostream& os, const Options& o) {
 	os << setw(20) << "maxLoopLoad" << setw(20) << o.maxLoopLoad << endl;
 	os << setw(20) << "loopMin" << setw(20) << o.loopMin << endl;
 	os << setw(20) << "loopMax" << setw(20) << o.loopMax << endl;
+	os << setw(20) << "loops" << setw(20) << o.loops << endl;
 	os << setw(20) << "printChoice" << setw(20) << o.printChoice << endl;
 	os << endl;
 	return os;
@@ -552,6 +573,7 @@ void Options::load(const string& filename) {
 	is >> dross >> loopChoice;
 	is >> dross >> loopMin;
 	is >> dross >> loopMax;
+	is >> dross >> loops;
 	is >> dross >> printChoice;
 	is.close();
 }

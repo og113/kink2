@@ -21,7 +21,7 @@ CONTENTS
 	3. Filename
 	4. FilenameComparator
 	5. Folder
-	6. functions (reduceTo)
+	6. functions (reduceTo, getLastInt)
 	
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -124,6 +124,7 @@ string FolderError::Add::message() const {
 		- set
 		- operator=
 		- constructor(const string& filename)
+		- operator string() - conversion
 		- operator()
 		- operator<<
 		- operator<
@@ -134,9 +135,9 @@ string FolderError::Add::message() const {
 void Filename::set(const string& f) {
 	string temp = f;
 	size_t stop;
-	stop = f.find("/");
+	stop = temp.find_last_of("/");
 	if (stop!=string::npos) {
-		Directory = f.substr(0,stop);
+		Directory = temp.substr(0,stop);
 		temp = temp.substr(stop+1);
 	}
 	if (temp.find_first_of("0123456789")==0) {
@@ -187,6 +188,16 @@ Filename& Filename::operator=(const string& rhs) {
 // constructor(const string& filename)
 Filename::Filename(const string& f): FilenameAttributes() {
 	set(f);
+}
+
+// operator string() - conversion
+Filename::operator string() const {
+	string filename = Directory + "/" + Timenumber + ID;
+	for (unsigned int l=0; l<Extras.size(); l++) {
+		filename += "_" + Extras[l].first + "_" + Extras[l].second;
+	}
+	filename += Suffix;
+	return filename;
 }
 
 // operator()
@@ -468,7 +479,16 @@ Folder::Folder(const Folder& f): Comparator(), Filenames() {
 
 // constructor(FilenameComparator)
 Folder::Folder(const FilenameComparator& fc): Comparator(fc), Filenames() {
-	Comparator = fc;
+	refresh();
+}
+
+// constructor(FilenameAttributes)
+Folder::Folder(const FilenameAttributes& l): Comparator(l), Filenames() {
+	refresh();
+}
+
+// constructor(FilenameAttributes, FilenameAttributes)
+Folder::Folder(const FilenameAttributes& l, const FilenameAttributes& u): Comparator(l,u), Filenames() {
 	refresh();
 }
 
@@ -508,6 +528,7 @@ ostream& operator<<(ostream& os, const Folder& f) {
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. functions acting on Filenames and Folders
 		- removeUnshared
+		- getLastInt (used in getting ints from zmx and zmt)
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // removeUnshared
@@ -530,3 +551,25 @@ void removeUnshared(Folder& f1,Folder& f2) {
 	f2.order();
 }
 
+// getLastInt - returns last integer in string
+uint getLastInt(const string& str) {
+	size_t first_index;
+	size_t last_index;
+	if (str.find_last_not_of("0123456789")!=string::npos) first_index = str.find_last_not_of("0123456789");
+	else {
+		cerr << "getLastInt error, no non-numeric characters found in " << str << endl;
+		return -1;
+	}
+	string temp = str.substr(first_index+1);
+	if (isdigit(temp[0])==0) { // zero for false
+		cerr << "getLastInt error, first character of " << temp << " in " << str << " not numeric" << endl;
+		return -1;
+	}
+	if (temp.find_last_of("0123456789")!=string::npos) last_index = temp.find_last_of("0123456789");
+	else {
+		cerr << "getLastInt error, last numeric character not found in " << temp << " in " << str << endl;
+		return -1;
+	}
+	temp = temp.substr(0,last_index+1);
+	return stringToNumber<uint>(temp);
+}
