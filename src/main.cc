@@ -150,7 +150,8 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		}
 
 	//copying a version of ps with timenumber
-	Filename paramsRunFile = (string)("./data/" + timenumber + "inputsM_" + numberToString<uint>(loop));
+	Filename paramsRunFile = (string)("./data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
+			+"_loop_"+numberToString<uint>(loop));
 	ps.save(paramsRunFile);
 	
 	// declaring Checks
@@ -235,6 +236,7 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	so_simple.ParamsIn = ps; so_simple.ParamsOut = ps;
 	so_simple.vectorType = SaveOptions::simple;
 	so_simple.extras = SaveOptions::none;
+	so_simple.printMessage = false;
 	{
 		Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
 		omegaM1F = (string)"data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
@@ -312,6 +314,7 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			eigVecOpts.vectorType = SaveOptions::realB;
 			eigVecOpts.extras = SaveOptions::coords;
 			eigVecOpts.paramsOut = ps;
+			eigVecOpts.printMessage = false;
 			Parameters pIn = ps;
 			pIn.N = stringToNumber<uint>(N_load);
 			pIn.Nb = stringToNumber<uint>(Nb_load);
@@ -364,6 +367,7 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.vectorType = SaveOptions::complex;
 		so_tp.extras = SaveOptions::coords;
 		so_tp.zeroModes = 2;
+		so_tp.printMessage = false;
 		if (loop==0) {
 			load(pFolder[0],so_tp,p);
 			printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
@@ -1181,79 +1185,60 @@ for (unsigned int fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		actionfile = fopen("./data/mainAction.dat","a");
 		fprintf(actionfile,"%12s%6i%6i%8g%8g%8g%8g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g\n",\
 					timeNumber.c_str(),ps.N,NT,L,Tb,dE,theta,E,Num,imag(action)\
-					,real(W),sol_test.back(),lin_test.back(),true_test.back());
+					,real(W),checkSoln.back(),checkLin.back(),checkTrue.back());
 		fclose(actionfile);
 		
 		string prefix = "./data/" + timeNumber;
 		string suffix = "_" + numberToString<unsigned int>(fileLoop)+"_" + numberToString<unsigned int>(loop)+ ".dat";
 	
-		//copying a version of inputs with timeNumber and theta changed
-		string runInputs = prefix + "inputsM_"+ numberToString<unsigned int>(fileLoop) + "_" + numberToString<unsigned int>(loop); //different suffix
-		if (abs(maxTheta-minTheta)>MIN_NUMBER) 	changeInputs(runInputs,"theta", numberToString<double>(theta),inputsFiles[fileLoop]);
-		else if (abs(maxTb-minTb)>MIN_NUMBER)	changeInputs(runInputs,"Tb", numberToString<double>(Tb),inputsFiles[fileLoop]);
-		else 									copyFile(inputsFiles[fileLoop],runInputs);
-		printf("%12s%30s\n","output: ",runInputs.c_str());
+		// printing messages for saved files
+		so_tp.printMessage = true;
+		so_simple.printMessage = true;
 	
 		//printing output phi
-		string tpifile =  prefix + "mainpi"+suffix;
-		printVector(tpifile,p);
-		//gp(tpifile,"repi.gp");
-		printf("%12s%30s\n"," ",tpifile.c_str());
+		Filename tpFile = (string)("data/"+timenumber+"mainpi_fLoop_"+numberToString<uint>(fLoop)\
+					+"_loop_"+numberToString<uint>(loop)+".dat";
+		save(tpFile,so_tp,p);
 	
-		//printing output minusDS				
-		string minusDSfile = prefix + "mainminusDS"+suffix;
-		printVector(minusDSfile,minusDS);
-		printf("%12s%30s\n"," ",minusDSfile.c_str());
+		//printing output minusDS
+		tpFile.ID = "mainminudDS";
+		save(tpFile,so_tp,minusDS);		
 				
 		//printing output DDS
-		string DDSfile = prefix + "mainDDS"+suffix;
-		printSpmat(DDSfile,DDS);
-	    printf("%12s%30s\n"," ",DDSfile.c_str());
+		tpFile.ID = "mainDDS";
+		save(tpFile,so_simple,DDS);
 	    
 		//printing linNum
-		string linNumFile = prefix + "mainlinNum"+suffix;
+		tpFile.ID = "mainlinNum";
 		linNum.conservativeResize(Na);
-		simplePrintCVector(linNumFile,linNum);
-		printf("%12s%30s\n"," ",linNumFile.c_str());
-		//gpSimple(linNumFile);
+		save(tpFile,so_simple,linNum);
 	
 		//printing linErg
-		string linErgFile = prefix + "mainlinErg"+suffix;
+		tpFile.ID = "mainlinErg";
 		linErg.conservativeResize(Na);
-		simplePrintCVector(linErgFile,linErg);
-		//gpSimple(linErgFile);
-		printf("%12s%30s\n"," ",linErgFile.c_str());
+		save(tpFile,so_simple,linErg);
 		
 		//printing linErgOffShell
-		string linErgOffShellFile = prefix + "mainlinErgOffShell"+suffix;
+		tpFile.ID = "mainlinErgOffShell";
 		linErgOffShell.conservativeResize(Na);
-		simplePrintCVector(linErgOffShellFile,linErgOffShell);
-		//gpSimple(linErgFileOffShell);
-		printf("%12s%30s\n"," ",linErgOffShellFile.c_str());
-		
+		save(tpFile,so_simple,linErgOffShell);
+
 		//printing derivErg
-		string derivErgFile = prefix + "mainderivErg"+suffix;
-		//derivErg.conservativeResize(Na);
-		simplePrintCVector(derivErgFile,derivErg);
-		//gpSimple(linErgFile);
-		printf("%12s%30s\n"," ",derivErgFile.c_str());
+		tpFile.ID = "mainderivErg";
+		derivErg.conservativeResize(Na);
+		save(tpFile,so_simple,derivErg);
 		
 		//printing potErg
-		string potErgFile = prefix + "mainpotErg"+suffix;
-		//potErg.conservativeResize(Na);
-		simplePrintCVector(potErgFile,potErg);
-		//gpSimple(linErgFile);
-		printf("%12s%30s\n"," ",potErgFile.c_str());
+		tpFile.ID = "mainpotErg";
+		potErg.conservativeResize(Na);
+		save(tpFile,so_simple,potErg);
 	
 		//printing erg
-		string ergFile = prefix + "mainerg" + suffix;
-		erg.conservativeResize(Na);
-		simplePrintCVector(ergFile,erg);
-		//gpSimple(ergFile);
-		printf("%12s%30s\n"," ",ergFile.c_str());
-		cout << endl;
+		tpFile.ID = "mainerg";
+		//erg.conservativeResize(Na);
+		save(tpFile,so_simple,erg);
 		
-		if (delta_test.back()>closenessD) {
+		if (!checkDelta.good()) {
 				return 1;
 			}
 		

@@ -50,6 +50,7 @@ struct SaveOptions {
 	uint zeroModes;
 	Parameters paramsIn;
 	Parameters paramsOut;
+	bool printMessage;
 };
 
 /*-------------------------------------------------------------------------------------------------------------------------

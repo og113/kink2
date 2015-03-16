@@ -173,7 +173,10 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 									break;
 		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
 									break;
-	}	
+	}
+	if (opts.printMessage) {
+		printf("%12s%30s\n","saved: ",f.c_str());
+	}
 }
 
 // save cVec - simpleSaveVec
@@ -289,7 +292,10 @@ void save(const string& f, const SaveOptions& opts, const cVec& v) {
 									break;
 		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
 									break;
-	}	
+	}
+	if (opts.printMessage) {
+		printf("%12s%30s\n","saved: ",f.c_str());
+	}
 }
 
 // save mat
@@ -305,6 +311,9 @@ void save(const string& f, const SaveOptions& opts, const mat& m) {
 		}
 	}
 	F.close();
+	if (opts.printMessage) {
+		printf("%12s%30s\n","saved: ",f.c_str());
+	}
 }
 
 // save cMat
@@ -320,6 +329,9 @@ void save(const string& f, const SaveOptions& opts, const cMat& m) {
 		}
 	}
 	F.close();
+	if (opts.printMessage) {
+		printf("%12s%30s\n","saved: ",f.c_str());
+	}
 }
 
 // save spMat
@@ -334,6 +346,9 @@ void save(const string& f, const SaveOptions& opts, const spMat& m) {
 		}
 	}
 	F.close();
+	if (opts.printMessage) {
+		printf("%12s%30s\n","saved: ",f.c_str());
+	}
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
