@@ -78,9 +78,11 @@ clean:
 	rm -f *~ core
 	rm -f $(HDIR)/*~
 	rm -f $(TSDIR)/testFolder
-	rm -f $(TSDIR)/testPotentials
 	rm -f $(TSDIR)/testGsl_extras
+	rm -f $(TSDIR)/testLattice
 	rm -f $(TSDIR)/testParameters
+	rm -f $(TSDIR)/testPotentials
+	rm -f $(TSDIR)/testPrint
 
 #------------------------------------------------------------------------------------------------------------------------
 	
