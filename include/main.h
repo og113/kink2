@@ -6,12 +6,14 @@
 #define __MAIN_H_INCLUDED__
 
 #include <complex>
-#include "parameters.h"
-#include "lattice.h"
-#include "folder.h"
 #include "check.h"
-#include "print.h"
+#include "folder.h"
+#include "lattice.h"
 #include "omega.h"
+#include "parameters.h"
+#include "potentials.h"
+#include "print.h"
+#include "simple.h"
 
 using namespace std;
 
@@ -33,6 +35,10 @@ CONTENTS
 typedef unsigned int uint;
 typedef unsigned long lint;
 typedef complex<double> comp;
+
+typedef pair<string,string> StringPair;
+
+typedef comp(*PotentialType)(const comp&, const struct params_for_V&);
 
 typedef Eigen::VectorXd vec;
 typedef Eigen::VectorXcd cVec;

@@ -618,7 +618,8 @@ void plot(const string& f, const PlotOptions& opts) {
 		pclose(gnuplotPipe);
 	}
 	else {
-		string commandStr = "gnuplot -e \"f='" + f + "'\" \"o='" + output + "'\" " + opts.gp + " -persistent";
+		string commandStr = "gnuplot -e \"f='" + f + "'\" \"o='" + output + "'\" " + opts.gp \
+					 + "'\" \"s='" + style + "'\" " + opts.gp+ " -persistent";
 		const char * command = commandStr.c_str();
 		FILE * gnuplotPipe = popen (command,"w");
 		fprintf(gnuplotPipe, "%s \n", " ");

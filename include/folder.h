@@ -212,8 +212,11 @@ ostream& operator<<(ostream&, const Folder&);
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. functions acting on Filenames and Folders
 		- removeUnshared
+		- getLastInt
 -------------------------------------------------------------------------------------------------------------------------*/
 
 void removeUnshared(Folder&,Folder&);
+
+uint getLastInt(const string& str);
 
 #endif // __FOLDER_H_INCLUDED__

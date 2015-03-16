@@ -26,7 +26,7 @@ class Check {
 public:
 	Check(const string& m, const double& c);		// constructor
 	~Check() {}										// destructor
-	void add(const double* t);						// add test to Tests
+	void add(const double& t);						// add test to Tests
 	bool good() const;								// carry out check
 	void checkMessage() const;						// carry out check and print message if !good()
 	double back() const;							// gives result of last test
