@@ -137,8 +137,8 @@ static long periodic(const lint& locNum, const uint& direction, const int& sign,
 	}
 	
 //spherical system, reflective at r=0, nothing at r=R
-static long spherical(const lint& locNum, const uint& direction, const int& sign, const uint& xNt, const uint& xNx) //periodic in space but not time, degree refers to the number of neighbours, 1 is for just positive neighbours, 2 is for both
-	{
+static long spherical(const lint& locNum, const uint& direction, const int& sign, const uint& xNt, const uint& xNx) { //periodic in space but not time, degree refers to the number of neighbours, 1 is for just positive neighbours, 2 is for both
+	
 	unsigned int c = intCoord(locNum,direction,xNt);
 	if (direction==0) {
 		if (sign==1 and c!=(xNt-1))		return locNum+1;
@@ -148,7 +148,7 @@ static long spherical(const lint& locNum, const uint& direction, const int& sign
 	else if (c==0 and sign==-1)			return -1;
 	else if (c==(xNx-1) and sign==1)	return -1;
 	else								return locNum+sign*(int)xNt;
-	}
+}
 
 // neigh	
 long neigh (const lint& loc, const uint& direction, const int& sign, const Parameters p) {
@@ -161,6 +161,16 @@ long neigh (const lint& loc, const uint& direction, const int& sign, const Param
 	}
 	else {
 		return spherical(loc,direction,sign,p.NT,p.N);
+	}
+}
+
+// neigh	
+long neigh (const lint& loc, const uint& direction, const int& sign, const uint& xNt, const uint& xNx, const uint& pot) {
+	if (pot!=3) {
+		return periodic(loc,direction,sign,xNt,xNx);
+	}
+	else {
+		return spherical(loc,direction,sign,xNt,xNx);
 	}
 }
 

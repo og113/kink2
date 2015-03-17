@@ -103,6 +103,6 @@ uint countLines(const string & file_to_count);
 
 // smallestLoc
 template <class T>
-uint smallestLoc<T>(const vector<T>&);
+uint smallestLoc(const vector<T>&);
 
 #endif // __SIMPLE_H_INCLUDED__

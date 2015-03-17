@@ -81,7 +81,7 @@ comp coordB(const lint& loc, const int& direction, const Parameters& p);
 long neigh (const lint& loc, const uint& direction, const int& sign, const Parameters p);
 
 // neigh - Nt, Nx
-long neigh (const lint& loc, const uint& direction, const int& sign, const uint& xNt, const uint& xNx);
+long neigh (const lint& loc, const uint& direction, const int& sign, const uint& xNt, const uint& xNx, const uint& pot);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. dx, dt etc

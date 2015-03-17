@@ -124,16 +124,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	Check checkLatt("lattice small enough for energy",0.2);
 	Check checkReg("regularisation term",1.0e-2);
 	Check checkDT("time derivative of phi",1.0e-2);
-	Check checkProf("phi input calculation",1.0e-5);
-	
-	Check checkLin("linear energy flat",5.0e-2);
-	Check checkTrue("linear energy equal true energy",5.0e-2);
-	Check checkIE("imaginary part of energy",1.0e-5);
-	Check checkContm("linear energy equal continuum expression",5.0e-2);
-	Check checkOS("linear energy equal on shell expression",5.0e-2);
-	Check checkAB("a_k = Gamma*b_k",1.0e-2);
-	Check checkABNE("N = Sum(a_k*b_k), E = Sum(w_k*a_k*b_k)",5.0e-2);
-	Check checkLR("linear representation of phi",1.0e-12);
+	Check checkProfile("phi input calculation",1.0e-5);
 	
 	// do trivial or redundant checks?
 	bool trivialChecks = true;
@@ -266,7 +257,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 					if (((eigVecFolder[j].Extras)[1]).second>((eigVecFile.Extras)[1]).second) {
 						eigVecFile = eigVecFolder[j];
 						N_load = ((eigVecFile.Extras)[1]).second;
-						NbcheckProf_load = ((eigVecFile.Extras)[2]).second;
+						Nb_load = ((eigVecFile.Extras)[2]).second;
 					}
 				}
 			}
@@ -281,7 +272,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
 			load(eigVecFile,eigVecOpts,negVec);
 			
-			Filename eigValFile = (string)("data/stable/eigVal_pot_"+numberToString<uint>(ps.pot)+".dat");
+			string eigValFile = "data/stable/eigVal_pot_"+numberToString<uint>(ps.pot)+".dat";
 			string line, dross;
 			double negError;
 			ifstream isEigVal;
@@ -291,7 +282,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			iss >> dross >> dross >> dross >> negError >> negVal;
 			if (negError>1.0)
 				cerr << "error in eigenvalue(" << negError << ") is large, consider retrying calculation" << endl;
-			isEigVal.close()
+			isEigVal.close();
 		}
 	}
 
@@ -305,6 +296,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	comp action = ps.action0;
 	double W;
 	double E;
+	double ergZero = 0.0;
 	cVec erg(ps.NT);	
 
 	//defining some quantities used to stop the Newton-Raphson loop when action stops varying
@@ -338,7 +330,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	so_p.printMessage = false;
 	if ((opts.inF).compare("f")==0) {
 		Filename inputsPhiFile = (string)("data/"+opts.minTimenumberLoad+"inputsP_loop_"+\
-							minLoopLoad+".dat");
+							opts.minLoopLoad+".dat");
 		Parameters paramsPhiIn;
 		paramsPhiIn.load(inputsPhiFile);
 		so_p.paramsIn = paramsPhiIn;
@@ -387,8 +379,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		
 		if (ps.pot==3) {
 			vec tempPhi, temp2Phi;
-			Filename pi3GuessFile = (string)("data/pi3Guess_L_"+numberToString<double>(L)\
-										+"_Tb_"+numberToString<double>(Tb)+".dat");
+			Filename pi3GuessFile = (string)("data/pi3Guess_L_"+numberToString<double>(ps.L)\
+										+"_Tb_"+numberToString<double>(ps.Tb)+".dat");
 			so_simple.column = 4;
 			Parameters ps_blank;
 			so_simple.paramsIn = ps_blank;
@@ -402,7 +394,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			ps_blank.N = length;
 			ps_blank.Nb = length;
 			ps_blank.NT = 10000; // same fudge as before, so that it realises that the vector is just on BC
-			temp2Phi = interpolateReal(tempPhi,length,length,ps.Nb,ps.N);
+			temp2Phi = interpolateReal(tempPhi,ps_blank,ps);
 			for (uint j=0; j<ps.N*ps.Nb; j++) {
 				p(2*j) = temp2Phi(j);
 				p(2*j+1) = 0.0;
@@ -461,7 +453,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				}
 			}
 		}
-		p(2*N*Nb) = 0.5; // lagrange multiplier for zero mode
+		p(2*ps.N*ps.Nb) = 0.5; // lagrange multiplier for zero mode
 	}
 	
 	// fixing boundary conditions of input phi
@@ -487,7 +479,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	}
 	
 	// printing input phi
-	Filename earlyPhiFile = (string)("data/"+timeNumber+"pE_loop_"+numberToString<uint>(loop)+"_run_0.dat");
+	Filename earlyPhiFile = (string)("data/"+timenumber+"pE_loop_"+numberToString<uint>(loop)+"_run_0.dat");
 	save(earlyPhiFile,so_p,p);
 
 	// defining complex phi
@@ -511,11 +503,11 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		chiX = Eigen::VectorXd::Zero(ps.N*ps.Nb);
 		if (ps.pot!=3) {
 			for (uint j=0; j<ps.N; j++){
-				lint pos = c(Nb-1,j,Nb);
-				lint neighPos = neigh(pos,1,1,Nb,N), neighMin = neigh(pos,1,-1,Nb,N);
+				lint pos = c(ps.Nb-1,j,ps.Nb);
+				long int neighPos = neigh(pos,1,1,ps.Nb,ps.N,ps.pot), neighMin = neigh(pos,1,-1,ps.Nb,ps.N,ps.pot);
 				if(neighPos!=-1 && neighMin!=-1) {
 		        	chiX(pos) = p(2*neighPos)-p(2*neighMin); 								//final time slice
-		        	//chiX(pos-1) = p(2*neigh(pos-1,1,1,Nb,N))-p(2*neigh(pos-1,1,-1,Nb,N)); //penultimate time slice
+		        	//chiX(pos-1) = p(2*neigh(pos-1,1,1,ps.Nb,ps.N))-p(2*neigh(pos-1,1,-1,ps.Nb,ps.N,ps.pot)); //penultimate time slice
 		        }
 		    }
 		}
@@ -563,10 +555,10 @@ for (uint loop=0; loop<opts.loops; loop++) {
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 		// beginning loop over lattice points
-		for (ulint j = 0; j < N*Nb; j++) {		
+		for (lint j = 0; j < ps.N*ps.Nb; j++) {		
 			uint t = intCoord(j,0,ps.Nb); //coordinates
 			uint x = intCoord(j,1,ps.Nb);
-			lint neighPosX = neigh(j,1,1,ps.Nb,ps.N);
+			lint neighPosX = neigh(j,1,1,ps.Nb,ps.N,ps.pot);
 			
 			if (ps.pot==3) {
 					paramsV.epsi = ps.r0+x*ps.a;
@@ -575,10 +567,10 @@ for (uint loop=0; loop<opts.loops; loop++) {
 					ddV.setParams(paramsV);
 			}
 			
-			if (t<(Nb-1)) dtTest += abs((p(2*(j+1))-p(2*j))/ps.b);
+			if (t<(ps.Nb-1)) dtTest += abs((p(2*(j+1))-p(2*j))/ps.b);
 			
 			// fixing zero mode
-			if ((absolute(chiX(j))>1.0e-16)) {
+			if ((abs(chiX(j))>1.0e-16)) {
 				DDS.insert(2*j,2*ps.N*ps.Nb) = ps.a*chiX(j); 
 				DDS.insert(2*ps.N*ps.Nb,2*j) = ps.a*chiX(j);
 				minusDS(2*j) += -ps.a*chiX(j)*p(2*ps.N*ps.Nb);
@@ -595,18 +587,18 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				DDS.insert(2*j,2*j) = 1.0; // p=0 at r=0
 				DDS.insert(2*j+1,2*j+1) = 1.0;
 				double csi = ((t==0 || t==(ps.NT-1))? 0.5: 1.0);
-				kineticS +=	csi*ps.b*pow(Cp(neighPosX),2.0)/a/2.0;
+				kineticS +=	csi*ps.b*pow(Cp(neighPosX),2.0)/ps.a/2.0;
 			}
-			else if (t==ps.Nb-1)) {
-				comp Dt = -b*ii/2.0;
-				erg(t+Na) += pow(Cp(neighPosX)-Cp(j),2.0)/a/2.0 + a*V(Cp(j)) + a*Vr(Cp(j));
-				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/a/2.0; //n.b. no contribution from time derivative term at the final time boundary	
-				pot_0 += Dt*a*V(Cp(j));
-				pot_r += Dt*a*Vr(Cp(j));
+			else if (t==(ps.Nb-1)) {
+				comp Dt = -ps.b*ii/2.0;
+				erg(t+ps.Na) += pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
+				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0; //n.b. no contribution from time derivative term at the final time boundary	
+				pot_0 += Dt*ps.a*V(Cp(j));
+				pot_r += Dt*ps.a*Vr(Cp(j));
 				
 				
-				DDS.insert(2*j,2*j) = 1.0/b; //zero time derivative
-				DDS.insert(2*j,2*(j-1)) = -1.0/b;
+				DDS.insert(2*j,2*j) = 1.0/ps.b; //zero time derivative
+				DDS.insert(2*j,2*(j-1)) = -1.0/ps.b;
 				DDS.insert(2*j+1,2*j+1) = 1.0; //zero imaginary part
 			}
 			else if (t==0) {
@@ -616,14 +608,14 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
 				pot_0 += Dt*ps.a*V(Cp(j));
 				pot_r += Dt*ps.a*Vr(Cp(j));
-				erg(t+Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0\
+				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0\
 								 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
 				
-				if (inP.compare("b")==0) {
+				if ((opts.inF).compare("b")==0) {
 					DDS.insert(2*j,2*j) = 1.0; //zero change (initial input satisfies b.c.s)
 					DDS.insert(2*j+1,2*j+1) = 1.0; //zero imaginary part
 				}
-				else if (inP.compare("p")==0) {
+				else if ((opts.inF).compare("p")==0) {
 					DDS.insert(2*j,2*j) = -1.0/ps.b; //zero time derivative
 					DDS.insert(2*j,2*(j+1)) = 1.0/ps.b;
 					DDS.insert(2*j+1,2*j+1) = 1.0; //zero imaginary part
@@ -638,13 +630,13 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
 				pot_0 += Dt*ps.a*V(Cp(j));
 				pot_r += Dt*ps.a*Vr(Cp(j));
-				erg(t+Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0\
+				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0\
 							 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
 				
                 for (uint k=0; k<2*2; k++) {
                     int sign = pow(-1,k);
                     uint direc = (uint)(k/2.0);
-                    long int neighb = neigh(j,direc,sign,ps.Nb,ps.N);
+                    long int neighb = neigh(j,direc,sign,ps.Nb,ps.N,ps.pot);
                     if (direc == 0) {
                         minusDS(2*j) += real(ps.a*Cp(j+sign)/dt);
                         minusDS(2*j+1) += imag(ps.a*Cp(j+sign)/dt);
@@ -721,7 +713,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		vec diff(2*ps.N*ps.Nb+1);
 		diff = DDS*delta-minusDS;
 		double maxDiff = diff.maxCoeff();
-		maxDiff = absolute(maxDiff);
+		maxDiff = abs(maxDiff);
 		checkInv.add(maxDiff);
 		checkInv.checkMessage();
 		if (!checkInv.good()) {
@@ -792,7 +784,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 
 		// checking pot_r is much smaller than the other potential terms
 		checkReg.add(abs(pot_r/pot_0));
-		checkReg.message();
+		checkReg.checkMessage();
 		
 		// evaluating norms
 		double normDS = minusDS.dot(minusDS);
@@ -822,7 +814,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		
 		} //closing newton-raphson loop
 		
-		checkDT.message();
+		checkDT.checkMessage();
 		
 /*----------------------------------------------------------------------------------------------------------------------------
 	11. propagating solution along minkowskian time
@@ -860,8 +852,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		//#pragma omp parallel for
 		for (uint j=0; j<ps.N; j++) {
 			lint l = j*(ps.Na+1);
-			accA(l) = ((Dt0/pow(ps.a,2.0))*(ap(neigh(l,1,1,ps.Na+1,ps.N))\
-												+ap(neigh(l,1,-1,ps.Na+1,ps.N))-2.0*ap(l))-Dt0*(dV(ap(l))+dVr(ap(l))))/dtau;
+			accA(l) = ((Dt0/pow(ps.a,2.0))*(ap(neigh(l,1,1,ps.Na+1,ps.N,ps.pot))\
+												+ap(neigh(l,1,-1,ps.Na+1,ps.N,ps.pot))-2.0*ap(l))-Dt0*(dV(ap(l))+dVr(ap(l))))/dtau;
 		}
 			
 		//A4.5 starting the energy and that off
@@ -877,16 +869,16 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		    }
 		    for (uint x=0; x<ps.N; x++) {
 		        uint m = t+x*(ps.Na+1);
-				accA(m) = (1.0/pow(ps.a,2.0))*(ap(neigh(m,1,1,ps.Na+1,ps.N))+ap(neigh(m,1,-1,ps.Na+1,ps.N))-2.0*ap(m)) \
+				accA(m) = (1.0/pow(ps.a,2.0))*(ap(neigh(m,1,1,ps.Na+1,ps.N,ps.pot))+ap(neigh(m,1,-1,ps.Na+1,ps.N,ps.pot))-2.0*ap(m)) \
 	        		-dV(ap(m)) - dVr(ap(m));
 	        	erg(ps.Na-t) += ps.a*pow(ap(m-1)-ap(m),2.0)/pow(-dtau,2.0)/2.0\
-	        		 + pow(ap(neigh(m,1,1,ps.Na+1,ps.N))-ap(m),2.0)/a/2.0 + ps.a*V(ap(m)) + ps.a*Vr(ap(m));
+	        		 + pow(ap(neigh(m,1,1,ps.Na+1,ps.N,ps.pot))-ap(m),2.0)/ps.a/2.0 + ps.a*V(ap(m)) + ps.a*Vr(ap(m));
 		        for (uint y=0; y<ps.N; y++) {
 		        	lint n = t + y*(ps.Na+1);
-				    	linErgA(ps.Na-t) += Eomega(x,y)*(real(ap(m))-ps.minima[0])*(real(ap(n))-ps.minima[0])\
-				    						 + Eomega(x,y)*imag(ap(m))*imag(ap(n));
-						linNumA (ps.Na-t) += omega(x,y)*(real(ap(m))-ps.minima[0])*(real(ap(n))-ps.minima[0])\
-											 + omega(x,y)*imag(ap(m))*imag(ap(n));
+				    	linErgA(ps.Na-t) += omega_2(x,y)*(real(ap(m))-ps.minima[0])*(real(ap(n))-ps.minima[0])\
+				    						 + omega_2(x,y)*imag(ap(m))*imag(ap(n));
+						linNumA (ps.Na-t) += omega_1(x,y)*(real(ap(m))-ps.minima[0])*(real(ap(n))-ps.minima[0])\
+											 + omega_1(x,y)*imag(ap(m))*imag(ap(n));
 				}
 			}
 		}
@@ -914,32 +906,32 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		//C4. initialize acc using phi and expression from equation of motion and zeros-complex
 		cVec accC(ps.N*(ps.Nc+1));
 		accC = Eigen::VectorXcd::Zero(ps.N*(ps.Nc+1));
-		for (unt j=0; j<ps.N; j++){
+		for (uint j=0; j<ps.N; j++){
 			lint l = j*(ps.Nc+1);
-			accC(l) = ((Dt0/pow(ps.a,2.0))*(ccp(neigh(l,1,1,ps.Nc+1,ps.N))+ccp(neigh(l,1,-1,ps.Nc+1,ps.N))-2.0*ccp(l))\
+			accC(l) = ((Dt0/pow(ps.a,2.0))*(ccp(neigh(l,1,1,ps.Nc+1,ps.N,ps.pot))+ccp(neigh(l,1,-1,ps.Nc+1,ps.N,ps.pot))-2.0*ccp(l))\
 						-Dt0*(dV(ccp(l))+dVr(ccp(l))))/dtau;
 		}
 
 		//C7. run loop
 		for (uint t=1; t<(ps.Nc+1); t++) {
 			for (uint x=0; x<ps.N; x++) {
-				lint l = t+x*(Nc+1);
+				lint l = t+x*(ps.Nc+1);
 				velC(l) = velC(l-1) + dtau*accC(l-1);
 				ccp(l) = ccp(l-1) + dtau*velC(l);
 			}
-			for (uint x=0; x<N; x++) {
-				if (ps.pot==3) paramsV  = {r0+x*a, A};
+			for (uint x=0; x<ps.N; x++) {
 				lint l = t+x*(ps.Nc+1);
-				accC(l) = (1.0/pow(ps.a,2.0))*(ccp(neigh(l,1,1,ps.Nc+1,ps.N))+ccp(neigh(l,1,-1,ps.Nc+1,ps.N))-2.0*ccp(l))\
+				accC(l) = (1.0/pow(ps.a,2.0))*(ccp(neigh(l,1,1,ps.Nc+1,ps.N,ps.pot))+ccp(neigh(l,1,-1,ps.Nc+1,ps.N,ps.pot))-2.0*ccp(l))\
 								-dV(ccp(l));		    	
 				erg (ps.Na+ps.Nb-2+t) += ps.a*pow(ccp(l)-ccp(l-1),2.0)/pow(dtau,2.0)/2.0\
-				 	+ pow(ccp(neigh(l-1,1,1,ps.Nc+1,ps.N))-ccp(l-1),2.0)/ps.a/2.0\
+				 	+ pow(ccp(neigh(l-1,1,1,ps.Nc+1,ps.N,ps.pot))-ccp(l-1),2.0)/ps.a/2.0\
 					+ ps.a*V(ccp(l-1)) + ps.a*Vr(ccp(l-1));
 			}
+		}
 		
 		//checking energy conserved
 		double relErgChange = 0.0;
-		if (absolute(real(erg(0)))>MIN_NUMBER) {
+		if (abs(real(erg(0)))>MIN_NUMBER) {
 			relErgChange = absDiff(erg(0),erg(ps.NT-2));
 		}
 		checkCon.add(relErgChange);
@@ -957,7 +949,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		       }
 		    else if (t<(ps.Na+ps.Nb)) {
 		        t = t - ps.Na;
-		        tCp(j) = Cp(t+x*Nb);
+		        tCp(j) = Cp(t+x*ps.Nb);
 		       }
 		    else {
 		        t = t - ps.Na - ps.Nb + 1;
@@ -971,7 +963,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		tp.conservativeResize(2*ps.N*ps.NT+1);
 		tp(2*ps.N*ps.NT) = p(2*ps.N*ps.Nb);
 		
-		string prefix = "data/"+timeNumber;
+		string prefix = "data/"+timenumber;
 		string suffix = "_loop_"+numberToString<uint>(loop)+".dat";
 		
 		// printing tp
@@ -985,7 +977,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		Filename linErgFile = (string)(prefix+"linErg"+suffix);
 		so_simple.printMessage = true;
 		save(linErgFile,so_simple,linErgA);
-    	}
+    }
     else {
     	E = 0.0;
     	W = 0.0;

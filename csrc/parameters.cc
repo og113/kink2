@@ -131,6 +131,7 @@ WRAP(dVd_local)
 WRAP(ddVd_local)
 #undef WRAP
 
+/*
 //V FDF gsl function
 static void VdV (double x, void * parameters, double * f, double* df) 
 	{
@@ -146,6 +147,7 @@ static void dVddV (double x, void * parameters, double * f, double* df)
 	*f =  dVd_local_wrapped(x,params);
 	*df = ddVd_local_wrapped(x,params);
 	}
+*/
 	
 //energy change parameter struct
 struct ec_params {double aa; double minima0; double minima1; double de; };
@@ -169,7 +171,7 @@ static double s1Integrand (double x, void * parameters) {
 }
 
 //rho integrand
-static double rhoIntegrand (double x, void * parameters) {
+double rhoIntegrand (double x, void * parameters) {
 	struct params_for_V * params = (struct params_for_V *)parameters;
 	return pow(2.0*Vd_local(x,*params),-0.5);
 }

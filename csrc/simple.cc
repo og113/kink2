@@ -182,7 +182,7 @@ template <typename T>
 uint smallestLoc(const vector<T>& inVector) {
 	uint loc = 0;
 	for(uint l=1;l<inVector.size();l++) {
-		if (absolute(inVector[l])<absolute(inVector[loc])) {
+		if (abs(inVector[l])<abs(inVector[loc])) {
 			loc = l;
 		}
 	}
