@@ -439,6 +439,9 @@ void load(const string& f, const SaveOptions& opts, vec& v) {
 			v = vf;
 		}
 	}
+	if (opts.printMessage) {
+		printf("%12s%30s\n","loaded: ",f.c_str());
+	}
 }
 
 // load cVec
@@ -507,6 +510,9 @@ void load(const string& f, const SaveOptions& opts, cVec& v) {
 			v = vf;
 		}
 	}
+	if (opts.printMessage) {
+		printf("%12s%30s\n","loaded: ",f.c_str());
+	}
 }
 
 // load mat - assumes square matrix
@@ -528,6 +534,9 @@ void load(const string& f, const SaveOptions& opts, mat& m) {
 		}
 	}
 	F.close();
+	if (opts.printMessage) {
+		printf("%12s%30s\n","loaded: ",f.c_str());
+	}
 }
 
 // load cMat
@@ -549,6 +558,9 @@ void load(const string& f, const SaveOptions& opts, cMat& m) {
 		}
 	}
 	F.close();
+	if (opts.printMessage) {
+		printf("%12s%30s\n","loaded: ",f.c_str());
+	}
 }
 
 // load spMat
@@ -595,6 +607,9 @@ void load(const string& f , const SaveOptions& opts, spMat& m) {
 	}
 	M.makeCompressed();
 	m = M;
+	if (opts.printMessage) {
+		printf("%12s%30s\n","loaded: ",f.c_str());
+	}
 }
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. plot
