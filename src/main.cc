@@ -1069,7 +1069,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 								+"_loop_"+numberToString<uint>(loop)+"_run_"+numberToString<uint>(runs_count)+".dat");
 			if ((opts.printChoice).compare("p")==0 || (opts.printChoice).compare("e")==0) {
 				Filename pEFile = basic;
-				pEFile.ID = "mainpiE";
+				pEFile.ID = "mainpE";
 				save(pEFile,so_tp,p);
 			}
 			if ((opts.printChoice).compare("v")==0 || (opts.printChoice).compare("e")==0) {
@@ -1157,6 +1157,15 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- stopping clock
 		- printing results to terminal
 		- printing results to file
+		- printing (and plotting if vectors):
+			- p
+			- minusDS
+			- DDS
+			- linNum
+			- linErg
+			- linErgOffShell
+			- erg
+		- return
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -1197,7 +1206,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		PlotOptions po_tp;
 		po_tp.gp = "gp/repi.gp";
 		po_tp.style = "points";
-		Filename plotFile = (string)("data/"+timenumber+"mainpi_fLoop_"+numberToString<uint>(fileLoop)\
+		Filename plotFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
 					+"_loop_"+numberToString<uint>(loop)+".png");
 		po_tp.output = plotFile;
 		
@@ -1207,7 +1216,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 	
 		//printing output phi
-		Filename tpFile = (string)("data/"+timenumber+"mainpi_fLoop_"+numberToString<uint>(fileLoop)\
+		Filename tpFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
 					+"_loop_"+numberToString<uint>(loop)+".dat");
 		save(tpFile,so_tp,p);
 		plot(tpFile,po_tp);

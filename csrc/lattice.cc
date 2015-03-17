@@ -464,10 +464,15 @@ cVec vecComplex(vec realVec, const uint & tDim) {
 
 //complexify a real vector - parameters
 cVec vecComplex(vec realVec, const Parameters& p) {
-	uint tDim = p.N*p.NT;
-	cVec complexVec(tDim);
-	if (realVec.size() >= (2*tDim)) {
-		for (unsigned int l=0; l<tDim; l++) {
+	cVec complexVec(p.N*p.NT);
+	if (realVec.size() >= (2*p.N*p.NT)) {
+		for (uint l=0; l<p.N*p.NT; l++) {
+			complexVec(l) = realVec(2*l) + comp(0.0,1.0)*realVec(2*l+1);
+		}
+	}
+	else if (realVec.size() >= (2*p.N*p.Nb)) {
+		complexVec.resize(p.N*p.Nb);
+		for (uint l=0; l<p.N*p.Nb; l++) {
 			complexVec(l) = realVec(2*l) + comp(0.0,1.0)*realVec(2*l+1);
 		}
 	}
@@ -490,10 +495,16 @@ vec vecReal(cVec complexVec, const uint &  tDim) {
 
 //make a complex vector real - parameters
 vec vecReal(cVec complexVec, const Parameters&  p) {
-	uint tDim = p.N*p.NT;
-	vec realVec(2*tDim);
-	if (complexVec.size() == tDim) {
-		for (uint l=0; l<tDim; l++) {
+	vec realVec(2*p.N*p.NT);
+	if (complexVec.size() == p.N*p.NT) {
+		for (uint l=0; l<p.N*p.NT; l++) {
+			realVec(2*l) = real(complexVec(l));
+			realVec(2*l+1) = imag(complexVec(l));
+		}
+	}
+	else if (complexVec.size() == p.N*p.Nb) {
+		realVec.resize(2*p.N*p.Nb);
+		for (uint l=0; l<p.N*p.Nb; l++) {
 			realVec(2*l) = real(complexVec(l));
 			realVec(2*l+1) = imag(complexVec(l));
 		}

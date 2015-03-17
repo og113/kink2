@@ -22,7 +22,8 @@ CONTENTS
 	4 - currentDateTime
 	5 - copyFile
 	6 - countLines
-	7 - explicit instantiation
+	7 - smallestLoc
+	8 - explicit instantiation
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -172,8 +173,26 @@ uint countLines(const string & file_to_count) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	7. explicit instantiation
+	7. smallestLoc
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// smallestLoc
+// function giving location of smallest element of a vector of type T
+template <typename T>
+uint smallestLoc(const vector<T>& inVector) {
+	uint loc = 0;
+	for(uint l=1;l<inVector.size();l++) {
+		if (absolute(inVector[l])<absolute(inVector[loc])) {
+			loc = l;
+		}
+	}
+	return loc;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	8. explicit instantiation
 		- numberToString, stringToNumber
+		- smallestLoc
 -------------------------------------------------------------------------------------------------------------------------*/
 
 template string numberToString<int>(const int&);
@@ -185,3 +204,9 @@ template int stringToNumber<int>(const string&);
 template uint stringToNumber<uint>(const string&);
 template double stringToNumber<double>(const string&);
 template comp stringToNumber<comp>(const string&);
+
+template uint smallestLoc<int>(const vector<int>&);
+template uint smallestLoc<uint>(const vector<uint>&);
+template uint smallestLoc<double>(const vector<double>&);
+template uint smallestLoc<comp>(const vector<comp>&);
+
