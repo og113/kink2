@@ -162,7 +162,7 @@ while (abs(F-aim)>closeness) {
 }
 
 // printing solution
-string filename = "./data/sphaleron_L_"+numberToString<double>(r1)+".dat";
+string filename = "./data/stable/sphaleron_L_"+numberToString<double>(r1)+".dat";
 string picname = "./pics/sphaleron_L_"+numberToString<double>(r1)+".png";
 SaveOptions so_simple;
 so_simple.printMessage = true;
@@ -235,8 +235,8 @@ if (printD1AndD2) {
 	}
 	D1.makeCompressed();
 	D2.makeCompressed();
-	save("data/D1_L_"+numberToString<double>(r1)+".dat",so_simple,D1);
-	save("data/D2_L_"+numberToString<double>(r1)+".dat",so_simple,D2);
+	save("data/stable/D1_L_"+numberToString<double>(r1)+".dat",so_simple,D1);
+	save("data/stable/D2_L_"+numberToString<double>(r1)+".dat",so_simple,D2);
 }
 printf("From Matlab: D1 gives omega^2_- = -15.31,\n");
 printf("             D2 gives omega^2_- = -15.34\n\n");
@@ -450,9 +450,11 @@ for (unsigned int t=0;t<Nt_print;t++) {
 	}
 }
 
-Filename datOut = (string)("data/sphaleronLinNum_L_"+numberToString<double>(r1)+".dat");
+string datOutStr = (string)("data/sphaleronLinNum_L_"+numberToString<double>(r1)+".dat");
+Filename datOut = datOutStr;
 Filename pngOut = datOut;
 pngOut.Suffix = ".png";
+pngOut.Directory = "pics";
 
 // linNum
 save(datOut,so_simple,linNum);

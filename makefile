@@ -37,7 +37,9 @@ COMMONSRC		= $(patsubst %,$(CSDIR)/%,$(_COMMONSRC))
 COMMONOBJS 		= $(patsubst %,$(CODIR)/%,$(_COMMONOBJS))
 
 #------------------------------------------------------------------------------------------------------------------------
-	
+
+all: common main pi sphaleron sphaleron_pi	
+
 common: $(COMMONOBJS)
 	@echo made common objects $(COMMONOBJS)
 	
@@ -50,6 +52,10 @@ pi: $(ODIR)/pi.o $(COMMONOBJS)
 	@echo Simple compiler named $(PI) has been compiled
 	
 sphaleron: $(ODIR)/sphaleron.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named $(PI) has been compiled
+	
+sphaleron_pi: $(ODIR)/sphaleron_pi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named $(PI) has been compiled
 	

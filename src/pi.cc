@@ -1006,7 +1006,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	printf("%8s%8s%8s%8s%8s%8s%8s%12s%12s%12s\n","runs","time","N","NT","L","Tb","dE","E","im(S)","W");
 	printf("%8i%8g%8i%8i%8g%8g%8g%12.4g%12.4g%12.4g\n",runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,E,imag(action),W);
 	printf("\n");
-	 printf("%60s\n","%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+	printf("%60s\n","----------------------------------------------------------------------------------------------------");
 
 	//printing results to file
 	FILE * actionfile;

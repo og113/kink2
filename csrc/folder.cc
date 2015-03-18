@@ -133,6 +133,7 @@ string FolderError::Add::message() const {
 
 // set
 void Filename::set(const string& f) {
+	Extras.clear();
 	string temp = f;
 	size_t stop;
 	stop = temp.find_last_of("/");
@@ -165,7 +166,7 @@ void Filename::set(const string& f) {
 			sp.second = temp.substr(0,stop);
 			Extras.push_back(sp);
 		}
-		temp.substr(stop);
+		temp = temp.substr(stop);
 	}
 	if (stop!=string::npos && temp[0]=='.') {
 		Suffix = temp;
@@ -216,6 +217,7 @@ ostream& operator<<(ostream& os, const Filename& f) {
 	return os;
 }
 
+// operator >>
 istream& operator>>(istream& is, Filename& f) {
 	string filename;
 	is >> filename;
