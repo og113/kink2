@@ -1025,6 +1025,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	po_p.style = "points";
 	Filename plotFile = (string)("data/"+timenumber+"p_loop_"+numberToString<uint>(loop)+".png");
 	po_p.output = plotFile;
+	po_p.printMessage = true;
 	
 	PlotOptions po_simple;
 	po_simple.column = 1;

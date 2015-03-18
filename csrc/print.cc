@@ -618,18 +618,20 @@ void load(const string& f , const SaveOptions& opts, spMat& m) {
 // plot
 void plot(const string& f, const PlotOptions& opts) {
 	string style = ((opts.style).empty()? "linespoints": opts.style);
-	string output = ((opts.output).empty()? "pic": opts.output);
+	string output = ((opts.output).empty()? "pics/pic.png": opts.output);
 	uint col = (opts.column==0? 1: opts.column);
 	if ((opts.gp).empty()) {		
 		string commandOpenStr = "gnuplot -persistent";
 		const char * commandOpen = commandOpenStr.c_str();
 		FILE * gnuplotPipe = popen (commandOpen,"w");
-		string command1Str = "plot \"" + f + "\" using " + numberToString<uint>(col) + " with " + style;
-		string command2Str = "pause -1";
-		const char * command1 = command1Str.c_str();
-		const char * command2 = command2Str.c_str();
-		fprintf(gnuplotPipe, "%s \n", command1);
-		fprintf(gnuplotPipe, "%s \n", command2);
+		string command1Str = "set term png size 1600,800";
+		string command2Str = "set output \""+output+"\"";
+		string command3Str = "plot \"" + f + "\" using " + numberToString<uint>(col) + " with " + style;
+		//string command4Str = "pause -1";
+		fprintf(gnuplotPipe, "%s \n",command1Str.c_str());
+		fprintf(gnuplotPipe, "%s \n",command2Str.c_str());
+		fprintf(gnuplotPipe, "%s \n",command3Str.c_str());
+		//fprintf(gnuplotPipe, "%s \n", command4Str.c_str());
 		pclose(gnuplotPipe);
 	}
 	else {
@@ -639,5 +641,8 @@ void plot(const string& f, const PlotOptions& opts) {
 		FILE * gnuplotPipe = popen (command,"w");
 		fprintf(gnuplotPipe, "%s \n", " ");
 		pclose(gnuplotPipe);
+	}
+	if (opts.printMessage) {
+		printf("%12s%30s\n","plotted: ",output.c_str());
 	}
 }

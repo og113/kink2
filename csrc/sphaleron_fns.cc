@@ -12,7 +12,8 @@
 #include <gsl/gsl_min.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_odeiv2.h>
-#include "sphaleron.h"
+#include "simple.h"
+#include "sphaleron_fns.h"
 
 using namespace std;
 
@@ -146,11 +147,12 @@ double E_integrand (double x, void * parameters) {
 		return 0.0;
 	}
 	else {
-		struct paramsStruct * params = (struct paramsStruct *)parameters;
+		struct E_params * params = (struct E_params *)parameters;
 		double Y_0 = (params->Y_0);
 		double y_R[4] = { Y_0, 0.0, 1.0, 0.0};
 		int status;
 		double t = 1.0e-16;
+		void_params paramsVoid;
 		gsl_odeiv2_system syse = {func, jac, 4, &paramsVoid};
 		gsl_odeiv2_driver * de = gsl_odeiv2_driver_alloc_yp_new (&syse,  gsl_odeiv2_step_rk8pd, 1.0e-9, 1.0e-9, 0.0);
 		status = gsl_odeiv2_driver_apply (de, &t, x, y_R);

@@ -7,7 +7,7 @@ CODIR			= cobjs
 TSDIR			= tests
 CC 				= g++
 OPTIM 			= 
-CFLAGS 			= -Wall -g -std=c++0x
+CFLAGS 			= -Wall -g -std=c++0x -static
 #CFLAGS EXPLAINED:
 #-std=c++0x 		: added so that auto lambda functions can be used
 #-std=c++11 		: for more modern std c++
@@ -26,10 +26,12 @@ LFLAGS 			=
 INCLUDES		= -I$(HDIR) -I/home/og113/Documents/c++/eigen_build/eigen/ -I/home/og113/Documents/c++/gnuplot/gnuplot-cpp
 LIBS 			= -lm -lgsl -lgslcblas
 
-_HEADERS 		= check.h error.h fnptrs.h folder.h gsl_extras.h lattice.h omega.h parameters.h potentials.h print.h simple.h 
+_HEADERS 		= check.h error.h fnptrs.h folder.h gsl_extras.h lattice.h omega.h parameters.h potentials.h print.h simple.h\
+					sphaleron_fns.h 
 HEADERS 		= $(patsubst %,$(HDIR)/%,$(_HEADERS))
 
-_COMMONSRC		= check.cc error.cc folder.cc gsl_extras.cc lattice.cc omega.cc parameters.cc potentials.cc print.cc simple.cc
+_COMMONSRC		= check.cc error.cc folder.cc gsl_extras.cc lattice.cc omega.cc parameters.cc potentials.cc print.cc simple.cc\
+					sphaleron_fns.cc
 _COMMONOBJS		= $(_COMMONSRC:.cc=.o)
 COMMONSRC		= $(patsubst %,$(CSDIR)/%,$(_COMMONSRC))
 COMMONOBJS 		= $(patsubst %,$(CODIR)/%,$(_COMMONOBJS))
@@ -44,6 +46,10 @@ main: $(ODIR)/main.o $(COMMONOBJS)
 	@echo Simple compiler named $(MAIN) has been compiled
 	
 pi: $(ODIR)/pi.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named $(PI) has been compiled
+	
+sphaleron: $(ODIR)/sphaleron.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named $(PI) has been compiled
 	
