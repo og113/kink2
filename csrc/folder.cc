@@ -112,7 +112,7 @@ string FilenameComparatorError::LU::message() const {
 }
 
 string FolderError::System::message() const {
-	return "Folder error: system call failure, finding dataFiles";
+	return "Folder error: system call failure, finding files in data";
 }
 
 string FolderError::Add::message() const {
@@ -430,14 +430,14 @@ void Folder::order() {
 
 // refresh
 void Folder::refresh() {
-	int systemCall = system("find data/* -type f > dataFiles");
+	int systemCall = system("find data/* -type f > data/dataFiles");
 	if (systemCall==-1) {
 		FolderError::System e;
 		cerr << e;
 	}
 	ifstream is;
 	Filename f;
-    is.open ("dataFiles");
+    is.open ("data/dataFiles");
 	while ( !is.eof() ){
 		is >> f;
 		if (!isPresent(f) && Comparator(f)) Filenames.push_back(f);

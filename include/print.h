@@ -111,6 +111,7 @@ void load(const string&, const SaveOptions&, spMat&);
 struct PlotOptions {
 	string gp;
 	uint column;
+	uint column2;
 	string style;
 	string output;
 	bool printMessage;
