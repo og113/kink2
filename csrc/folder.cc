@@ -33,6 +33,7 @@ CONTENTS
 		- operator=
 		- operator<<
 		- operator==
+		- empty
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // pair
@@ -96,6 +97,13 @@ bool operator==(const FilenameAttributes& lhs, const FilenameAttributes& rhs) {
 	return true;
 }
 
+bool FilenameAttributes::empty() const {
+	if (Directory.empty() && Timenumber.empty() && ID.empty() && Suffix.empty() && Extras.size()==0)
+		return true;
+	else
+		return false;
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. definitions for Filename etc errors Errors
 		- FilenameError::Extras
@@ -153,7 +161,7 @@ void Filename::set(const string& f) {
 	}
 	if (temp[0]=='_') {
 		temp = temp.substr(1);
-		while (stop!=string::npos && temp[stop]!='.') {
+		while (stop!=string::npos && !(temp[0]=='.' && temp.find_last_of(".")==0)) {
 			stop = temp.find("_");
 			if (stop==string::npos) {
 				FilenameError::Extras e(f);
@@ -162,11 +170,12 @@ void Filename::set(const string& f) {
 			StringPair sp;
 			sp.first = temp.substr(0,stop);
 			temp = temp.substr(stop+1);
-			stop = temp.find_first_of("_.");
+			stop = min(temp.find_first_of("_"),temp.find_last_of("."));
 			sp.second = temp.substr(0,stop);
 			Extras.push_back(sp);
+			if (temp[stop]=='_') 	temp = temp.substr(stop+1);
+			else 					temp = temp.substr(stop);
 		}
-		temp = temp.substr(stop);
 	}
 	if (stop!=string::npos && temp[0]=='.') {
 		Suffix = temp;
@@ -392,7 +401,7 @@ ostream& operator<<(ostream& os, const FilenameComparator& fc){
 
 // isPresent(Filename)
 bool Folder::isPresent(const Filename& f) {
-	for (unsigned int l=0; l<Filenames.size(); l++) {
+	for (uint l=0; l<Filenames.size(); l++) {
 		if (f==Filenames[l]) return true;
 	}
 	return false;
@@ -430,17 +439,18 @@ void Folder::order() {
 
 // refresh
 void Folder::refresh() {
-	int systemCall = system("find data/* -type f > data/dataFiles");
+	int systemCall = system("find data/* -type f > dataFiles");
 	if (systemCall==-1) {
 		FolderError::System e;
 		cerr << e;
 	}
 	ifstream is;
 	Filename f;
-    is.open ("data/dataFiles");
+    is.open ("dataFiles");
 	while ( !is.eof() ){
 		is >> f;
-		if (!isPresent(f) && Comparator(f)) Filenames.push_back(f);
+		if (!f.empty())
+			if (!isPresent(f) && Comparator(f)) Filenames.push_back(f);
 	}
     is.close();
     sort();
