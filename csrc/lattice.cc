@@ -226,6 +226,10 @@ vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 	uint N_old = p_old.N, Nt_old = p_old.NT, N_new = p_new.N, Nt_new = p_new.NT;
 	uint old_size = vec_old.size();
 	if (N_old == N_new && Nt_old == Nt_new) return vec_old;
+	if (Nt_new==0 || Nt_old==0) {
+		Nt_new = p_new.Nb;
+		Nt_old = p_old.Nb;
+	}
 	if (old_size<2*N_old*Nt_old) {
 		if (old_size>=2*N_old*p_old.Nb) {
 			Nt_old = p_old.Nb;
@@ -255,9 +259,9 @@ vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 		rem_x_old = exact_x_old;
 		rem_x_old -= (double)(x_old);
 		pos = t_old + Nt_old*x_old;
-		neigh_t = neigh(pos,0,1,p_old);
-		neigh_x = neigh(pos,1,1,p_old);
-		neigh_tx = neigh(neigh_t,1,1,p_old);
+		neigh_t = neigh(pos,0,1,Nt_old,N_old,p_old.pot);
+		neigh_x = neigh(pos,1,1,Nt_old,N_old,p_old.pot);
+		neigh_tx = neigh(neigh_t,1,1,Nt_old,N_old,p_old.pot);
 		if  (t_old<(Nt_old-1) ) {
 			if (neigh_t!=-1 && neigh_x) {
 				vec_new(2*l) = (1.0-rem_t_old)*(1.0-rem_x_old)*vec_old(2*pos) \
@@ -298,6 +302,10 @@ cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new)
 	uint N_old = p_old.N, Nt_old = p_old.NT, N_new = p_new.N, Nt_new = p_new.NT;
 	uint old_size = vec_old.size();
 	if (N_old == N_new && Nt_old == Nt_new) return vec_old;
+	if (Nt_new==0 || Nt_old==0) {
+		Nt_new = p_new.Nb;
+		Nt_old = p_old.Nb;
+	}
 	if (old_size<N_old*Nt_old) {
 		if (old_size>=N_old*p_old.Nb) {
 			Nt_old = p_old.Nb;
@@ -327,9 +335,9 @@ cVec interpolate(cVec vec_old, const Parameters& p_old, const Parameters& p_new)
 		rem_x_old = exact_x_old;
 		rem_x_old -= (double)(x_old);
 		pos = t_old + Nt_old*x_old;
-		neigh_t = neigh(pos,0,1,p_old);
-		neigh_x = neigh(pos,1,1,p_old);
-		neigh_tx = neigh(neigh_t,1,1,p_old);
+		neigh_t = neigh(pos,0,1,Nt_old,N_old,p_old.pot);
+		neigh_x = neigh(pos,1,1,Nt_old,N_old,p_old.pot);
+		neigh_tx = neigh(neigh_t,1,1,Nt_old,N_old,p_old.pot);
 		if  (t_old<(Nt_old-1) ) {
 			if (neigh_t!=-1 && neigh_x) {
 				vec_new(l) = (1.0-rem_t_old)*(1.0-rem_x_old)*vec_old(pos) \
@@ -361,6 +369,10 @@ vec interpolateReal(vec vec_old, const Parameters& p_old, const Parameters& p_ne
 	uint N_old = p_old.N, Nt_old = p_old.NT, N_new = p_new.N, Nt_new = p_new.NT;
 	uint old_size = vec_old.size();
 	if (N_old == N_new && Nt_old == Nt_new) return vec_old;
+	if (Nt_new==0 || Nt_old==0) {
+		Nt_new = p_new.Nb;
+		Nt_old = p_old.Nb;
+	}
 	if (old_size<N_old*Nt_old) {
 		if (old_size>=N_old*p_old.Nb) {
 			Nt_old = p_old.Nb;
@@ -388,9 +400,9 @@ vec interpolateReal(vec vec_old, const Parameters& p_old, const Parameters& p_ne
 		rem_x_old = exact_x_old;
 		rem_x_old -= (double)(x_old);
 		pos = t_old + Nt_old*x_old;
-		neigh_t = neigh(pos,0,1,p_old);
-		neigh_x = neigh(pos,1,1,p_old);
-		neigh_tx = neigh(neigh_t,1,1,p_old);
+		neigh_t = neigh(pos,0,1,Nt_old,N_old,p_old.pot);
+		neigh_x = neigh(pos,1,1,Nt_old,N_old,p_old.pot);
+		neigh_tx = neigh(neigh_t,1,1,Nt_old,N_old,p_old.pot);
 		if  (t_old<(Nt_old-1) ) {
 			if (neigh_x!=-1 && neigh_t!=-1) {
 				vec_new(l) = (1.0-rem_t_old)*(1.0-rem_x_old)*vec_old(pos) \

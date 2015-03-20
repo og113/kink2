@@ -65,7 +65,14 @@ static void saveVecB (const string& f, const SaveOptions& opts, const vec& v) {
 	Parameters pin = opts.paramsIn, pout = opts.paramsOut;
 	vec vo;
 	if ((pin.N!=pout.N && pout.N!=0) || (pin.Nb!=pout.Nb && pout.Nb!=0)) {
-		vo = interpolate(v,pin,pout);
+		if (opts.vectorType==SaveOptions::realB)
+			vo = interpolateReal(v,pin,pout);
+		else if (opts.vectorType==SaveOptions::complexB)
+			vo = interpolate(v,pin,pout);
+		else {
+			cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+			return;
+		}
 	}
 	else {
 		vo = v;
@@ -97,6 +104,7 @@ static void saveVecB (const string& f, const SaveOptions& opts, const vec& v) {
 			case SaveOptions::complexB:	F << setw(25) << vo(2*j) << setw(25) << vo(2*j+1)  << endl;
 										break;
 			default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+										return;
 										break;
 		}
 	}
@@ -114,7 +122,10 @@ static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
 	Parameters pin = opts.paramsIn, pout = opts.paramsOut;
 	vec vo;
 	if ((pin.N!=pout.N && pout.N!=0) || (pin.NT!=pout.NT && pout.NT!=0)) {
-		vo = interpolate(v,pin,pout);
+		if (SaveOptions::real)
+			vo = interpolateReal(v,pin,pout);
+		else if (SaveOptions::complex)
+			vo = interpolate(v,pin,pout);
 	}
 	else {
 		vo = v;
@@ -636,11 +647,9 @@ void plot(const string& f, const PlotOptions& opts) {
 		pclose(gnuplotPipe);
 	}
 	else {
-		string commandStr = "gnuplot -e \"f='" + f + "'\" \"o='" + output + "'\" " + opts.gp \
-					 + "'\" \"s='" + style + "'\" " + opts.gp+ " -persistent";
-		const char * command = commandStr.c_str();
-		FILE * gnuplotPipe = popen (command,"w");
-		fprintf(gnuplotPipe, "%s \n", " ");
+		string commandStr = "gnuplot -e \"inFile='"+f+"'; outFile='"+output+"'; "+" style='"+style+"'\" "+opts.gp;
+		FILE * gnuplotPipe = popen(commandStr.c_str(),"w");
+		fprintf(gnuplotPipe,"%s\n"," ");
 		pclose(gnuplotPipe);
 	}
 	if (opts.printMessage) {

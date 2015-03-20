@@ -55,7 +55,7 @@ sphaleron: $(ODIR)/sphaleron.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named $(PI) has been compiled
 	
-sphaleron_pi: $(ODIR)/sphaleron_pi.o $(COMMONOBJS)
+sphaleronPi: $(ODIR)/sphaleronPi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named $(PI) has been compiled
 	
