@@ -40,7 +40,7 @@ os.open(file.c_str());
 cout << "stepping variables:" << endl;
 cout << P << setw(15) << f(P) << endl;
 for (unsigned int j=0; j<1000; j++) {
-	st.stepVariables();
+	st.step();
 	P = st.point();
 	//cout << P << setw(15) << f(P) << endl;
 	os << P << setw(15) << f(P) << endl;

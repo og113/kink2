@@ -76,7 +76,7 @@ public:
 	~Stepper() {}
 	void 		setStart(const double& X, const double& Y);
 	void 		setStart(const Point2d& P);
-	void 		stepVariables();
+	void 		step();
 	void 		addResult(const double& f);
 	Point2d 	point() const;
 	double		x() const;
