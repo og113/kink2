@@ -226,8 +226,8 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 	Gamma = exp(-pp.theta);									////////// Gamma
 	
 	params_for_V paramsV, paramsV0;
-	minima.reserve(2);
-	minima0.reserve(2);
+	minima = vector<double>(2,0.0);
+	minima0 = vector<double>(2,0.0);
 	//potential functions
 	if (pp.pot==1) {
 		Vd_local = &V1;
@@ -322,7 +322,8 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 	}
 	else if (pp.pot==3) {
 		mass2 = 1.0;										////////// mass2
-		minima[0] = 0.0, minima[1] = 0.0; 					////////// minima
+		minima[0] = 0.0; minima[1] = 0.0; 					////////// minima
+		minima0 = minima;									////////// minima0
 		R = 10.0;											////////// R
 		action0 = 8.0*pow(pi,2.0)/3.0;						////////// action0
 		L = pp.LoR*R;										////////// L
@@ -364,6 +365,9 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 		- empty constructor
 		- constructor from PrimaryParameters
 		- constructor from PrimaryParameters and SecondaryParameters
+		- copy
+		- constructor from Parameters
+		- operator=
 		- print to shell
 		- set secondary parameters
 		- load
@@ -380,7 +384,48 @@ Parameters::Parameters(const PrimaryParameters& p1): PrimaryParameters(p1) {
 
 // constructor using primary and secondary parameters
 Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2): \
-					PrimaryParameters(p1), SecondaryParameters(p2)	{}			
+					PrimaryParameters(p1), SecondaryParameters(p2)	{}
+					
+// copy
+void Parameters::copy(const Parameters& p){
+	pot = p.pot;
+	N = p.N;
+	Na = p.Na;
+	Nb = p.Nb;
+	Nc = p.Nc;
+	LoR = p.LoR;
+	dE = p.dE;
+	Tb = p.Tb;
+	theta = p.theta;
+	reg = p.reg;
+	NT = p.NT;
+	epsilon = p.epsilon;
+	R = p.R; 			
+	Gamma = p.Gamma; 	
+	r0 = p.r0;			
+	L = p.L;
+	a = p.a; 			
+	b = p.b; 			
+	Ta = p.Ta;
+	Tc = p.Tc;
+	A = p.A;			
+	minima = p.minima;
+	mass2 = p.mass2; 			
+	action0 = p.action0;			
+	epsilon0 = p.epsilon0;		
+	minima0 = p.minima0;	
+}	
+
+// constructor from parameters	
+Parameters::Parameters(const Parameters& p): PrimaryParameters(), SecondaryParameters() {
+	copy(p);
+}
+
+// operator=
+Parameters& Parameters::operator=(const Parameters& rhs) {
+	copy(rhs);
+	return *this;
+}
 
 // print to shell
 void Parameters::print() const {

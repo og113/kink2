@@ -89,7 +89,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	time = clock();
 	
 	// changing parameters
-	Parameters ps = psu;
+	Parameters ps(psu);
 	if (opts.loops>1) {
 		if ((opts.loopChoice)[0]=='N') {
 			uint pValue = (uint)opts.loopMin + (uint)(opts.loopMax - opts.loopMin)*loop/(opts.loops-1);
@@ -128,7 +128,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	Check checkProfile("phi input calculation",1.0e-5);
 	
 	// do trivial or redundant checks?
-	bool trivialChecks = true;
+	bool trivialChecks = false;
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. assigning potential functions
@@ -192,8 +192,6 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		omegaM1F = (string)("data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
 						+"_L_"+numberToString<double>(ps.L)+".dat");
 		Folder omegaM1Folder(omegaM1F);
-		cout << omegaM1F << endl;
-		cout << omegaM1Folder << endl;
 		omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
 		omega1F = omegaM1F; 		omega1F.ID = "omega1"; 		Folder omega1Folder(omega1F);
 		omega2F = omegaM1F; 		omega2F.ID = "omega2";	 	Folder omega2Folder(omega2F);
@@ -269,7 +267,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			eigVecOpts.extras = SaveOptions::coords;
 			eigVecOpts.paramsOut = ps;
 			eigVecOpts.printMessage = false;
-			Parameters pIn = ps;
+			Parameters pIn(ps);
 			pIn.N = stringToNumber<uint>(N_load);
 			pIn.Nb = stringToNumber<uint>(Nb_load);
 			pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
@@ -536,7 +534,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			comp Vtrial = 0.0, Vcontrol = 0.0;
 			for (uint j=0; j<ps.N; j++) {
 				double r = ps.r0 + j*ps.a;
-				paramsV  = {r, 0.0};
+				paramsV.epsi = r;
+				V.setParams(paramsV);
 				Vcontrol += pow(p(2*j*ps.Nb),2.0)/2.0 - pow(p(2*j*ps.Nb),4.0)/4.0/pow(r,2.0);
 				Vtrial += V(p(2*j*ps.Nb));
 			}
@@ -557,7 +556,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		for (lint j = 0; j < ps.N*ps.Nb; j++) {		
 			uint t = intCoord(j,0,ps.Nb); //coordinates
 			uint x = intCoord(j,1,ps.Nb);
-			lint neighPosX = neigh(j,1,1,ps.Nb,ps.N,ps.pot);
+			long int neighPosX = neigh(j,1,1,ps.Nb,ps.N,ps.pot);
 			
 			if (ps.pot==3) {
 					paramsV.epsi = ps.r0+x*ps.a;
@@ -589,26 +588,31 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				kineticS +=	csi*ps.b*pow(Cp(neighPosX),2.0)/ps.a/2.0;
 			}
 			else if (t==(ps.Nb-1)) {
-				comp Dt = -ps.b*ii/2.0;
-				erg(t+ps.Na) += pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
-				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0; //n.b. no contribution from time derivative term at the final time boundary	
-				pot_0 += Dt*ps.a*V(Cp(j));
-				pot_r += Dt*ps.a*Vr(Cp(j));
+				comp Dt(0.0,-ps.b/2.0);
+				if (neighPosX!=-1) {
+					erg(t+ps.Na) 		+= pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+					kineticS			+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				}
+				erg(t+ps.Na) 			+= ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
+				pot_0 					+= Dt*ps.a*V(Cp(j));
+				pot_r 					+= Dt*ps.a*Vr(Cp(j));				
 				
-				
-				DDS.insert(2*j,2*j) = 1.0/ps.b; //zero time derivative
+				DDS.insert(2*j,2*j) 	= 1.0/ps.b; //zero time derivative
 				DDS.insert(2*j,2*(j-1)) = -1.0/ps.b;
 				DDS.insert(2*j+1,2*j+1) = 1.0; //zero imaginary part
 			}
 			else if (t==0) {
-				comp dt = -ps.b*ii;
-				comp Dt = -ps.b*ii/2.0;
+				comp dt(0.0,-ps.b);
+				comp Dt(0.0,-ps.b/2.0);
 				kineticT += ps.a*pow(Cp(j+1)-Cp(j),2.0)/dt/2.0;
-				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				if (neighPosX!=-1) {
+					kineticS 		+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+					erg(t+ps.Na) 	+= pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				}
+				
 				pot_0 += Dt*ps.a*V(Cp(j));
 				pot_r += Dt*ps.a*Vr(Cp(j));
-				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0\
-								 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
+				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
 				
 				if ((opts.inF).compare("b")==0) {
 					DDS.insert(2*j,2*j) = 1.0; //zero change (initial input satisfies b.c.s)
@@ -623,14 +627,16 @@ for (uint loop=0; loop<opts.loops; loop++) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//bulk
 			else {
-				comp dt = -ps.b*ii;
-				comp Dt = -ps.b*ii;
+				comp dt(0.0,-ps.b);
+				comp Dt(0.0,-ps.b);
 				kineticT += ps.a*pow(Cp(j+1)-Cp(j),2.0)/dt/2.0;
-				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				if (neighPosX!=-1) {
+					kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+					erg(t+ps.Na) 	+= pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				}
 				pot_0 += Dt*ps.a*V(Cp(j));
 				pot_r += Dt*ps.a*Vr(Cp(j));
-				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0\
-							 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
+				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
 				
                 for (uint k=0; k<2*2; k++) {
                     int sign = pow(-1,k);

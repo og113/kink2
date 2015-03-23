@@ -542,7 +542,7 @@ void load(const string& f, const SaveOptions& opts, mat& m) {
 		if (!line.empty()) {
 			istringstream ss(line);
 			ss >> j >> k >> v;
-			if (j>matLength || k>matLength) cerr << "load error: matrix index > sqrt(fileLength)" << endl;
+			if (j>matLength || k>matLength) cerr << "load error: matrix index(" << j << "," << k << ") > " << (uint)sqrt(fileLength) << endl;
 			m(j,k) = v;
 		}
 	}
@@ -641,15 +641,16 @@ void plot(const string& f, const PlotOptions& opts) {
 		string command1Str = "set term png size 1600,800";
 		string command2Str = "set output \""+output+"\"";
 		string command3Str = "plot \"" + f + "\" using " + columns + " with " + style;
-		//string command4Str = "pause -1";
+		string command4Str = "pause -1";
 		fprintf(gnuplotPipe, "%s \n",command1Str.c_str());
-		fprintf(gnuplotPipe, "%s \n",command2Str.c_str());
+		if (output.compare("gui")!=0) fprintf(gnuplotPipe, "%s \n",command2Str.c_str());
 		fprintf(gnuplotPipe, "%s \n",command3Str.c_str());
-		//fprintf(gnuplotPipe, "%s \n", command4Str.c_str());
+		if (output.compare("gui")==0) fprintf(gnuplotPipe, "%s \n",command4Str.c_str());
 		pclose(gnuplotPipe);
 	}
 	else {
 		string commandStr = "gnuplot -e \"inFile='"+f+"'; outFile='"+output+"'; "+" style='"+style+"'\" "+opts.gp;
+		if (output.compare("gui")==0) commandStr += " -persistent";
 		FILE * gnuplotPipe = popen(commandStr.c_str(),"w");
 		fprintf(gnuplotPipe,"%s\n"," ");
 		pclose(gnuplotPipe);

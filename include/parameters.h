@@ -147,11 +147,14 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters();																// empty constructor
 	Parameters(const PrimaryParameters& p1);									// constructor using primary parameters
 	Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2);		// constructor using primary and secondary parameters
+	Parameters(const Parameters& p);											// constructor using parameters
+	Parameters& operator=(const Parameters&);									// operator=
 	void load(const string&);													// uses PrimaryParameters::load
 	void setSecondaryParameters();												// uses setSecondaryParameters
 	bool changeParameters (const string& pName, const double& pValue); 			// change all due to change in one
 	bool changeParameters (const string& pName, const uint& pValue); 			// change all due to change in one
 	void print() const;
+	void copy(const Parameters&);
 };
 
 /*-------------------------------------------------------------------------------------------------------------------------
