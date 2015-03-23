@@ -54,6 +54,7 @@ int main(int argc, char** argv)
 
 Options opts;
 opts.load("optionsP");
+//opts.print();
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. getting inputs
@@ -64,13 +65,13 @@ opts.load("optionsP");
 // loading inputs
 Parameters psu;
 psu.load("inputsP");
-cout << "input parameters: " << endl;
-psu.print();
-cout << endl;
+//cout << "input parameters: " << endl;
+//psu.print();
+//cout << endl;
 
 // defining timenumber
 string timenumber;
-(argc==2) ? timenumber = argv[1] : timenumber = currentDateTime();
+(argc==2)? timenumber = argv[1] : timenumber = currentDateTime();
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	3. beginning parameter loop
@@ -107,7 +108,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	}
 		
 	// copying a version of ps with timenumber
-	Filename paramsRunFile = (string)("./data/"+timenumber+"inputsP_loop_"+numberToString<uint>(loop));
+	Filename paramsRunFile = (string)("data/"+timenumber+"inputsP_loop_"+numberToString<uint>(loop));
 	ps.save(paramsRunFile);
 	
 	//printing timenumber and parameters
@@ -188,15 +189,17 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	so_simple.printMessage = false;
 	{
 		Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
-		omegaM1F = (string)"data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
-						+"_L_"+numberToString<double>(ps.L)+".dat";
+		omegaM1F = (string)("data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
+						+"_L_"+numberToString<double>(ps.L)+".dat");
 		Folder omegaM1Folder(omegaM1F);
+		cout << omegaM1F << endl;
+		cout << omegaM1Folder << endl;
 		omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
 		omega1F = omegaM1F; 		omega1F.ID = "omega1"; 		Folder omega1Folder(omega1F);
 		omega2F = omegaM1F; 		omega2F.ID = "omega2";	 	Folder omega2Folder(omega2F);
 		modesF = omegaM1F;			modesF.ID = "modes"; 		Folder modesFolder(modesF);
 		freqsF = omegaM1F;			freqsF.ID = "freqs"; 		Folder freqsFolder(freqsF);
-		freqsExpF = omegaM1F;		omegaM1F.ID = "freqsExp";	Folder freqsExpFolder(omegaM1F);
+		freqsExpF = omegaM1F;		freqsExpF.ID = "freqsExp";	Folder freqsExpFolder(freqsExpF);
 		if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()==1 \
 			&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
 			load(omegaM1Folder[0],so_simple,omega_m1);
@@ -231,7 +234,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	double negVal;
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 		if (ps.pot==3) {
-			Filename eigVecFile = "data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";	
+			Filename eigVecFile = (string)("data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat");	
 			load(eigVecFile,so_simple,negVec); // should automatically interpolate
 			negVal = -15.3;
 		}
@@ -345,13 +348,36 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		load(phiFile,so_p,p);
 	}
 	else {
-		//finding phi profile between minima
-		uint profileSize = ps.Nb; //more than the minimum
-		vector<double> phiProfile(profileSize);
-		vector<double> rhoProfile(profileSize);
-		double alphaL = opts.alpha, alphaR = opts.alpha;
-
-		if (ps.pot!=3) {
+		if (ps.pot==3) {
+			vec tempPhi, temp2Phi;
+			Filename pi3GuessFile = (string)("data/sphaleronPi_L_"+numberToString<double>(ps.L)\
+										+"_Tb_"+numberToString<double>(ps.Tb)+".dat");
+			so_simple.column = 4;
+			Parameters ps_blank;
+			so_simple.paramsIn = ps_blank;
+			so_simple.paramsOut = ps_blank;
+			load(pi3GuessFile,so_simple,tempPhi);
+			so_simple.paramsIn = ps;
+			so_simple.paramsOut = ps;
+			so_simple.column = 0;
+			uint length = tempPhi.size();
+			length = (uint)(sqrt(length));
+			ps_blank.N = length;
+			ps_blank.Nb = length;
+			ps_blank.NT = 10000; // same fudge as before, so that it realises that the vector is just on BC
+			temp2Phi = interpolateReal(tempPhi,ps_blank,ps);
+			for (uint j=0; j<ps.N*ps.Nb; j++) {
+				p(2*j) = temp2Phi(j);
+				p(2*j+1) = 0.0;
+			}
+			p(2*ps.Nb*ps.N) = 0.5; // lagrange multiplier for zero mode
+		}
+		else {
+			//finding phi profile between minima
+			uint profileSize = ps.Nb; //more than the minimum
+			vector<double> phiProfile(profileSize);
+			vector<double> rhoProfile(profileSize);
+			double alphaL = opts.alpha, alphaR = opts.alpha;
 			if (ps.pot==2) {
 				double phiL = ps.minima0[1]-1.0e-2;
 				double phiR = ps.minima0[0]+1.0e-2;
@@ -375,33 +401,6 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				alphaL = rhoProfile[0];
 				alphaR = rhoProfile.back();
 			}
-		}
-		
-		if (ps.pot==3) {
-			vec tempPhi, temp2Phi;
-			Filename pi3GuessFile = (string)("data/pi3Guess_L_"+numberToString<double>(ps.L)\
-										+"_Tb_"+numberToString<double>(ps.Tb)+".dat");
-			so_simple.column = 4;
-			Parameters ps_blank;
-			so_simple.paramsIn = ps_blank;
-			so_simple.paramsOut = ps_blank;
-			load(pi3GuessFile,so_simple,tempPhi);
-			so_simple.paramsIn = ps;
-			so_simple.paramsOut = ps;
-			so_simple.column = 0;
-			uint length = tempPhi.size();
-			length = (uint)(sqrt(length));
-			ps_blank.N = length;
-			ps_blank.Nb = length;
-			ps_blank.NT = 10000; // same fudge as before, so that it realises that the vector is just on BC
-			temp2Phi = interpolateReal(tempPhi,ps_blank,ps);
-			for (uint j=0; j<ps.N*ps.Nb; j++) {
-				p(2*j) = temp2Phi(j);
-				p(2*j+1) = 0.0;
-			}
-			p(2*ps.Nb*ps.N) = 0.5; // lagrange multiplier for zero mode
-		}
-		else {
 			if (ps.R<opts.alpha) {
 				cerr << "R is too small. Not possible to give thinwall input. It should be more that " << opts.alpha;
 				return 1;

@@ -36,10 +36,13 @@ for (unsigned int loop=0; loop<(p.Extras).size(); loop++) {
 cout << p << endl;
 FilenameAttributes j;
 Filename k = (string)"data/30thingy_L_5_Tb_0.8.dat";
+Filename l = (string)"data/blahblah_L_5.txt";
+Folder FolderL(l);
+cout << "FolderL =  " << FolderL << endl << endl;
 k.Timenumber = "40";
-cout << k << endl;
+cout << "k = " << k << endl;
 Folder folder1(j); // test may die here if not run from the folder tests
-cout << folder1 << endl;
+cout << "folder1 = " << folder1 << endl;
 cout << "folder2 = ";
 Folder folder2(k);
 cout << folder2 << endl;

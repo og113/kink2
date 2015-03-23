@@ -517,6 +517,7 @@ bool Parameters::changeParameters (const string& pName, const double& pValue) {
 		- operator<<
 		- save
 		- load
+		- print
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // operator<<
@@ -533,6 +534,7 @@ ostream& operator<<(ostream& os, const Options& o) {
 	os << setw(20) << "maxTimenumberLoad" << setw(20) << o.maxTimenumberLoad << endl;
 	os << setw(20) << "minLoopLoad" << setw(20) << o.minLoopLoad << endl;
 	os << setw(20) << "maxLoopLoad" << setw(20) << o.maxLoopLoad << endl;
+	os << setw(20) << "loopChoice" << setw(20) << o.loopChoice << endl;
 	os << setw(20) << "loopMin" << setw(20) << o.loopMin << endl;
 	os << setw(20) << "loopMax" << setw(20) << o.loopMax << endl;
 	os << setw(20) << "epsi_Tb" << setw(20) << o.epsi_Tb << endl;
@@ -584,4 +586,14 @@ void Options::load(const string& filename) {
 	is >> dross >> loops;
 	is >> dross >> printChoice;
 	is.close();
+}
+
+// print
+void Options::print() const {
+	printf("%12s%12s%12s%12s%12s%12s%12s%12s%12s%12s\n","alpha","open","zmx","zmt","bds","inF","loopChoice","loopMin","loopMax","loops");
+	printf("%12.1g%12.1g%12s%12s%12s%12s%12s%12.4g%12.4g%12i\n",\
+			alpha,open,zmx.c_str(),zmt.c_str(),\
+			bds.c_str(),inF.c_str(),loopChoice.c_str(),loopMin,loopMax,\
+			loops);
+	printf("\n");
 }

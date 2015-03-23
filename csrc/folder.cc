@@ -31,6 +31,7 @@ CONTENTS
 		- copy
 		- copy constructor
 		- operator=
+
 		- operator<<
 		- operator==
 		- empty
@@ -70,11 +71,11 @@ ostream& operator<<(ostream& os, const FilenameAttributes& fa) {
 	os << "ID:         " << fa.ID << endl;
 	os << "Extras:     ";
 	if ((fa.Extras).size()>0) {
-		for (unsigned int l=0; l<(fa.Extras).size(); l++) {
+		for (uint l=0; l<(fa.Extras).size(); l++) {
+			if(l>0) os << "            ";
 			os << (fa.Extras[l]).first << ", " << (fa.Extras[l]).second << endl;
 		}
 	}
-	os << endl;
 	os << "Suffix:     " << fa.Suffix << endl;
 	return os;
 }
@@ -141,8 +142,14 @@ string FolderError::Add::message() const {
 
 // set
 void Filename::set(const string& f) {
+	Directory = "";
+	Timenumber = "";
+	ID = "";
+	Suffix = "";
 	Extras.clear();
 	string temp = f;
+	string firstTwo = temp.substr(0,2);
+	if (firstTwo.compare("./")==0) temp = temp.substr(2);
 	size_t stop;
 	stop = temp.find_last_of("/");
 	if (stop!=string::npos) {
@@ -173,8 +180,9 @@ void Filename::set(const string& f) {
 			stop = min(temp.find_first_of("_"),temp.find_last_of("."));
 			sp.second = temp.substr(0,stop);
 			Extras.push_back(sp);
-			if (temp[stop]=='_') 	temp = temp.substr(stop+1);
-			else 					temp = temp.substr(stop);
+			if (stop==string::npos) 	break;
+			else if (temp[stop]=='_') 	temp = temp.substr(stop+1);
+			else 						temp = temp.substr(stop);
 		}
 	}
 	if (stop!=string::npos && temp[0]=='.') {

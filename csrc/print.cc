@@ -383,6 +383,7 @@ void load(const string& f, const SaveOptions& opts, vec& v) {
 			case SaveOptions::coords:	col = 4;
 										break;
 			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+										return;
 										break;
 		}
 	}
@@ -400,6 +401,7 @@ void load(const string& f, const SaveOptions& opts, vec& v) {
 		case SaveOptions::complexB:	vLength = 2*(fileLength-opts.zeroModes);
 									break;
 		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+									return;
 									break;
 	}	
 	vec vf = Eigen::VectorXd::Zero(vLength);

@@ -39,19 +39,24 @@ void Check::add(const double& test) {
 
 // good
 bool Check::good() const {
+	if (Tests.empty()) return false;
 	return Tests.back()<Closeness;
 }
 
 // checkMessage
 void Check::checkMessage() const {
 	if (!good()) {
-		cout << "Check " << Message << ": test(" << Tests.back() << ") > closeness(" << Closeness << ")" << endl;
+		if (Tests.empty())
+			cout << "Check " << Message << ": no tests done yet" << endl;
+		else
+			cout << "Check " << Message << ": test(" << Tests.back() << ") > closeness(" << Closeness << ")" << endl;
 	}
 }
 	
 // back
 double Check::back() const {
-	return Tests.back();
+	if (Tests.empty()) return 1.0;
+	else return Tests.back();
 }
 
 // tests

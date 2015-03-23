@@ -7,7 +7,7 @@ CODIR			= cobjs
 TSDIR			= tests
 CC 				= g++
 OPTIM 			= 
-CFLAGS 			= -Wall -g -std=c++0x -static
+CFLAGS 			= -Wall -g -std=c++0x -static -O0
 #CFLAGS EXPLAINED:
 #-std=c++0x 		: added so that auto lambda functions can be used
 #-std=c++11 		: for more modern std c++
@@ -45,19 +45,19 @@ common: $(COMMONOBJS)
 	
 main: $(ODIR)/main.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named $(MAIN) has been compiled
+	@echo Simple compiler named main has been compiled
 	
 pi: $(ODIR)/pi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named $(PI) has been compiled
+	@echo Simple compiler named pi has been compiled
 	
 sphaleron: $(ODIR)/sphaleron.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named $(PI) has been compiled
+	@echo Simple compiler named sphaleron has been compiled
 	
 sphaleronPi: $(ODIR)/sphaleronPi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named $(PI) has been compiled
+	@echo Simple compiler named sphaleronPi has been compiled
 	
 #------------------------------------------------------------------------------------------------------------------------
 	
@@ -88,7 +88,6 @@ clean:
 	rm -f $(CODIR)/*.o
 	rm -f $(TSDIR)/*.o
 	rm -f *~ core
-	rm -f $(HDIR)/*~
 	rm -f $(TSDIR)/testFolder
 	rm -f $(TSDIR)/testGsl_extras
 	rm -f $(TSDIR)/testLattice

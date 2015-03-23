@@ -182,6 +182,7 @@ struct Options {
 	string printChoice;
 	void save(const string& filename) const;
 	void load(const string& filename);
+	void print() const;
 };
 
 // operator<<
