@@ -148,7 +148,7 @@ pngOut.Directory = "pics";
 
 Parameters ps_print;
 ps_print = ps_run;
-ps_print.N = 300;
+ps_print.N = 300; // must have output N=Nb as load into pi requires this
 ps_print.Nb = 300;
 ps_print.a = (r1-r0)/(ps_print.N-1.0);
 ps_print.b = (t1-t0)/(ps_print.Nb-1.0);

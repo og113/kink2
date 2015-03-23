@@ -385,47 +385,6 @@ Parameters::Parameters(const PrimaryParameters& p1): PrimaryParameters(p1) {
 // constructor using primary and secondary parameters
 Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2): \
 					PrimaryParameters(p1), SecondaryParameters(p2)	{}
-					
-// copy
-void Parameters::copy(const Parameters& p){
-	pot = p.pot;
-	N = p.N;
-	Na = p.Na;
-	Nb = p.Nb;
-	Nc = p.Nc;
-	LoR = p.LoR;
-	dE = p.dE;
-	Tb = p.Tb;
-	theta = p.theta;
-	reg = p.reg;
-	NT = p.NT;
-	epsilon = p.epsilon;
-	R = p.R; 			
-	Gamma = p.Gamma; 	
-	r0 = p.r0;			
-	L = p.L;
-	a = p.a; 			
-	b = p.b; 			
-	Ta = p.Ta;
-	Tc = p.Tc;
-	A = p.A;			
-	minima = p.minima;
-	mass2 = p.mass2; 			
-	action0 = p.action0;			
-	epsilon0 = p.epsilon0;		
-	minima0 = p.minima0;	
-}	
-
-// constructor from parameters	
-Parameters::Parameters(const Parameters& p): PrimaryParameters(), SecondaryParameters() {
-	copy(p);
-}
-
-// operator=
-Parameters& Parameters::operator=(const Parameters& rhs) {
-	copy(rhs);
-	return *this;
-}
 
 // print to shell
 void Parameters::print() const {

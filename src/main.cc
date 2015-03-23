@@ -48,6 +48,7 @@ int main(int argc, char** argv)
 
 Options opts;
 opts.load("optionsM");
+opts.print();
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. Folders
@@ -65,8 +66,8 @@ opts.load("optionsM");
 FilenameAttributes fa_low, fa_high;
 fa_low.Timenumber = opts.minTimenumberLoad;
 fa_high.Timenumber = opts.minTimenumberLoad;
-(fa_low.Extras).push_back(StringPair("Loop",opts.minLoopLoad));
-(fa_high.Extras).push_back(StringPair("Loop",opts.maxLoopLoad));
+(fa_low.Extras).push_back(StringPair("loop",opts.minLoopLoad));
+(fa_high.Extras).push_back(StringPair("loop",opts.maxLoopLoad));
 
 // FilenameComparator
 FilenameComparator fc(fa_low,fa_high);
@@ -74,12 +75,12 @@ Folder allFiles(fc);
 
 // pFolder
 if ((opts.inF).compare("p")==0) {
-	fa_low.ID = "tpip";
-	fa_high.ID = "tpip";
+	fa_low.ID = "tp";
+	fa_high.ID = "tp";
 }
 else if ((opts.inF).compare("m")==0) {
-	fa_low.ID = "mainpi";
-	fa_high.ID = "mainpi";
+	fa_low.ID = "mainp";
+	fa_high.ID = "mainp";
 }
 else {
 	cerr << "inF error: " << opts.inF << " not recognised" << endl;

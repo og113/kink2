@@ -3,7 +3,6 @@
 		program to solve boundary value problem on contour BC, and step out to A and D
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-//#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
 #include <Eigen/Sparse>
 #include <Eigen/Dense>
 #include <vector>
@@ -42,7 +41,7 @@
 		11 - printing early
 		12 - convergence
 		13 - propagating along minkowskian time
-		14 - 
+		14 - printing output
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -124,7 +123,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	Check checkCon("energy conservation",1.0e-2);
 	Check checkLatt("lattice small enough for energy",0.2);
 	Check checkReg("regularisation term",1.0e-2);
-	Check checkDT("time derivative of phi",1.0e-2);
+	Check checkDT("1/(time derivative of phi)",1.0e3);
 	Check checkProfile("phi input calculation",1.0e-5);
 	
 	// do trivial or redundant checks?
@@ -675,6 +674,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
         if (ps.pot==3) {
         	DDS.insert(2*ps.N*ps.Nb,2*ps.N*ps.Nb) = 1.0;	// redundant lagrange multiplier
         	dtTest /= (double)(ps.Nb-1.0);
+        	dtTest = 1.0/dtTest;
         	action 	*= 4.0*pi;
         	erg 	*= 4.0*pi;
         }
@@ -1035,6 +1035,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	PlotOptions po_simple;
 	po_simple.column = 1;
 	po_simple.style = "linespoints";
+	po_simple.printMessage = true;
 
 	//printing output phi on Euclidean time part
 	so_p.printMessage = true;
@@ -1045,12 +1046,13 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	//printing output minusDS
 	pFile.ID = "minudDS";
 	save(pFile,so_p,minusDS);
-	plotFile = pFile;
-	plotFile.Suffix = ".png";
-	po_p.output = plotFile;
-	plot(pFile,po_p);
+	//plotFile = pFile;
+	//plotFile.Suffix = ".png";
+	//po_p.output = plotFile;
+	//plot(pFile,po_p);
 			
 	//printing output DDS
+	so_simple.printMessage = true;
 	pFile.ID = "DDS";
 	save(pFile,so_simple,DDS);
 	

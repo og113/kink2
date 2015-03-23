@@ -382,7 +382,7 @@ vec interpolateReal(vec vec_old, const Parameters& p_old, const Parameters& p_ne
 			cerr << "interpolateReal error: vec_old.size() = " << old_size << " , N_old*Nt_old = " << N_old*Nt_old << endl;
 		}
 	}
-	vec vec_new(N_old*Nt_old);
+	vec vec_new(N_new*Nt_new);
 	uint x_new, t_new, x_old, t_old;
 	double exact_x_old, exact_t_old, rem_x_old, rem_t_old;
 	lint pos;

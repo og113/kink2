@@ -28,13 +28,29 @@
 #include <gsl/gsl_odeiv2.h>
 #include "sphaleron_pf.h"
 
+//#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
+
 using namespace std;
 
-int main(int argc, char** argv)
-{
+/*----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+	CONTENTS
+		1 - defining key parameters
+		2 - argv inputs
+		3 - getting parameters from specific inputs
+		4 - loading phi on BC
+		5 - omega
+		6 - propagating euclidean solution along B->A and C->D
+		7 - testing linearity or whether tunneled
+		8 - printing results
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------*/
+
+
+int main(int argc, char** argv) {
 
 /* ---------------------------------------------------------------------------------------------
-main parameters
+	1. defining key parameters
 ---------------------------------------------------------------------------------------------*/
 
 double r0 = 1.0e-16, r1 = 10.0;
@@ -53,8 +69,7 @@ double closenessEdge = 1.0e-3, Redge = 0.0;
 double closenessMom = 1.9e-2, momTest;
 
 /* ---------------------------------------------------------------------------------------------
-user inputs
-and labels for input and output
+	2. argv inputs
 ---------------------------------------------------------------------------------------------*/
 
 string timeNumber;
@@ -101,7 +116,7 @@ if (testLinear) {
 }
 
 /* ---------------------------------------------------------------------------------------------
-getting parameters from specific inputs
+	3. getting parameters from specific inputs
 ---------------------------------------------------------------------------------------------*/
 
 unsigned int Nin, Nain, Nbin, Ncin;
@@ -154,7 +169,7 @@ if (abs(Ta)<2.5 && !testTunnel && !testLinear) {
 }
 
 /* ---------------------------------------------------------------------------------------------
-loading phi on BC
+	4. loading phi on BC
 ---------------------------------------------------------------------------------------------*/
 string filename = "data/" + timeNumberIn + "pip_" + loopIn + ".dat";
 unsigned int fileLength = countLines(filename);
@@ -173,7 +188,7 @@ else {
 
 
 /* ---------------------------------------------------------------------------------------------
-deterimining omega matrices for fourier transforms in spatial direction
+	5. getting omega matrices
 ---------------------------------------------------------------------------------------------*/
 mat omega_m1(N+1,N+1); 	
 mat omega_0(N+1,N+1);
@@ -220,7 +235,7 @@ if (testLinear) {
 }
 
 /* ---------------------------------------------------------------------------------------------
-propagating euclidean solution forwards and/or backwards in time
+	6. propagating euclidean solution along B->A and C->D
 ---------------------------------------------------------------------------------------------*/
 
 vec phiA, phiC, linearizationA;
