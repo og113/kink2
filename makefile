@@ -5,7 +5,7 @@ ODIR			= objs
 CSDIR			= csrc
 CODIR			= cobjs
 TSDIR			= tests
-CC 				= g++-4.6
+CC 				= g++
 OPTIM 			= 
 CFLAGS 			= -Wall -g -std=c++0x -static -O0
 #CFLAGS EXPLAINED:
@@ -23,7 +23,7 @@ CFLAGS 			= -Wall -g -std=c++0x -static -O0
 #-fopenmp 			: so can use openmp parallelisation
 #-pg 				: also known as gprof, the gcc profiling tool 
 LFLAGS 			= 
-INCLUDES		= -I$(HDIR) -I/home/og/Documents/c++/eigen-eigen-1306d75b4a21/ -I/home/og/Documents/c++/gnuplot/gnuplot-cpp
+INCLUDES		= -I$(HDIR) -I/home/og113/Documents/c++/eigen_build/eigen/ -I/home/og113/Documents/c++/gnuplot/gnuplot-cpp
 LIBS 			= -lm -lgsl -lgslcblas
 
 _HEADERS 		= check.h error.h fnptrs.h folder.h gsl_extras.h lattice.h omega.h parameters.h potentials.h print.h simple.h\
@@ -38,30 +38,26 @@ COMMONOBJS 		= $(patsubst %,$(CODIR)/%,$(_COMMONOBJS))
 
 #------------------------------------------------------------------------------------------------------------------------
 
-all: common main pi sphaleron sphaleron_pi	
+all: 	
 
 common: $(COMMONOBJS)
 	@echo made common objects $(COMMONOBJS)
 	
 main: $(ODIR)/main.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named main has been compiled
+	@echo Simple compiler named $(MAIN) has been compiled
 	
 pi: $(ODIR)/pi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named pi has been compiled
-	
-plot: $(ODIR)/plot.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named plot has been compiled
+	@echo Simple compiler named $(PI) has been compiled
 	
 sphaleron: $(ODIR)/sphaleron.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named sphaleron has been compiled
+	@echo Simple compiler named $(PI) has been compiled
 	
-sphaleronPi: $(ODIR)/sphaleronPi.o $(COMMONOBJS)
+sphaleron_pi: $(ODIR)/sphaleron_pi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named sphaleronPi has been compiled
+	@echo Simple compiler named $(PI) has been compiled
 	
 #------------------------------------------------------------------------------------------------------------------------
 	
@@ -92,6 +88,7 @@ clean:
 	rm -f $(CODIR)/*.o
 	rm -f $(TSDIR)/*.o
 	rm -f *~ core
+	rm -f $(HDIR)/*~
 	rm -f $(TSDIR)/testFolder
 	rm -f $(TSDIR)/testGsl_extras
 	rm -f $(TSDIR)/testLattice

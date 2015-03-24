@@ -129,7 +129,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. beginning parameter loop
+<<<<<<< HEAD
+		- initializing stepper
+=======
 		- beginning stepper
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 		- defining a time
 		- changing parameters (if required)
 		- copying a verson of parameters with timenumber
@@ -155,6 +159,25 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	}
 	Stepper stepper(step_opts,point);
 	
+	// initializing stepper
+	StepperOptions step_opts;
+	Point2d point;
+	if ((opts.loopChoice).compare("const")==0) {
+		step_opts.constant = true;
+		step_opts.epsi_x = opts.epsiTb;
+		step_opts.epsi_y = opts.epsiTheta;
+		step_opts.angle = 0.0;
+		point(psu.Tb,psu.theta);
+	}
+	else {
+		step_opts.constant = false;
+		step_opts.epsi_x = (opts.loopMax - opts.loopMin)/(opts.loops-1.0);
+		step_opts.epsi_y = 0.0;
+		step_opts.angle = 0.0;
+		point(opts.loopMin,0.0);
+	}
+	Stepper stepper(step_opts,point);
+	
 	for (uint loop=0; loop<opts.loops; loop++) {
 	
 		//defining a time and starting the clock
@@ -163,6 +186,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	
 		// changing parameters
 		Parameters ps = psu;
+		stepper.step();
 		if (opts.loops>1) {
 			if ((opts.loopChoice)[0]=='N') {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,(uint)stepper.x());
@@ -170,7 +194,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					cout << opts.loopChoice << "changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
+<<<<<<< HEAD
+			else {
+=======
 			else if ((opts.loopChoice).compare("const")!=0 && (opts.loopChoice).compare("constant")!=0){
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
 				if (loop==0 && anythingChanged) {
 					cout << opts.loopChoice << "changed to " << stepper.x() << " on input" << endl;
@@ -1177,7 +1205,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	14. printing output
 		- check messages
 		- stopping clock
+<<<<<<< HEAD
+		- adding data to stepper
+=======
 		- stepping stepper
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 		- printing results to terminal
 		- printing results to file
 		- printing (and plotting if vectors):
@@ -1205,9 +1237,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		time = clock() - time;
 		double realtime = time/1000000.0;
 		
+<<<<<<< HEAD
+		// adding data to stepper
+		stepper.addResult(W);
+=======
 		// stepping stepper
 		stepper.addResult(W);
 		stepper.step();
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 	
 		// printing results to terminal
 		printf("\n");

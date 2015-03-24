@@ -42,7 +42,7 @@ CONTENTS
 
 // SaveOptions
 struct SaveOptions {
-	enum vectorTypeList { simple=0, real=1, complex=2, realB=3, complexB=4 };
+	enum vectorTypeList { simple=0, real=1, complex=2, realB=3, complexB=4, append=5 };
 	enum extrasList { none=0, loc=1, coords=2};
 	vectorTypeList vectorType;
 	extrasList extras;
