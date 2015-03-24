@@ -31,11 +31,13 @@ CONTENTS
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. save
 		- vec
-			- static simpleSaveVec
+			- static SaveVec
+			- static saveVecSimpleAppend
 			- static saveVecB
 			- static saveVec
 		- cVec
 			- static savecVecSimple
+			- static savecVecSimpleAppend
 			- static savecVecB
 			- static savecVec
 		- mat
@@ -43,7 +45,7 @@ CONTENTS
 		- spMat
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// save vec - simpleSaveVec
+// save vec - saveVecSimple
 static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v) {
 	fstream F;
 	F.open(f.c_str(), ios::out);
@@ -52,13 +54,37 @@ static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v
 	uint length = v.size();
 	if (opts.vectorType==SaveOptions::complex && !length%2) length = (uint)(length/2);
 	for (uint j=0; j<length; j++) {
-		if (opts.extras==SaveOptions::loc) 			F << setw(25) << j;
+		if (opts.extras==SaveOptions::loc)			F << setw(25) << j;
 		if (opts.vectorType==SaveOptions::complex)	F << setw(25) << v(2*j) << setw(25) << v(2*j+1);
 		else										F << setw(25) << v(j);
 													F << endl;
 	}
 	F.close();
 }
+
+// save vec - simpleVecAppend
+void saveVecSimpleAppend(const string& f, const SaveOptions& opts, const vec& v) {
+	ifstream is;
+	is.open((printFile).c_str(),ios::in);
+	ofstream os;
+	os.open("data/temp",ios::out);
+	os.precision(16);
+	os << left;
+	unsigned int lengthOs = v.size();
+	unsigned int lengthIs = countLines(printFile);
+	if (lengthOs!=lengthIs)
+		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
+	else {
+		string lineIn;
+		for (unsigned int j=0; j<lengthOs; j++){
+		getline(is,lineIn);
+		os << lineIn << setw(25) << v(j) << endl;
+		}
+	}
+	is.close();
+	os.close();
+	copyFile("data/temp",printFile);
+}	
 
 // save vec - saveVecB
 static void saveVecB (const string& f, const SaveOptions& opts, const vec& v) {
@@ -172,7 +198,7 @@ static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
 // save vec
 void save(const string& f, const SaveOptions& opts, const vec& v) {
 	switch(opts.vectorType) {
-		case SaveOptions::simple:	saveVecSimple(f, opts, v);
+		case SaveOptions::simple:	saveVecSimple(f,opts,v);
 									break;
 		case SaveOptions::real:		saveVec(f,opts,v);
 									break;
@@ -182,6 +208,8 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 									break;
 		case SaveOptions::complexB:	saveVecB(f,opts,v);
 									break;
+		case SaveOptions::append	saveVecSimpleAppend(f,opts,v);
+									break;
 		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
 									break;
 	}
@@ -190,7 +218,7 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 	}
 }
 
-// save cVec - simpleSaveVec
+// save cVec - saveVecSimple
 static void savecVecSimple(const string& f, const SaveOptions& opts, const cVec& v) {
 	fstream F;
 	F.open((f).c_str(), ios::out);
@@ -203,6 +231,30 @@ static void savecVecSimple(const string& f, const SaveOptions& opts, const cVec&
 	}
 	F.close();
 }
+
+// save cVec - simplecVecAppend
+void savecVecSimpleAppend(const string& f, const SaveOptions& opts, const cVec& v) {
+	ifstream is;
+	is.open((printFile).c_str(),ios::in);
+	ofstream os;
+	os.open("data/temp",ios::out);
+	os.precision(16);
+	os << left;
+	unsigned int lengthOs = v.size();
+	unsigned int lengthIs = countLines(printFile);
+	if (lengthOs!=lengthIs)
+		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
+	else {
+		string lineIn;
+		for (unsigned int j=0; j<lengthOs; j++){
+		getline(is,lineIn);
+		os << lineIn << setw(25) << real(v(j)) << setw(25) << imag(v(j)) << endl;
+		}
+	}
+	is.close();
+	os.close();
+	copyFile("data/temp",printFile);
+}	
 
 // save cVec - saveVecB
 static void savecVecB (const string& f, const SaveOptions& opts, const cVec& v) {
@@ -291,7 +343,7 @@ static void savecVec(const string& f, const SaveOptions& opts, const cVec& v) {
 // save cVec
 void save(const string& f, const SaveOptions& opts, const cVec& v) {
 	switch(opts.vectorType) {
-		case SaveOptions::simple:	savecVecSimple(f, opts, v);
+		case SaveOptions::simple:	savecVecSimple(f,opts,v);
 									break;
 		case SaveOptions::real:		savecVec(f,opts,v);
 									break;
@@ -300,6 +352,8 @@ void save(const string& f, const SaveOptions& opts, const cVec& v) {
 		case SaveOptions::realB:	savecVecB(f,opts,v);
 									break;
 		case SaveOptions::complexB:	savecVecB(f,opts,v);
+									break;
+		case SaveOptions::append:	savecVecSimpleAppend(f,opts,v);
 									break;
 		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
 									break;
