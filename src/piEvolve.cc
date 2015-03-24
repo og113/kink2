@@ -1,32 +1,21 @@
 /*---------------------------------------------------------------------------------------------
 	piEvolve
-		- something to compile results to get periodic instanton for pot3
+		- something to compile results to get periodic instanton for pot=3
 ---------------------------------------------------------------------------------------------*/
 #include <Eigen/Sparse>
 #include <Eigen/Dense>
 #include <vector>
-#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 #include <complex>
 #include <string>
-#include <stdlib.h>
-#include <stdio.h>
-#include <cstdlib>
-#include <ctype.h>
-#include <limits> //for DBL_MIN etc
-#include <cstring> //for memcpy
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_poly.h>
-#include <gsl/gsl_roots.h>
-#include <gsl/gsl_integration.h>
-#include <gsl/gsl_min.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_odeiv2.h>
-#include "sphaleron_pf.h"
+#include "simple.h"
+#include "folder.h"
+#include "parameters.h"
+#include "print.h"
+
 
 //#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
 
@@ -51,18 +40,17 @@ int main(int argc, char** argv) {
 
 /* ---------------------------------------------------------------------------------------------
 	1. defining key parameters
+		- parameters
+		- specific options
 ---------------------------------------------------------------------------------------------*/
 
-double r0 = 1.0e-16, r1 = 10.0;
-unsigned int N = 300;
-double dr;
+// parameters
+Parameters ps_run;
+Parameters ps_in;
 
-double Ta, Tc;
-unsigned int Na, Nc, Nt;
-double dt;
-
+// specific options
 int direction = 1; // direction of time evolution
-double sigma = 1.0; //set sigma=-1 for euclidean evolution
+double sigma = 1.0; // set sigma=-1 for euclidean evolution; sigma=1 for minkowskian
 bool testTunnel = false, testLinear = false, changeParams = false, approxOmega = false;
 double closenessLin = 1.0e-2, Tlin = 0.0;
 double closenessEdge = 1.0e-3, Redge = 0.0;
@@ -70,18 +58,21 @@ double closenessMom = 1.9e-2, momTest;
 
 /* ---------------------------------------------------------------------------------------------
 	2. argv inputs
+		- getting argv inputs
+		- printing type of test if chosen 
 ---------------------------------------------------------------------------------------------*/
 
-string timeNumber;
-string timeNumberIn = "150112114306";
+// getting argv inputs
+string timenumber;
+string timenumberIn = "150112114306";
 string loopIn = "0";
-if (argc == 2) timeNumberIn = argv[1];
+if (argc == 2) timenumberIn = argv[1];
 else if (argc % 2 && argc>1) {
 	for (unsigned int j=0; j<(int)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
-		if (id.compare("tn")==0) timeNumberIn = argv[2*j+2];
-		else if (id.compare("r1")==0) timeNumberIn = stringToNumber<double>(argv[2*j+2]);
+		if (id.compare("tn")==0) timenumberIn = argv[2*j+2];
+		else if (id.compare("r1")==0) timenumberIn = stringToNumber<double>(argv[2*j+2]);
 		else if (id.compare("loop")==0 || id.compare("l")==0) loopIn = argv[2*j+2];
 		else if (id.compare("test")==0 || id.compare("tunnel")==0 || id.compare("tt")==0) testTunnel = (bool)atoi(argv[2*j+2]);
 		else if (id.compare("linearization")==0 || id.compare("lin")==0) testLinear = (bool)atoi(argv[2*j+2]);
@@ -106,7 +97,9 @@ else {
 	return 1;
 }
 
-timeNumber = timeNumberIn;
+
+// printing type of test if chosen 
+timenumber = timenumberIn;
 if (testTunnel) {
 	cout << "pi3 testing if tunnelled" << endl;
 }
@@ -117,122 +110,123 @@ if (testLinear) {
 
 /* ---------------------------------------------------------------------------------------------
 	3. getting parameters from specific inputs
+		- getting inputs corresponding to timenumberIn
+		- chosing p_run
+		- checking parameters
 ---------------------------------------------------------------------------------------------*/
 
-unsigned int Nin, Nain, Nbin, Ncin;
-double Tbin, dtin, drin;
-string inputsF = "./data/" + timeNumberIn + "inputsPi_" + loopIn;
-ifstream fin;
-fin.open(inputsF.c_str());
-if (fin.is_open())
+// getting inputs corresponding to timenumberIn
+string prefix = "./data/"+timenumberIn;
+string suffix = "_loop_"+numberToString<uint>(loopIn)+".dat";
+Filename inputsFile = (string)(prefix+"inputsP"+suffix);
+inputsFile.Suffix = "";
+ps_in.load(inputsFile);
+
+// chosing p_run
+ps_run = ps_in;
+ps_run.changeParameters("N",300);
 	{
-	string line, temp;
-	double LoR;
-	while(getline(fin,line))
-		{
-		if(line[0] == '#') continue;
-		if(line.empty()) continue;
-		istringstream ss(line);
-		ss >> Nin >> Nain >> Nbin >> Ncin >> temp >> LoR >> Tbin;
-		r1 = 10.0*LoR;
-		break;
-		}
+	double dt = ps_run.a/5.0;
+	ps_run.changeParameters("Na",(unsigned int)(ps_in.Ta/dt));
+	ps_run.changeParameters("Nb",(unsigned int)(ps_in.Tb/dt));
+	ps_run.changeParameters("Nc",(unsigned int)(ps_in.Tc/dt));
 	}
-else cout << "unable to open " << inputsF << endl;
-fin.close();
 
-dr = r1-r0;
-dr /= (double)N;
-dtin = Tbin/(Nbin-1.0);
-drin = (r1-r0)/(Nin-1.0);
-Ta = dtin*Nain;
-Tc = dtin*Ncin;
-dt = dr*0.2;
-Na = (unsigned int)(Ta/dt);
-Nc = (unsigned int)(Tc/dt);
-
-if (abs(Ta)>1.1*(r1-r0) && !testTunnel && !testLinear) {
-	cerr << "R is too small compared to Ta. R = " << r1-r0 << ", Ta = " << Ta << endl;
+// checking parameters
+if (abs(ps_in.Ta)>1.1*ps_in.L && !testTunnel && !testLinear) {
+	cerr << "R is too small compared to Ta. R = " << ps_in.L << ", Ta = " << ps_in.Ta << endl;
 	return 1;
 }
-if (abs(Tc)>1.1*(r1-r0) && !testTunnel && !testLinear) {
-	cerr << "R is too small compared to Tc. R = " << r1-r0 << ", Tc = " << Tc << endl;
+if (abs(ps_in.Tc)>1.1*ps_in.L && !testTunnel && !testLinear) {
+	cerr << "R is too small compared to Tc. R = " << ps_in.L << ", Tc = " << ps_in.Tc << endl;
 	return 1;
 }
-if (abs(dt)>0.5*dr) {
-	cerr << "dt too large. dt = " << dt << ", dr = " << dr << endl;
+if (abs(ps_run.b)>0.5*ps_run.a) {
+	cerr << "dt too large. dt = " << ps_run.b << ", dr = " << ps_run.a << endl;
 	return 1;
 }
-if (abs(Ta)<2.5 && !testTunnel && !testLinear) {
-	cerr << "Ta too small. Ta = " << Ta << endl;
+if (abs(ps_in.Ta)<2.5 && !testTunnel && !testLinear) {
+	cerr << "Ta too small. Ta = " << ps_in.Ta << endl;
 	return 1;
 }
 
 /* ---------------------------------------------------------------------------------------------
 	4. loading phi on BC
+		- load options
+		- defining phiBC
+		- loading phiBC
 ---------------------------------------------------------------------------------------------*/
-string filename = "data/" + timeNumberIn + "pip_" + loopIn + ".dat";
-unsigned int fileLength = countLines(filename);
-vec phiBC;
-	
-if (fileLength==Nin*Nbin) phiBC = loadSimpleVectorColumn(filename,3);
-else if (fileLength==(Nin*Nbin+1))
-	{
-	phiBC = loadSimpleVectorColumn(filename,3);
-	phiBC.conservativeResize(Nbin*Nin);
-	}
-else {
-	cerr << filename << " cannot be read." << endl;
-	cerr << "File length not correct: " << fileLength << " != " << Nbin*Nin+1 << endl;
-}
 
+// load options
+Filename pFile = (string)(prefix+"p"+suffix);
+SaveOptions so_in;
+so_in.paramsIn = ps_in;
+so_in.paramsOut = ps_in;
+so_in.vectorType = SaveOptions::complexB;
+so_in.extras = SaveOptions::coords;
+so_in.zeroModes = 1;
+so_in.printMessage = true;
+
+// defining phiBC
+vec phiBC;
+
+// loading phiBC
+load(pFile,so_p,phiBC);
 
 /* ---------------------------------------------------------------------------------------------
 	5. getting omega matrices
+		- loading if possible
+		- otherwise constructing omegas and saving results
 ---------------------------------------------------------------------------------------------*/
-mat omega_m1(N+1,N+1); 	
-mat omega_0(N+1,N+1);
-mat omega_1(N+1,N+1);
-mat omega_2(N+1,N+1);
-vec eigenValues(N+1);
-mat eigenVectors(N+1,N+1); //eigenvectors correspond to columns of this matrix
-if (testLinear) {
-	omega_m1 = Eigen::MatrixXd::Zero(N+1,N+1);
-	omega_0 = Eigen::MatrixXd::Zero(N+1,N+1);
-	omega_1 = Eigen::MatrixXd::Zero(N+1,N+1);
-	omega_2 = Eigen::MatrixXd::Zero(N+1,N+1);
-	if(!approxOmega) {
-		mat h(N+1,N+1);
-		h = hFn(N+1,dr,1.0);
-		Eigen::SelfAdjointEigenSolver<mat> eigensolver(h);
-		if (eigensolver.info() != Eigen::Success) cerr << "h eigensolver failed" << endl;
+
+//deterimining omega matrices for fourier transforms in spatial direction
+	vec freqs(ps_run.N), freqs_exp(ps_run.N);
+	mat modes(ps_run.N,ps_run.N);
+	mat omega_m1(ps_run.N,ps_run.N), omega_0(ps_run.N,ps_run.N), omega_1(ps_run.N,ps_run.N), omega_2(ps_run.N,ps_run.N);
+	SaveOptions so_simple;
+	so_simple.paramsIn = ps_run; so_simple.paramsOut = ps_run;
+	so_simple.vectorType = SaveOptions::simple;
+	so_simple.extras = SaveOptions::none;
+	so_simple.printMessage = false;
+	{
+		Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
+		omegaM1F = (string)("data/stable/omegaM1_pot_"+numberToString<uint>(ps_run.pot)+"_N_"+numberToString<uint>(ps_run.N)\
+						+"_L_"+numberToString<double>(ps_run.L)+".dat");
+		Folder omegaM1Folder(omegaM1F);
+		omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
+		omega1F = omegaM1F; 		omega1F.ID = "omega1"; 		Folder omega1Folder(omega1F);
+		omega2F = omegaM1F; 		omega2F.ID = "omega2";	 	Folder omega2Folder(omega2F);
+		modesF = omegaM1F;			modesF.ID = "modes"; 		Folder modesFolder(modesF);
+		freqsF = omegaM1F;			freqsF.ID = "freqs"; 		Folder freqsFolder(freqsF);
+		freqsExpF = omegaM1F;		freqsExpF.ID = "freqsExp";	Folder freqsExpFolder(freqsExpF);
+		if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()==1 \
+			&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
+			load(omegaM1Folder[0],so_simple,omega_m1);
+			load(omega0Folder[0],so_simple,omega_0);
+			load(omega1Folder[0],so_simple,omega_1);
+			load(omega2Folder[0],so_simple,omega_2);
+			load(modesFolder[0],so_simple,modes);
+			load(freqsFolder[0],so_simple,freqs);
+			load(freqsExpFolder[0],so_simple,freqs_exp);
+		}
 		else {
-			eigenValues = eigensolver.eigenvalues();
-			eigenVectors = eigensolver.eigenvectors(); //automatically normalised to have unit norm
-		}
-	}
-	else {
-		double normalisation = sqrt(2.0/(double)N);
-		for (unsigned int l=0; l<(N+1); l++) {
-			eigenValues(l) = 1.0+pow(2.0*sin(pi*l/(double)N/2.0)/dr,2.0);
-			for (unsigned int m=0; m<(N+1); m++) eigenVectors(l,m) = normalisation*sin(pi*l*m/(double)N);
-		}
-	}
-	double djdk;	
-	for (unsigned int j=0; j<(N+1); j++) {
-		for (unsigned int k=0; k<(N+1); k++) {
-			for (unsigned int l=0; l<(N+1); l++) {
-				djdk = 4.0*pi*dr;
-				if ((j==0 || j==N) && !approxOmega) djdk/=sqrt(2.0);
-				if ((k==0 || k==N) && !approxOmega) djdk/=sqrt(2.0);
-				omega_m1(j,k) += djdk*pow(eigenValues(l),-0.5)*eigenVectors(j,l)*eigenVectors(k,l);
-				omega_0(j,k) += djdk*eigenVectors(j,l)*eigenVectors(k,l);
-				omega_1(j,k) += djdk*pow(eigenValues(l),0.5)*eigenVectors(j,l)*eigenVectors(k,l);
-				omega_2(j,k) += djdk*eigenValues(l)*eigenVectors(j,l)*eigenVectors(k,l);
+			bool approxOmega = false;
+			if (!approxOmega) {
+				numericalModes(modes,freqs,freqs_exp,ps_run);
 			}
+			else {
+				analyticModes(modes,freqs,freqs_exp,ps_run);
+			}
+			omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,ps_run);
+			save(omegaM1F,so_simple,omega_m1);
+			save(omega0F,so_simple,omega_0);
+			save(omega1F,so_simple,omega_1);
+			save(omega2F,so_simple,omega_2);
+			save(modesF,so_simple,modes);
+			save(freqsF,so_simple,freqs);
+			save(freqsExpF,so_simple,freqs_exp);
 		}
 	}
-}
 
 /* ---------------------------------------------------------------------------------------------
 	6. propagating euclidean solution along B->A and C->D
@@ -247,21 +241,21 @@ uint j=0;
 while(j<2) {
 
 	if (testLinear) {
-		Nt = 10*N;
+		Nt = 10*ps_run.N;
 		j=1;
 		direction = -1;
 	}
 	else if (testTunnel) {
-		Nt = 10*N;
+		Nt = 10*ps_run.N;
 		j=1;
 		direction = 1;
 	}
 	else if (j==0) {
-		Nt = Nc;
+		Nt = ps_run.Nc;
 		direction = 1;
 	}
 	else if (j==1) {
-		Nt = Na;
+		Nt = ps_run.Na;
 		direction = -1;
 	}
 	
@@ -439,7 +433,7 @@ if (testLinear) {
 	for (unsigned int t=0;t<(Nt+1);t++){
 		tVec(t) = t*dt;
 		}
-	string linearizationFile = "data/" + timeNumber + "linearization_" + loopIn + ".dat";
+	string linearizationFile = "data/" + timenumber + "linearization_" + loopIn + ".dat";
 	simplePrintVector(linearizationFile,tVec);
 	simpleAppendVector(linearizationFile,linearizationA);
 	momTest = linErgA*dr/linNumA/pi;
@@ -448,7 +442,7 @@ if (testLinear) {
 	printf("Redge(%6.4f)         = %6.4f\n",closenessEdge,Redge);
 	printf("momTest               = %6.4f\n",momTest);
 	if (changeParams) {
-		//string inputsOut = "data/" + timeNumber + "inputsPi3_" + loopIn;
+		//string inputsOut = "data/" + timenumber + "inputsPi3_" + loopIn;
 		string inputsOut = "inputs";
 		int Nmom = (int)(linErgA*Redge/pi/linNumA/closenessMom) + 1;
 		int Nbmom = (int)(Nmom*4*Tbin/Redge);
@@ -504,7 +498,7 @@ else if (!testTunnel) {
 				}
 			}
 		}
-	string mainInFile = "data/" + timeNumber + "tpip_" + loopIn + ".dat";
+	string mainInFile = "data/" + timenumber + "tpip_" + loopIn + ".dat";
 	printThreeVectors(mainInFile,tVec,rVec,mainIn);
 	gp(mainInFile,"pi3.gp");
 

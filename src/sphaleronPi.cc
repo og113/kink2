@@ -30,7 +30,6 @@
 #include "folder.h"
 #include "parameters.h"
 #include "print.h"
-#include "sphaleron_fns.h"
 
 using namespace std;
 

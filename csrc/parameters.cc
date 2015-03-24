@@ -541,13 +541,8 @@ ostream& operator<<(ostream& os, const Options& o) {
 	os << setw(20) << "loopChoice" << setw(20) << o.loopChoice << endl;
 	os << setw(20) << "loopMin" << setw(20) << o.loopMin << endl;
 	os << setw(20) << "loopMax" << setw(20) << o.loopMax << endl;
-<<<<<<< HEAD
 	os << setw(20) << "epsiTb" << setw(20) << o.epsiTb << endl;
 	os << setw(20) << "epsiTheta" << setw(20) << o.epsiTheta << endl;
-=======
-	os << setw(20) << "epsi_Tb" << setw(20) << o.epsi_Tb << endl;
-	os << setw(20) << "epsi_theta" << setw(20) << o.epsi_theta << endl;
->>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 	os << setw(20) << "loops" << setw(20) << o.loops << endl;
 	os << setw(20) << "printChoice" << setw(20) << o.printChoice << endl;
 	os << endl;
@@ -590,13 +585,8 @@ void Options::load(const string& filename) {
 	is >> dross >> loopChoice;
 	is >> dross >> loopMin;
 	is >> dross >> loopMax;
-<<<<<<< HEAD
 	is >> dross >> epsiTb;
 	is >> dross >> epsiTheta;
-=======
-	is >> dross >> epsi_Tb;
-	is >> dross >> epsi_theta;
->>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 	is >> dross >> loops;
 	is >> dross >> printChoice;
 	is.close();
