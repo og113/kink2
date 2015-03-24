@@ -53,6 +53,6 @@ void numericalModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p)
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // omegasFn
-void omegasFn(const bool& analytic, const mat& modes, const mat& freqs, mat& omega_m1, mat& omega_0, mat& omega_1, mat& omega_2, const Parameters& p);
+void omegasFn(const bool& analytic, const mat& modes, const vec& freqs, mat& omega_m1, mat& omega_0, mat& omega_1, mat& omega_2, const Parameters& p);
 
 #endif // __OMEGA_H_INCLUDED__

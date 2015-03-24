@@ -88,6 +88,7 @@ double dr = r1-r0;
 dr /= (double)N;
 
 Parameters ps;
+ps.pot = 3;
 ps.r0 = r0;
 ps.L = r1;
 ps.N = N+1;
@@ -332,7 +333,7 @@ erg = Eigen::VectorXd::Zero(Nt+1);
 
 //getting eigVec from file
 so_simple.paramsOut = ps;
-string eigVecFile = "data/stable/sphaleronEigVec_L_"+numberToString<double>(r1)+".dat";
+string eigVecFile = "data/stable/eigVec_pot_3_L_"+numberToString<double>(r1)+".dat";
 load(eigVecFile,so_simple,eigVec);
 if (eigVec[0]<0) eigVec *= -1.0;
 
@@ -494,6 +495,7 @@ datOut.ID = "sphaleronEvo";
 pngOut.ID = datOut.ID;
 
 Parameters ps_print;
+ps.pot = 3;
 ps.N = 300;
 ps.Nb = 300;
 ps.Tb = T;

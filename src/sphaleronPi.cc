@@ -100,7 +100,7 @@ ps_run.b = dt;
 vec sphaleron(N), negEig(N);
 
 Filename sphaleronFile = (string)("data/stable/sphaleron_L_"+numberToString<double>(r1)+".dat");
-Filename negEigFile = (string)("data/stable/sphaleronEigVec_L_"+numberToString<double>(r1)+".dat");
+Filename negEigFile = (string)("data/stable/eigVec_pot_3_L_"+numberToString<double>(r1)+".dat");
 SaveOptions so_simple;
 so_simple.paramsOut = ps_run;
 so_simple.vectorType = SaveOptions::simple;
@@ -141,7 +141,11 @@ for (unsigned int k=0; k<Nt; k++) {
 /* ---------------------------------------------------------------------------------------------
 	6. printing result
 ---------------------------------------------------------------------------------------------*/
+<<<<<<< HEAD:src/sphaleron_pi.cc
 string datOut = (string)("data/stable/sphaleronPi_L_"+numberToString<double>(r1)+"_Tb_"+numberToString<double>(t1)+".dat");
+=======
+Filename datOut = (string)("data/sphaleronPi_L_"+numberToString<double>(r1)+"_Tb_"+numberToString<double>(t1)+".dat");
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881:src/sphaleronPi.cc
 Filename pngOut = datOut;
 cout << pngOut.Directory << " " << (pngOut.Extras[0]).first << " " << (pngOut.Extras[0]).second << " " << (pngOut.Extras[1]).first << endl;
 cout << pngOut << endl;
@@ -152,7 +156,7 @@ cout << pngOut << endl;
 
 Parameters ps_print;
 ps_print = ps_run;
-ps_print.N = 300;
+ps_print.N = 300; // must have output N=Nb as load into pi requires this
 ps_print.Nb = 300;
 ps_print.a = (r1-r0)/(ps_print.N-1.0);
 ps_print.b = (t1-t0)/(ps_print.Nb-1.0);

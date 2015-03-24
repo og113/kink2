@@ -176,12 +176,18 @@ struct Options {
 	string loopChoice;
 	double loopMin;
 	double loopMax;
+<<<<<<< HEAD
 	double epsiTb;
 	double epsiTheta;
+=======
+	double epsi_Tb;
+	double epsi_theta;
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 	uint loops;
 	string printChoice;
 	void save(const string& filename) const;
 	void load(const string& filename);
+	void print() const;
 };
 
 // operator<<

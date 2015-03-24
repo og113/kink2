@@ -28,12 +28,24 @@ Filename h(f());
 cout << h << endl;
 h.Timenumber = "0";
 cout << h << endl;
-Filename p("data/data1.dat");
-cout << p << " " << p.Directory << " " << p.Timenumber << " " << p.ID << " " << p.Suffix << endl;
+Filename p("data/stable/455data1_L_5_Tb_0.8_R_4.2.dat");
+cout << " Extras: " << endl;
+for (unsigned int loop=0; loop<(p.Extras).size(); loop++) {
+	cout << (p.Extras)[loop].first << " " << (p.Extras)[loop].second << endl;
+}
+cout << p << endl;
 FilenameAttributes j;
-Filename k = (string)"data/30thingy.dat";
+Filename k = (string)"data/30thingy_L_5_Tb_0.8.dat";
+Filename l = (string)"data/blahblah_L_5.txt";
+Folder FolderL(l);
+cout << "FolderL =  " << FolderL << endl << endl;
 k.Timenumber = "40";
-Folder folder1(j), folder2(k); // test may die here if not run from the folder tests
+cout << "k = " << k << endl;
+Folder folder1(j); // test may die here if not run from the folder tests
+cout << "folder1 = " << folder1 << endl;
+cout << "folder2 = ";
+Folder folder2(k);
+cout << folder2 << endl;
 folder2.set(k);
 //folder2.update();
 if (folder2.isPresent(p)) cout << "Present" << endl;

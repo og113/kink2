@@ -65,7 +65,14 @@ static void saveVecB (const string& f, const SaveOptions& opts, const vec& v) {
 	Parameters pin = opts.paramsIn, pout = opts.paramsOut;
 	vec vo;
 	if ((pin.N!=pout.N && pout.N!=0) || (pin.Nb!=pout.Nb && pout.Nb!=0)) {
-		vo = interpolate(v,pin,pout);
+		if (opts.vectorType==SaveOptions::realB)
+			vo = interpolateReal(v,pin,pout);
+		else if (opts.vectorType==SaveOptions::complexB)
+			vo = interpolate(v,pin,pout);
+		else {
+			cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+			return;
+		}
 	}
 	else {
 		vo = v;
@@ -97,6 +104,7 @@ static void saveVecB (const string& f, const SaveOptions& opts, const vec& v) {
 			case SaveOptions::complexB:	F << setw(25) << vo(2*j) << setw(25) << vo(2*j+1)  << endl;
 										break;
 			default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+										return;
 										break;
 		}
 	}
@@ -114,7 +122,10 @@ static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
 	Parameters pin = opts.paramsIn, pout = opts.paramsOut;
 	vec vo;
 	if ((pin.N!=pout.N && pout.N!=0) || (pin.NT!=pout.NT && pout.NT!=0)) {
-		vo = interpolate(v,pin,pout);
+		if (SaveOptions::real)
+			vo = interpolateReal(v,pin,pout);
+		else if (SaveOptions::complex)
+			vo = interpolate(v,pin,pout);
 	}
 	else {
 		vo = v;
@@ -372,6 +383,7 @@ void load(const string& f, const SaveOptions& opts, vec& v) {
 			case SaveOptions::coords:	col = 4;
 										break;
 			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+										return;
 										break;
 		}
 	}
@@ -389,6 +401,7 @@ void load(const string& f, const SaveOptions& opts, vec& v) {
 		case SaveOptions::complexB:	vLength = 2*(fileLength-opts.zeroModes);
 									break;
 		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+									return;
 									break;
 	}	
 	vec vf = Eigen::VectorXd::Zero(vLength);
@@ -529,7 +542,7 @@ void load(const string& f, const SaveOptions& opts, mat& m) {
 		if (!line.empty()) {
 			istringstream ss(line);
 			ss >> j >> k >> v;
-			if (j>matLength || k>matLength) cerr << "load error: matrix index > sqrt(fileLength)" << endl;
+			if (j>matLength || k>matLength) cerr << "load error: matrix index(" << j << "," << k << ") > " << (uint)sqrt(fileLength) << endl;
 			m(j,k) = v;
 		}
 	}
@@ -628,19 +641,18 @@ void plot(const string& f, const PlotOptions& opts) {
 		string command1Str = "set term png size 1600,800";
 		string command2Str = "set output \""+output+"\"";
 		string command3Str = "plot \"" + f + "\" using " + columns + " with " + style;
-		//string command4Str = "pause -1";
+		string command4Str = "pause -1";
 		fprintf(gnuplotPipe, "%s \n",command1Str.c_str());
-		fprintf(gnuplotPipe, "%s \n",command2Str.c_str());
+		if (output.compare("gui")!=0) fprintf(gnuplotPipe, "%s \n",command2Str.c_str());
 		fprintf(gnuplotPipe, "%s \n",command3Str.c_str());
-		//fprintf(gnuplotPipe, "%s \n", command4Str.c_str());
+		if (output.compare("gui")==0) fprintf(gnuplotPipe, "%s \n",command4Str.c_str());
 		pclose(gnuplotPipe);
 	}
 	else {
-		string commandStr = "gnuplot -e \"f='" + f + "'\" \"o='" + output + "'\" " + opts.gp \
-					 + "'\" \"s='" + style + "'\" " + opts.gp+ " -persistent";
-		const char * command = commandStr.c_str();
-		FILE * gnuplotPipe = popen (command,"w");
-		fprintf(gnuplotPipe, "%s \n", " ");
+		string commandStr = "gnuplot -e \"inFile='"+f+"'; outFile='"+output+"'; "+" style='"+style+"'\" "+opts.gp;
+		if (output.compare("gui")==0) commandStr += " -persistent";
+		FILE * gnuplotPipe = popen(commandStr.c_str(),"w");
+		fprintf(gnuplotPipe,"%s\n"," ");
 		pclose(gnuplotPipe);
 	}
 	if (opts.printMessage) {

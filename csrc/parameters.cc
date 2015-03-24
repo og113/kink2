@@ -226,8 +226,8 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 	Gamma = exp(-pp.theta);									////////// Gamma
 	
 	params_for_V paramsV, paramsV0;
-	minima.reserve(2);
-	minima0.reserve(2);
+	minima = vector<double>(2,0.0);
+	minima0 = vector<double>(2,0.0);
 	//potential functions
 	if (pp.pot==1) {
 		Vd_local = &V1;
@@ -322,7 +322,8 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 	}
 	else if (pp.pot==3) {
 		mass2 = 1.0;										////////// mass2
-		minima[0] = 0.0, minima[1] = 0.0; 					////////// minima
+		minima[0] = 0.0; minima[1] = 0.0; 					////////// minima
+		minima0 = minima;									////////// minima0
 		R = 10.0;											////////// R
 		action0 = 8.0*pow(pi,2.0)/3.0;						////////// action0
 		L = pp.LoR*R;										////////// L
@@ -364,6 +365,9 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 		- empty constructor
 		- constructor from PrimaryParameters
 		- constructor from PrimaryParameters and SecondaryParameters
+		- copy
+		- constructor from Parameters
+		- operator=
 		- print to shell
 		- set secondary parameters
 		- load
@@ -380,7 +384,7 @@ Parameters::Parameters(const PrimaryParameters& p1): PrimaryParameters(p1) {
 
 // constructor using primary and secondary parameters
 Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2): \
-					PrimaryParameters(p1), SecondaryParameters(p2)	{}			
+					PrimaryParameters(p1), SecondaryParameters(p2)	{}
 
 // print to shell
 void Parameters::print() const {
@@ -517,6 +521,7 @@ bool Parameters::changeParameters (const string& pName, const double& pValue) {
 		- operator<<
 		- save
 		- load
+		- print
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // operator<<
@@ -533,10 +538,16 @@ ostream& operator<<(ostream& os, const Options& o) {
 	os << setw(20) << "maxTimenumberLoad" << setw(20) << o.maxTimenumberLoad << endl;
 	os << setw(20) << "minLoopLoad" << setw(20) << o.minLoopLoad << endl;
 	os << setw(20) << "maxLoopLoad" << setw(20) << o.maxLoopLoad << endl;
+	os << setw(20) << "loopChoice" << setw(20) << o.loopChoice << endl;
 	os << setw(20) << "loopMin" << setw(20) << o.loopMin << endl;
 	os << setw(20) << "loopMax" << setw(20) << o.loopMax << endl;
+<<<<<<< HEAD
 	os << setw(20) << "epsiTb" << setw(20) << o.epsiTb << endl;
 	os << setw(20) << "epsiTheta" << setw(20) << o.epsiTheta << endl;
+=======
+	os << setw(20) << "epsi_Tb" << setw(20) << o.epsi_Tb << endl;
+	os << setw(20) << "epsi_theta" << setw(20) << o.epsi_theta << endl;
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 	os << setw(20) << "loops" << setw(20) << o.loops << endl;
 	os << setw(20) << "printChoice" << setw(20) << o.printChoice << endl;
 	os << endl;
@@ -579,9 +590,24 @@ void Options::load(const string& filename) {
 	is >> dross >> loopChoice;
 	is >> dross >> loopMin;
 	is >> dross >> loopMax;
+<<<<<<< HEAD
 	is >> dross >> epsiTb;
 	is >> dross >> epsiTheta;
+=======
+	is >> dross >> epsi_Tb;
+	is >> dross >> epsi_theta;
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 	is >> dross >> loops;
 	is >> dross >> printChoice;
 	is.close();
+}
+
+// print
+void Options::print() const {
+	printf("%12s%12s%12s%12s%12s%12s%12s%12s%12s%12s\n","alpha","open","zmx","zmt","bds","inF","loopChoice","loopMin","loopMax","loops");
+	printf("%12.1g%12.1g%12s%12s%12s%12s%12s%12.4g%12.4g%12i\n",\
+			alpha,open,zmx.c_str(),zmt.c_str(),\
+			bds.c_str(),inF.c_str(),loopChoice.c_str(),loopMin,loopMax,\
+			loops);
+	printf("\n");
 }

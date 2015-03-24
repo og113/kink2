@@ -31,8 +31,10 @@ CONTENTS
 		- copy
 		- copy constructor
 		- operator=
+
 		- operator<<
 		- operator==
+		- empty
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // pair
@@ -69,11 +71,11 @@ ostream& operator<<(ostream& os, const FilenameAttributes& fa) {
 	os << "ID:         " << fa.ID << endl;
 	os << "Extras:     ";
 	if ((fa.Extras).size()>0) {
-		for (unsigned int l=0; l<(fa.Extras).size(); l++) {
+		for (uint l=0; l<(fa.Extras).size(); l++) {
+			if(l>0) os << "            ";
 			os << (fa.Extras[l]).first << ", " << (fa.Extras[l]).second << endl;
 		}
 	}
-	os << endl;
 	os << "Suffix:     " << fa.Suffix << endl;
 	return os;
 }
@@ -94,6 +96,13 @@ bool operator==(const FilenameAttributes& lhs, const FilenameAttributes& rhs) {
 		if (!ExtraOK) return false;
 	}
 	return true;
+}
+
+bool FilenameAttributes::empty() const {
+	if (Directory.empty() && Timenumber.empty() && ID.empty() && Suffix.empty() && Extras.size()==0)
+		return true;
+	else
+		return false;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -133,8 +142,14 @@ string FolderError::Add::message() const {
 
 // set
 void Filename::set(const string& f) {
+	Directory = "";
+	Timenumber = "";
+	ID = "";
+	Suffix = "";
 	Extras.clear();
 	string temp = f;
+	string firstTwo = temp.substr(0,2);
+	if (firstTwo.compare("./")==0) temp = temp.substr(2);
 	size_t stop;
 	stop = temp.find_last_of("/");
 	if (stop!=string::npos) {
@@ -154,10 +169,7 @@ void Filename::set(const string& f) {
 	if (temp[0]=='_') {
 		cout << temp << endl;
 		temp = temp.substr(1);
-		cout << temp << endl;
 		while (stop!=string::npos && !(temp[0]=='.' && temp.find_last_of(".")==0)) {
-			cout << temp << endl;
-			if (temp[0]=='_') temp = temp.substr(1);
 			stop = temp.find("_");
 			if (stop==string::npos) {
 				FilenameError::Extras e(f);
@@ -168,12 +180,13 @@ void Filename::set(const string& f) {
 			sp.first = temp.substr(0,stop);
 			cout << "sp.first = " << sp.first << endl;
 			temp = temp.substr(stop+1);
-			cout << temp << endl;
-			stop = temp.find_first_of("_.");
+			stop = min(temp.find_first_of("_"),temp.find_last_of("."));
 			sp.second = temp.substr(0,stop);
 			cout << "sp.second = " << sp.second << endl;
 			Extras.push_back(sp);
-			temp = temp.substr(stop);
+			if (stop==string::npos) 	break;
+			else if (temp[stop]=='_') 	temp = temp.substr(stop+1);
+			else 						temp = temp.substr(stop);
 		}
 	}
 	if (stop!=string::npos && temp[0]=='.') {
@@ -400,7 +413,7 @@ ostream& operator<<(ostream& os, const FilenameComparator& fc){
 
 // isPresent(Filename)
 bool Folder::isPresent(const Filename& f) {
-	for (unsigned int l=0; l<Filenames.size(); l++) {
+	for (uint l=0; l<Filenames.size(); l++) {
 		if (f==Filenames[l]) return true;
 	}
 	return false;
@@ -438,7 +451,7 @@ void Folder::order() {
 
 // refresh
 void Folder::refresh() {
-	int systemCall = system("find data/* -type f > data/dataFiles");
+	int systemCall = system("find data/* -type f > dataFiles");
 	if (systemCall==-1) {
 		FolderError::System e;
 		cerr << e;
@@ -446,10 +459,11 @@ void Folder::refresh() {
 	}
 	ifstream is;
 	Filename f;
-    is.open ("data/dataFiles");
+    is.open ("dataFiles");
 	while ( !is.eof() ){
 		is >> f;
-		if (!isPresent(f) && Comparator(f)) Filenames.push_back(f);
+		if (!f.empty())
+			if (!isPresent(f) && Comparator(f)) Filenames.push_back(f);
 	}
     is.close();
     sort();

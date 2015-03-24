@@ -58,8 +58,8 @@ o.bds = "all";
 o.inF = "p";
 o.minTimenumberLoad = "0";
 o.maxTimenumberLoad = "0";
-o.minLoopLoad = 0;
-o.maxLoopLoad = 0;
+o.minLoopLoad = "0";
+o.maxLoopLoad = "0";
 o.loopChoice = "n";
 o.loopMin = 0.0;
 o.loopMax = 0.0;
@@ -68,6 +68,7 @@ o.printChoice = "n";
 
 string str = "tests/data/testParameters_o";
 o.save(str);
+o.print();
 cout << "o: " << endl << o;
 
 return 0;

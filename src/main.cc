@@ -48,6 +48,7 @@ int main(int argc, char** argv)
 
 Options opts;
 opts.load("optionsM");
+opts.print();
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. Folders
@@ -65,8 +66,8 @@ opts.load("optionsM");
 FilenameAttributes fa_low, fa_high;
 fa_low.Timenumber = opts.minTimenumberLoad;
 fa_high.Timenumber = opts.minTimenumberLoad;
-(fa_low.Extras).push_back(StringPair("Loop",opts.minLoopLoad));
-(fa_high.Extras).push_back(StringPair("Loop",opts.maxLoopLoad));
+(fa_low.Extras).push_back(StringPair("loop",opts.minLoopLoad));
+(fa_high.Extras).push_back(StringPair("loop",opts.maxLoopLoad));
 
 // FilenameComparator
 FilenameComparator fc(fa_low,fa_high);
@@ -74,12 +75,12 @@ Folder allFiles(fc);
 
 // pFolder
 if ((opts.inF).compare("p")==0) {
-	fa_low.ID = "tpip";
-	fa_high.ID = "tpip";
+	fa_low.ID = "tp";
+	fa_high.ID = "tp";
 }
 else if ((opts.inF).compare("m")==0) {
-	fa_low.ID = "mainpi";
-	fa_high.ID = "mainpi";
+	fa_low.ID = "mainp";
+	fa_high.ID = "mainp";
 }
 else {
 	cerr << "inF error: " << opts.inF << " not recognised" << endl;
@@ -128,13 +129,35 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. beginning parameter loop
+<<<<<<< HEAD
 		- initializing stepper
+=======
+		- beginning stepper
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 		- defining a time
 		- changing parameters (if required)
 		- copying a verson of parameters with timenumber
 		- printing parameters
 		- declaring checks
 ----------------------------------------------------------------------------------------------------------------------------*/
+
+	StepperOptions step_opts;
+	Point2d point;
+	if ((opts.loopChoice).compare("const")==0 || (opts.loopChoice).compare("constant")==0) {
+		step_opts.epsi_x = opts.epsi_Tb;
+		step_opts.epsi_y = opts.epsi_theta;
+		step_opts.angle = 0.0;
+		step_opts.constant = true;
+		point(psu.Tb,psu.theta);
+	}
+	else {
+		step_opts.epsi_x =  (opts.loopMax - opts.loopMin)/(opts.loops-1.0);;
+		step_opts.epsi_y = 0.0;
+		step_opts.angle = 0.0;
+		step_opts.constant = false;
+		point(opts.loopMin,0.0);
+	}
+	Stepper stepper(step_opts,point);
 	
 	// initializing stepper
 	StepperOptions step_opts;
@@ -171,11 +194,19 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					cout << opts.loopChoice << "changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
+<<<<<<< HEAD
 			else {
+=======
+			else if ((opts.loopChoice).compare("const")!=0 && (opts.loopChoice).compare("constant")!=0){
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
 				if (loop==0 && anythingChanged) {
 					cout << opts.loopChoice << "changed to " << stepper.x() << " on input" << endl;
 				}
+			}
+			else {
+				ps.changeParameters("Tb",stepper.x());
+				ps.changeParameters("theta",stepper.y());
 			}
 		}
 
@@ -1174,7 +1205,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	14. printing output
 		- check messages
 		- stopping clock
+<<<<<<< HEAD
 		- adding data to stepper
+=======
+		- stepping stepper
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 		- printing results to terminal
 		- printing results to file
 		- printing (and plotting if vectors):
@@ -1202,8 +1237,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		time = clock() - time;
 		double realtime = time/1000000.0;
 		
+<<<<<<< HEAD
 		// adding data to stepper
 		stepper.addResult(W);
+=======
+		// stepping stepper
+		stepper.addResult(W);
+		stepper.step();
+>>>>>>> 7d1f4d946e2014f0931f244085a2c31c1f801881
 	
 		// printing results to terminal
 		printf("\n");

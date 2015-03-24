@@ -6,6 +6,10 @@
 #define __MAIN_H_INCLUDED__
 
 #include <complex>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+#include <string>
+#include <utility> // for pair
 #include "check.h"
 #include "error.h"
 #include "fnptrs.h"

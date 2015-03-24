@@ -108,7 +108,7 @@ void numericalModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p)
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // omegasFn
-void omegasFn(const bool& analytic, const mat& modes, const mat& freqs, mat& omega_m1, mat& omega_0, mat& omega_1, mat& omega_2, const Parameters& p) {
+void omegasFn(const bool& analytic, const mat& modes, const vec& freqs, mat& omega_m1, mat& omega_0, mat& omega_1, mat& omega_2, const Parameters& p) {
 	omega_m1 = Eigen::MatrixXd::Zero(p.N,p.N);
 	omega_0 = Eigen::MatrixXd::Zero(p.N,p.N);
 	omega_1 = Eigen::MatrixXd::Zero(p.N,p.N);
@@ -117,7 +117,7 @@ void omegasFn(const bool& analytic, const mat& modes, const mat& freqs, mat& ome
 	for (unsigned int j=0; j<p.N; j++) {
 		for (unsigned int k=0; k<p.N; k++) {
 			for (unsigned int l=0; l<p.N; l++) {
-				if (analytic) djdk = p.a;
+				if (analytic) 	 djdk = p.a;
 				else 			 djdk = sqrt(DxFn(j,p)*DxFn(k,p));
 				omega_m1(j,k) += djdk*pow(freqs(l),-1.0)*modes(j,l)*modes(k,l);
 				omega_0(j,k)  += djdk*modes(j,l)*modes(k,l);

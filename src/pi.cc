@@ -3,7 +3,6 @@
 		program to solve boundary value problem on contour BC, and step out to A and D
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-//#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
 #include <Eigen/Sparse>
 #include <Eigen/Dense>
 #include <vector>
@@ -42,7 +41,7 @@
 		11 - printing early
 		12 - convergence
 		13 - propagating along minkowskian time
-		14 - 
+		14 - printing output
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -54,6 +53,7 @@ int main(int argc, char** argv)
 
 Options opts;
 opts.load("optionsP");
+//opts.print();
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. getting inputs
@@ -64,13 +64,13 @@ opts.load("optionsP");
 // loading inputs
 Parameters psu;
 psu.load("inputsP");
-cout << "input parameters: " << endl;
-psu.print();
-cout << endl;
+//cout << "input parameters: " << endl;
+//psu.print();
+//cout << endl;
 
 // defining timenumber
 string timenumber;
-(argc==2) ? timenumber = argv[1] : timenumber = currentDateTime();
+(argc==2)? timenumber = argv[1] : timenumber = currentDateTime();
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	3. beginning parameter loop
@@ -88,7 +88,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	time = clock();
 	
 	// changing parameters
-	Parameters ps = psu;
+	Parameters ps(psu);
 	if (opts.loops>1) {
 		if ((opts.loopChoice)[0]=='N') {
 			uint pValue = (uint)opts.loopMin + (uint)(opts.loopMax - opts.loopMin)*loop/(opts.loops-1);
@@ -107,7 +107,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	}
 		
 	// copying a version of ps with timenumber
-	Filename paramsRunFile = (string)("./data/"+timenumber+"inputsP_loop_"+numberToString<uint>(loop));
+	Filename paramsRunFile = (string)("data/"+timenumber+"inputsP_loop_"+numberToString<uint>(loop));
 	ps.save(paramsRunFile);
 	
 	//printing timenumber and parameters
@@ -123,11 +123,11 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	Check checkCon("energy conservation",1.0e-2);
 	Check checkLatt("lattice small enough for energy",0.2);
 	Check checkReg("regularisation term",1.0e-2);
-	Check checkDT("time derivative of phi",1.0e-2);
+	Check checkDT("1/(time derivative of phi)",1.0e3);
 	Check checkProfile("phi input calculation",1.0e-5);
 	
 	// do trivial or redundant checks?
-	bool trivialChecks = true;
+	bool trivialChecks = false;
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. assigning potential functions
@@ -188,15 +188,15 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	so_simple.printMessage = false;
 	{
 		Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
-		omegaM1F = (string)"data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
-						+"_L_"+numberToString<double>(ps.L)+".dat";
+		omegaM1F = (string)("data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
+						+"_L_"+numberToString<double>(ps.L)+".dat");
 		Folder omegaM1Folder(omegaM1F);
 		omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
 		omega1F = omegaM1F; 		omega1F.ID = "omega1"; 		Folder omega1Folder(omega1F);
 		omega2F = omegaM1F; 		omega2F.ID = "omega2";	 	Folder omega2Folder(omega2F);
 		modesF = omegaM1F;			modesF.ID = "modes"; 		Folder modesFolder(modesF);
 		freqsF = omegaM1F;			freqsF.ID = "freqs"; 		Folder freqsFolder(freqsF);
-		freqsExpF = omegaM1F;		omegaM1F.ID = "freqsExp";	Folder freqsExpFolder(omegaM1F);
+		freqsExpF = omegaM1F;		freqsExpF.ID = "freqsExp";	Folder freqsExpFolder(freqsExpF);
 		if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()==1 \
 			&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
 			load(omegaM1Folder[0],so_simple,omega_m1);
@@ -231,7 +231,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	double negVal;
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 		if (ps.pot==3) {
-			Filename eigVecFile = "data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";	
+			Filename eigVecFile = (string)("data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat");	
 			load(eigVecFile,so_simple,negVec); // should automatically interpolate
 			negVal = -15.3;
 		}
@@ -266,7 +266,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			eigVecOpts.extras = SaveOptions::coords;
 			eigVecOpts.paramsOut = ps;
 			eigVecOpts.printMessage = false;
-			Parameters pIn = ps;
+			Parameters pIn(ps);
 			pIn.N = stringToNumber<uint>(N_load);
 			pIn.Nb = stringToNumber<uint>(Nb_load);
 			pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
@@ -345,13 +345,36 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		load(phiFile,so_p,p);
 	}
 	else {
-		//finding phi profile between minima
-		uint profileSize = ps.Nb; //more than the minimum
-		vector<double> phiProfile(profileSize);
-		vector<double> rhoProfile(profileSize);
-		double alphaL = opts.alpha, alphaR = opts.alpha;
-
-		if (ps.pot!=3) {
+		if (ps.pot==3) {
+			vec tempPhi, temp2Phi;
+			Filename pi3GuessFile = (string)("data/sphaleronPi_L_"+numberToString<double>(ps.L)\
+										+"_Tb_"+numberToString<double>(ps.Tb)+".dat");
+			so_simple.column = 4;
+			Parameters ps_blank;
+			so_simple.paramsIn = ps_blank;
+			so_simple.paramsOut = ps_blank;
+			load(pi3GuessFile,so_simple,tempPhi);
+			so_simple.paramsIn = ps;
+			so_simple.paramsOut = ps;
+			so_simple.column = 0;
+			uint length = tempPhi.size();
+			length = (uint)(sqrt(length));
+			ps_blank.N = length;
+			ps_blank.Nb = length;
+			ps_blank.NT = 10000; // same fudge as before, so that it realises that the vector is just on BC
+			temp2Phi = interpolateReal(tempPhi,ps_blank,ps);
+			for (uint j=0; j<ps.N*ps.Nb; j++) {
+				p(2*j) = temp2Phi(j);
+				p(2*j+1) = 0.0;
+			}
+			p(2*ps.Nb*ps.N) = 0.5; // lagrange multiplier for zero mode
+		}
+		else {
+			//finding phi profile between minima
+			uint profileSize = ps.Nb; //more than the minimum
+			vector<double> phiProfile(profileSize);
+			vector<double> rhoProfile(profileSize);
+			double alphaL = opts.alpha, alphaR = opts.alpha;
 			if (ps.pot==2) {
 				double phiL = ps.minima0[1]-1.0e-2;
 				double phiR = ps.minima0[0]+1.0e-2;
@@ -375,33 +398,6 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				alphaL = rhoProfile[0];
 				alphaR = rhoProfile.back();
 			}
-		}
-		
-		if (ps.pot==3) {
-			vec tempPhi, temp2Phi;
-			Filename pi3GuessFile = (string)("data/pi3Guess_L_"+numberToString<double>(ps.L)\
-										+"_Tb_"+numberToString<double>(ps.Tb)+".dat");
-			so_simple.column = 4;
-			Parameters ps_blank;
-			so_simple.paramsIn = ps_blank;
-			so_simple.paramsOut = ps_blank;
-			load(pi3GuessFile,so_simple,tempPhi);
-			so_simple.paramsIn = ps;
-			so_simple.paramsOut = ps;
-			so_simple.column = 0;
-			uint length = tempPhi.size();
-			length = (uint)(sqrt(length));
-			ps_blank.N = length;
-			ps_blank.Nb = length;
-			ps_blank.NT = 10000; // same fudge as before, so that it realises that the vector is just on BC
-			temp2Phi = interpolateReal(tempPhi,ps_blank,ps);
-			for (uint j=0; j<ps.N*ps.Nb; j++) {
-				p(2*j) = temp2Phi(j);
-				p(2*j+1) = 0.0;
-			}
-			p(2*ps.Nb*ps.N) = 0.5; // lagrange multiplier for zero mode
-		}
-		else {
 			if (ps.R<opts.alpha) {
 				cerr << "R is too small. Not possible to give thinwall input. It should be more that " << opts.alpha;
 				return 1;
@@ -537,7 +533,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			comp Vtrial = 0.0, Vcontrol = 0.0;
 			for (uint j=0; j<ps.N; j++) {
 				double r = ps.r0 + j*ps.a;
-				paramsV  = {r, 0.0};
+				paramsV.epsi = r;
+				V.setParams(paramsV);
 				Vcontrol += pow(p(2*j*ps.Nb),2.0)/2.0 - pow(p(2*j*ps.Nb),4.0)/4.0/pow(r,2.0);
 				Vtrial += V(p(2*j*ps.Nb));
 			}
@@ -558,7 +555,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		for (lint j = 0; j < ps.N*ps.Nb; j++) {		
 			uint t = intCoord(j,0,ps.Nb); //coordinates
 			uint x = intCoord(j,1,ps.Nb);
-			lint neighPosX = neigh(j,1,1,ps.Nb,ps.N,ps.pot);
+			long int neighPosX = neigh(j,1,1,ps.Nb,ps.N,ps.pot);
 			
 			if (ps.pot==3) {
 					paramsV.epsi = ps.r0+x*ps.a;
@@ -590,26 +587,31 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				kineticS +=	csi*ps.b*pow(Cp(neighPosX),2.0)/ps.a/2.0;
 			}
 			else if (t==(ps.Nb-1)) {
-				comp Dt = -ps.b*ii/2.0;
-				erg(t+ps.Na) += pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
-				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0; //n.b. no contribution from time derivative term at the final time boundary	
-				pot_0 += Dt*ps.a*V(Cp(j));
-				pot_r += Dt*ps.a*Vr(Cp(j));
+				comp Dt(0.0,-ps.b/2.0);
+				if (neighPosX!=-1) {
+					erg(t+ps.Na) 		+= pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+					kineticS			+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				}
+				erg(t+ps.Na) 			+= ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
+				pot_0 					+= Dt*ps.a*V(Cp(j));
+				pot_r 					+= Dt*ps.a*Vr(Cp(j));				
 				
-				
-				DDS.insert(2*j,2*j) = 1.0/ps.b; //zero time derivative
+				DDS.insert(2*j,2*j) 	= 1.0/ps.b; //zero time derivative
 				DDS.insert(2*j,2*(j-1)) = -1.0/ps.b;
 				DDS.insert(2*j+1,2*j+1) = 1.0; //zero imaginary part
 			}
 			else if (t==0) {
-				comp dt = -ps.b*ii;
-				comp Dt = -ps.b*ii/2.0;
+				comp dt(0.0,-ps.b);
+				comp Dt(0.0,-ps.b/2.0);
 				kineticT += ps.a*pow(Cp(j+1)-Cp(j),2.0)/dt/2.0;
-				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				if (neighPosX!=-1) {
+					kineticS 		+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+					erg(t+ps.Na) 	+= pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				}
+				
 				pot_0 += Dt*ps.a*V(Cp(j));
 				pot_r += Dt*ps.a*Vr(Cp(j));
-				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0\
-								 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
+				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
 				
 				if ((opts.inF).compare("b")==0) {
 					DDS.insert(2*j,2*j) = 1.0; //zero change (initial input satisfies b.c.s)
@@ -624,14 +626,16 @@ for (uint loop=0; loop<opts.loops; loop++) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//bulk
 			else {
-				comp dt = -ps.b*ii;
-				comp Dt = -ps.b*ii;
+				comp dt(0.0,-ps.b);
+				comp Dt(0.0,-ps.b);
 				kineticT += ps.a*pow(Cp(j+1)-Cp(j),2.0)/dt/2.0;
-				kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				if (neighPosX!=-1) {
+					kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+					erg(t+ps.Na) 	+= pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
+				}
 				pot_0 += Dt*ps.a*V(Cp(j));
 				pot_r += Dt*ps.a*Vr(Cp(j));
-				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0\
-							 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
+				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
 				
                 for (uint k=0; k<2*2; k++) {
                     int sign = pow(-1,k);
@@ -670,6 +674,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
         if (ps.pot==3) {
         	DDS.insert(2*ps.N*ps.Nb,2*ps.N*ps.Nb) = 1.0;	// redundant lagrange multiplier
         	dtTest /= (double)(ps.Nb-1.0);
+        	dtTest = 1.0/dtTest;
         	action 	*= 4.0*pi;
         	erg 	*= 4.0*pi;
         }
@@ -1030,6 +1035,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	PlotOptions po_simple;
 	po_simple.column = 1;
 	po_simple.style = "linespoints";
+	po_simple.printMessage = true;
 
 	//printing output phi on Euclidean time part
 	so_p.printMessage = true;
@@ -1040,12 +1046,13 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	//printing output minusDS
 	pFile.ID = "minudDS";
 	save(pFile,so_p,minusDS);
-	plotFile = pFile;
-	plotFile.Suffix = ".png";
-	po_p.output = plotFile;
-	plot(pFile,po_p);
+	//plotFile = pFile;
+	//plotFile.Suffix = ".png";
+	//po_p.output = plotFile;
+	//plot(pFile,po_p);
 			
 	//printing output DDS
+	so_simple.printMessage = true;
 	pFile.ID = "DDS";
 	save(pFile,so_simple,DDS);
 	
