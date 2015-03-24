@@ -16,6 +16,7 @@
 #include "potentials.h"
 #include "print.h"
 #include "simple.h"
+#include "stepper.h"
 
 using namespace std;
 

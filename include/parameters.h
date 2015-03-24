@@ -176,6 +176,8 @@ struct Options {
 	string loopChoice;
 	double loopMin;
 	double loopMax;
+	double epsiTb;
+	double epsiTheta;
 	uint loops;
 	string printChoice;
 	void save(const string& filename) const;

@@ -85,6 +85,7 @@ printf("%8s%8s%8s%8s%8s%8s%8s\n","N","Nt","r1","r0","t1","t0","amp");
 printf("%8i%8i%8g%8g%8g%8g%8g\n",N,Nt,r1,r0,t1,t0,amp);
 printf("\n");
 
+ps_run.pot = 3;
 ps_run.N = N;
 ps_run.Nb = Nt;
 ps_run.r0 = r0;
@@ -140,10 +141,14 @@ for (unsigned int k=0; k<Nt; k++) {
 /* ---------------------------------------------------------------------------------------------
 	6. printing result
 ---------------------------------------------------------------------------------------------*/
-string datOut = (string)("data/stable/sphaleron_pi_L_"+numberToString<double>(r1)+"_Tb_"+numberToString<double>(t1)+".dat");
+string datOut = (string)("data/stable/sphaleronPi_L_"+numberToString<double>(r1)+"_Tb_"+numberToString<double>(t1)+".dat");
 Filename pngOut = datOut;
+cout << pngOut.Directory << " " << (pngOut.Extras[0]).first << " " << (pngOut.Extras[0]).second << " " << (pngOut.Extras[1]).first << endl;
+cout << pngOut << endl;
 pngOut.Suffix = ".png";
+cout << pngOut << endl;
 pngOut.Directory = "pics";
+cout << pngOut << endl;
 
 Parameters ps_print;
 ps_print = ps_run;

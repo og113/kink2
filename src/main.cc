@@ -128,12 +128,32 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. beginning parameter loop
+		- initializing stepper
 		- defining a time
 		- changing parameters (if required)
 		- copying a verson of parameters with timenumber
 		- printing parameters
 		- declaring checks
 ----------------------------------------------------------------------------------------------------------------------------*/
+	
+	// initializing stepper
+	StepperOptions step_opts;
+	Point2d point;
+	if ((opts.loopChoice).compare("const")==0) {
+		step_opts.constant = true;
+		step_opts.epsi_x = opts.epsiTb;
+		step_opts.epsi_y = opts.epsiTheta;
+		step_opts.angle = 0.0;
+		point(psu.Tb,psu.theta);
+	}
+	else {
+		step_opts.constant = false;
+		step_opts.epsi_x = (opts.loopMax - opts.loopMin)/(opts.loops-1.0);
+		step_opts.epsi_y = 0.0;
+		step_opts.angle = 0.0;
+		point(opts.loopMin,0.0);
+	}
+	Stepper stepper(step_opts,point);
 	
 	for (uint loop=0; loop<opts.loops; loop++) {
 	
@@ -143,19 +163,18 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	
 		// changing parameters
 		Parameters ps = psu;
+		stepper.step();
 		if (opts.loops>1) {
 			if ((opts.loopChoice)[0]=='N') {
-				uint pValue = (uint)opts.loopMin + (uint)(opts.loopMax - opts.loopMin)*loop/(opts.loops-1);
-				bool anythingChanged = ps.changeParameters(opts.loopChoice,pValue);
+				bool anythingChanged = ps.changeParameters(opts.loopChoice,(uint)stepper.x());
 				if (loop==0 && anythingChanged) {
-					cout << opts.loopChoice << "changed to " << pValue << " on input" << endl;
+					cout << opts.loopChoice << "changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
 			else {
-				double pValue = opts.loopMin + (opts.loopMax - opts.loopMin)*loop/(opts.loops-1.0);
-				bool anythingChanged = ps.changeParameters(opts.loopChoice,pValue);
+				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
 				if (loop==0 && anythingChanged) {
-					cout << opts.loopChoice << "changed to " << pValue << " on input" << endl;
+					cout << opts.loopChoice << "changed to " << stepper.x() << " on input" << endl;
 				}
 			}
 		}
@@ -1155,6 +1174,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	14. printing output
 		- check messages
 		- stopping clock
+		- adding data to stepper
 		- printing results to terminal
 		- printing results to file
 		- printing (and plotting if vectors):
@@ -1181,12 +1201,15 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//stopping clock
 		time = clock() - time;
 		double realtime = time/1000000.0;
+		
+		// adding data to stepper
+		stepper.addResult(W);
 	
 		// printing results to terminal
 		printf("\n");
 		printf("%8s%8s%8s%8s%8s%8s%8s%8s%14s%14s%14s%14s\n","runs","time","ps.N","NT","L","Tb","dE","theta","Num","E","im(action)","W");
 		printf("%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
-				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,Num,E,imag(action),real(W));
+				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,Num,E,imag(action),W);
 		printf("\n");
 		printf("%60s\n","%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 
@@ -1195,7 +1218,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		actionfile = fopen("./data/mainAction.dat","a");
 		fprintf(actionfile,"%12s%6i%6i%8g%8g%8g%8g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g\n",\
 					timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,imag(action)\
-					,real(W),checkSoln.back(),checkLin.back(),checkTrue.back());
+					,W,checkSoln.back(),checkLin.back(),checkTrue.back());
 		fclose(actionfile);
 	
 		// printing messages for saved files

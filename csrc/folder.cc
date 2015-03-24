@@ -152,21 +152,29 @@ void Filename::set(const string& f) {
 	 temp = temp.substr(stop);
 	}
 	if (temp[0]=='_') {
+		cout << temp << endl;
 		temp = temp.substr(1);
-		while (stop!=string::npos && temp[stop]!='.') {
+		cout << temp << endl;
+		while (stop!=string::npos && !(temp[0]=='.' && temp.find_last_of(".")==0)) {
+			cout << temp << endl;
+			if (temp[0]=='_') temp = temp.substr(1);
 			stop = temp.find("_");
 			if (stop==string::npos) {
 				FilenameError::Extras e(f);
 				cerr << e;
+				return;
 			}
 			StringPair sp;
 			sp.first = temp.substr(0,stop);
+			cout << "sp.first = " << sp.first << endl;
 			temp = temp.substr(stop+1);
+			cout << temp << endl;
 			stop = temp.find_first_of("_.");
 			sp.second = temp.substr(0,stop);
+			cout << "sp.second = " << sp.second << endl;
 			Extras.push_back(sp);
+			temp = temp.substr(stop);
 		}
-		temp = temp.substr(stop);
 	}
 	if (stop!=string::npos && temp[0]=='.') {
 		Suffix = temp;
@@ -434,6 +442,7 @@ void Folder::refresh() {
 	if (systemCall==-1) {
 		FolderError::System e;
 		cerr << e;
+		return;
 	}
 	ifstream is;
 	Filename f;
@@ -460,6 +469,7 @@ void Folder::add(const Filename& f) {
 	else {
 		FolderError::Add e(f());
 		cerr << e;
+		return;
 	}
 }
 

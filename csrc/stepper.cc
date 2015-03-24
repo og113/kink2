@@ -124,7 +124,7 @@ uint Stepper::size() const {
 }
 
 // stepVariables
-void Stepper::stepVariables() {
+void Stepper::step() {
 	if (size()==0) {
 		cerr << "Stepper error: cannot step before giving initial step" << endl;
 		return;
