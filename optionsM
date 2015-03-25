@@ -5,14 +5,16 @@ zmx                 nC2
 zmt                 nC2                 
 bds                 all                 
 inF                 p                   
-minTimenumberLoad   150323195236                   
-maxTimenumberLoad   150323195236                   
+minTimenumberLoad   150325173545        
+maxTimenumberLoad   150325173545        
 minLoopLoad         0                   
-maxLoopLoad         0    
-loopChoice          n               
+maxLoopLoad         0                   
+loopChoice          n                   
 loopMin             0                   
 loopMax             0                   
-epsi_Tb             0.0         
-epsi_theta          0.0         
+epsiTb              0                   
+epsiTheta           0                   
 loops               1                   
 printChoice         p                   
+
+

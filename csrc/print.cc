@@ -178,9 +178,9 @@ static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
 										break;
 		}
 		switch(opts.vectorType) {
-			case SaveOptions::realB:	F << setw(25) << vo(j) << endl;
+			case SaveOptions::real:		F << setw(25) << vo(j) << endl;
 										break;
-			case SaveOptions::complexB:	F << setw(25) << vo(2*j) << setw(25) << vo(2*j+1)  << endl;
+			case SaveOptions::complex:	F << setw(25) << vo(2*j) << setw(25) << vo(2*j+1)  << endl;
 										break;
 			default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
 										break;
@@ -371,7 +371,7 @@ void save(const string& f, const SaveOptions& opts, const mat& m) {
 	F.precision(16);
 	for (uint j=0; j<m.rows(); j++) {
 		for (uint k=0; k<m.cols(); k++) {
-			if (opts.extras==saveOptions::loc)
+			if (opts.extras==SaveOptions::loc)
 				F << setw(25) << j << setw(25) << k;
 			F << setw(25) << m(j,k) << endl;
 		}
@@ -408,7 +408,7 @@ void save(const string& f, const SaveOptions& opts, const spMat& m) {
 	F.precision(16);
 	for (int l=0; l<m.outerSize(); ++l) {
 		for (Eigen::SparseMatrix<double>::InnerIterator it(m,l); it; ++it) {
-			if (opts.extras==saveOptions::loc)
+			if (opts.extras==SaveOptions::loc)
 				F << setw(25) << it.row()+1 << setw(25) << it.col()+1;
 			F << setw(25) << it.value() << endl;
 		}
@@ -590,12 +590,12 @@ void load(const string& f, const SaveOptions& opts, mat& m) {
 	uint rowsF = countLines(f), rows;
 	uint columnsF = countColumns(f), columns;
 	if (opts.extras==SaveOptions::loc && columnsF==3) {
-		rows = (uint)sqrt(columns); // this option could certainly be improved to allow for non-square matrices if required
-		columns = (uint)sqrt(columns);
+		rows = (uint)sqrt(rowsF); // this option could certainly be improved to allow for non-square matrices if required
+		columns = (uint)sqrt(rowsF);
 	}
 	else if (opts.extras==SaveOptions::none && columnsF==1) {
-		rows = (uint)sqrt(columns);
-		columns = (uint)sqrt(columns);
+		rows = (uint)sqrt(rowsF);
+		columns = (uint)sqrt(rowsF);
 	}
 	else if (opts.extras==SaveOptions::none) {
 		rows = rowsF;
@@ -623,7 +623,7 @@ void load(const string& f, const SaveOptions& opts, mat& m) {
 			else if (opts.extras==SaveOptions::none && columnsF==1) {
 				m(j,k) = v;
 				k++;
-				if (k==(columns-1)) {
+				if (k==columns) {
 					k = 0;
 					j++;
 				}
@@ -632,7 +632,7 @@ void load(const string& f, const SaveOptions& opts, mat& m) {
 				while (ss >> v) {
 					m(j,k) = v;
 					k++;
-					if (k==(columns-1)) {
+					if (k==columns) {
 						k = 0;
 						j++;
 					}
@@ -727,19 +727,24 @@ void plot(const string& f, const PlotOptions& opts) {
 	string style = ((opts.style).empty()? "linespoints": opts.style);
 	string output = ((opts.output).empty()? "pics/pic.png": opts.output);
 	uint col = (opts.column==0? 1: opts.column);
-	string columns = (opts.column2==0? numberToString<uint>(col): (numberToString<uint>(col)+":"+numberToString<uint>(opts.column2)));
+	string columns1 = (opts.column2==0? numberToString<uint>(col): (numberToString<uint>(col)+":"+numberToString<uint>(opts.column2)));
+	string columns2 = (opts.column3==0? "": (numberToString<uint>(col)+":"+numberToString<uint>(opts.column3)));
 	if ((opts.gp).empty()) {		
 		string commandOpenStr = "gnuplot -persistent";
 		const char * commandOpen = commandOpenStr.c_str();
 		FILE * gnuplotPipe = popen (commandOpen,"w");
 		string command1Str = "set term png size 1600,800";
 		string command2Str = "set output \""+output+"\"";
-		string command3Str = "plot \"" + f + "\" using " + columns + " with " + style;
+		string command3Str = "plot \"" + f + "\" using " + columns1 + " with " + style;
+		if (!columns2.empty()) command3Str += ", \"" + f + "\" using " + columns2 + " with " + style;
 		string command4Str = "pause -1";
-		fprintf(gnuplotPipe, "%s \n",command1Str.c_str());
-		if (output.compare("gui")!=0) fprintf(gnuplotPipe, "%s \n",command2Str.c_str());
+		if (output.compare("gui")!=0) {
+			fprintf(gnuplotPipe, "%s \n",command1Str.c_str());
+			fprintf(gnuplotPipe, "%s \n",command2Str.c_str());
+		}
 		fprintf(gnuplotPipe, "%s \n",command3Str.c_str());
-		if (output.compare("gui")==0) fprintf(gnuplotPipe, "%s \n",command4Str.c_str());
+		if (output.compare("gui")==0)
+			fprintf(gnuplotPipe, "%s \n",command4Str.c_str());
 		pclose(gnuplotPipe);
 	}
 	else {

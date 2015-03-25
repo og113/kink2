@@ -112,9 +112,11 @@ struct PlotOptions {
 	string gp;
 	uint column;
 	uint column2;
+	uint column3;
 	string style;
 	string output;
 	bool printMessage;
+	vector<string> commands;
 };
 
 // plot

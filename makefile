@@ -55,13 +55,25 @@ sphaleron: $(ODIR)/sphaleron.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named sphaleron has been compiled
 	
-sphaleron_pi: $(ODIR)/sphaleron_pi.o $(COMMONOBJS)
+sphaleronPi: $(ODIR)/sphaleronPi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named sphaleron_pi has been compiled
+	@echo Simple compiler named sphaleronPi has been compiled
+	
+piEvolve: $(ODIR)/piEvolve.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named piEvolve has been compiled
 	
 plot: $(ODIR)/plot.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named plot has been compiled
+	
+analysis: $(ODIR)/analysis.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named analysis has been compiled
+	
+changeInputs: $(ODIR)/changeInputs.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named changeInputs has been compiled
 	
 #------------------------------------------------------------------------------------------------------------------------
 	
@@ -93,6 +105,7 @@ clean:
 	rm -f $(TSDIR)/*.o
 	rm -f *~ core
 	rm -f $(HDIR)/*~
+	rm -f data/temp/*
 	rm -f $(TSDIR)/testFolder
 	rm -f $(TSDIR)/testGsl_extras
 	rm -f $(TSDIR)/testLattice

@@ -167,7 +167,6 @@ void Filename::set(const string& f) {
 	 temp = temp.substr(stop);
 	}
 	if (temp[0]=='_') {
-		cout << temp << endl;
 		temp = temp.substr(1);
 		while (stop!=string::npos && !(temp[0]=='.' && temp.find_last_of(".")==0)) {
 			stop = temp.find("_");
@@ -178,11 +177,9 @@ void Filename::set(const string& f) {
 			}
 			StringPair sp;
 			sp.first = temp.substr(0,stop);
-			cout << "sp.first = " << sp.first << endl;
 			temp = temp.substr(stop+1);
 			stop = min(temp.find_first_of("_"),temp.find_last_of("."));
 			sp.second = temp.substr(0,stop);
-			cout << "sp.second = " << sp.second << endl;
 			Extras.push_back(sp);
 			if (stop==string::npos) 	break;
 			else if (temp[stop]=='_') 	temp = temp.substr(stop+1);

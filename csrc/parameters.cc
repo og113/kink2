@@ -518,11 +518,108 @@ bool Parameters::changeParameters (const string& pName, const double& pValue) {
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	5. Options
+		- changeOptions
 		- operator<<
 		- save
 		- load
 		- print
 -------------------------------------------------------------------------------------------------------------------------*/
+
+// changeOptions double
+bool Options::changeOptions (const string& pName, const double& pValue) {
+	bool anythingChanged = false;
+	if (pName.compare("alpha")==0) {
+		if (absDiff(alpha,pValue)>MIN_NUMBER) anythingChanged = true;
+		alpha = pValue;
+	}
+	else if (pName.compare("open")==0) {
+		if (absDiff(open,pValue)>MIN_NUMBER) anythingChanged = true;
+		open = pValue;
+	}
+	else if (pName.compare("amp")==0) {
+		if (absDiff(amp,pValue)>MIN_NUMBER) anythingChanged = true;
+		amp = pValue;
+	}
+	else if (pName.compare("loopMin")==0) {
+		if (absDiff(loopMin,pValue)>MIN_NUMBER) anythingChanged = true;
+		loopMin = pValue;
+	}
+	else if (pName.compare("loopMax")==0) {
+		if (absDiff(loopMax,pValue)>MIN_NUMBER) anythingChanged = true;
+		loopMax = pValue;
+	}
+	else if (pName.compare("epsiTb")==0) {
+		if (absDiff(epsiTb,pValue)>MIN_NUMBER) anythingChanged = true;
+		epsiTb = pValue;
+	}
+	else if (pName.compare("epsiTheta")==0) {
+		if (absDiff(epsiTheta,pValue)>MIN_NUMBER) anythingChanged = true;
+		epsiTheta = pValue;
+	}
+	else
+		cerr << "changeOptions error: " << pName << " not understood" << endl;
+	return anythingChanged;
+}
+
+// changeOptions uint
+bool Options::changeOptions (const string& pName, const uint& pValue) {
+	bool anythingChanged = false;
+	if (pName.compare("loops")==0) {
+		if ((int)(loops-pValue)!=0) anythingChanged = true;
+		loops = pValue;
+	}
+	else
+		cerr << "changeOptions error: " << pName << " not understood" << endl;
+	return anythingChanged;
+}
+
+// changeOptions string
+bool Options::changeOptions (const string& pName, const string& pValue) {
+	bool anythingChanged = false;
+	if (pName.compare("zmx")==0) {
+		if (zmx.compare(pValue)!=0) anythingChanged = true;
+		zmx = pValue;
+	}
+	else if (pName.compare("zmt")==0) {
+		if (zmx.compare(pValue)!=0) anythingChanged = true;
+		zmt = pValue;
+	}
+	else if (pName.compare("bds")==0) {
+		if (bds.compare(pValue)!=0) anythingChanged = true;
+		bds = pValue;
+	}
+	else if (pName.compare("inF")==0) {
+		if (inF.compare(pValue)!=0) anythingChanged = true;
+		inF = pValue;
+	}
+	else if (pName.compare("minTimenumberLoad")==0) {
+		if (minTimenumberLoad.compare(pValue)!=0) anythingChanged = true;
+		minTimenumberLoad = pValue;
+	}
+	else if (pName.compare("maxTimenumberLoad")==0) {
+		if (maxTimenumberLoad.compare(pValue)!=0) anythingChanged = true;
+		maxTimenumberLoad = pValue;
+	}
+	else if (pName.compare("minLoopLoad")==0) {
+		if (minLoopLoad.compare(pValue)!=0) anythingChanged = true;
+		minLoopLoad = pValue;
+	}
+	else if (pName.compare("maxLoopLoad")==0) {
+		if (maxLoopLoad.compare(pValue)!=0) anythingChanged = true;
+		maxLoopLoad = pValue;
+	}
+	else if (pName.compare("loopChoice")==0) {
+		if (loopChoice.compare(pValue)!=0) anythingChanged = true;
+		loopChoice = pValue;
+	}
+	else if (pName.compare("printChoice")==0) {
+		if (printChoice.compare(pValue)!=0) anythingChanged = true;
+		printChoice = pValue;
+	}
+	else
+		cerr << "changeOptions error: " << pName << " not understood" << endl;
+	return anythingChanged;
+}
 
 // operator<<
 ostream& operator<<(ostream& os, const Options& o) {

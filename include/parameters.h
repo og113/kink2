@@ -180,6 +180,9 @@ struct Options {
 	double epsiTheta;
 	uint loops;
 	string printChoice;
+	bool changeOptions (const string& pName, const double& pValue);
+	bool changeOptions (const string& pName, const uint& pValue);
+	bool changeOptions (const string& pName, const string& pValue);
 	void save(const string& filename) const;
 	void load(const string& filename);
 	void print() const;
