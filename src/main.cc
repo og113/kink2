@@ -295,7 +295,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		SaveOptions so_simple;
 		so_simple.paramsIn = ps; so_simple.paramsOut = ps;
 		so_simple.vectorType = SaveOptions::simple;
-		so_simple.extras = SaveOptions::none;
+		so_simple.extras = SaveOptions::loc;
 		so_simple.printMessage = false;
 		{
 			Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
@@ -307,7 +307,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			omega2F = omegaM1F; 		omega2F.ID = "omega2";	 	Folder omega2Folder(omega2F);
 			modesF = omegaM1F;			modesF.ID = "modes"; 		Folder modesFolder(modesF);
 			freqsF = omegaM1F;			freqsF.ID = "freqs"; 		Folder freqsFolder(freqsF);
-			freqsExpF = omegaM1F;		omegaM1F.ID = "freqsExp";	Folder freqsExpFolder(omegaM1F);
+			freqsExpF = omegaM1F;		freqsExpF.ID = "freqsExp";	Folder freqsExpFolder(freqsExpF);
 			if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()==1 \
 				&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
 				load(omegaM1Folder[0],so_simple,omega_m1);

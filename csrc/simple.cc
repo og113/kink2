@@ -21,7 +21,7 @@ CONTENTS
 	3 - factorial
 	4 - currentDateTime
 	5 - copyFile
-	6 - countLines
+	6 - countLines, countColumns
 	7 - smallestLoc
 	8 - explicit instantiation
 -------------------------------------------------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ void copyFile(const string & inputFile, const string & outputFile) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	6. countLines
+	6. countLines, countColumns
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // count lines
@@ -167,6 +167,29 @@ uint countLines(const string & file_to_count) {
 		getline(fin,line);
 		if(line.empty()) continue;
 		counter++;
+	}		
+	fin.close();
+    return counter;
+}
+
+// countColumns
+uint countColumns(const string & file_to_count) {
+	ifstream fin;
+	fin.open(file_to_count.c_str());
+	if (!fin.good()) cerr << "countRows error: " << file_to_count << " not opened properly." << endl;
+	string line;
+	unsigned int counter = 0;
+	while(!fin.eof()) {
+		getline(fin,line);
+		if(line.empty()) continue;
+		else {
+			stringstream ss(line);
+			string temp;
+			while (ss >> temp) {
+				counter++;
+			}
+			break;
+		}
 	}		
 	fin.close();
     return counter;

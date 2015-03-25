@@ -63,15 +63,15 @@ static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v
 }
 
 // save vec - simpleVecAppend
-void saveVecSimpleAppend(const string& f, const SaveOptions& opts, const vec& v) {
+static void saveVecSimpleAppend(const string& f, const SaveOptions& opts, const vec& v) {
 	ifstream is;
-	is.open((printFile).c_str(),ios::in);
+	is.open(f.c_str(),ios::in);
 	ofstream os;
 	os.open("data/temp",ios::out);
 	os.precision(16);
 	os << left;
 	unsigned int lengthOs = v.size();
-	unsigned int lengthIs = countLines(printFile);
+	unsigned int lengthIs = countLines(f);
 	if (lengthOs!=lengthIs)
 		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
 	else {
@@ -83,7 +83,7 @@ void saveVecSimpleAppend(const string& f, const SaveOptions& opts, const vec& v)
 	}
 	is.close();
 	os.close();
-	copyFile("data/temp",printFile);
+	copyFile("data/temp",f);
 }	
 
 // save vec - saveVecB
@@ -208,7 +208,7 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 									break;
 		case SaveOptions::complexB:	saveVecB(f,opts,v);
 									break;
-		case SaveOptions::append	saveVecSimpleAppend(f,opts,v);
+		case SaveOptions::append:	saveVecSimpleAppend(f,opts,v);
 									break;
 		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
 									break;
@@ -233,15 +233,15 @@ static void savecVecSimple(const string& f, const SaveOptions& opts, const cVec&
 }
 
 // save cVec - simplecVecAppend
-void savecVecSimpleAppend(const string& f, const SaveOptions& opts, const cVec& v) {
+static void savecVecSimpleAppend(const string& f, const SaveOptions& opts, const cVec& v) {
 	ifstream is;
-	is.open((printFile).c_str(),ios::in);
+	is.open(f.c_str(),ios::in);
 	ofstream os;
 	os.open("data/temp",ios::out);
 	os.precision(16);
 	os << left;
 	unsigned int lengthOs = v.size();
-	unsigned int lengthIs = countLines(printFile);
+	unsigned int lengthIs = countLines(f);
 	if (lengthOs!=lengthIs)
 		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
 	else {
@@ -253,7 +253,7 @@ void savecVecSimpleAppend(const string& f, const SaveOptions& opts, const cVec& 
 	}
 	is.close();
 	os.close();
-	copyFile("data/temp",printFile);
+	copyFile("data/temp",f);
 }	
 
 // save cVec - saveVecB
@@ -371,7 +371,8 @@ void save(const string& f, const SaveOptions& opts, const mat& m) {
 	F.precision(16);
 	for (uint j=0; j<m.rows(); j++) {
 		for (uint k=0; k<m.cols(); k++) {
-			F << setw(25) << j << setw(25) << k;
+			if (opts.extras==saveOptions::loc)
+				F << setw(25) << j << setw(25) << k;
 			F << setw(25) << m(j,k) << endl;
 		}
 	}
@@ -407,7 +408,9 @@ void save(const string& f, const SaveOptions& opts, const spMat& m) {
 	F.precision(16);
 	for (int l=0; l<m.outerSize(); ++l) {
 		for (Eigen::SparseMatrix<double>::InnerIterator it(m,l); it; ++it) {
-			F << setw(25) << it.row()+1 << setw(25) << it.col()+1 << setw(25) << it.value() << endl;
+			if (opts.extras==saveOptions::loc)
+				F << setw(25) << it.row()+1 << setw(25) << it.col()+1;
+			F << setw(25) << it.value() << endl;
 		}
 	}
 	F.close();
@@ -584,20 +587,57 @@ void load(const string& f, const SaveOptions& opts, cVec& v) {
 
 // load mat - assumes square matrix
 void load(const string& f, const SaveOptions& opts, mat& m) {
-	uint fileLength = countLines(f);
-	uint matLength = (uint)sqrt(fileLength);
+	uint rowsF = countLines(f), rows;
+	uint columnsF = countColumns(f), columns;
+	if (opts.extras==SaveOptions::loc && columnsF==3) {
+		rows = (uint)sqrt(columns); // this option could certainly be improved to allow for non-square matrices if required
+		columns = (uint)sqrt(columns);
+	}
+	else if (opts.extras==SaveOptions::none && columnsF==1) {
+		rows = (uint)sqrt(columns);
+		columns = (uint)sqrt(columns);
+	}
+	else if (opts.extras==SaveOptions::none) {
+		rows = rowsF;
+		columns = columnsF;
+	}
+	else {
+		cerr << "SaveOptions::extras choice not allowed: " << opts.extras << endl;
+		return;
+	}
+	m = Eigen::MatrixXd::Zero(rows,columns);
 	fstream F;
 	F.open(f.c_str(), ios::in);
 	string line;
-	uint j, k;
+	uint j = 0, k = 0;
 	double v;
-	m = Eigen::MatrixXd::Zero(matLength,matLength);
 	while (getline(F, line)) {
 		if (!line.empty()) {
 			istringstream ss(line);
-			ss >> j >> k >> v;
-			if (j>matLength || k>matLength) cerr << "load error: matrix index(" << j << "," << k << ") > " << (uint)sqrt(fileLength) << endl;
-			m(j,k) = v;
+			if (opts.extras==SaveOptions::loc && columnsF==3) {
+				ss >> j >> k >> v;
+				if (j>rows || k>columns)
+					cerr << "load error: matrix index(" << j << "," << k << ") > " << columns << endl;
+				m(j,k) = v;
+			}
+			else if (opts.extras==SaveOptions::none && columnsF==1) {
+				m(j,k) = v;
+				k++;
+				if (k==(columns-1)) {
+					k = 0;
+					j++;
+				}
+			}
+			else if (opts.extras==SaveOptions::none) {
+				while (ss >> v) {
+					m(j,k) = v;
+					k++;
+					if (k==(columns-1)) {
+						k = 0;
+						j++;
+					}
+				}
+			}
 		}
 	}
 	F.close();
