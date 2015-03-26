@@ -343,7 +343,7 @@ while(run<2) {
 		    phi(m) = phi(m-1) + ps_run.b*vel(m);
 		    if (testTunnel) {
 		    	double testInf = phi(m);
-		    	if (!isfinite(testInf) && abs(Tinf)<MINNUMBER) Tinf = u*ps_run.b;
+		    	if (!isfinite(testInf) && abs(Tinf)<MIN_NUMBER) Tinf = u*ps_run.b;
 		    }
 		}
 		acc(u) = 2.0*(phi(u+Nt+1) - phi(u))/pow(ps_run.a,2.0) - phi(u) + pow(phi(u),3.0);

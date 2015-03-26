@@ -23,7 +23,7 @@ CFLAGS 			= -Wall -g -std=c++0x -static -O0
 #-fopenmp 			: so can use openmp parallelisation
 #-pg 				: also known as gprof, the gcc profiling tool 
 LFLAGS 			= 
-INCLUDES		= -I$(HDIR) -I/home/og/Documents/c++/eigen-eigen-1306d75b4a21/ -I/home/og/Documents/c++/gnuplot/gnuplot-cpp
+INCLUDES		= -I$(HDIR) -I/home/og113/Documents/c++/eigen_build/eigen/ -I/home/og113/Documents/c++/gnuplot/gnuplot-cpp
 LIBS 			= -lm -lgsl -lgslcblas
 
 _HEADERS 		= check.h error.h fnptrs.h folder.h gsl_extras.h lattice.h omega.h parameters.h potentials.h print.h simple.h\
@@ -38,7 +38,15 @@ COMMONOBJS 		= $(patsubst %,$(CODIR)/%,$(_COMMONOBJS))
 
 #------------------------------------------------------------------------------------------------------------------------
 
-all: 	
+all: analysis changeInputs common main plot pi piEvolve sphaleron sphaleronPi
+
+analysis: $(ODIR)/analysis.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named analysis has been compiled
+	
+changeInputs: $(ODIR)/changeInputs.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named changeInputs has been compiled
 
 common: $(COMMONOBJS)
 	@echo made common objects $(COMMONOBJS)
@@ -47,9 +55,17 @@ main: $(ODIR)/main.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named main has been compiled
 	
+plot: $(ODIR)/plot.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named plot has been compiled
+	
 pi: $(ODIR)/pi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named pi has been compiled
+	
+piEvolve: $(ODIR)/piEvolve.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named piEvolve has been compiled
 	
 sphaleron: $(ODIR)/sphaleron.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
@@ -57,23 +73,7 @@ sphaleron: $(ODIR)/sphaleron.o $(COMMONOBJS)
 	
 sphaleronPi: $(ODIR)/sphaleronPi.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named sphaleronPi has been compiled
-	
-piEvolve: $(ODIR)/piEvolve.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named piEvolve has been compiled
-	
-plot: $(ODIR)/plot.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named plot has been compiled
-	
-analysis: $(ODIR)/analysis.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named analysis has been compiled
-	
-changeInputs: $(ODIR)/changeInputs.o $(COMMONOBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
-	@echo Simple compiler named changeInputs has been compiled
+	@echo Simple compiler named sphaleronPi has been compiled	
 	
 #------------------------------------------------------------------------------------------------------------------------
 	

@@ -236,8 +236,10 @@ if (printD1AndD2) {
 	}
 	D1.makeCompressed();
 	D2.makeCompressed();
+	so_simple.extras = SaveOptions::loc;
 	save("data/stable/D1_L_"+numberToString<double>(r1)+".dat",so_simple,D1);
 	save("data/stable/D2_L_"+numberToString<double>(r1)+".dat",so_simple,D2);
+	so_simple.extras = SaveOptions::none;
 }
 printf("From Matlab: D1 gives omega^2_- = -15.31,\n");
 printf("             D2 gives omega^2_- = -15.34\n\n");
