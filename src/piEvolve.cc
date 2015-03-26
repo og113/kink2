@@ -501,7 +501,7 @@ else if (!testTunnel) {
 	ps_run.print();
 	
 	// constructing input to main
-	vec mainIn(ps_in.NT*ps_in.N);
+	vec mainIn(2*ps_in.NT*ps_in.N+2);
 	vec phiAOut, phiCOut;
 	Parameters ps_run_a = ps_run, ps_run_c = ps_run, ps_in_a = ps_in, ps_in_c = ps_in;
 	ps_run_a.NT = ps_run.Na+1;
@@ -514,25 +514,28 @@ else if (!testTunnel) {
 		for (unsigned int k=0; k<ps_in.N; k++) {
 			unsigned int l = j+k*ps_in.NT, m;
 			double r = ps_in.r0 + k*ps_in.a;
+			mainIn(2*l+1) = 0.0;
 			if (j<ps_in.Na) {
 				m = (ps_in.Na-j)+k*(ps_in.Na+1);
-				mainIn(l) = phiAOut(m)*r;
+				mainIn(2*l) = phiAOut(m)*r;
 			}
 			else if (j<(ps_in.Na+ps_in.Nb)) {
 				m = (j-ps_in.Na)+k*ps_in.Nb;
-				mainIn(l) = phiBC(m);
+				mainIn(2*l) = phiBC(m);
 			}
 			else {
 		        m = j - ps_in.Na - ps_in.Nb + 1 + k*(ps_in.Nc+1);
-				mainIn(l) = phiCOut(m)*r;
+				mainIn(2*l) = phiCOut(m)*r;
 			}
 		}
 	}
+	mainIn(2*ps_in.NT*ps_in.N) = 0.5;
+	mainIn(2*ps_in.NT*ps_in.N+1) = 0.5;
 	Filename mainInFile = (string)(prefix + "tp" + suffix);
 	SaveOptions so_tp;
 	so_tp.paramsIn = ps_in;
-	so_tp.paramsOut = ps_in;;
-	so_tp.vectorType = SaveOptions::real;
+	so_tp.paramsOut = ps_in;
+	so_tp.vectorType = SaveOptions::complex;
 	so_tp.extras = SaveOptions::coords;
 	so_tp.zeroModes = 0;
 	so_tp.printMessage = true;

@@ -103,6 +103,7 @@ static void saveVecB (const string& f, const SaveOptions& opts, const vec& v) {
 	else {
 		vo = v;
 	}
+	
 	fstream F;
 	F.open(f.c_str(), ios::out);
 	uint x0 = intCoord(0,1,pout.Nb);
@@ -748,7 +749,7 @@ void plot(const string& f, const PlotOptions& opts) {
 		pclose(gnuplotPipe);
 	}
 	else {
-		string commandStr = "gnuplot -e \"inFile='"+f+"'; outFile='"+output+"'; "+" style='"+style+"'\" "+opts.gp;
+		string commandStr = "gnuplot -e \"inFile='"+f+"'; outFile='"+output+"'; "+" style='"+style+"'\" "+"'"+opts.gp+"'";
 		if (output.compare("gui")==0) commandStr += " -persistent";
 		FILE * gnuplotPipe = popen(commandStr.c_str(),"w");
 		fprintf(gnuplotPipe,"%s\n"," ");

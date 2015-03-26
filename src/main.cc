@@ -268,7 +268,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		SaveOptions so_simple;
 		so_simple.paramsIn = ps; so_simple.paramsOut = ps;
 		so_simple.vectorType = SaveOptions::simple;
-		so_simple.extras = SaveOptions::loc;
+		so_simple.extras = SaveOptions::none;
 		so_simple.printMessage = false;
 		{
 			Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
@@ -418,7 +418,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			
 		//very early vector print
 		so_tp.paramsIn = ps;
-		Filename earlyPrintFile = (string)("data/"+timenumber+"mainpiE_fLoop_"+numberToString<uint>(fileLoop)\
+		Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
 				 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.dat");
 		save(earlyPrintFile,so_tp,p);
 	

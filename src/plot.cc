@@ -49,17 +49,17 @@ else
 PlotOptions po;
 po.printMessage = true;
 po.output = "gui";
-bool isMain;
 string id = f.ID;
-if (id.back()=='E') 					 id = id.substr(0,id.size()-1);
+if (id.back()=='E') id = id.substr(0,id.size()-1);
+if ((id.substr(0,4)).compare("main")==0) id = id.substr(4);
 
 if (id.compare("DDS")==0 || (id.substr(0,5)).compare("omega")==0 || (id.substr(0,5)).compare("freqs")==0 \
 	|| (id.substr(0,5)).compare("modes")==0) {
 	cerr << "cannot plot matrices" << endl;
 	return 1;	
 }
-else if (id.compare("p")==0 || id.compare("minusDS")==0 || id.compare("delta")==0) {
-	po.gp = "gp/repi_gui.gp";
+else if (id.compare("p")==0 || id.compare("pi")==0 || id.compare("minusDS")==0 || id.compare("delta")==0) {
+	po.gp = "gp/repi.gp";
 	po.style = "points";
 }
 else {

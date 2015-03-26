@@ -163,8 +163,14 @@ void Filename::set(const string& f) {
 	}
 	if (temp.find_first_not_of("_")==0) {
 	 stop = temp.find_first_of("_.");
-	 ID = temp.substr(0,stop);
-	 temp = temp.substr(stop);
+	 if (stop==string::npos) {
+	 	ID = temp.substr(0,stop);
+	 	temp = "";
+	 }
+	 else {
+	 	ID = temp.substr(0,stop);
+	 	temp = temp.substr(stop);
+	 }
 	}
 	if (temp[0]=='_') {
 		temp = temp.substr(1);

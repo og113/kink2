@@ -1,8 +1,7 @@
 #gnuplot program to plot energy versus number of particles, or something similar
 
 #if you want to save directly to a file, use the following two lines of code
-#set terminal postscript eps color enhanced size 10,5
-#set output 'figure.eps';
+if (outFile ne 'gui') set term png size 1600,800; set output outFile;
 
 unset log
 unset label

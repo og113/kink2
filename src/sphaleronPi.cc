@@ -49,10 +49,10 @@ int main(int argc, char ** argv) {
 /* ---------------------------------------------------------------------------------------------
 	1. defining main parameters
 ---------------------------------------------------------------------------------------------*/
-unsigned int 	N = 1e3, Nt = 1e3;
+unsigned int 	N = 300, Nt = 300;
 double 			r0 = 1.0e-16, r1 = 5.0, t0 = 0.0, t1 = 0.80;
 double			dr, dt;
-double			amp = 0.5;
+double			amp = -0.5;
 Parameters		ps_run;
 
 /* ---------------------------------------------------------------------------------------------
@@ -87,6 +87,7 @@ printf("\n");
 ps_run.pot = 3;
 ps_run.N = N;
 ps_run.Nb = Nt;
+ps_run.NT = 2*ps_run.Nb;
 ps_run.r0 = r0;
 ps_run.L = r1;
 ps_run.Tb = t1;
@@ -127,13 +128,14 @@ negEig *= normSphaleron/normNegEig;
 	n.b. time direction is reversed
 ---------------------------------------------------------------------------------------------*/
 
-vec phi(N*Nt);
+vec phi(2*N*Nt);
 
 for (unsigned int k=0; k<Nt; k++) {
 	for (unsigned int j=0; j<N; j++) {
 		unsigned int 	m = (Nt-1-k) + j*Nt;
 		double 			r = r0 + dr*j, t = t0 + dt*(Nt-1.0-k);
-		phi[m] = r*(sphaleron[j] + amp*cos(3.91*t)*negEig[j]);
+		phi(2*m) = r*(sphaleron(j) + amp*cos(3.91*t)*negEig(j));
+		phi(2*m+1) = 0.0;
 	}
 }
 	
@@ -145,19 +147,20 @@ Filename pngOut = datOut;
 pngOut.Suffix = ".png";
 pngOut.Directory = "pics";
 
-Parameters ps_print;
-ps_print = ps_run;
-ps_print.N = 300; // must have output N=Nb as load into pi requires this
-ps_print.Nb = 300;
-ps_print.a = (r1-r0)/(ps_print.N-1.0);
-ps_print.b = (t1-t0)/(ps_print.Nb-1.0);
+Parameters ps_save;
+ps_save = ps_run;
+ps_save.N = 300; // must have output N=Nb as load into pi requires this
+ps_save.Nb = 300;
+ps_save.NT = 2*ps_save.Nb;
+ps_save.a = (r1-r0)/(ps_save.N-1.0);
+ps_save.b = (t1-t0)/(ps_save.Nb-1.0);
 
 SaveOptions so_p;
 so_p.printMessage = true;
-so_p.vectorType = SaveOptions::realB;
+so_p.vectorType = SaveOptions::complexB;
 so_p.extras = SaveOptions::coords;
 so_p.paramsIn = ps_run;
-so_p.paramsOut = ps_print;
+so_p.paramsOut = ps_save;
 
 PlotOptions po_p;
 po_p.printMessage = true;
