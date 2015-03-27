@@ -176,7 +176,6 @@ Filename fo = f;
 fo.ID = f.ID + "_deriv_" + deriv;
 fo.Directory = "data";
 so.vectorType = SaveOptions::simple;
-so.extras = SaveOptions::none;
 
 save(fo,so,Y);
 so.vectorType = SaveOptions::append;
@@ -186,9 +185,9 @@ save(fo,so,rhs);
 save(fo,so,diff);
 save(fo,so,constError);
 
-//so.extras = SaveOptions::loc;
-//Filename fm = (string)"data/dataMatrix.dat";
-//save(fm,so,data);
+so.extras = SaveOptions::loc;
+Filename fm = (string)"data/dataMatrix.dat";
+save(fm,so,data);
 
 // plotting vectors
 PlotOptions po;

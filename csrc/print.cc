@@ -1,4 +1,4 @@
-	/*-------------------------------------------------------------------------------------------------------------------------
+/*-------------------------------------------------------------------------------------------------------------------------
  	definitions for functions to save, load and plot
  -------------------------------------------------------------------------------------------------------------------------*/
  
@@ -64,14 +64,14 @@ static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v
 
 // save vec - simpleVecAppend
 static void saveVecSimpleAppend(const string& f, const SaveOptions& opts, const vec& v) {
+	unsigned int lengthOs = v.size();
+	unsigned int lengthIs = countLines(f);
 	ifstream is;
 	is.open(f.c_str(),ios::in);
 	ofstream os;
-	os.open("data/temp",ios::out);
+	os.open("data/tempAppend",ios::out);
 	os.precision(16);
 	os << left;
-	unsigned int lengthOs = v.size();
-	unsigned int lengthIs = countLines(f);
 	if (lengthOs!=lengthIs)
 		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
 	else {
@@ -83,7 +83,7 @@ static void saveVecSimpleAppend(const string& f, const SaveOptions& opts, const 
 	}
 	is.close();
 	os.close();
-	copyFile("data/temp",f);
+	copyFile("data/tempAppend",f);
 }	
 
 // save vec - saveVecB
@@ -238,7 +238,7 @@ static void savecVecSimpleAppend(const string& f, const SaveOptions& opts, const
 	ifstream is;
 	is.open(f.c_str(),ios::in);
 	ofstream os;
-	os.open("data/temp",ios::out);
+	os.open("data/tempAppend",ios::out);
 	os.precision(16);
 	os << left;
 	unsigned int lengthOs = v.size();
@@ -254,7 +254,7 @@ static void savecVecSimpleAppend(const string& f, const SaveOptions& opts, const
 	}
 	is.close();
 	os.close();
-	copyFile("data/temp",f);
+	copyFile("data/tempAppend",f);
 }	
 
 // save cVec - saveVecB
