@@ -1,4 +1,4 @@
-	/*-------------------------------------------------------------------------------------------------------------------------
+/*-------------------------------------------------------------------------------------------------------------------------
  	definitions for functions to save, load and plot
  -------------------------------------------------------------------------------------------------------------------------*/
  
@@ -64,14 +64,14 @@ static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v
 
 // save vec - simpleVecAppend
 static void saveVecSimpleAppend(const string& f, const SaveOptions& opts, const vec& v) {
+	unsigned int lengthOs = v.size();
+	unsigned int lengthIs = countLines(f);
 	ifstream is;
 	is.open(f.c_str(),ios::in);
 	ofstream os;
 	os.open("data/temp",ios::out);
 	os.precision(16);
 	os << left;
-	unsigned int lengthOs = v.size();
-	unsigned int lengthIs = countLines(f);
 	if (lengthOs!=lengthIs)
 		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
 	else {
