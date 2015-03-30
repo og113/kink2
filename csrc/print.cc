@@ -452,11 +452,11 @@ void load(const string& f, const SaveOptions& opts, vec& v) {
 									break;
 		case SaveOptions::real:		vLength = fileLength;
 									break;
-		case SaveOptions::complex:	vLength = 2*(fileLength-opts.zeroModes);
+		case SaveOptions::complex:	vLength = 2*(fileLength-opts.zeroModes)+opts.zeroModes;
 									break;
 		case SaveOptions::realB:	vLength = fileLength;
 									break;
-		case SaveOptions::complexB:	vLength = 2*(fileLength-opts.zeroModes);
+		case SaveOptions::complexB:	vLength = 2*(fileLength-opts.zeroModes)+opts.zeroModes;
 									break;
 		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
 									return;
@@ -472,7 +472,7 @@ void load(const string& f, const SaveOptions& opts, vec& v) {
 			istringstream ss(line);
 			if (col>1) for (unsigned int l=0; l<(col-1); l++) ss >> temp;
 			if (opts.vectorType==SaveOptions::complex || opts.vectorType==SaveOptions::complexB) {
-				if (j>=(fileLength-opts.zeroModes)) 	ss >> vf(j);
+				if (j>=(fileLength-opts.zeroModes)) 	ss >> vf(fileLength-opts.zeroModes+j);
 				else 									ss >> vf(2*j) >> vf(2*j+1);
 				
 			}
@@ -488,15 +488,39 @@ void load(const string& f, const SaveOptions& opts, vec& v) {
 		uint Nb1 = (opts.paramsIn).Nb, Nb2  = (opts.paramsOut).Nb;
 		if (opts.vectorType==SaveOptions::complex && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
 			v = interpolate(vf,opts.paramsIn,opts.paramsOut);
+			if (v.size()<(2*NT2*N2+opts.zeroModes)) {
+				v.conservativeResize(2*NT2*N2+opts.zeroModes);
+				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+					if (abs(v(2*NT2*N2+zModes))<MIN_NUMBER)  v(2*NT2*N2+zModes) = 0.5;
+				}
+			}
 		}
 		else if (opts.vectorType==SaveOptions::real && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
 			v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
+			if (v.size()<(NT2*N2+opts.zeroModes)) {
+				v.conservativeResize(NT2*N2+opts.zeroModes);
+				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+					if (abs(v(NT2*N2+zModes))<MIN_NUMBER)  v(NT2*N2+zModes) = 0.5;
+				}
+			}
 		}
 		else if (opts.vectorType==SaveOptions::complexB && N1>0 && N2>0 && Nb1>0 && Nb2>0&& (N1!=N2 || Nb1!=Nb2)) {
 			v = interpolate(vf,opts.paramsIn,opts.paramsOut);
+			if (v.size()<(2*Nb2*N2+opts.zeroModes)) {
+				v.conservativeResize(2*Nb2*N2+opts.zeroModes);
+				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+					if (abs(v(2*Nb2*N2+zModes))<MIN_NUMBER)  v(2*Nb2*N2+zModes) = 0.5;
+				}
+			}
 		}
 		else if (opts.vectorType==SaveOptions::realB && N1>0 && N2>0 && Nb1>0 && Nb2>0 && (N1!=N2 || Nb1!=Nb2)) {
 			v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
+			if (v.size()<(Nb2*N2+opts.zeroModes)) {
+				v.conservativeResize(Nb2*N2+opts.zeroModes);
+				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+					if (abs(v(Nb2*N2+zModes))<MIN_NUMBER)  v(Nb2*N2+zModes) = 0.5;
+				}
+			}
 		}
 		else {
 			v = vf;
@@ -622,6 +646,7 @@ void load(const string& f, const SaveOptions& opts, mat& m) {
 				m(j,k) = v;
 			}
 			else if (opts.extras==SaveOptions::none && columnsF==1) {
+				ss >> v;
 				m(j,k) = v;
 				k++;
 				if (k==columns) {

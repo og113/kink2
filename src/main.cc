@@ -33,10 +33,11 @@
 		8 - beginning newton-raphson loop
 		9 - assigning minusDS, DDS etc
 		10 - checks
-		11 - solving for delta
-		12 - printing early
-		13 - convergence
-		14 - printing output
+		11 - printing early 1
+		12 - solving for delta
+		13 - printing early 2
+		14 - convergence
+		15 - printing output
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -48,7 +49,7 @@ int main(int argc, char** argv)
 
 Options opts;
 opts.load("optionsM");
-opts.print();
+//opts.print();
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. Folders
@@ -64,8 +65,12 @@ opts.print();
 
 // FilenameAttributes for defining FilenameComparator
 FilenameAttributes fa_low, fa_high;
+fa_low.Directory = "data";
+fa_high.Directory = "data";
 fa_low.Timenumber = opts.minTimenumberLoad;
 fa_high.Timenumber = opts.minTimenumberLoad;
+(fa_low.Extras).push_back(StringPair("fLoop",opts.minfLoopLoad));
+(fa_high.Extras).push_back(StringPair("fLoop",opts.maxfLoopLoad));
 (fa_low.Extras).push_back(StringPair("loop",opts.minLoopLoad));
 (fa_high.Extras).push_back(StringPair("loop",opts.maxLoopLoad));
 
@@ -105,7 +110,7 @@ Folder inputsFolder(fc);
 // removeUnshared(pFolder,inputsFolder);
 
 // printing folders
-cout << "inputs: " << pFolder << inputsFolder << endl;
+cout << endl << "inputs: " << endl << pFolder << inputsFolder << endl;
 
 //defining timenumber
 string timenumber;
@@ -211,7 +216,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Check checkLR("linear representation of phi",1.0e-12);
 	
 		// do trivial or redundant checks?
-		bool trivialChecks = true;
+		bool trivialChecks = false;
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	5. assigning potential functions
@@ -398,14 +403,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.printMessage = false;
 		if (loop==0) {
 			load(pFolder[0],so_tp,p);
-			printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
+			//printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
 		else {
 			Filename lastPhi = (string)("./data/" + timenumber + "mainpi_fLoop_" + numberToString<uint>(fileLoop) + "_loop_"\
 								 + numberToString<uint>(loop-1)+".dat");
 			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
-			printf("%12s%30s\n","input: ",(lastPhi()).c_str());
+			//printf("%12s%30s\n","input: ",(lastPhi()).c_str());
 		}
 		
 		//defining complexified vector Cp
@@ -545,7 +550,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			linNumContm = 0.0;
 			
 			//testing that the potential term is working for pot3
-			if (ps.pot==3 && true) {
+			if (ps.pot==3 && trivialChecks) {
 				comp Vtrial = 0.0, Vcontrol = 0.0;
 				for (unsigned int j=0; j<ps.N; j++) {
 					double r = ps.r0 + j*ps.a;
@@ -845,9 +850,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		            DDS.insert(2*j+1,2*j) 	= imag(-temp2 + temp0);
 		            DDS.insert(2*j+1,2*j+1) = real(-temp2 + temp0);
 		        }
-		    } // eng of loop over j
+		    } // end of loop over j
 		    
-		    if (ps.pot==3) DDS.insert(2*ps.N*ps.NT,2*ps.N*ps.NT) = 1.0;
+		    if (ps.pot==3) 		DDS.insert(2*ps.N*ps.NT,2*ps.N*ps.NT) = 1.0;
 		    action = kineticT - kineticS - potV - pot_r;
 		    linErgOffShell(ps.NT-1) = linErgOffShell(ps.NT-2);
 	    	linNumOffShell(ps.NT-1) = linNumOffShell(ps.NT-2);
@@ -1021,9 +1026,61 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			//checking lattice small enough for E, should have parameter for this
 			double momTest = E*ps.b/Num/pi; //perhaps should have a not b here
 			checkLatt.add(momTest);
+	
+/*----------------------------------------------------------------------------------------------------------------------------
+	11. printing early 1
+		- filenames and saveoptions
+		- phi
+		- minusDS
+		- DDS
+		- chiX, chiT
+		- energies
+		- a_k, b_k
+		
+----------------------------------------------------------------------------------------------------------------------------*/
+
+		//printing early if desired
+		if ((opts.printChoice).compare("n")!=0) {
+			Filename basic = (string)("data/"+timenumber+"basic_fLoop_"+numberToString<uint>(fileLoop)\
+								+"_loop_"+numberToString<uint>(loop)+"_run_"+numberToString<uint>(runs_count)+".dat");
+			if ((opts.printChoice).compare("v")==0 || (opts.printChoice).compare("e")==0) {
+				Filename vEFile = basic;
+				vEFile.ID = "mainminusDSE";
+				save(vEFile,so_tp,minusDS);
+			}
+			if ((opts.printChoice).compare("m")==0 || (opts.printChoice).compare("e")==0) {
+				Filename mEFile = basic;
+				mEFile.ID = "mainDDSE";
+				save(mEFile,so_simple,DDS);
+			}
+			if ((opts.printChoice).compare("z")==0 || (opts.printChoice).compare("e")==0) {
+				so_tp.vectorType = SaveOptions::real;			
+				Filename zEFile = basic;
+				zEFile.ID = "mainchiTE";
+				save(zEFile,so_tp,chiT);
+				zEFile.ID = "mainchiXE";
+				save(zEFile,so_tp,chiX);
+				so_tp.vectorType = SaveOptions::complex;
+			}
+			if ((opts.printChoice).compare("l")==0 || (opts.printChoice).compare("e")==0) {
+				Filename lEFile = basic;
+				lEFile.ID = "mainlinErgE";
+				save(lEFile,so_simple,linErg);
+				lEFile.ID = "mainergE";
+				save(lEFile,so_simple,erg);
+			}
+			if ((opts.printChoice).compare("ab")==0 || (opts.printChoice).compare("e")==0) {
+				Filename abEFile = basic;
+				abEFile.ID = "mainakE";
+				save(abEFile,so_simple,a_k);
+				abEFile.ID = "mainbkE";
+				save(abEFile,so_simple,b_k);
+			}
+		}
+		
 		
 /*----------------------------------------------------------------------------------------------------------------------------
-	11. solving for delta	
+	12. solving for delta	
 		- defining delta, solver etc
 		- analysing pattern
 		- factorising
@@ -1074,15 +1131,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			Cp = vecComplex(p,ps.N*ps.NT);
 			
 /*----------------------------------------------------------------------------------------------------------------------------
-	12. printing early
+	13. printing early 2
 		- filenames and saveoptions
-		- phi
-		- minusDS
-		- DDS
 		- delta
-		- chiX, chiT
-		- energies
-		- a_k, b_k
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -1095,46 +1146,15 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				pEFile.ID = "mainpE";
 				save(pEFile,so_tp,p);
 			}
-			if ((opts.printChoice).compare("v")==0 || (opts.printChoice).compare("e")==0) {
-				Filename vEFile = basic;
-				vEFile.ID = "mainminusDSE";
-				save(vEFile,so_tp,minusDS);
-			}
-			if ((opts.printChoice).compare("m")==0 || (opts.printChoice).compare("e")==0) {
-				Filename mEFile = basic;
-				mEFile.ID = "mainDDSE";
-				save(mEFile,so_simple,DDS);
-			}
 			if ((opts.printChoice).compare("d")==0 || (opts.printChoice).compare("e")==0) {
 				Filename dEFile = basic;
 				dEFile.ID = "maindeltaE";
 				save(dEFile,so_tp,delta);
 			}
-			if ((opts.printChoice).compare("z")==0 || (opts.printChoice).compare("e")==0) {
-				Filename zEFile = basic;
-				zEFile.ID = "mainchiTE";
-				save(zEFile,so_tp,chiT);
-				zEFile.ID = "mainchiXE";
-				save(zEFile,so_tp,chiX);
-			}
-			if ((opts.printChoice).compare("l")==0 || (opts.printChoice).compare("e")==0) {
-				Filename lEFile = basic;
-				lEFile.ID = "mainlinErgE";
-				save(lEFile,so_simple,linErg);
-				lEFile.ID = "mainergE";
-				save(lEFile,so_simple,erg);
-			}
-			if ((opts.printChoice).compare("ab")==0 || (opts.printChoice).compare("e")==0) {
-				Filename abEFile = basic;
-				abEFile.ID = "mainakE";
-				save(abEFile,so_simple,a_k);
-				abEFile.ID = "mainbkE";
-				save(abEFile,so_simple,b_k);
-			}
 		}
 		
 /*----------------------------------------------------------------------------------------------------------------------------
-	13. convergence
+	14. convergence
 		- evaluating norms
 		- adding convergence checks
 		- printing convergence checks
@@ -1175,7 +1195,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			
 		} //ending while loop
 /*----------------------------------------------------------------------------------------------------------------------------
-	14. printing output
+	15. printing output
 		- check messages
 		- stopping clock
 		- stepping stepper
@@ -1220,7 +1240,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 		}
 		else
-			stepper.addResult(0.0); // choice irrelevant but a value is require to make step
+			stepper.addResult(1.0); // choice irrelevant but a value is require to make step
 		stepper.step();
 	
 		// printing results to terminal

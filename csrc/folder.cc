@@ -454,7 +454,7 @@ void Folder::order() {
 
 // refresh
 void Folder::refresh() {
-	int systemCall = system("find data/* -type f > dataFiles");
+	int systemCall = system("find data/* -type f > data/dataFiles");
 	if (systemCall==-1) {
 		FolderError::System e;
 		cerr << e;
@@ -462,10 +462,10 @@ void Folder::refresh() {
 	}
 	ifstream is;
 	Filename f;
-    is.open ("dataFiles");
+    is.open ("data/dataFiles");
 	while ( !is.eof() ){
 		is >> f;
-		if (!f.empty())
+		if (!f.empty() && (f()).back()!='~')
 			if (!isPresent(f) && Comparator(f)) Filenames.push_back(f);
 	}
     is.close();

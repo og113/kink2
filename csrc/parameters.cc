@@ -600,6 +600,14 @@ bool Options::changeOptions (const string& pName, const string& pValue) {
 		if (maxTimenumberLoad.compare(pValue)!=0) anythingChanged = true;
 		maxTimenumberLoad = pValue;
 	}
+	else if (pName.compare("minfLoopLoad")==0) {
+		if (minfLoopLoad.compare(pValue)!=0) anythingChanged = true;
+		minfLoopLoad = pValue;
+	}
+	else if (pName.compare("maxfLoopLoad")==0) {
+		if (maxfLoopLoad.compare(pValue)!=0) anythingChanged = true;
+		maxfLoopLoad = pValue;
+	}
 	else if (pName.compare("minLoopLoad")==0) {
 		if (minLoopLoad.compare(pValue)!=0) anythingChanged = true;
 		minLoopLoad = pValue;
@@ -633,6 +641,8 @@ ostream& operator<<(ostream& os, const Options& o) {
 	os << setw(20) << "inF" << setw(20) << o.inF << endl;
 	os << setw(20) << "minTimenumberLoad" << setw(20) << o.minTimenumberLoad << endl;
 	os << setw(20) << "maxTimenumberLoad" << setw(20) << o.maxTimenumberLoad << endl;
+	os << setw(20) << "minfLoopLoad" << setw(20) << o.minfLoopLoad << endl;
+	os << setw(20) << "maxfLoopLoad" << setw(20) << o.maxfLoopLoad << endl;
 	os << setw(20) << "minLoopLoad" << setw(20) << o.minLoopLoad << endl;
 	os << setw(20) << "maxLoopLoad" << setw(20) << o.maxLoopLoad << endl;
 	os << setw(20) << "loopChoice" << setw(20) << o.loopChoice << endl;
@@ -677,6 +687,8 @@ void Options::load(const string& filename) {
 	is >> dross >> inF;
 	is >> dross >> minTimenumberLoad;
 	is >> dross >> maxTimenumberLoad;
+	is >> dross >> minfLoopLoad;
+	is >> dross >> maxfLoopLoad;
 	is >> dross >> minLoopLoad;
 	is >> dross >> maxLoopLoad;
 	is >> dross >> loopChoice;

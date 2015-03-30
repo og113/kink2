@@ -145,7 +145,7 @@ for (uint j=0; j<(data.rows()-1); j++) {
 		rhs(j) *= -1.0;
 	if (colX==colS || colX==colTb)
 		dXdY_Z(j) *= 2.0;
-	if (colY==colS || colX==colTb)
+	if (colY==colS || colY==colTb)
 		dXdY_Z(j) /= 2.0;
 	if (colRhs==colTb)
 		rhs(j) *= 2.0;
