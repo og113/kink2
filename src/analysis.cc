@@ -127,8 +127,8 @@ load(f,so,data);
 			- dWdE|N = -T
 			- dWdN|E = -theta
 			- dN/dE|W = -T/theta
-			- dS/dT|theta = E
-			- dS/dtheta|T = N
+			- 2dS/dT|theta = E
+			- 2dS/dtheta|T = N
 	
 	n.b. T = 2Tb
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -143,6 +143,10 @@ for (uint j=0; j<(data.rows()-1); j++) {
 		rhs(j) /= (data(j+1,colRhs2)+data(j,colRhs2))/2.0;
 	if (deriv.compare("dWdE-N")==0 || deriv.compare("dWdN-E")==0 || deriv.compare("dNdE-W")==0)
 		rhs(j) *= -1.0;
+	if (colX==colS || colX==colTb)
+		dXdY_Z(j) *= 2.0;
+	if (colY==colS || colX==colTb)
+		dXdY_Z(j) /= 2.0;
 	if (colRhs==colTb)
 		rhs(j) *= 2.0;
 	if (colRhs2==colTb)
