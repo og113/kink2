@@ -113,6 +113,35 @@ double Stepper::y() const {
 	return ((f_xy.back()).first).Y;
 }
 
+// offset()
+uint Stepper::offset() const {
+	uint sizem1 = size()-1;
+	if (opts.constant) {
+		if (sizem1==3) {
+			return 3;
+		}
+		else if (sizem1==2 || (sizem1%2!=0 && sizem1>3)) {
+			return 2;
+		}
+		else
+			return 1;	
+	}
+	else return 1;
+}
+
+// keep()
+bool Stepper::keep() const {
+	if (opts.constant) {
+		if (size()>3 && size()%2==0) {
+			return true;
+		}
+		else
+			return false;	
+	}
+	else
+		return true;
+}
+
 // point()
 Point2d Stepper::point() const{
 	return (f_xy.back()).first;

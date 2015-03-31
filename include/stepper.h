@@ -81,7 +81,9 @@ public:
 	Point2d 	point() const;
 	double		x() const;
 	double		y() const;
+	uint		offset() const;
 	uint		size() const;
+	bool		keep() const;
 private:
 	StepperOptions 	opts;
 	vector<FxyPair> f_xy;

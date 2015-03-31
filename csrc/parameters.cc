@@ -388,8 +388,8 @@ Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p
 
 // print to shell
 void Parameters::print() const {
-	printf("%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
-	printf("%8i%8i%8i%8i%8.4g%8.4g%8.4g%8.4g%8.4g%8.4g%8.4g%8.4g\n",\
+	printf("%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
+	printf("%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
 			N,Na,Nb,Nc,\
 			L,Ta,Tb,Tc,R,\
 			dE,theta,reg);

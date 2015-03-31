@@ -91,6 +91,8 @@ else {
 	cerr << "inF error: " << opts.inF << " not recognised" << endl;
 	return 1;
 }
+fa_low.Suffix = ".dat";
+fa_high.Suffix = ".dat";
 fc.set(fa_low,fa_high);
 Folder pFolder(fc);
 
@@ -103,6 +105,8 @@ else if ((opts.inF).compare("m")==0) {
 	fa_low.ID = "inputsM";
 	fa_high.ID = "inputsM";
 }
+fa_low.Suffix = "";
+fa_high.Suffix = "";
 fc.set(fa_low,fa_high);
 Folder inputsFolder(fc);
 
@@ -113,8 +117,10 @@ Folder inputsFolder(fc);
 cout << endl;
 if (pFolder.size()>0)
 	cout << "inputs: " << endl << pFolder << inputsFolder << endl;
-else
-	cout << "not files found" << endl;
+else {
+	cout << "not files found for options:" << endl;
+	cout << opts << endl;
+}
 
 
 //defining timenumber
@@ -143,7 +149,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- defining a time
 		- changing parameters (if required)
 		- copying a verson of parameters with timenumber
-		- printing parameters
+		- printing timenumber
 		- declaring checks
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -181,7 +187,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					cout << opts.loopChoice << "changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
-			else if (((opts.loopChoice).substr(0,5)).compare("const")==0) {
+			else if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
 				if (loop==0 && anythingChanged) {
 					cout << opts.loopChoice << "changed to " << stepper.x() << " on input" << endl;
@@ -198,9 +204,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				+"_loop_"+numberToString<uint>(loop));
 		ps.save(paramsRunFile);
 		
-		//printing timenumber and parameters
+		//printing timenumber
 		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
-		ps.print();
 	
 		// declaring Checks
 		Check checkAction("action",1.0e-2);
@@ -370,6 +375,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	7. defining quantities
 		- erg, linErg etc
 		- p, minusDS, DDS
+		- printing parameters
 		- print input phi
 ----------------------------------------------------------------------------------------------------------------------------*/	
 	
@@ -386,7 +392,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//defining the action and bound and W and zero of energy
 		double ergZero = (ps.pot==3? 0.0: ps.N*ps.a*real(V(ps.minima[0])) );
 		comp action = ii*ps.action0;
-		double bound;
+		double bound = 0.0;
 		double W;
 		double E;
 		double E_exact;
@@ -395,7 +401,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//defining some quantities used to stop the Newton-Raphson loop when action stops varying
 		comp action_last = action;
 		uint runs_count = 0;
-		uint min_runs = 3;
+		uint min_runs = 2;
 
 		//initializing phi (=p)
 		vec p;
@@ -408,15 +414,18 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.printMessage = false;
 		if (loop==0) {
 			load(pFolder[0],so_tp,p);
-			//printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
+			printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
 		else {
-			Filename lastPhi = (string)("./data/" + timenumber + "mainpi_fLoop_" + numberToString<uint>(fileLoop) + "_loop_"\
-								 + numberToString<uint>(loop-1)+".dat");
+			Filename lastPhi = (string)("./data/" + timenumber + "mainp_fLoop_" + numberToString<uint>(fileLoop) + "_loop_"\
+								 + numberToString<uint>(loop-stepper.offset())+".dat");
 			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
-			//printf("%12s%30s\n","input: ",(lastPhi()).c_str());
+			printf("%12s%30s\n","input: ",(lastPhi()).c_str());
 		}
+		
+		// printing parameters
+		ps.print();
 		
 		//defining complexified vector Cp
 		cVec Cp;
@@ -1206,12 +1215,15 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- printing results to file
 		- printing (and plotting if vectors):
 			- p
-			- minusDS
-			- DDS
-			- linNum
 			- linErg
-			- linErgOffShell
 			- erg
+			- if printEverything:
+				- minusDS
+				- DDS
+				- linErgOffShell
+				- linNum
+				- derivErg
+				- potErg
 		- return
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -1254,12 +1266,18 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		printf("\n");
 
 		// printing results to file
-		FILE * actionfile;
-		actionfile = fopen("./data/mainAction.dat","a");
-		fprintf(actionfile,"%12s%6i%6i%8g%8g%8g%8g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g%10.4g\n",\
-					timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,imag(action)\
-					,W,checkSoln.back(),checkLin.back(),checkTrue.back());
-		fclose(actionfile);
+		if (stepper.keep()) {
+			FILE * actionfile;
+			actionfile = fopen("./data/mainAction.dat","a");
+			fprintf(actionfile,"%12s%5i%5i%6g%8g%8g%8g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
+						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
+						,W,checkSoln.back(),checkLin.back(),checkTrue.back());
+			fclose(actionfile);
+		}
+		
+		// print everything?, plot too
+		bool printEverything = false;
+		bool plotPhi = true;
 	
 		// printing messages for saved files
 		so_tp.printMessage = true;
@@ -1282,26 +1300,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Filename tpFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
 					+"_loop_"+numberToString<uint>(loop)+".dat");
 		save(tpFile,so_tp,p);
-		plot(tpFile,po_tp);
-	
-		//printing output minusDS
-		tpFile.ID = "mainminudDS";
-		save(tpFile,so_tp,minusDS);
-		plotFile = tpFile;
-		plotFile.Suffix = ".png";
-		po_tp.output = plotFile;
-		plot(tpFile,po_tp);	
-				
-		//printing output DDS
-		tpFile.ID = "mainDDS";
-		save(tpFile,so_simple,DDS);
-	    
-		//printing linNum
-		tpFile.ID = "mainlinNum";
-		tpFile.Suffix = ".dat";
-		linNum.conservativeResize(ps.Na);
-		save(tpFile,so_simple,linNum);
-	
+		if (plotPhi)
+			plot(tpFile,po_tp);
+		
 		//printing linErg
 		tpFile.ID = "mainlinErg";
 		linErg.conservativeResize(ps.Na);
@@ -1309,12 +1310,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		plotFile = tpFile;
 		plotFile.Suffix = ".png";
 		po_simple.output = plotFile;
-		plot(tpFile,po_simple);
-		
-		//printing linErgOffShell
-		tpFile.ID = "mainlinErgOffShell";
-		linErgOffShell.conservativeResize(ps.Na);
-		save(tpFile,so_simple,linErgOffShell);
+		if (plotPhi)
+			plot(tpFile,po_simple);
 	
 		//printing erg
 		tpFile.ID = "mainerg";
@@ -1323,24 +1320,49 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		plotFile = tpFile;
 		plotFile.Suffix = ".png";
 		po_simple.output = plotFile;
-		plot(tpFile,po_simple);
+		if (plotPhi)
+			plot(tpFile,po_simple);
+	
+		if (printEverything) {
+			//printing output minusDS
+			tpFile.ID = "mainminudDS";
+			save(tpFile,so_tp,minusDS);
+			plotFile = tpFile;
+			plotFile.Suffix = ".png";
+			po_tp.output = plotFile;
+			if (plotPhi)
+				plot(tpFile,po_tp);	
+				
+			//printing output DDS
+			tpFile.ID = "mainDDS";
+			save(tpFile,so_simple,DDS);
 		
-		/*
-		//printing derivErg
-		tpFile.ID = "mainderivErg";
-		derivErg.conservativeResize(ps.Na);
-		save(tpFile,so_simple,derivErg);
+			//printing linErgOffShell
+			tpFile.ID = "mainlinErgOffShell";
+			linErgOffShell.conservativeResize(ps.Na);
+			save(tpFile,so_simple,linErgOffShell);
+			
+			//printing linNum
+			tpFile.ID = "mainlinNum";
+			tpFile.Suffix = ".dat";
+			linNum.conservativeResize(ps.Na);
+			save(tpFile,so_simple,linNum);
 		
-		//printing potErg
-		tpFile.ID = "mainpotErg";
-		potErg.conservativeResize(ps.Na);
-		save(tpFile,so_simple,potErg);
-		*/
+			//printing derivErg
+			tpFile.ID = "mainderivErg";
+			derivErg.conservativeResize(ps.Na);
+			save(tpFile,so_simple,derivErg);
+		
+			//printing potErg
+			tpFile.ID = "mainpotErg";
+			potErg.conservativeResize(ps.Na);
+			save(tpFile,so_simple,potErg);
+		}
 		
 		if (!checkDelta.good()) {
 				return 1;
 			}
-		printf("----------------------------------------------------------------------------------------------------------------------------\n\n");
+		printf("\n----------------------------------------------------------------------------------------------------------------------------\n\n");
 		
 		} //ending parameter loop
 	} //ending file loop
