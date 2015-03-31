@@ -110,7 +110,13 @@ Folder inputsFolder(fc);
 // removeUnshared(pFolder,inputsFolder);
 
 // printing folders
-cout << endl << "inputs: " << endl << pFolder << inputsFolder << endl;
+cout << endl;
+if (pFolder.size()>0)
+	cout << "inputs: " << endl << pFolder << inputsFolder;
+else
+	cout << "not files found";
+cout << endl;
+
 
 //defining timenumber
 string timenumber;
@@ -956,10 +962,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			for (uint j=0; j<ps.N; j++) {
 				ABtest += absDiff(a_k(j),conj(b_k(j))*ps.Gamma);
 				p0(j) = Cp(j*ps.NT);
-				if (j<ps.N) {
-					linNumAB += a_k(j)*b_k(j);
-					linErgAB += sqrt(modes(j))*a_k(j)*b_k(j);
-				}
+				linNumAB += a_k(j)*b_k(j);
+				linErgAB += freqs(j)*a_k(j)*b_k(j);
 				if (trivialChecks) {
 					for (uint n=0; n<ps.N; n++) {
 						double w_n = freqs(n);
