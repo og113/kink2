@@ -112,10 +112,9 @@ Folder inputsFolder(fc);
 // printing folders
 cout << endl;
 if (pFolder.size()>0)
-	cout << "inputs: " << endl << pFolder << inputsFolder;
+	cout << "inputs: " << endl << pFolder << inputsFolder << endl;
 else
-	cout << "not files found";
-cout << endl;
+	cout << "not files found" << endl;
 
 
 //defining timenumber
@@ -1253,7 +1252,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		printf("%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
 				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,Num,E,imag(action),W);
 		printf("\n");
-		printf("%60s\n","%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 
 		// printing results to file
 		FILE * actionfile;
@@ -1342,6 +1340,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		if (!checkDelta.good()) {
 				return 1;
 			}
+		printf("----------------------------------------------------------------------------------------------------------------------------\n\n");
 		
 		} //ending parameter loop
 	} //ending file loop
