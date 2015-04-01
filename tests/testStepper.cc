@@ -22,8 +22,9 @@ cout << "pi = " << pi << endl;
 cout << "MIN_NUMBER = " << MIN_NUMBER << endl;
 
 StepperOptions sto;
-sto.constant = true;
-sto.angle = 0.0;
+sto.stepType = StepperOptions::constSimple;
+sto.directed = false;
+sto.angle0 = 0.0;
 sto.epsi_x = 0.05;
 sto.epsi_y = 0.1;
 

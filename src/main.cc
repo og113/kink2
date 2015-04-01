@@ -159,15 +159,17 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	if (((opts.loopChoice).substr(0,5)).compare("const")==0) {
 		step_opts.epsi_x = opts.epsiTb;
 		step_opts.epsi_y = opts.epsiTheta;
-		step_opts.angle = 0.0;
-		step_opts.constant = true;
+		step_opts.angle0 = 0.0;
+		step_opts.stepType = StepperOptions::constSimple;
+		step_opts.directed = true;
 		point(psu.Tb,psu.theta);
 	}
 	else {
 		step_opts.epsi_x =  (opts.loopMax - opts.loopMin)/(opts.loops-1.0);;
 		step_opts.epsi_y = 0.0;
-		step_opts.angle = 0.0;
-		step_opts.constant = false;
+		step_opts.angle0 = 0.0;
+		step_opts.stepType = StepperOptions::straight;
+		step_opts.directed = true;
 		point(opts.loopMin,0.0);
 	}
 	Stepper stepper(step_opts,point);

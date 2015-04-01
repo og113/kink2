@@ -73,20 +73,20 @@ ostream& operator<<(ostream& os,const Point2d& p) {
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // constructor
-Stepper::Stepper(const StepperOptions& sto, const double& X, const double& Y): opts(sto), f_xy() {
+Stepper::Stepper(const StepperOptions& sto, const double& X, const double& Y): opts(sto), f_xy(), angle(sto.angle0) {
 	Point2d P(X,Y);
 	FxyPair toAdd(P,0.0);
 	f_xy.push_back(toAdd);
 }
 
 // constructor
-Stepper::Stepper(const StepperOptions& sto, const Point2d& P): opts(sto), f_xy() {
+Stepper::Stepper(const StepperOptions& sto, const Point2d& P): opts(sto), f_xy(), angle(sto.angle0) {
 	FxyPair toAdd(P,0.0);
 	f_xy.push_back(toAdd);
 }
 
 // constructor
-Stepper::Stepper(const StepperOptions& sto): opts(sto), f_xy() {}
+Stepper::Stepper(const StepperOptions& sto): opts(sto), f_xy(), angle(sto.angle0) {}
 
 // set Start
 void Stepper::setStart(const double& X, const double& Y) {
@@ -116,7 +116,7 @@ double Stepper::y() const {
 // offset()
 uint Stepper::offset() const {
 	uint sizem1 = size()-1;
-	if (opts.constant) {
+	if (opts.stepType!=StepperOptions::straight) {
 		if (sizem1==3) {
 			return 3;
 		}
@@ -131,7 +131,7 @@ uint Stepper::offset() const {
 
 // keep()
 bool Stepper::keep() const {
-	if (opts.constant) {
+	if (opts.stepType!=StepperOptions::straight) {
 		if (size()>3 && size()%2==0) {
 			return true;
 		}
@@ -158,13 +158,13 @@ void Stepper::step() {
 		cerr << "Stepper error: cannot step before giving initial step" << endl;
 		return;
 	}
-	if (abs((f_xy.back()).second)<MIN_NUMBER) {
+	if (abs((f_xy.back()).second)<MIN_NUMBER && opts.stepType!=StepperOptions::straight) {
 		cerr << "Stepper error: cannot step before giving result of previous step" << endl;
 		return;
 	}
 	double x_old = x();
 	double y_old = y();
-	if (opts.constant) {
+	if (opts.stepType!=StepperOptions::straight) {
 		if (size()==3) {
 			x_old = ((f_xy[0]).first).X;
 			y_old = ((f_xy[0]).first).Y;
@@ -174,8 +174,8 @@ void Stepper::step() {
 			y_old = ((f_xy[size()-2]).first).Y;
 		}		
 	}
-	double x_new = x_old + opts.epsi_x*cos(opts.angle);
-	double y_new = y_old + opts.epsi_y*sin(opts.angle);
+	double x_new = x_old + opts.epsi_x*cos(angle);
+	double y_new = y_old + opts.epsi_y*sin(angle);
 	Point2d P(x_new,y_new);
 	FxyPair toAdd(P,0.0);
 	f_xy.push_back(toAdd);
@@ -184,28 +184,54 @@ void Stepper::step() {
 // addResult
 void Stepper::addResult(const double& f) {
 	(f_xy.back()).second = f;
-	if (opts.constant && size()>1) {
+	if (opts.stepType==StepperOptions::constSimple && size()>1) {
 		if (size()%2==0) {
-			opts.angle += pi/2.0;
-			if (opts.angle>2.0*pi) opts.angle -= 2.0*pi;
+			angle += pi/2.0;
+			if (!opts.directed && angle>2.0*pi) 					angle -= 2.0*pi;
+			else if (opts.directed && angle>(opts.angle0+pi/2.0))	angle -= pi;
+			else if (opts.directed && angle<(opts.angle0-pi/2.0))	angle += pi;
 		}
 		else if (size()==3) {
-			double angle = opts.angle - pi/2.0;
-			if (angle<0) angle += 2.0*pi;
-			double dx_n = sqrt(pow(opts.epsi_x*cos(angle),2.0)+pow(opts.epsi_y*sin(angle),2.0));
-			double dx_t = sqrt(pow(opts.epsi_x*sin(angle),2.0)+pow(opts.epsi_y*cos(angle),2.0));
-			opts.angle = -atan(((f_xy[1]).second-(f_xy[0]).second)*dx_t/((f_xy[2]).second-(f_xy[0]).second)/dx_n);
+			double tempAngle = angle - pi/2.0;
+			if (!opts.directed && tempAngle<0) 							tempAngle += 2.0*pi;
+			else if (opts.directed && tempAngle>(opts.angle0+pi/2.0))	tempAngle -= pi;
+			else if (opts.directed && tempAngle<(opts.angle0-pi/2.0))	tempAngle += pi;
+			double dx_n = sqrt(pow(opts.epsi_x*cos(tempAngle),2.0)+pow(opts.epsi_y*sin(tempAngle),2.0));
+			double dx_t = sqrt(pow(opts.epsi_x*sin(tempAngle),2.0)+pow(opts.epsi_y*cos(tempAngle),2.0));
+			angle = -atan(((f_xy[1]).second-(f_xy[0]).second)*dx_t/((f_xy[2]).second-(f_xy[0]).second)/dx_n);
+			if (opts.directed && angle>(opts.angle0+pi/2.0))		angle -= pi;
+			else if (opts.directed && angle<(opts.angle0-pi/2.0))	angle += pi;
 		}
 		else {
-			double angle = opts.angle - pi/2.0;
-			if (angle<0) angle += 2.0*pi;
+			double tempAngle = angle - pi/2.0;
+			if (!opts.directed && tempAngle<0) 							tempAngle += 2.0*pi;
+			else if (opts.directed && tempAngle>(opts.angle0+pi/2.0))	tempAngle -= pi;
+			else if (opts.directed && tempAngle<(opts.angle0-pi/2.0))	tempAngle += pi;
 			uint j = size()-1;
-			double dx_n = sqrt(pow(opts.epsi_x*cos(angle),2.0)+pow(opts.epsi_y*sin(angle),2.0));
-			double dx_t = sqrt(pow(opts.epsi_x*sin(angle),2.0)+pow(opts.epsi_y*cos(angle),2.0));
+			double dx_n = sqrt(pow(opts.epsi_x*cos(tempAngle),2.0)+pow(opts.epsi_y*sin(tempAngle),2.0));
+			double dx_t = sqrt(pow(opts.epsi_x*sin(tempAngle),2.0)+pow(opts.epsi_y*cos(tempAngle),2.0));
 			double angle_n = -atan(((f_xy[j-1]).second-(f_xy[j-3]).second)*dx_t/((f_xy[j]).second-(f_xy[j-1]).second)/dx_n);
-			opts.angle = angle + angle_n;
-			if (opts.angle>2.0*pi) opts.angle -= 2.0*pi;
-			else if (opts.angle<0)opts.angle += 2.0*pi;
+			angle = tempAngle + angle_n;
+			if (!opts.directed && angle>2.0*pi) 					angle -= 2.0*pi;
+			else if (!opts.directed && angle<0) 					angle += 2.0*pi;
+			else if (opts.directed && angle>(opts.angle0+pi/2.0))	angle -= pi;
+			else if (opts.directed && angle<(opts.angle0-pi/2.0))	angle += pi;
+		}
+	}
+	else if (opts.stepType==StepperOptions::lagrange && size()>1) {
+		cerr << "Stepper error: must add 3 values (F,E,N) for StepperOptions::lagrange" << endl;
+	}
+}
+
+// addResult
+void Stepper::addResult(const double& f, const double& e, const double& n) {
+	if (opts.stepType!=StepperOptions::lagrange) {
+		addResult(f);
+	}
+	else {
+		(f_xy.back()).second = f;
+		if (size()>1) {
+			cerr << "Stepper error: lagrange stepper not written yet" << endl;
 		}
 	}
 }

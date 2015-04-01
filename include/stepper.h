@@ -61,10 +61,12 @@ typedef pair<Point2d,double> FxyPair;
 
 // StepperOptions
 struct StepperOptions{
-	double 	epsi_x;
-	double	epsi_y;
-	double 	angle;
-	bool 	constant;
+	double 			epsi_x;
+	double			epsi_y;
+	double 			angle0;
+	enum			stepTypeList {straight=1, constSimple=2, lagrange=3};
+	stepTypeList 	stepType;
+	bool			directed;
 };
 
 // Stepper
@@ -78,6 +80,7 @@ public:
 	void 		setStart(const Point2d& P);
 	void 		step();
 	void 		addResult(const double& f);
+	void		addResult(const double& f, const double& e, const double& n);
 	Point2d 	point() const;
 	double		x() const;
 	double		y() const;
@@ -87,6 +90,7 @@ public:
 private:
 	StepperOptions 	opts;
 	vector<FxyPair> f_xy;
+	double			angle;
 };
 
 #endif // __STEPPER_H_INCLUDED__
