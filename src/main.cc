@@ -1279,7 +1279,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		
 		// print everything?, plot too
 		bool printEverything = false;
-		bool plotPhi = true;
+		bool plotEverything = false;
 	
 		// printing messages for saved files
 		so_tp.printMessage = true;
@@ -1292,17 +1292,19 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Filename plotFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
 					+"_loop_"+numberToString<uint>(loop)+".png");
 		po_tp.output = plotFile;
+		po_tp.printMessage = true;
 		
 		PlotOptions po_simple;
 		po_simple.column = 1;
 		po_simple.style = "linespoints";
+		po_simple.printMessage = true;
 
 	
 		//printing output phi
 		Filename tpFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
 					+"_loop_"+numberToString<uint>(loop)+".dat");
 		save(tpFile,so_tp,p);
-		if (plotPhi)
+		if (plotEverything)
 			plot(tpFile,po_tp);
 		
 		//printing linErg
@@ -1312,7 +1314,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		plotFile = tpFile;
 		plotFile.Suffix = ".png";
 		po_simple.output = plotFile;
-		if (plotPhi)
+		if (plotEverything)
 			plot(tpFile,po_simple);
 	
 		//printing erg
@@ -1322,7 +1324,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		plotFile = tpFile;
 		plotFile.Suffix = ".png";
 		po_simple.output = plotFile;
-		if (plotPhi)
+		if (plotEverything)
 			plot(tpFile,po_simple);
 	
 		if (printEverything) {
@@ -1332,7 +1334,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			plotFile = tpFile;
 			plotFile.Suffix = ".png";
 			po_tp.output = plotFile;
-			if (plotPhi)
+			if (plotEverything)
 				plot(tpFile,po_tp);	
 				
 			//printing output DDS
