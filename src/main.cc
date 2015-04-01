@@ -23,7 +23,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
 	CONTENTS
-		1 - loading options
+		1 - loading options, argv inputs
 		2 - Folders
 		3 - beginning file loop
 		4 - beginning parameter loop
@@ -44,12 +44,59 @@
 int main(int argc, char** argv)
 {
 /*----------------------------------------------------------------------------------------------------------------------------
-	1. loading options
+	1. loading options, argv inputs
+		- loading options
+		- argv inputs
+		- defining timenumber
 ----------------------------------------------------------------------------------------------------------------------------*/
 
+// loading opts
 Options opts;
 opts.load("optionsM");
 //opts.print();
+
+// defining timenumber
+string timenumber;
+
+// getting argv inputs
+if (argc==2) timenumber = argv[1];
+else if (argc % 2 && argc>1) {
+	for (unsigned int j=0; j<(int)(argc/2); j++) {
+		string id = argv[2*j+1];
+		if (id[0]=='-') id = id.substr(1);
+		if (id.compare("tn")==0 || id.compare("timenumber")==0) timenumber = argv[2*j+2];
+		else if (id.compare("amp")==0) opts.amp = stringToNumber<double>(argv[2*j+2]);
+		else if (id.compare("open")==0) opts.open = stringToNumber<double>(argv[2*j+2]);
+		else if (id.compare("alpha")==0) opts.alpha = stringToNumber<double>(argv[2*j+2]);
+		else if (id.compare("zmx")==0) opts.zmx = argv[2*j+2];
+		else if (id.compare("zmt")==0) opts.zmt = argv[2*j+2];
+		else if (id.compare("bds")==0) opts.bds = argv[2*j+2];
+		else if (id.compare("inF")==0) opts.inF = argv[2*j+2];
+		else if (id.compare("minTimenumberLoad")==0 || id.compare("mintn")==0) opts.minTimenumberLoad = argv[2*j+2];
+		else if (id.compare("maxTimenumberLoad")==0 || id.compare("maxtn")==0) opts.maxTimenumberLoad = argv[2*j+2];
+		else if (id.compare("minfLoopLoad")==0 || id.compare("minfLoopLoad")==0) opts.minfLoopLoad = argv[2*j+2];
+		else if (id.compare("maxfLoopLoad")==0 || id.compare("maxfLoopLoad")==0) opts.maxfLoopLoad = argv[2*j+2];
+		else if (id.compare("minLoopLoad")==0 || id.compare("minLoopLoad")==0) opts.minLoopLoad = argv[2*j+2];
+		else if (id.compare("maxLoopLoad")==0 || id.compare("maxLoopLoad")==0) opts.maxLoopLoad = argv[2*j+2];
+		else if (id.compare("loopChoice")==0) opts.loopChoice = argv[2*j+2];
+		else if (id.compare("loopMin")==0) opts.loopMin = stringToNumber<double>(argv[2*j+2]);
+		else if (id.compare("loopMax")==0) opts.loopMax = stringToNumber<double>(argv[2*j+2]);
+		else if (id.compare("epsiTb")==0) opts.epsiTb = stringToNumber<double>(argv[2*j+2]);
+		else if (id.compare("epsiTheta")==0) opts.epsiTheta = stringToNumber<double>(argv[2*j+2]);
+		else if (id.compare("loops")==0) opts.loops = stringToNumber<uint>(argv[2*j+2]);
+		else if (id.compare("printChoice")==0) opts.printChoice = argv[2*j+2];
+		else {
+			cerr << "input " << id << " unrecognized" << endl;
+			return 1;
+		}
+	}
+}
+else if (argc != 1) {
+	cerr << "must provide an even number of inputs in format '-name value':" << endl;
+	for (int j=1; j<argc; j++) cerr << argv[j] << " ";
+	cerr << endl;
+	return 1;
+}
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. Folders
@@ -59,7 +106,6 @@ opts.load("optionsM");
 		- inputsFolder
 		- removeUnshared
 		- printing folders
-		- defining timenumber
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -121,11 +167,6 @@ else {
 	cout << "not files found for options:" << endl;
 	cout << opts << endl;
 }
-
-
-//defining timenumber
-string timenumber;
-(argc==2) ? timenumber = argv[1] : timenumber = currentDateTime();
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	3. beginning file loop
