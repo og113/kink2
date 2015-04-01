@@ -1245,11 +1245,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		
 		// stepping stepper
 		if(((opts.loopChoice).substr(0,5)).compare("const")==0) {
-			if ((opts.loopChoice).back()=='W')
+			if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='W')
 				stepper.addResult(W);
-			else if ((opts.loopChoice).back()=='E')
+			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='E')
 				stepper.addResult(E);
-			else if ((opts.loopChoice).back()=='N')
+			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='N')
 				stepper.addResult(Num);
 			else {
 				cerr << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
