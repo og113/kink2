@@ -229,7 +229,6 @@ template double stringToNumber<double>(const string&);
 template comp stringToNumber<comp>(const string&);
 
 template uint smallestLoc<int>(const vector<int>&);
-template uint smallestLoc<uint>(const vector<uint>&);
 template uint smallestLoc<double>(const vector<double>&);
 template uint smallestLoc<comp>(const vector<comp>&);
 
