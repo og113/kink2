@@ -74,7 +74,8 @@ void analyticModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) 
 			else			modes(l,m) = normalisation*cos(pi*l*m/(p.N-1.0));
 		}
 	}
-	freqs(p.N-1) = 1.0;		
+	freqs(p.N-1) = 1.0;
+	freqs_exp(p.N-1) = (2.0/p.b)*asin(p.b*freqs(p.N-1)/2.0);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -85,21 +86,23 @@ void analyticModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) 
 void numericalModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) {
 	mat h = hFn(p);
 	Eigen::EigenSolver<mat> eigensolver(h);
-	cVec cFreqs(p.N);
+	cVec cFreqs2(p.N);
 	cMat cModes(p.N,p.N);
 	if (eigensolver.info() != Eigen::Success) {
 		cerr << "h eigensolver failed" << endl;
 		cerr << "N = " << p.N << ", a = " << p.a << ", mass2 = " << p.mass2 << endl;
 	}
 	else {
-		cFreqs = eigensolver.eigenvalues();
+		cFreqs2 = eigensolver.eigenvalues();
 		cModes = eigensolver.eigenvectors(); //automatically normalised to have unit norm
 	}
 	for (unsigned int j=0; j<p.N; j++) {
-		freqs(j) = sqrt(real(cFreqs(j)));
+		freqs(j) = sqrt(real(cFreqs2(j)));
 		freqs_exp(j) = (2.0/p.b)*asin(p.b*freqs(j)/2.0);
 		for (unsigned int k=0; k<p.N; k++) {
 			modes(j,k) = real(cModes(j,k));
+			if (abs(imag(cModes(j,k)))>MIN_NUMBER)
+				cerr << "omega error: imaginary part of modes(" << j << "," << k << ") = " << imag(cModes(j,k)) << endl;
 		}
 	}
 }

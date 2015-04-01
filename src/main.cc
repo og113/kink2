@@ -309,7 +309,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				load(freqsExpFolder[0],so_simple,freqs_exp);
 			}
 			else {
-				bool approxOmega = false;
+				bool approxOmega = true;
 				if (!approxOmega) {
 					numericalModes(modes,freqs,freqs_exp,ps);
 				}

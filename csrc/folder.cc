@@ -31,7 +31,6 @@ CONTENTS
 		- copy
 		- copy constructor
 		- operator=
-
 		- operator<<
 		- operator==
 		- empty
@@ -98,6 +97,7 @@ bool operator==(const FilenameAttributes& lhs, const FilenameAttributes& rhs) {
 	return true;
 }
 
+// empty
 bool FilenameAttributes::empty() const {
 	if (Directory.empty() && Timenumber.empty() && ID.empty() && Suffix.empty() && Extras.size()==0)
 		return true;
@@ -465,7 +465,7 @@ void Folder::refresh() {
     is.open ("data/dataFiles");
 	while ( !is.eof() ){
 		is >> f;
-		if (!f.empty() && (f()).back()!='~')
+		if (!f.empty() && (f())[(f()).size()-1]!='~')
 			if (!isPresent(f) && Comparator(f)) Filenames.push_back(f);
 	}
     is.close();
