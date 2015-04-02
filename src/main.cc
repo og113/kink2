@@ -56,7 +56,7 @@ opts.load("optionsM");
 //opts.print();
 
 // defining timenumber
-string timenumber;
+string timenumber = currentDateTime();
 
 // getting argv inputs
 if (argc==2) timenumber = argv[1];
@@ -200,7 +200,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	if (((opts.loopChoice).substr(0,5)).compare("const")==0) {
 		step_opts.epsi_x = opts.epsiTb;
 		step_opts.epsi_y = opts.epsiTheta;
-		step_opts.angle0 = 0.0;
+		step_opts.angle0 = pi/2.0;
 		step_opts.stepType = StepperOptions::constSimple;
 		step_opts.directed = true;
 		point(psu.Tb,psu.theta);
@@ -249,7 +249,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		
 		//printing timenumber
 		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
-	
+		if (((opts.loopChoice).substr(0,5)).compare("const")==0 && loop>0) {
+			printf("%12s%12.3g\n","step angle: ",stepper.stepAngle()/2.0/pi);
+		}
+		
 		// declaring Checks
 		Check checkAction("action",1.0e-2);
 		Check checkSoln("solution",1.0e-6);

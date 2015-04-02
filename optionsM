@@ -14,7 +14,7 @@ maxLoopLoad         0
 loopChoice          constW                   
 loopMin             0                   
 loopMax             0                   
-epsiTb              -0.0001                   
+epsiTb              0.0001                   
 epsiTheta           0.0001                  
 loops               100                   
 printChoice         n                   
