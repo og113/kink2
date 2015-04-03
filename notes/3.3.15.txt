@@ -1,0 +1,3 @@
+stepper has been rejigged to have a closeness above which steps will not be accepted. it currently doesn't work. atm i can see that:
+	- find_nth_closest doesn't work as it uses temp to find the nth closest and the smallest_loc of temp is not that of fxy once some elements have been erased from temp
+	- i'm sure there are other errors in addResult but these can be looked at afterwards

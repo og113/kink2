@@ -16,6 +16,7 @@ double f(const Point2d& p) {
 	return pow(p.X,2.0)+pow(p.Y,2.0);
 }
 
+
 int main() {
 cout << "test stepper: " << endl;
 cout << "pi = " << pi << endl;
@@ -23,7 +24,8 @@ cout << "MIN_NUMBER = " << MIN_NUMBER << endl;
 
 StepperOptions sto;
 sto.stepType = StepperOptions::constSimple;
-sto.directed = false;
+sto.directed = StepperOptions::local;
+sto.closeness = 1.0e-2;
 sto.angle0 = 0.0;
 sto.epsi_x = 0.05;
 sto.epsi_y = 0.1;
@@ -46,6 +48,8 @@ for (unsigned int j=0; j<1000; j++) {
 	//cout << P << setw(15) << f(P) << endl;
 	os << P << setw(15) << f(P) << endl;
 	st.addResult(f(P));
+	if (j%100==0)
+		cout << st.stepAngle() << endl;
 }
 os.close();
 
