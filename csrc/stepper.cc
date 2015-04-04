@@ -103,7 +103,7 @@ static double calcAngle(const Point2d& p1, const Point2d& p2) {
 }
 
 // find nth closest
-static uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const uint& n) {
+uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const uint& n) {
 	if (n>fxy.size()) {
 		cerr << "find_nth_closest error: n(" << n << ") chosen larger than f_xy.size() = " << fxy.size() << endl;
 		return 1;
@@ -112,19 +112,24 @@ static uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const 
 		cerr << "find_nth_closest error: f_xy.size() = " << fxy.size() << " smaller than 3" << endl;
 		return 1;
 	}
-	vector<FxyPair> temp = fxy;
+	vector<uint> ints(fxy.size());
+	for (uint j=0; j<ints.size(); j++)
+		ints[j] = j;
 	uint loc_smallest = 0;
+	uint ints_loc_smallest = 0;
 	for (uint j=0; j<n; j++) {
-		loc_smallest = 0;
-		double test_smallest = absDiff((temp[0]).second,f);
-		for (uint k=1; k<fxy.size(); k++) {
-			double testk = absDiff((temp[k]).second,f);
+		loc_smallest = ints[0];
+		ints_loc_smallest = 0;
+		double test_smallest = absDiff((fxy[loc_smallest]).second,f);
+		for (uint k=1; k<ints.size(); k++) {
+			double testk = absDiff((fxy[ints[k]]).second,f);
 			if (testk < test_smallest) {
-				loc_smallest = k;
-				test_smallest = absDiff((temp[loc_smallest]).second,f);
+				loc_smallest = ints[k];
+				ints_loc_smallest = k;
+				test_smallest = absDiff((fxy[loc_smallest]).second,f);
 			}
 		}
-		temp.erase(temp.begin()+loc_smallest);
+		ints.erase(ints.begin()+ints_loc_smallest);
 	}
 	return loc_smallest;
 }

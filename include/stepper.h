@@ -18,6 +18,7 @@ using namespace std;
 CONTENTS
 	1. Point2d
 	2. Stepper
+	3. static functions for testing
 	
 n.b. stepper defined in 2d
 -------------------------------------------------------------------------------------------------------------------------
@@ -104,5 +105,14 @@ private:
 	vector<FxyPair> f_xy_steps;
 	double			angle;
 };
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	3. static functions for testing
+		- find_nth_closest
+	n.b. to be removed once tested
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// find_nth_closest
+uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const uint& n);
 
 #endif // __STEPPER_H_INCLUDED__

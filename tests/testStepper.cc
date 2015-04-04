@@ -31,6 +31,22 @@ sto.epsi_x = 0.05;
 sto.epsi_y = 0.1;
 
 Point2d P(5.0,0.0);
+Point2d Q(5.0,1.0);
+Point2d R(6.0,1.0);
+Point2d S(7.0,1.0);
+Point2d T(7.0,2.0);
+
+vector<FxyPair> fxy;
+fxy.push_back(FxyPair(Q,f(Q)));
+fxy.push_back(FxyPair(R,f(R)));
+fxy.push_back(FxyPair(S,f(S)));
+fxy.push_back(FxyPair(T,f(T)));
+fxy.push_back(FxyPair(P,f(P)));
+
+cout << "1st closest = " << find_nth_closest(fxy, f(P), 1) << endl;
+cout << "2nd closest = " << find_nth_closest(fxy, f(P), 2) << endl;
+cout << "3rd closest = " << find_nth_closest(fxy, f(P), 3) << endl;
+cout << "4th closest = " << find_nth_closest(fxy, f(P), 4) << endl;
 
 cout << "initializing stepper: ";
 Stepper st(sto,P);
