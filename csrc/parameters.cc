@@ -26,11 +26,13 @@ CONTENTS
 	2 - PrimaryParameters
 	3 - SecondaryParameters
 	4 - Parameters
+	5 - options
+	6 - closenesses
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	1.parameter related errors
+	1. parameter related errors
 		- unset
 		- load
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -709,4 +711,81 @@ void Options::print() const {
 			bds.c_str(),inF.c_str(),loopChoice.c_str(),loopMin,loopMax,\
 			loops);
 	printf("\n");
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	5. Closenesses
+		- operator<<
+		- save
+		- load
+-------------------------------------------------------------------------------------------------------------------------*/
+	
+// operator<<
+ostream& operator<<(ostream& os, const Closenesses& c) {
+	os << left;
+	os << setw(20) << "Step" << setw(20) << c.Step << endl;
+	os << setw(20) << "Action" << setw(20) << c.Action << endl;
+	os << setw(20) << "Soln" << setw(20) << c.Soln << endl;
+	os << setw(20) << "SolnMax" << setw(20) << c.SolnMax << endl;
+	os << setw(20) << "Delta" << setw(20) << c.Delta << endl;
+	os << setw(20) << "Inv" << setw(20) << c.Inv << endl;
+	os << setw(20) << "Con" << setw(20) << c.Con << endl;
+	os << setw(20) << "Lin" << setw(20) << c.Lin << endl;
+	os << setw(20) << "True" << setw(20) << c.True << endl;
+	os << setw(20) << "Latt" << setw(20) << c.Latt << endl;
+	os << setw(20) << "Reg" << setw(20) << c.Reg << endl;
+	os << setw(20) << "IE" << setw(20) << c.IE << endl;
+	os << setw(20) << "Contm" << setw(20) << c.Contm << endl;
+	os << setw(20) << "OS" << setw(20) << c.OS << endl;
+	os << setw(20) << "AB" << setw(20) << c.AB << endl;
+	os << setw(20) << "ABNE" << setw(20) << c.ABNE << endl;
+	os << setw(20) << "LR" << setw(20) << c.LR << endl;
+	os << setw(20) << "DT" << setw(20) << c.DT << endl;
+	os << setw(20) << "Profile" << setw(20) << c.Profile << endl;
+	os << endl;
+	return os;
+}
+
+// save
+void Closenesses::save(const string& filename) const {
+	ofstream os;
+	os.open(filename.c_str());
+	if (!os.good()) {
+		FileError::StreamNotGood e(filename);
+		cerr << e;
+	}
+	os << *this;
+	os << endl;
+	os.close();
+}
+
+//load
+void Closenesses::load(const string& filename) {
+	ifstream is;
+	is.open(filename.c_str());
+	if (!is.good()) {
+		FileError::StreamNotGood e(filename);
+		cerr << e;
+	}
+	string dross;
+	is >> dross >> Step;
+	is >> dross >> Action;
+	is >> dross >> Soln;
+	is >> dross >> SolnMax;
+	is >> dross >> Delta;
+	is >> dross >> Inv;
+	is >> dross >> Con;
+	is >> dross >> Lin;
+	is >> dross >> True;
+	is >> dross >> Latt;
+	is >> dross >> Reg;
+	is >> dross >> IE;
+	is >> dross >> Contm;
+	is >> dross >> OS;
+	is >> dross >> AB;
+	is >> dross >> ABNE;
+	is >> dross >> LR;
+	is >> dross >> DT;
+	is >> dross >> Profile;
+	is.close();
 }

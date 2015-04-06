@@ -23,7 +23,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
 	CONTENTS
-		1 - loading options, argv inputs
+		1 - loading options, closenesses, argv inputs
 		2 - Folders
 		3 - beginning file loop
 		4 - beginning parameter loop
@@ -46,6 +46,7 @@ int main(int argc, char** argv)
 /*----------------------------------------------------------------------------------------------------------------------------
 	1. loading options, argv inputs
 		- loading options
+		- loading closenesses
 		- argv inputs
 		- defining timenumber
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -54,6 +55,10 @@ int main(int argc, char** argv)
 Options opts;
 opts.load("optionsM");
 //opts.print();
+
+// loading closenesses
+Closenesses closenesses;
+closenesses.load("closenesses");
 
 // defining timenumber
 string timenumber = currentDateTime();
@@ -201,8 +206,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.epsi_x = opts.epsiTb;
 		step_opts.epsi_y = opts.epsiTheta;
 		step_opts.angle0 = pi/2.0;
+		step_opts.closeness = closenesses.Step;
 		step_opts.stepType = StepperOptions::constSimple;
-		step_opts.directed = true;
+		step_opts.directed = StepperOptions::local;
 		point(psu.Tb,psu.theta);
 	}
 	else {
@@ -210,7 +216,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.epsi_y = 0.0;
 		step_opts.angle0 = 0.0;
 		step_opts.stepType = StepperOptions::straight;
-		step_opts.directed = true;
+		step_opts.directed = StepperOptions::undirected;
 		point(opts.loopMin,0.0);
 	}
 	Stepper stepper(step_opts,point);
@@ -250,26 +256,26 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//printing timenumber
 		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
 		if (((opts.loopChoice).substr(0,5)).compare("const")==0 && loop>0) {
-			printf("%12s%12.3g\n","step angle: ",stepper.stepAngle()/2.0/pi);
+			printf("%12s%12.3g\n","step angle: ",stepper.stepAngle());
 		}
 		
 		// declaring Checks
-		Check checkAction("action",1.0e-2);
-		Check checkSoln("solution",1.0e-6);
-		Check checkSolnMax("solution max",1.0e-5);
-		Check checkDelta("delta",1.0);
-		Check checkInv("matrix inversion",1.0e-16*ps.N*ps.NT);
-		Check checkCon("energy conservation",1.0e-2);
-		Check checkLin("linear energy flat",5.0e-2);
-		Check checkTrue("linear energy equal true energy",5.0e-2);
-		Check checkLatt("lattice small enough for energy",0.2);
-		Check checkReg("regularisation term",1.0e-2);
-		Check checkIE("imaginary part of energy",1.0e-5);
-		Check checkContm("linear energy equal continuum expression",5.0e-2);
-		Check checkOS("linear energy equal on shell expression",5.0e-2);
-		Check checkAB("a_k = Gamma*b_k",1.0e-2);
-		Check checkABNE("N = Sum(a_k*b_k), E = Sum(w_k*a_k*b_k)",5.0e-2);
-		Check checkLR("linear representation of phi",1.0e-12);
+		Check checkAction("action",closenesses.Action);
+		Check checkSoln("solution",closenesses.Soln);
+		Check checkSolnMax("solution max",closenesses.SolnMax);
+		Check checkDelta("delta",closenesses.Delta);
+		Check checkInv("matrix inversion",closenesses.Inv*ps.N*ps.NT);
+		Check checkCon("energy conservation",closenesses.Con);
+		Check checkLin("linear energy flat",closenesses.Lin);
+		Check checkTrue("linear energy equal true energy",closenesses.True);
+		Check checkLatt("lattice small enough for energy",closenesses.Latt);
+		Check checkReg("regularisation term",closenesses.Reg);
+		Check checkIE("imaginary part of energy",closenesses.IE);
+		Check checkContm("linear energy equal continuum expression",closenesses.Contm);
+		Check checkOS("linear energy equal on shell expression",closenesses.OS);
+		Check checkAB("a_k = Gamma*b_k",closenesses.AB);
+		Check checkABNE("N = Sum(a_k*b_k), E = Sum(w_k*a_k*b_k)",closenesses.ABNE);
+		Check checkLR("linear representation of phi",closenesses.LR);
 	
 		// do trivial or redundant checks?
 		bool trivialChecks = false;
@@ -464,7 +470,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		}
 		else {
 			Filename lastPhi = (string)("./data/" + timenumber + "mainp_fLoop_" + numberToString<uint>(fileLoop) + "_loop_"\
-								 + numberToString<uint>(loop-stepper.offset())+".dat");
+								 + numberToString<uint>(loop-stepper.local()+1)+".dat");
 			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
 			printf("%12s%30s\n","input: ",(lastPhi()).c_str());

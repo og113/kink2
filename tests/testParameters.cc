@@ -69,7 +69,32 @@ o.printChoice = "n";
 string str = "tests/data/testParameters_o";
 o.save(str);
 o.print();
-cout << "o: " << endl << o;
+cout << "o: " << endl << o << endl;
+
+Closenesses c;
+c.Step = 1.0e-2;
+c.Action = 1.0e-2;
+c.Soln = 1.0e-6;
+c.SolnMax = 1.0e-5;
+c.Delta = 1.0;
+c.Inv = 1.0e-16;
+c.Con = 1.0e-2;
+c.Lin = 5.0e-2;
+c.True = 5.0e-2;
+c.Latt = 2.0e-1;
+c.Reg = 1.0e-2;
+c.IE = 1.0e-5;
+c.Contm = 5.0e-2;
+c.OS = 5.0e-2;
+c.AB = 5.0e-2;
+c.ABNE = 5.0e-2;
+c.LR = 1.0e-12;
+c.DT = 1.0e3;
+c.Profile = 1.0e-5;
+
+str = "tests/data/testParameters_c";
+c.save(str);
+cout << "c: " << endl << c;
 
 return 0;
 }

@@ -49,11 +49,18 @@ int main(int argc, char** argv)
 {
 /*----------------------------------------------------------------------------------------------------------------------------
 	1. loading options
+		- loading options
+		- loading closenesses
 ----------------------------------------------------------------------------------------------------------------------------*/
 
+// loading options
 Options opts;
 opts.load("optionsP");
 //opts.print();
+
+// loading closenesses
+Closenesses closenesses;
+closenesses.load("closenesses");
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. getting inputs
@@ -115,16 +122,18 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	ps.print();
 	
 	// declaring Checks
-	Check checkAction("action",1.0e-2);
-	Check checkSoln("solution",1.0e-6);
-	Check checkSolnMax("solution max",1.0e-5);
-	Check checkDelta("delta",1.0);
-	Check checkInv("matrix inversion",1.0e-16*ps.N*ps.NT);
-	Check checkCon("energy conservation",1.0e-2);
-	Check checkLatt("lattice small enough for energy",0.2);
-	Check checkReg("regularisation term",1.0e-2);
-	Check checkDT("1/(time derivative of phi)",1.0e3);
-	Check checkProfile("phi input calculation",1.0e-5);
+	Check checkAction("action",closenesses.Action);
+	Check checkSoln("solution",closenesses.Soln);
+	Check checkSolnMax("solution max",closenesses.SolnMax);
+	Check checkDelta("delta",closenesses.Delta);
+	Check checkInv("matrix inversion",closenesses.Inv*ps.N*ps.NT);
+	Check checkCon("energy conservation",closenesses.Con);
+	Check checkLin("linear energy flat",closenesses.Lin);
+	Check checkTrue("linear energy equal true energy",closenesses.True);
+	Check checkLatt("lattice small enough for energy",closenesses.Latt);
+	Check checkReg("regularisation term",closenesses.Reg);
+	Check checkDT("1/(time derivative of phi)",closenesses.DT);
+	Check checkProfile("phi input calculation",closenesses.Profile);
 	
 	// do trivial or redundant checks?
 	bool trivialChecks = false;

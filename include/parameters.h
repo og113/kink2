@@ -25,7 +25,8 @@ CONTENTS
 	2 - PrimaryParameters
 	3 - SecondaryParameters
 	4 - Parameters
-	5 - options
+	5 - Options
+	6 - Closenesses
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -192,5 +193,39 @@ struct Options {
 
 // operator<<
 ostream& operator<<(ostream&, const Options&);
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	6. Closenesses
+		- Closenesses
+		- operator<<
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// Closenesses
+struct Closenesses {
+	double Step;
+	double Action;
+	double Soln;
+	double SolnMax;
+	double Delta;
+	double Inv;
+	double Con;
+	double Lin;
+	double True;
+	double Latt;
+	double Reg;
+	double IE;
+	double Contm;
+	double OS;
+	double AB;
+	double ABNE;
+	double LR;	
+	double DT;
+	double Profile;
+	void save(const string& filename) const;
+	void load(const string& filename);
+};
+
+// operator<<
+ostream& operator<<(ostream&, const Closenesses&);
 
 #endif // __PARAMETERS_H_INCLUDED__

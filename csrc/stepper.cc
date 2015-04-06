@@ -309,7 +309,6 @@ void Stepper::addResult(const double& f) {
 				double norm = absDiff(fl,f_0) + absDiff(fh,f_0);
 				double anglel = calcAngle(p_step,pl), angleh = calcAngle(p_step,ph);
 				angle = (absDiff(fl,f_0)/norm)*anglel + (absDiff(fh,f_0)/norm)*angleh;
-				uint k=0;
 			}
 		}
 		
