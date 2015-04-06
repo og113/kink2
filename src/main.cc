@@ -159,9 +159,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	if (((opts.loopChoice).substr(0,5)).compare("const")==0) {
 		step_opts.epsi_x = opts.epsiTb;
 		step_opts.epsi_y = opts.epsiTheta;
-		step_opts.angle0 = 0.0;
+		step_opts.angle0 = pi/2.0;
 		step_opts.stepType = StepperOptions::constSimple;
-		step_opts.directed = true;
+		step_opts.directed = false;
 		point(psu.Tb,psu.theta);
 	}
 	else {
