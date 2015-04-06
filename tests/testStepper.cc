@@ -26,27 +26,13 @@ StepperOptions sto;
 sto.stepType = StepperOptions::constSimple;
 sto.directed = StepperOptions::local;
 sto.closeness = 1.0e-2;
-sto.angle0 = 0.0;
-sto.epsi_x = 0.05;
-sto.epsi_y = 0.1;
+sto.angle0 = pi/2.0;
+sto.epsi_x = 0.01;
+sto.epsi_y = 0.02;
 
 Point2d P(5.0,0.0);
-Point2d Q(5.0,1.0);
-Point2d R(6.0,1.0);
-Point2d S(7.0,1.0);
-Point2d T(7.0,2.0);
-
-vector<FxyPair> fxy;
-fxy.push_back(FxyPair(Q,f(Q)));
-fxy.push_back(FxyPair(R,f(R)));
-fxy.push_back(FxyPair(S,f(S)));
-fxy.push_back(FxyPair(T,f(T)));
-fxy.push_back(FxyPair(P,f(P)));
-
-cout << "1st closest = " << find_nth_closest(fxy, f(P), 1) << endl;
-cout << "2nd closest = " << find_nth_closest(fxy, f(P), 2) << endl;
-cout << "3rd closest = " << find_nth_closest(fxy, f(P), 3) << endl;
-cout << "4th closest = " << find_nth_closest(fxy, f(P), 4) << endl;
+double maxError = 0.0;
+double f0 = f(P);
 
 cout << "initializing stepper: ";
 Stepper st(sto,P);
@@ -57,15 +43,15 @@ string file = "tests/data/testStepper.dat";
 ofstream os;
 os.open(file.c_str());
 cout << "stepping variables:" << endl;
-cout << P << setw(15) << f(P) << endl;
-for (unsigned int j=0; j<1000; j++) {
+for (unsigned int j=0; j<1e4; j++) {
+	if (st.keep()) {
+		os << P << setw(15) << f(P) << endl;
+		//cout << st.stepAngle() << endl;
+		maxError = (absDiff(f(P),f0)>maxError? absDiff(f(P),f0): maxError);
+	}
 	st.step();
 	P = st.point();
-	//cout << P << setw(15) << f(P) << endl;
-	os << P << setw(15) << f(P) << endl;
 	st.addResult(f(P));
-	if (j%100==0)
-		cout << st.stepAngle() << endl;
 }
 os.close();
 
@@ -73,11 +59,14 @@ cout << "plotting steps" << endl;
 PlotOptions po;
 po.column = 1;
 po.column2 = 2;
-po.style = "points";
-po.output = "tests/data/testStepper.png";
+po.style = "linespoints";
+po.output = "tests/data/testStepper1.png";
 po.printMessage = true;
 
 plot(file,po);
+
+cout << "maxError = " << maxError << endl;
+cout << "closeness = " << sto.closeness << endl;
 
 return 0;
 }

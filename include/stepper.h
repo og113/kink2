@@ -113,6 +113,6 @@ private:
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // find_nth_closest
-uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const uint& n);
+//uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const uint& n);
 
 #endif // __STEPPER_H_INCLUDED__
