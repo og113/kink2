@@ -1,0 +1,16 @@
+to do next:
+	want to reproduce results of tinyakov and kuznetsov so:
+		- need to step with F=const
+			- to do this stepper needs to be improved to incorporate information from legendre transform
+			- dF = (dF/dT)*dT + (dF/dtheta)*dtheta and dF/dT|theta = -T*dE/dT|theta -theta*dN/dT|theta etc.
+			- should replace the bool constant with an enum giving options for stepping
+			- the stepper should also have a bias within 180 degrees. so we need to store the initial angle angle0
+			- angles which are within angle0+/-pi/2 are allowed
+	should think about whether and if so why dE/dT|theta>0 unlike in the DL model.
+	should look for bifurcations of solutions in the regions where F>0
+	it is important to check whether or not solutions tunnel. i.e. extend them with pi3.cc or piEvolve.cc
+		- ideally piEvolve would not use phi/r but phi directly. it would also take V in like main.
+		- that way it could be more easily used for other potentials
+		- likely this isn't worth the faff though and working with a rejigged pi3.cc may be preferable. or simpy with a working piEvolve as it is
+	we should look at the locations of singularities in the solutions. as well as the solution between C and D there should be ones of the real(t) axis. these were found in dl2015
+	we should also consider the continuum limit of our solutions, alla dl2015.

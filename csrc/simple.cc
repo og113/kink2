@@ -1,6 +1,8 @@
 /*-------------------------------------------------------------------------------------------------------------------------
 definitions of some very simple functions and classes
 -------------------------------------------------------------------------------------------------------------------------*/
+
+#include <cstdlib> //for rand, srand
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -23,7 +25,8 @@ CONTENTS
 	5 - copyFile
 	6 - countLines, countColumns
 	7 - smallestLoc
-	8 - explicit instantiation
+	8 - randDouble
+	9 - explicit instantiation
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -212,8 +215,21 @@ uint smallestLoc(const vector<T>& inVector) {
 	return loc;
 }
 
+
 /*-------------------------------------------------------------------------------------------------------------------------
-	8. explicit instantiation
+	8. randDouble
+
+	n.b. must first seed rand with srand(time(NULL)) or something similar
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// randDouble
+double randDouble(const double& min, const double& max) {
+	double f = (double)rand() / RAND_MAX;
+    return min + f*(max - min);
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	9. explicit instantiation
 		- numberToString, stringToNumber
 		- smallestLoc
 -------------------------------------------------------------------------------------------------------------------------*/

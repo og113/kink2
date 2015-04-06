@@ -21,6 +21,7 @@ using namespace std;
 #endif
 
 typedef unsigned int uint;
+typedef unsigned long int lint;
 typedef complex<double> comp;
 typedef Eigen::VectorXd vec;
 typedef Eigen::VectorXcd cVec;
@@ -37,6 +38,7 @@ CONTENTS
 	5 - copyFile
 	6 - countLines, countColumns
 	7 - smallestLoc
+	8 - randDouble
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -107,5 +109,14 @@ uint countColumns(const string & file_to_count);
 // smallestLoc
 template <class T>
 uint smallestLoc(const vector<T>&);
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	8. randDouble
+	
+	n.b. must first seed rand with srand(time(NULL)) or something similar
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// randDouble
+double randDouble(const double& min, const double& max);
 
 #endif // __SIMPLE_H_INCLUDED__

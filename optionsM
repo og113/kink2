@@ -12,8 +12,8 @@ maxfLoopLoad        0
 minLoopLoad         200                   
 maxLoopLoad         200                 
 loopChoice          constW                   
-loopMin             0.8                   
-loopMax             0.79                   
+loopMin             0                   
+loopMax             0                   
 epsiTb              0.0001                   
 epsiTheta           0.0001                  
 loops               201                   
