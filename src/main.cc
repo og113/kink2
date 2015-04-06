@@ -1320,11 +1320,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		// printing results to file
 		if (stepper.keep()) {
 			FILE * actionfile;
-			actionfile = fopen("./data/mainAction.dat","a");
+			string resultsFile = "./data/mainAction.dat";
+			actionfile = fopen(resultsFile.c_str(),"a");
 			fprintf(actionfile,"%12s%5i%5i%6g%8g%8g%8g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
 						,W,checkSoln.back(),checkLin.back(),checkTrue.back());
 			fclose(actionfile);
+			printf("saved results: %30s",resultsFile.c_str());
 		}
 		
 		// print everything?, plot too
