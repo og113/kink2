@@ -256,7 +256,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//printing timenumber
 		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
 		if (((opts.loopChoice).substr(0,5)).compare("const")==0 && loop>0) {
-			printf("%12s%12.3g\n","step angle: ",stepper.stepAngle());
+			double angleModTwoPi = stepper.stepAngle();
+			int pis = (int)(angleModTwoPi/pi);
+			angleModTwoPi = angleModTwoPi - pi*(double)(pis+pis%2);
+			printf("%12s%12.3g\n","step angle: ",angleModTwoPi);
 		}
 		
 		// declaring Checks
@@ -1318,11 +1321,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		printf("\n");
 
 		// printing results to file
-		if (stepper.keep()) {
+		if (stepper.keep() || true) {
 			FILE * actionfile;
 			string resultsFile = "./data/mainAction.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
-			fprintf(actionfile,"%12s%5i%5i%6g%8g%8g%8g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
+			fprintf(actionfile,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
 						,W,checkSoln.back(),checkLin.back(),checkTrue.back());
 			fclose(actionfile);
