@@ -99,8 +99,8 @@ static double distance(const Point2d& p1, const Point2d& p2) {
 
 // calcAngle
 static double calcAngle(const Point2d& p1, const Point2d& p2) {
-	Point2d p3 = p2;
-	p3.X = p3.X + distance(p1,p2);
+	Point2d p3(p2);
+	p3.X = p2.X + distance(p1,p2);
 	return 2.0*asin(distance(p1,p3)/2.0/distance(p1,p2));
 }
 
