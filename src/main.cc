@@ -1321,7 +1321,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		printf("\n");
 
 		// printing results to file
-		if (stepper.keep() || true) {
+		if (stepper.keep()) {
 			FILE * actionfile;
 			string resultsFile = "./data/mainAction.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
@@ -1329,7 +1329,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
 						,W,checkSoln.back(),checkLin.back(),checkTrue.back());
 			fclose(actionfile);
-			printf("saved results: %30s",resultsFile.c_str());
+			printf("%12s%30s\n","results:",resultsFile.c_str());
 		}
 		
 		// print everything?, plot too
