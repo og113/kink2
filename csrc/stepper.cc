@@ -92,7 +92,7 @@ Point2d operator-(const Point2d& p1, const Point2d& p2) {
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // distance
-static double distance(const Point2d& p1, const Point2d& p2) {
+static double Distance(const Point2d& p1, const Point2d& p2) {
 	return sqrt(pow(p1.X-p2.X,2.0)+pow(p1.Y-p2.Y,2.0));
 }
 
@@ -100,8 +100,8 @@ static double distance(const Point2d& p1, const Point2d& p2) {
 // calcAngle
 static double calcAngle(const Point2d& p1, const Point2d& p2) {
 	Point2d p3(p2);
-	p3.X = p2.X + distance(p1,p2);
-	return 2.0*asin(distance(p1,p3)/2.0/distance(p1,p2));
+	p3.X += Distance(p1,p2);
+	return 2.0*asin(Distance(p1,p3)/2.0/Distance(p1,p2));
 }
 
 // find nth closest
