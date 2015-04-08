@@ -30,6 +30,7 @@ n.b. stepper defined in 2d
 		- operator<<
 		- operator+
 		- operator-
+		- operator==
 just a collection of two numbers (x,y)
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -57,6 +58,9 @@ Point2d operator+(const Point2d&, const Point2d&);
 
 // operator -
 Point2d operator-(const Point2d&, const Point2d&);
+
+// operator==
+bool operator==(const Point2d& lhs, const Point2d& rhs);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. Stepper

@@ -208,7 +208,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.angle0 = pi/2.0;
 		step_opts.closeness = closenesses.Step;
 		step_opts.stepType = StepperOptions::constSimple;
-		step_opts.directed = StepperOptions::local;
+		step_opts.directed = StepperOptions::undirected;
 		point(psu.Tb,psu.theta);
 	}
 	else {
@@ -233,13 +233,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if ((opts.loopChoice)[0]=='N') {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,(uint)stepper.x());
 				if (loop==0 && anythingChanged) {
-					cout << opts.loopChoice << "changed to " << (uint)stepper.x() << " on input" << endl;
+					cout << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
 			else if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
 				if (loop==0 && anythingChanged) {
-					cout << opts.loopChoice << "changed to " << stepper.x() << " on input" << endl;
+					cout << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
 				}
 			}
 			else {
