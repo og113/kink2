@@ -260,6 +260,7 @@ void Stepper::step() {
 	if (opts.stepType!=StepperOptions::straight) {
 		for (uint k=1; k<local(); k++) {
 			if (P==(f_xy_local[k]).first && (steps()==0 || k>1)) {
+				//if (k==(local()-1)) cout << "adding random angle" << endl;
 				srand(time(NULL));
 				angle += randDouble(-pi,pi)/4.0;
 				if (opts.directed!=StepperOptions::undirected) {	
@@ -319,6 +320,21 @@ void Stepper::addResult(const double& f) {
 									/((f_xy_local[local()-1]).second-(f_xy_steps[steps()]).second)/dx_n);
 			angle = tempAngle + angle_n;
 		}
+		/*else if (local()==3 && steps()==0) {
+			Point2d p0 = (f_xy_steps[0]).first, p1 = (f_xy_local[1]).first, p2 = (f_xy_local[2]).first;
+			double f0 = (f_xy_steps[0]).second, f1 = (f_xy_local[1]).second, f2 = (f_xy_local[2]).second;
+			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
+			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
+			angle = atan(numerator/denominator);
+		}
+		else if (local()==3) {
+			Point2d p0 = (f_xy_steps[steps()]).first, p1 = (f_xy_local[steps()-1]).first, p2 = (f_xy_local[local()-1]).first;
+			double f0 = (f_xy_steps[steps()]).second, f1 = (f_xy_local[steps()-1]).second, f2 = (f_xy_local[local()-1]).second;
+			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
+			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
+			angle = atan(numerator/denominator);
+		}*/
+		
 		else if (local()>3) {
 			Point2d p_step = (f_xy_steps.back()).first;
 			p_step.X /= opts.epsi_x;
@@ -349,6 +365,30 @@ void Stepper::addResult(const double& f) {
 				angle += MIN_NUMBER; 
 			}
 		}
+		/*else if (local()>3) {
+			Point2d p0 = (f_xy_steps.back()).first;
+			double f0 = (f_xy_steps[0]).second;
+			vector <FxyPair> f_low, f_high;
+			for (uint k=0; k<local(); k++) {
+				if ((f_xy_local[k]).second<(f0-MIN_NUMBER*1.0e2))
+					f_low.push_back(f_xy_local[k]);
+				else if ((f_xy_local[k]).second>(f0+MIN_NUMBER*1.0e2))
+					f_high.push_back(f_xy_local[k]);
+			}
+			if (f_low.size()==0 || f_high.size()==0) {
+				srand(time(NULL));
+				angle += randDouble(-pi,pi)/4.0;
+			}
+			else {
+				uint ll = find_nth_closest(f_low,f0,1), lh = find_nth_closest(f_high,f0,1);				
+				Point2d pl = (f_low[ll]).first, ph = (f_high[lh]).first;
+				double fl = (f_low[ll]).second, fh = (f_high[lh]).second;
+				double numerator = (fh-f0)*(pl.Y-p0.Y) - (fl-f0)*(ph.Y-p0.Y);
+				double denominator = (fh-f0)*(pl.X-p0.X) - (fl-f0)*(ph.X-p0.X);
+				angle = atan(numerator/denominator);
+				angle += MIN_NUMBER; 
+			}
+		}*/
 		
 		else
 			cerr << "Stepper error: addResult should not have reached this point, 1" << endl;
