@@ -208,7 +208,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.angle0 = pi/2.0;
 		step_opts.closeness = closenesses.Step;
 		step_opts.stepType = StepperOptions::constSimple;
-		step_opts.directed = StepperOptions::local;
+		step_opts.directed = StepperOptions::undirected;
 		point(psu.Tb,psu.theta);
 	}
 	else {
@@ -233,13 +233,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if ((opts.loopChoice)[0]=='N') {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,(uint)stepper.x());
 				if (loop==0 && anythingChanged) {
-					cout << opts.loopChoice << "changed to " << (uint)stepper.x() << " on input" << endl;
+					cout << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
 			else if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
 				if (loop==0 && anythingChanged) {
-					cout << opts.loopChoice << "changed to " << stepper.x() << " on input" << endl;
+					cout << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
 				}
 			}
 			else {
@@ -1298,16 +1298,31 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		
 		// stepping stepper
 		if(((opts.loopChoice).substr(0,5)).compare("const")==0) {
-			if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='W')
+			double F = 0.0;
+			if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='W') {
 				stepper.addResult(W);
-			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='E')
+				F = W;
+				}
+			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='E') {
 				stepper.addResult(E);
-			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='N')
+				F = E;
+			}
+			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='N') {
 				stepper.addResult(Num);
+				F = Num;
+			}
 			else {
 				cerr << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
 				return 1;
 			}
+			string keep = (stepper.keep()? "y": "n");
+			FILE * stepOs;
+			string stepFile = "./data/"+timenumber+"mainStep_fLoop_"+numberToString<uint>(fileLoop)+".dat";
+			stepOs = fopen(stepFile.c_str(),"a");
+			fprintf(stepOs,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
+						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,stepper.stepAngle(),F,keep.c_str());
+			fclose(stepOs);
+			printf("%12s%30s\n","steps:",stepFile.c_str());
 		}
 		else
 			stepper.addResult(1.0); // choice irrelevant but a value is require to make step
@@ -1323,7 +1338,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		// printing results to file
 		if (stepper.keep()) {
 			FILE * actionfile;
-			string resultsFile = "./data/mainAction.dat";
+			string resultsFile = "./results/mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
 			fprintf(actionfile,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
