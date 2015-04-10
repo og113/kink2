@@ -22,6 +22,9 @@ double f(const Point2d& p) {
 
 int main() {
 cout << "test stepper: " << endl;
+string stepType;
+cout << "input either t (constTaylor) or p (constPlane): ";
+cin >> stepType;
 
 uint 			loops 				= 1e3;
 uint			avgLoops			= 1e3;
@@ -61,7 +64,14 @@ for (uint l=0; l<parameterLoops; l++) {
 	double maxLocal = 0.0;
 	for (uint m=0; m<avgLoops; m++) {
 		StepperOptions sto;
-		sto.stepType = StepperOptions::constSimple;
+		if (stepType.compare("t")==0)
+			sto.stepType = StepperOptions::constTaylor;
+		else if (stepType.compare("p")==0)
+			sto.stepType = StepperOptions::constPlane;
+		else {
+			cerr << "stepType, " << stepType << ", not understood" << endl;
+			return 1;
+		}
 		sto.directed = StepperOptions::undirected;
 		sto.closeness = closenessStepper.x();
 		sto.angle0 = pi/2.0;
