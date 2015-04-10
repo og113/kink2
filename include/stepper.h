@@ -9,6 +9,7 @@
 #include <vector>
 #include <utility> //for pair
 #include <iostream>
+#include "simple.h"
 #include "error.h"
 
 using namespace std;
