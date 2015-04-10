@@ -23,7 +23,8 @@ CONTENTS
 	2. fns of Point2d
 	3. Stepper
 	
-n.b. stepper defined in 2d
+n.b. stepper defined in 2d.
+n.b. on 10/04/15 constPlane was the only reliable stepper. considerably better than taylor.
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
