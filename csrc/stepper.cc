@@ -292,7 +292,7 @@ void Stepper::addResult(const double& f) {
 		f_xy_local.push_back(f_xy_steps[steps()-1]);
 		f_xy_local.push_back(f_xy_steps[steps()]);
 	}
-	else if (opts.stepType==StepperOptions::constSimple) {
+	else if (opts.stepType==StepperOptions::constTaylor) {
 		double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second);
 		if (test<opts.closeness && local()>3) {
 			f_xy_steps.push_back(f_xy_local.back());
@@ -320,21 +320,6 @@ void Stepper::addResult(const double& f) {
 									/((f_xy_local[local()-1]).second-(f_xy_steps[steps()]).second)/dx_n);
 			angle = tempAngle + angle_n;
 		}
-		/*else if (local()==3 && steps()==0) {
-			Point2d p0 = (f_xy_steps[0]).first, p1 = (f_xy_local[1]).first, p2 = (f_xy_local[2]).first;
-			double f0 = (f_xy_steps[0]).second, f1 = (f_xy_local[1]).second, f2 = (f_xy_local[2]).second;
-			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
-			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
-			angle = atan(numerator/denominator);
-		}
-		else if (local()==3) {
-			Point2d p0 = (f_xy_steps[steps()]).first, p1 = (f_xy_local[steps()-1]).first, p2 = (f_xy_local[local()-1]).first;
-			double f0 = (f_xy_steps[steps()]).second, f1 = (f_xy_local[steps()-1]).second, f2 = (f_xy_local[local()-1]).second;
-			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
-			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
-			angle = atan(numerator/denominator);
-		}*/
-		
 		else if (local()>3) {
 			Point2d p_step = (f_xy_steps.back()).first;
 			p_step.X /= opts.epsi_x;
@@ -365,7 +350,36 @@ void Stepper::addResult(const double& f) {
 				angle += MIN_NUMBER; 
 			}
 		}
-		/*else if (local()>3) {
+	}
+	else if (opts.stepType==StepperOptions::constPlane) {
+		double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second);
+		if (test<opts.closeness && local()>3) {
+			f_xy_steps.push_back(f_xy_local.back());
+			f_xy_local.clear();
+			f_xy_local.push_back(f_xy_steps[steps()-1]);
+			f_xy_local.push_back(f_xy_steps[steps()]);
+			if (opts.directed==StepperOptions::local)
+				opts.angle0 = angle;
+			angle += pi/2.0;
+		}
+		else if (local()==2) {
+			angle += pi/2.0;		
+		}
+		else if (local()==3 && steps()==0) {
+			Point2d p0 = (f_xy_steps[0]).first, p1 = (f_xy_local[1]).first, p2 = (f_xy_local[2]).first;
+			double f0 = (f_xy_steps[0]).second, f1 = (f_xy_local[1]).second, f2 = (f_xy_local[2]).second;
+			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
+			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
+			angle = atan(numerator/denominator);
+		}
+		else if (local()==3) {
+			Point2d p0 = (f_xy_steps[steps()]).first, p1 = (f_xy_local[steps()-1]).first, p2 = (f_xy_local[local()-1]).first;
+			double f0 = (f_xy_steps[steps()]).second, f1 = (f_xy_local[steps()-1]).second, f2 = (f_xy_local[local()-1]).second;
+			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
+			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
+			angle = atan(numerator/denominator);
+		}
+		else if (local()>3) {
 			Point2d p0 = (f_xy_steps.back()).first;
 			double f0 = (f_xy_steps[0]).second;
 			vector <FxyPair> f_low, f_high;
@@ -388,10 +402,7 @@ void Stepper::addResult(const double& f) {
 				angle = atan(numerator/denominator);
 				angle += MIN_NUMBER; 
 			}
-		}*/
-		
-		else
-			cerr << "Stepper error: addResult should not have reached this point, 1" << endl;
+		}
 	}
 	else
 		cerr << "Stepper error: addResult should not have reached this point, 2" << endl;
