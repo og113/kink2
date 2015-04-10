@@ -1321,7 +1321,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
 			printf("%12s%30s\n","steps:",stepFile.c_str());
-			if (abs(stepper.result())<MIN_NUMBER)
+			if (abs(opts.loopMin-F)<stepper.closeness())
+				stepper.addResult(opts.loopMin);
+			else
 				stepper.addResult(F);
 		}
 		else

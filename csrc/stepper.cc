@@ -154,6 +154,7 @@ static uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const 
 		- x
 		- y
 		- result
+		- closeness
 		- stepAngle
 		- local
 		- keep
@@ -241,6 +242,11 @@ double Stepper::y() const {
 // result()
 double Stepper::result() const {
 	return (f_xy_local.back()).second;
+}
+
+// closeness()
+double Stepper::closeness() const {
+	return opts.closeness;
 }
 
 // stepAngle()
