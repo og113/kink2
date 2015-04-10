@@ -207,7 +207,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.epsi_y = opts.epsiTheta;
 		step_opts.angle0 = pi/2.0;
 		step_opts.closeness = closenesses.Step;
-		step_opts.stepType = StepperOptions::constTaylor;
+		step_opts.stepType = StepperOptions::constPlane;
 		step_opts.directed = StepperOptions::undirected;
 		point(psu.Tb,psu.theta);
 	}
