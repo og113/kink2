@@ -380,13 +380,15 @@ void Stepper::addResult(const double& f) {
 			angle = atan(numerator/denominator);
 		}
 		else if (local()>3) {
-			Point2d p0 = (f_xy_steps.back()).first;
-			double f0 = (f_xy_steps[0]).second;
+			Point2d p_step = (f_xy_steps.back()).first;
+			p_step.X /= opts.epsi_x;
+			p_step.Y /= opts.epsi_y;
+			double f_0 = (f_xy_steps[0]).second;
 			vector <FxyPair> f_low, f_high;
 			for (uint k=0; k<local(); k++) {
-				if ((f_xy_local[k]).second<(f0-MIN_NUMBER*1.0e2))
+				if ((f_xy_local[k]).second<(f_0-MIN_NUMBER*1.0e2))
 					f_low.push_back(f_xy_local[k]);
-				else if ((f_xy_local[k]).second>(f0+MIN_NUMBER*1.0e2))
+				else if ((f_xy_local[k]).second>(f_0+MIN_NUMBER*1.0e2))
 					f_high.push_back(f_xy_local[k]);
 			}
 			if (f_low.size()==0 || f_high.size()==0) {
@@ -394,12 +396,16 @@ void Stepper::addResult(const double& f) {
 				angle += randDouble(-pi,pi)/4.0;
 			}
 			else {
-				uint ll = find_nth_closest(f_low,f0,1), lh = find_nth_closest(f_high,f0,1);				
+				uint ll = find_nth_closest(f_low,f_0,1), lh = find_nth_closest(f_high,f_0,1);				
 				Point2d pl = (f_low[ll]).first, ph = (f_high[lh]).first;
+				pl.X /= opts.epsi_x;
+				pl.Y /= opts.epsi_y;
+				ph.X /= opts.epsi_x;
+				ph.Y /= opts.epsi_y;
 				double fl = (f_low[ll]).second, fh = (f_high[lh]).second;
-				double numerator = (fh-f0)*(pl.Y-p0.Y) - (fl-f0)*(ph.Y-p0.Y);
-				double denominator = (fh-f0)*(pl.X-p0.X) - (fl-f0)*(ph.X-p0.X);
-				angle = atan(numerator/denominator);
+				double norm = absDiff(fl,f_0) + absDiff(fh,f_0);
+				double anglel = calcAngle(p_step,pl), angleh = calcAngle(p_step,ph);
+				angle = (absDiff(fl,f_0)/norm)*anglel + (absDiff(fh,f_0)/norm)*angleh;
 				angle += MIN_NUMBER; 
 			}
 		}
