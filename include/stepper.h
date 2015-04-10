@@ -75,7 +75,7 @@ typedef pair<Point2d,double> FxyPair;
 
 // StepperOptions
 struct StepperOptions{
-	enum			stepTypeList {straight=1, constTaylor=2, constPlane=3, lagrange=4};
+	enum			stepTypeList {straight=1, constTaylor=2, constPlane=3, constLagrange=4};
 	enum			directedList {undirected=1, global=2, local=3};
 	double 			epsi_x;
 	double			epsi_y;
@@ -88,7 +88,9 @@ struct StepperOptions{
 // Stepper
 class Stepper {
 public:
+	Stepper(const StepperOptions& sto, const double& X, const double& Y, const double& f0);
 	Stepper(const StepperOptions& sto, const double& X, const double& Y);
+	Stepper(const StepperOptions& sto, const Point2d& P, const double& f0);
 	Stepper(const StepperOptions& sto, const Point2d& P);
 	Stepper(const StepperOptions& sto);
 	~Stepper() {}
@@ -100,6 +102,7 @@ public:
 	Point2d 	point() const;
 	double		x() const;
 	double		y() const;
+	double		result() const;
 	uint		local() const;
 	uint		steps() const;
 	bool		keep() const;
