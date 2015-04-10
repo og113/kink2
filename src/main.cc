@@ -1321,7 +1321,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
 			printf("%12s%30s\n","steps:",stepFile.c_str());
-			stepper.addResult(F);
+			if (abs(stepper.result())<MIN_NUMBER)
+				stepper.addResult(F);
 		}
 		else
 			stepper.addResult(1.0); // choice irrelevant but a value is require to make step

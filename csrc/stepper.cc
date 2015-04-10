@@ -153,11 +153,23 @@ static uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const 
 		- setStart
 		- x
 		- y
+		- result
 		- stepAngle
 		- local
 		- keep
 		
 -------------------------------------------------------------------------------------------------------------------------*/
+
+// constructor
+Stepper::Stepper(const StepperOptions& sto, const double& X, const double& Y, const double& f0):\
+ 		opts(sto), f_xy_local(), f_xy_steps(), angle(sto.angle0){
+	Point2d P(X,Y);
+	FxyPair toAdd(P,f0);
+	f_xy_local.push_back(toAdd);
+	f_xy_steps.push_back(toAdd);
+	if (opts.stepType!=StepperOptions::straight && opts.closeness<MIN_NUMBER)
+		cerr << "Stepper error: closeness must be larger than 0" << endl;
+}
 
 // constructor
 Stepper::Stepper(const StepperOptions& sto, const double& X, const double& Y):\
@@ -167,6 +179,16 @@ Stepper::Stepper(const StepperOptions& sto, const double& X, const double& Y):\
 	f_xy_local.push_back(toAdd);
 	f_xy_steps.push_back(toAdd);
 	if (opts.stepType!=StepperOptions::straight && opts.closeness<MIN_NUMBER)
+		cerr << "Stepper error: closeness must be larger than 0" << endl;
+}
+
+// constructor
+Stepper::Stepper(const StepperOptions& sto, const Point2d& P, const double& f0):\
+			 opts(sto), f_xy_local(), f_xy_steps(), angle(sto.angle0){
+	FxyPair toAdd(P,f0);
+	f_xy_local.push_back(toAdd);
+	f_xy_steps.push_back(toAdd);
+	if (opts.stepType!=StepperOptions::straight && abs(opts.closeness)<MIN_NUMBER)
 		cerr << "Stepper error: closeness must be larger than 0" << endl;
 }
 
@@ -214,6 +236,11 @@ double Stepper::x() const {
 // y()
 double Stepper::y() const {
 	return ((f_xy_local.back()).first).Y;
+}
+
+// result()
+double Stepper::result() const {
+	return (f_xy_local.back()).second;
 }
 
 // stepAngle()
@@ -418,7 +445,7 @@ void Stepper::addResult(const double& f) {
 
 // addResult
 void Stepper::addResult(const double& f, const double& e, const double& n) {
-	if (opts.stepType!=StepperOptions::lagrange) {
+	if (opts.stepType!=StepperOptions::constLagrange) {
 		addResult(f);
 	}
 	else {
