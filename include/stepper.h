@@ -9,6 +9,7 @@
 #include <vector>
 #include <utility> //for pair
 #include <iostream>
+#include "simple.h"
 #include "error.h"
 
 using namespace std;
@@ -74,20 +75,24 @@ typedef pair<Point2d,double> FxyPair;
 
 // StepperOptions
 struct StepperOptions{
-	enum			stepTypeList {straight=1, constSimple=2, lagrange=3};
+	enum			stepTypeList {straight=1, constTaylor=2, constPlane=3, constLagrange=4};
 	enum			directedList {undirected=1, global=2, local=3};
+	enum			angleRangeList {twopi=1, infinite=2};
 	double 			epsi_x;
 	double			epsi_y;
 	double 			angle0;
 	double			closeness;
 	stepTypeList 	stepType;
 	directedList	directed;
+	angleRangeList	range;
 };
 
 // Stepper
 class Stepper {
 public:
+	Stepper(const StepperOptions& sto, const double& X, const double& Y, const double& f0);
 	Stepper(const StepperOptions& sto, const double& X, const double& Y);
+	Stepper(const StepperOptions& sto, const Point2d& P, const double& f0);
 	Stepper(const StepperOptions& sto, const Point2d& P);
 	Stepper(const StepperOptions& sto);
 	~Stepper() {}
@@ -99,10 +104,12 @@ public:
 	Point2d 	point() const;
 	double		x() const;
 	double		y() const;
+	double		result() const;
 	uint		local() const;
 	uint		steps() const;
 	bool		keep() const;
 	double		stepAngle() const;
+	double		closeness() const;
 private:
 	StepperOptions 	opts;
 	vector<FxyPair> f_xy_local;

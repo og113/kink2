@@ -22,6 +22,9 @@ double f(const Point2d& p) {
 
 int main() {
 cout << "test stepper: " << endl;
+string stepType;
+cout << "input either t (constTaylor) or p (constPlane): ";
+cin >> stepType;
 
 uint 			loops 				= 1e3;
 uint			avgLoops			= 1e3;
@@ -61,7 +64,15 @@ for (uint l=0; l<parameterLoops; l++) {
 	double maxLocal = 0.0;
 	for (uint m=0; m<avgLoops; m++) {
 		StepperOptions sto;
-		sto.stepType = StepperOptions::constSimple;
+		if (stepType.compare("t")==0)
+			sto.stepType = StepperOptions::constTaylor;
+		else if (stepType.compare("p")==0)
+			sto.stepType = StepperOptions::constPlane;
+		else {
+			cerr << "stepType, " << stepType << ", not understood" << endl;
+			return 1;
+		}
+		sto.range = StepperOptions::infinite;
 		sto.directed = StepperOptions::undirected;
 		sto.closeness = closenessStepper.x();
 		sto.angle0 = pi/2.0;
@@ -84,23 +95,32 @@ for (uint l=0; l<parameterLoops; l++) {
 		//cout << "             loops: " << loops << endl;
 		bool coutEveryLoop = false;
 		bool coutAngle = false;
+		if (coutEveryLoop) {
+			cout << P << setw(15) << 0.0 << setw(15) << f(P) << setw(15) << "y" << endl;
+		}
 		for (unsigned int j=0; j<loops; j++) {
-			if (coutEveryLoop) {
-			cout << P << setw(15) << f(P) << setw(15) << st.stepAngle() << endl;
-			}
 			if (st.keep()) {
 				os << P << setw(15) << f(P) << endl;
 				if (!coutEveryLoop && coutAngle) cout << st.stepAngle() << endl;
 				maxError = (absDiff(f(P),f0)>maxError? absDiff(f(P),f0): maxError);
 			}
 			st.step();
+			if (coutEveryLoop) {
+			string keep = (st.keep()? "y": "n");
+			cout << P << setw(15) << st.stepAngle() << setw(15) << f(P);
+			}
 			P = st.point();
 			st.addResult(f(P));
+			if (coutEveryLoop) {
+			string keep = (st.keep()? "y": "n");
+			cout << setw(15) << keep << endl;
+			}
 		}
 		os.close();
 
-		//cout << "plotting steps" << endl;
-		/*PlotOptions po;
+		/*
+		cout << "plotting steps" << endl;
+		PlotOptions po;
 		po.column = 1;
 		po.column2 = 2;
 		po.style = "linespoints";
@@ -112,7 +132,8 @@ for (uint l=0; l<parameterLoops; l++) {
 		cout << "steps = " << st.steps() << endl;
 		cout << "avgLocal = " << (double)loops/(double)st.steps() << endl;
 		cout << "maxError = " << maxError << endl;
-		cout << "closeness = " << sto.closeness << endl;*/
+		cout << "closeness = " << sto.closeness << endl;
+		*/
 		if (st.steps()>0)
 			avgLocal += (double)loops/(double)st.steps();
 		else

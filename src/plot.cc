@@ -67,6 +67,11 @@ else if (id.compare("p")==0 || id.compare("pi")==0 || id.compare("minusDS")==0 |
 	po.gp = "gp/repi.gp";
 	po.style = "points";
 }
+else if (id.compare("Step")==0) {
+	po.column = 8;
+	po.column2 = 9;
+	po.style = "points";
+}
 else {
 	po.column = 1;
 }

@@ -23,7 +23,8 @@ CONTENTS
 	2. fns of Point2d
 	3. Stepper
 	
-n.b. stepper defined in 2d
+n.b. stepper defined in 2d.
+n.b. on 10/04/15 constPlane was the only reliable stepper. considerably better than taylor.
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -152,11 +153,24 @@ static uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const 
 		- setStart
 		- x
 		- y
+		- result
+		- closeness
 		- stepAngle
 		- local
 		- keep
 		
 -------------------------------------------------------------------------------------------------------------------------*/
+
+// constructor
+Stepper::Stepper(const StepperOptions& sto, const double& X, const double& Y, const double& f0):\
+ 		opts(sto), f_xy_local(), f_xy_steps(), angle(sto.angle0){
+	Point2d P(X,Y);
+	FxyPair toAdd(P,f0);
+	f_xy_local.push_back(toAdd);
+	f_xy_steps.push_back(toAdd);
+	if (opts.stepType!=StepperOptions::straight && opts.closeness<MIN_NUMBER)
+		cerr << "Stepper error: closeness must be larger than 0" << endl;
+}
 
 // constructor
 Stepper::Stepper(const StepperOptions& sto, const double& X, const double& Y):\
@@ -166,6 +180,16 @@ Stepper::Stepper(const StepperOptions& sto, const double& X, const double& Y):\
 	f_xy_local.push_back(toAdd);
 	f_xy_steps.push_back(toAdd);
 	if (opts.stepType!=StepperOptions::straight && opts.closeness<MIN_NUMBER)
+		cerr << "Stepper error: closeness must be larger than 0" << endl;
+}
+
+// constructor
+Stepper::Stepper(const StepperOptions& sto, const Point2d& P, const double& f0):\
+			 opts(sto), f_xy_local(), f_xy_steps(), angle(sto.angle0){
+	FxyPair toAdd(P,f0);
+	f_xy_local.push_back(toAdd);
+	f_xy_steps.push_back(toAdd);
+	if (opts.stepType!=StepperOptions::straight && abs(opts.closeness)<MIN_NUMBER)
 		cerr << "Stepper error: closeness must be larger than 0" << endl;
 }
 
@@ -215,6 +239,16 @@ double Stepper::y() const {
 	return ((f_xy_local.back()).first).Y;
 }
 
+// result()
+double Stepper::result() const {
+	return (f_xy_local.back()).second;
+}
+
+// closeness()
+double Stepper::closeness() const {
+	return opts.closeness;
+}
+
 // stepAngle()
 double Stepper::stepAngle() const {
 	return angle;
@@ -260,6 +294,7 @@ void Stepper::step() {
 	if (opts.stepType!=StepperOptions::straight) {
 		for (uint k=1; k<local(); k++) {
 			if (P==(f_xy_local[k]).first && (steps()==0 || k>1)) {
+				//if (k==(local()-1)) cout << "adding random angle" << endl;
 				srand(time(NULL));
 				angle += randDouble(-pi,pi)/4.0;
 				if (opts.directed!=StepperOptions::undirected) {	
@@ -291,7 +326,7 @@ void Stepper::addResult(const double& f) {
 		f_xy_local.push_back(f_xy_steps[steps()-1]);
 		f_xy_local.push_back(f_xy_steps[steps()]);
 	}
-	else if (opts.stepType==StepperOptions::constSimple) {
+	else if (opts.stepType==StepperOptions::constTaylor) {
 		double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second);
 		if (test<opts.closeness && local()>3) {
 			f_xy_steps.push_back(f_xy_local.back());
@@ -346,12 +381,64 @@ void Stepper::addResult(const double& f) {
 				double norm = absDiff(fl,f_0) + absDiff(fh,f_0);
 				double anglel = calcAngle(p_step,pl), angleh = calcAngle(p_step,ph);
 				angle = (absDiff(fl,f_0)/norm)*anglel + (absDiff(fh,f_0)/norm)*angleh;
+				if (opts.range==StepperOptions::twopi && anglel*angleh<0 && abs(anglel)>=pi/2.0 && abs(angleh)>=pi/2.0)
+					angle += pi;
 				angle += MIN_NUMBER; 
 			}
 		}
-		
-		else
-			cerr << "Stepper error: addResult should not have reached this point, 1" << endl;
+	}
+	else if (opts.stepType==StepperOptions::constPlane) {
+		double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second);
+		if (test<opts.closeness && local()>3) {
+			f_xy_steps.push_back(f_xy_local.back());
+			f_xy_local.clear();
+			f_xy_local.push_back(f_xy_steps[steps()-1]);
+			f_xy_local.push_back(f_xy_steps[steps()]);
+			if (opts.directed==StepperOptions::local)
+				opts.angle0 = angle;
+			angle += pi/2.0;
+		}
+		else if (local()==2) {
+			angle += pi/2.0;		
+		}
+		else if (local()==3 && steps()==0) {
+			Point2d p0 = (f_xy_steps[0]).first, p1 = (f_xy_local[1]).first, p2 = (f_xy_local[2]).first;
+			double f0 = (f_xy_steps[0]).second, f1 = (f_xy_local[1]).second, f2 = (f_xy_local[2]).second;
+			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
+			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
+			angle = atan(numerator/denominator);
+		}
+		else if (local()==3) {
+			Point2d p0 = (f_xy_steps[steps()]).first, p1 = (f_xy_steps[steps()-1]).first, p2 = (f_xy_local[local()-1]).first;
+			double f0 = (f_xy_steps[steps()]).second, f1 = (f_xy_steps[steps()-1]).second, f2 = (f_xy_local[local()-1]).second;
+			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
+			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
+			angle = atan(numerator/denominator);
+		}
+		else if (local()>3) {
+			Point2d p0 = (f_xy_steps.back()).first;
+			double f0 = (f_xy_steps[0]).second;
+			vector <FxyPair> f_low, f_high;
+			for (uint k=0; k<local(); k++) {
+				if ((f_xy_local[k]).second<(f0-MIN_NUMBER*1.0e2))
+					f_low.push_back(f_xy_local[k]);
+				else if ((f_xy_local[k]).second>(f0+MIN_NUMBER*1.0e2))
+					f_high.push_back(f_xy_local[k]);
+			}
+			if (f_low.size()==0 || f_high.size()==0) {
+				srand(time(NULL));
+				angle += randDouble(-pi,pi)/4.0;
+			}
+			else {
+				uint ll = find_nth_closest(f_low,f0,1), lh = find_nth_closest(f_high,f0,1);				
+				Point2d pl = (f_low[ll]).first, ph = (f_high[lh]).first;
+				double fl = (f_low[ll]).second, fh = (f_high[lh]).second;
+				double numerator = (fh-f0)*(pl.Y-p0.Y) - (fl-f0)*(ph.Y-p0.Y);
+				double denominator = (fh-f0)*(pl.X-p0.X) - (fl-f0)*(ph.X-p0.X);
+				angle = atan(numerator/denominator);
+				angle += MIN_NUMBER; 
+			}
+		}
 	}
 	else
 		cerr << "Stepper error: addResult should not have reached this point, 2" << endl;
@@ -366,7 +453,7 @@ void Stepper::addResult(const double& f) {
 
 // addResult
 void Stepper::addResult(const double& f, const double& e, const double& n) {
-	if (opts.stepType!=StepperOptions::lagrange) {
+	if (opts.stepType!=StepperOptions::constLagrange) {
 		addResult(f);
 	}
 	else {
