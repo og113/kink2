@@ -20,7 +20,7 @@ using namespace std;
 -------------------------------------------------------------------------------------------------------------------------
 CONTENTS
 	1. Point2d
-	2. fns of Point2d
+	2. static functions
 	3. Stepper
 	
 n.b. stepper defined in 2d.
@@ -92,12 +92,13 @@ bool operator==(const Point2d& lhs, const Point2d& rhs) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	2. functions of Point2d
+	2. static functions
 		- distance
 		- calcAngle
 			calculates the angle between a line, defined by two points, and the x axis
 		- find nth closest
-	n.b. all static
+		- isBetween
+		- isClockwise
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // distance
@@ -116,7 +117,8 @@ static double calcAngle(const Point2d& p1, const Point2d& p2) {
 
 // calcAngle
 static double calcAngle(const Point2d& p1, const Point2d& p2) {
-	return atan((p2.Y-p1.Y)/(p2.X-p1.X));
+	double toReturn = tan((p2.Y-p1.Y)/(p2.X-p1.X));
+	return mod(toReturn,-pi,pi);
 }
 
 // find nth closest
@@ -145,6 +147,39 @@ static uint find_nth_closest(const vector<FxyPair>& fxy, const double& f, const 
 		ints.erase(ints.begin()+ints_loc_smallest);
 	}
 	return loc_smallest;
+}
+
+// isBetween
+static bool isBetween(const double& v, const double& a, const double& b) {
+	double temph = (a<b? b: a);
+	double h = mod(temph,-pi,pi);
+	double templ = (a<b? a: b);
+	double l = mod(templ,-pi,pi);
+	double difference = h-l;
+	double V = mod(v,-pi,pi);
+	if (difference<=pi && V<h && V>l)
+		return true;
+	else if (difference<=pi && V>h && V<l)
+		return true;
+	else
+		return false;
+}
+
+// isClockwise, is v within pi in a clockwise direction from a?
+static bool isClockwise(const double& v, const double& a) {
+	double A = mod(a,-pi,pi);
+	double V = mod(v,-pi,pi);
+	double difference = abs(V-A);
+	if (difference<=pi && V<A && !(V*A>0.0 && abs(V)>=pi/2.0 && abs(A)>=pi/2.0))
+		return true;
+	else if (difference<=pi && V>A)
+		return true;
+	else if (difference>=pi && V>A && !(V*A>0.0 && abs(V)>=pi/2.0 && abs(A)>=pi/2.0)) 
+		return true;
+	else if (difference>=pi && V<A)
+		return true;
+	else
+		return false;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -262,7 +297,7 @@ uint Stepper::local() const {
 // keep()
 bool Stepper::keep() const {
 	double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second);
-	return ( (test<opts.closeness && ((steps()==0 && local()==1) || (steps()>0 && local()==2)))\
+	return ( (test<opts.closeness && ((steps()==0 && local()==1) || (steps()>0 && local()>2)))\
 				|| opts.stepType==StepperOptions::straight);
 }
 
@@ -297,12 +332,16 @@ void Stepper::step() {
 				//if (k==(local()-1)) cout << "adding random angle" << endl;
 				srand(time(NULL));
 				angle += randDouble(-pi,pi)/4.0;
+				double tempAngle = angle;
+				angle = mod(tempAngle,-pi,pi);
 				if (opts.directed!=StepperOptions::undirected) {	
 					if (angle<(opts.angle0-pi/2.0-MIN_NUMBER*1.0e2))
 						angle += pi;
 					else if (angle>(opts.angle0+pi/2.0+MIN_NUMBER*1.0e2))
 						angle -= pi;
-					}
+				}
+				tempAngle = angle;
+				angle = mod(tempAngle,-pi,pi);
 				x_new = x_old + opts.epsi_x*cos(angle);
 				y_new = y_old + opts.epsi_y*sin(angle);
 				P.X = x_new;
@@ -345,6 +384,8 @@ void Stepper::addResult(const double& f) {
 			double dx_n = sqrt(pow(opts.epsi_x*cos(tempAngle),2.0)+pow(opts.epsi_y*sin(tempAngle),2.0));
 			double dx_t = sqrt(pow(opts.epsi_x*sin(tempAngle),2.0)+pow(opts.epsi_y*cos(tempAngle),2.0));
 			angle = -atan(((f_xy_local[1]).second-(f_xy_steps[0]).second)*dx_t/((f_xy_local[2]).second-(f_xy_steps[0]).second)/dx_n);
+			if (!isBetween(angle,opts.angle0,opts.angle0+pi/2.0))
+				angle +=pi;
 		}
 		else if (local()==3) {
 			double tempAngle = angle - pi/2.0;
@@ -353,6 +394,8 @@ void Stepper::addResult(const double& f) {
 			double angle_n = -atan(((f_xy_steps[steps()]).second-(f_xy_steps[steps()-1]).second)*dx_t \
 									/((f_xy_local[local()-1]).second-(f_xy_steps[steps()]).second)/dx_n);
 			angle = tempAngle + angle_n;
+			if (!isBetween(angle,tempAngle,tempAngle+pi/2.0))
+				angle +=pi;
 		}
 		else if (local()>3) {
 			Point2d p_step = (f_xy_steps.back()).first;
@@ -368,7 +411,7 @@ void Stepper::addResult(const double& f) {
 			}
 			if (f_low.size()==0 || f_high.size()==0) {
 				srand(time(NULL));
-				angle += randDouble(-pi,pi)/4.0;
+				angle += randDouble(-pi,pi);
 			}
 			else {
 				uint ll = find_nth_closest(f_low,f_0,1), lh = find_nth_closest(f_high,f_0,1);				
@@ -381,9 +424,8 @@ void Stepper::addResult(const double& f) {
 				double norm = absDiff(fl,f_0) + absDiff(fh,f_0);
 				double anglel = calcAngle(p_step,pl), angleh = calcAngle(p_step,ph);
 				angle = (absDiff(fl,f_0)/norm)*anglel + (absDiff(fh,f_0)/norm)*angleh;
-				if (opts.range==StepperOptions::twopi && anglel*angleh<0 && abs(anglel)>=pi/2.0 && abs(angleh)>=pi/2.0)
-					angle += pi;
-				angle += MIN_NUMBER; 
+				if (!isBetween(angle,anglel,angleh))
+					angle +=pi; 
 			}
 		}
 	}
@@ -407,13 +449,18 @@ void Stepper::addResult(const double& f) {
 			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
 			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
 			angle = atan(numerator/denominator);
+			if (!isBetween(angle,opts.angle0,opts.angle0+pi/2.0))
+				angle +=pi;
 		}
 		else if (local()==3) {
+			double tempAngle = angle - pi/2.0;
 			Point2d p0 = (f_xy_steps[steps()]).first, p1 = (f_xy_steps[steps()-1]).first, p2 = (f_xy_local[local()-1]).first;
 			double f0 = (f_xy_steps[steps()]).second, f1 = (f_xy_steps[steps()-1]).second, f2 = (f_xy_local[local()-1]).second;
 			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
 			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
 			angle = atan(numerator/denominator);
+			if (!isBetween(angle,tempAngle,tempAngle+pi/2.0))
+				angle +=pi;
 		}
 		else if (local()>3) {
 			Point2d p0 = (f_xy_steps.back()).first;
@@ -425,30 +472,56 @@ void Stepper::addResult(const double& f) {
 				else if ((f_xy_local[k]).second>(f0+MIN_NUMBER*1.0e2))
 					f_high.push_back(f_xy_local[k]);
 			}
+			cout << "f_low.size() = " << f_low.size() << endl;
+			cout << "f_high.size() = " << f_high.size() << endl;
+			for (uint l=0; l<f_low.size(); l++) {
+				cout << "f_low["<<l<<"]="<<(f_low[l]).second<<endl;
+			}
+			for (uint l=0; l<f_high.size(); l++) {
+				cout << "f_high["<<l<<"]="<<(f_high[l]).second<<endl;
+			}
+			if (f_low.size()==0 && f_high.size()>0) {
+				FxyPair f_high_min = f_high[find_nth_closest(f_high,f0,1)];
+				FxyPair f_high_second = f_high[find_nth_closest(f_high,f0,2)];
+				double angle_min = calcAngle(p0,f_high_min.first);
+				double angle_second = calcAngle(p0,f_high_second.first);
+				int sign = (angle_min>angle_second? 1.0: -1.0);
+				angle = calcAngle(p0,f_high_min.first) + sign*randDouble(0.0,pi)/4.0;
+			}
 			if (f_low.size()==0 || f_high.size()==0) {
 				srand(time(NULL));
-				angle += randDouble(-pi,pi)/4.0;
+				angle += randDouble(-pi,pi);
 			}
 			else {
-				uint ll = find_nth_closest(f_low,f0,1), lh = find_nth_closest(f_high,f0,1);				
+				uint ll = find_nth_closest(f_low,f0,1), lh = find_nth_closest(f_high,f0,1);
+				cout << "ll = "<<ll<<", lh = "<<lh<<endl;				
 				Point2d pl = (f_low[ll]).first, ph = (f_high[lh]).first;
 				double fl = (f_low[ll]).second, fh = (f_high[lh]).second;
 				double numerator = (fh-f0)*(pl.Y-p0.Y) - (fl-f0)*(ph.Y-p0.Y);
 				double denominator = (fh-f0)*(pl.X-p0.X) - (fl-f0)*(ph.X-p0.X);
 				angle = atan(numerator/denominator);
-				angle += MIN_NUMBER; 
+				double anglel = calcAngle(pl,p0);
+				double angleh = calcAngle(ph,p0);
+				if (!isBetween(angle,anglel,angleh))
+					angle +=pi;
 			}
 		}
 	}
 	else
 		cerr << "Stepper error: addResult should not have reached this point, 2" << endl;
 		
+	double tempAngle = angle;
+	angle = mod(tempAngle,-pi,pi);
+	
 	if (opts.directed!=StepperOptions::undirected) {	
 		if (angle<(opts.angle0-pi/2.0-MIN_NUMBER*1.0e2))
 			angle += pi;
 		else if (angle>(opts.angle0+pi/2.0+MIN_NUMBER*1.0e2))
 			angle -= pi;
 	}
+	
+	tempAngle = angle;
+	angle = mod(tempAngle,-pi,pi);
 }
 
 // addResult
@@ -462,4 +535,17 @@ void Stepper::addResult(const double& f, const double& e, const double& n) {
 			cerr << "Stepper error: lagrange stepper not written yet" << endl;
 		}
 	}
+	
+	double tempAngle = angle;
+	angle = mod(tempAngle,-pi,pi);
+	
+	if (opts.directed!=StepperOptions::undirected) {	
+		if (angle<(opts.angle0-pi/2.0-MIN_NUMBER*1.0e2))
+			angle += pi;
+		else if (angle>(opts.angle0+pi/2.0+MIN_NUMBER*1.0e2))
+			angle -= pi;
+	}
+	
+	tempAngle = angle;
+	angle = mod(tempAngle,-pi,pi);
 }

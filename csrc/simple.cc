@@ -230,7 +230,39 @@ double randDouble(const double& min, const double& max) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	9. explicit instantiation
+	9. mod
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// mod
+double mod(const double& x, const double& min, const double& max) {
+	double Min, Max;
+	if (min<max) {
+		Min = min;
+		Max = max;
+	}
+	else if (min>max) {
+		Min = max;
+		Max = min;
+	}
+	else {
+		cerr << "mod error, range of size zero" << endl;
+		return 1.0;
+	}
+		
+	if (x>=Min && x<=Max)
+		return x;
+	else if (x>Max) {
+		int ranges = (int)((x-Min)/(Max-Min));
+		return x-(double)ranges*(Max-Min);
+	}
+	else {
+		int ranges = (int)((Max-x)/(Max-Min));
+		return x+(double)ranges*(Max-Min);
+	}
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	10. explicit instantiation
 		- numberToString, stringToNumber
 		- smallestLoc
 -------------------------------------------------------------------------------------------------------------------------*/

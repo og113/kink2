@@ -125,6 +125,6 @@ double randDouble(const double& min, const double& max);
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // mod
-
+double mod(const double& x, const double& min, const double& max);
 
 #endif // __SIMPLE_H_INCLUDED__

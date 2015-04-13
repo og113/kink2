@@ -256,9 +256,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//printing timenumber
 		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
 		if (((opts.loopChoice).substr(0,5)).compare("const")==0 && loop>0) {
-			double angleModTwoPi = stepper.stepAngle();
-			int pis = (int)(angleModTwoPi/pi);
-			angleModTwoPi = angleModTwoPi - pi*(double)(pis+pis%2);
+			double angleModTwoPi = mod(stepper.stepAngle(),-pi,pi);		
 			printf("%12s%12.3g\n","step angle: ",angleModTwoPi);
 		}
 		
@@ -1301,7 +1299,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			double F = 0.0;
 			if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='W') {
 				F = W;
-				}
+			}
 			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='E') {
 				F = E;
 			}
@@ -1320,8 +1318,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			fprintf(stepOs,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
-			printf("%12s%30s\n","steps:",stepFile.c_str());
-			if (abs(opts.loopMin-F)<stepper.closeness())
+			//printf("%12s%30s\n","steps:",stepFile.c_str());
+			if (absDiff(opts.loopMin-F)<stepper.closeness() && loop==0)
 				stepper.addResult(opts.loopMin);
 			else
 				stepper.addResult(F);
