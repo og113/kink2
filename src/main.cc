@@ -205,7 +205,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	if (((opts.loopChoice).substr(0,5)).compare("const")==0) {
 		step_opts.epsi_x = opts.epsiTb;
 		step_opts.epsi_y = opts.epsiTheta;
-		step_opts.angle0 = pi/2.0;
+		step_opts.angle0 = 3.0*pi/4.0;
 		step_opts.closeness = closenesses.Step;
 		step_opts.stepType = StepperOptions::constPlane;
 		step_opts.directed = StepperOptions::local;
@@ -217,6 +217,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.angle0 = 0.0;
 		step_opts.stepType = StepperOptions::straight;
 		step_opts.directed = StepperOptions::undirected;
+		step_opts.closeness = closenesses.Step; // irrelevant here
 		point(opts.loopMin,0.0);
 	}
 	Stepper stepper(step_opts,point);
@@ -1310,6 +1311,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				cerr << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
 				return 1;
 			}
+			if (absDiff(opts.loopMin-F)<stepper.closeness() && loop==0)
+				stepper.addResult(opts.loopMin);
+			else
+				stepper.addResult(F);
 			string keep = (stepper.keep()? "y": "n");
 			double angleToPrint = (loop==0? 0.0: stepper.stepAngle());
 			FILE * stepOs;
@@ -1319,10 +1324,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
 			//printf("%12s%30s\n","steps:",stepFile.c_str());
-			if (absDiff(opts.loopMin-F)<stepper.closeness() && loop==0)
-				stepper.addResult(opts.loopMin);
-			else
-				stepper.addResult(F);
 		}
 		else
 			stepper.addResult(1.0); // choice irrelevant but a value is require to make step
