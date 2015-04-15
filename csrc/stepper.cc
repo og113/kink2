@@ -320,7 +320,7 @@ uint Stepper::local() const {
 // keep() - n.b. only works after addResult
 bool Stepper::keep() const {
 	double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second);
-	return ( (test<opts.closeness && (steps()==0 || local()==2) || opts.stepType==StepperOptions::straight);
+	return ( (test<opts.closeness && (steps()==0 || local()==2)) || opts.stepType==StepperOptions::straight);
 }
 
 // point()
