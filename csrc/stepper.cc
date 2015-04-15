@@ -317,10 +317,10 @@ uint Stepper::local() const {
 	return f_xy_local.size();
 }
 
-// keep()
+// keep() - n.b. only works after addResult
 bool Stepper::keep() const {
 	double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second);
-	return ( test<opts.closeness || opts.stepType==StepperOptions::straight);
+	return ( (test<opts.closeness && (steps()==0 || local()==2) || opts.stepType==StepperOptions::straight);
 }
 
 // point()
@@ -436,6 +436,8 @@ void Stepper::addResult(const double& f) {
 				int sign = (isClockwise(angle_min,angle_second)? -1.0: 1.0);
 				srand(time(NULL));
 				angle = angle_min + sign*randDouble(0.0,pi)/2.0;
+				if (f_high.size()>5)
+					angle += sign*randDouble(0.0,pi)/2.0;
 			}
 			else if (f_high.size()==0) {
 				FxyPair f_low_min = f_low[find_nth_closest(f_low,f0,1)];
@@ -447,6 +449,8 @@ void Stepper::addResult(const double& f) {
 				int sign = (isClockwise(angle_min,angle_second)? -1.0: 1.0);
 				srand(time(NULL));
 				angle = angle_min + sign*randDouble(0.0,pi)/2.0;
+				if (f_high.size()>5)
+					angle += sign*randDouble(0.0,pi)/2.0;
 			}
 			else {
 				uint ll = find_nth_closest(f_low,f0,1), lh = find_nth_closest(f_high,f0,1);			
