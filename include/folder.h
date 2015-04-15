@@ -196,7 +196,7 @@ public:
 	ConstFolderIterator end() const;
 	void				add(const Filename&);
 	void 				erase(FolderIterator);
-	Filename 			operator[](const int&) const;
+	Filename 			operator[](const uint&) const;
 	bool 				isPresent(const Filename&);
 	void 				update();
 	void				order();

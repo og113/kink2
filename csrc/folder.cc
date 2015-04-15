@@ -539,8 +539,8 @@ unsigned int Folder::size() const{
 }
 
 // operator[]
-Filename Folder::operator[](const int& index) const {
-	if (index<0 || index>(size()-1)) {
+Filename Folder::operator[](const uint& index) const {
+	if (index>(size()-1)) {
 		IndexError::OutOfBounds e(index,size(),0);
 		cerr << e;
 	}
