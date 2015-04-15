@@ -217,6 +217,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.angle0 = 0.0;
 		step_opts.stepType = StepperOptions::straight;
 		step_opts.directed = StepperOptions::undirected;
+		step_opts.closeness = closenesses.Step; // irrelevant here
 		point(opts.loopMin,0.0);
 	}
 	Stepper stepper(step_opts,point);
@@ -256,9 +257,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//printing timenumber
 		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
 		if (((opts.loopChoice).substr(0,5)).compare("const")==0 && loop>0) {
-			double angleModTwoPi = stepper.stepAngle();
-			int pis = (int)(angleModTwoPi/pi);
-			angleModTwoPi = angleModTwoPi - pi*(double)(pis+pis%2);
+			double angleModTwoPi = mod(stepper.stepAngle(),-pi,pi);		
 			printf("%12s%12.3g\n","step angle: ",angleModTwoPi);
 		}
 		
@@ -1301,7 +1300,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			double F = 0.0;
 			if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='W') {
 				F = W;
-				}
+			}
 			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='E') {
 				F = E;
 			}
@@ -1312,17 +1311,20 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				cerr << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
 				return 1;
 			}
-			string keep = (stepper.keep()? "y": "n");
 			double angleToPrint = (loop==0? 0.0: stepper.stepAngle());
+			if (absDiff(opts.loopMin,F)<stepper.closeness() && loop==0)
+				stepper.addResult(opts.loopMin);
+			else {
+				stepper.addResult(F);
+			}
+			string keep = (stepper.keep()? "y": "n");
 			FILE * stepOs;
 			string stepFile = "./data/"+timenumber+"mainStep_fLoop_"+numberToString<uint>(fileLoop)+".dat";
 			stepOs = fopen(stepFile.c_str(),"a");
 			fprintf(stepOs,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
-			printf("%12s%30s\n","steps:",stepFile.c_str());
-			if (abs(stepper.result())<MIN_NUMBER)
-				stepper.addResult(F);
+			//printf("%12s%30s\n","steps:",stepFile.c_str());
 		}
 		else
 			stepper.addResult(1.0); // choice irrelevant but a value is require to make step

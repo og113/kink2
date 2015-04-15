@@ -16,5 +16,5 @@ loopMin             0.0
 loopMax             0.0                   
 epsiTb              0.0001                   
 epsiTheta           0.0001                  
-loops               51                   
+loops               0
 printChoice         n                   

@@ -26,9 +26,9 @@ string stepType;
 cout << "input either t (constTaylor) or p (constPlane): ";
 cin >> stepType;
 
-uint 			loops 				= 1e3;
-uint			avgLoops			= 1e3;
-uint 			parameterLoops 		= 5;
+uint 			loops 				= 10;
+uint			avgLoops			= 1;
+uint 			parameterLoops 		= 1;
 double			closenessMin 		= 0.005;
 double 			closenessMax 		= 0.025;
 
@@ -72,7 +72,7 @@ for (uint l=0; l<parameterLoops; l++) {
 			cerr << "stepType, " << stepType << ", not understood" << endl;
 			return 1;
 		}
-		sto.directed = StepperOptions::undirected;
+		sto.directed = StepperOptions::local;
 		sto.closeness = closenessStepper.x();
 		sto.angle0 = pi/2.0;
 		sto.epsi_x = 0.01;

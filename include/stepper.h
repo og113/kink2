@@ -107,6 +107,7 @@ public:
 	uint		steps() const;
 	bool		keep() const;
 	double		stepAngle() const;
+	double		closeness() const;
 private:
 	StepperOptions 	opts;
 	vector<FxyPair> f_xy_local;
