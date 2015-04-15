@@ -18,9 +18,17 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
+int id, p;
+
 MPI_Init(&argc,&argv);
-int p = MPI::COMM_WORLD.Get_size ( );
-cout << p << " available processes." << endl;
+
+id = MPI::COMM_WORLD.Get_rank ( );
+p = MPI::COMM_WORLD.Get_size ( );
+
+if (id==0) {
+	cout << p << " available processes." << endl;
+}
+
 MPI_Finalize();
 
 return 0;
