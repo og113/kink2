@@ -149,15 +149,13 @@ else {
 		- mpi::finalize
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-for (int k=0; k<nodes; k++) {
-	argv_main[2] = "data/00"+numberToString<int>(rank)+"optionsM";
-	cout << "node " << rank << " of " << nodes << " running main with input timenumber 00" << rank << endl;
-	returnValue = main_fn(argc_main,argv_main);
-	if (returnValue!=0) {
-		cerr << "return " << returnValue << " for node " << rank << " on running main" << endl;
-	}
-	//wait a bit between nodes
+argv_main[2] = "data/00"+numberToString<int>(rank)+"optionsM";
+cout << "node " << rank << " of " << nodes << " running main with input timenumber 00" << rank << endl;
+returnValue = main_fn(argc_main,argv_main);
+if (returnValue!=0) {
+	cerr << "return " << returnValue << " for node " << rank << " on running main" << endl;
 }
+//wait a bit between nodes
 
 MPI::Finalize();
 
