@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
 int changeInputs_fn(int argc, vector<string> argv);
 
 #endif // __CHANGEINPUTS_FN_H_INCLUDED__

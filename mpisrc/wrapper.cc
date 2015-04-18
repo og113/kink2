@@ -61,7 +61,7 @@ if (copyFiles) {
 		argv_changeInputs[7] = "-v";
 		argv_changeInputs[8] = timenumber;
 
-		returnValue = changeInputs_fn(argv_changeInputs,argv_changeInputs);
+		returnValue = changeInputs_fn(argc_changeInputs,argv_changeInputs);
 		if (returnValue!=0) {
 			cerr << "return " << returnValue << " on running changeInputs" << endl;
 		}
@@ -76,7 +76,7 @@ if (copyFiles) {
 		argv_changeInputs[5] = "-v";
 		argv_changeInputs[6] = timenumber;
 
-		returnValue = changeInputs_fn(argv_changeInputs,argv_changeInputs);
+		returnValue = changeInputs_fn(argc_changeInputs,argv_changeInputs);
 		if (returnValue!=0) {
 			cerr << "return " << returnValue << " on running changeInputs" << endl;
 		}
@@ -150,12 +150,16 @@ else {
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 argv_main[2] = "data/00"+numberToString<int>(rank)+"optionsM";
+
+sleep(rank*2);
+
 cout << "node " << rank << " of " << nodes << " running main with input timenumber 00" << rank << endl;
+
 returnValue = main_fn(argc_main,argv_main);
+
 if (returnValue!=0) {
 	cerr << "return " << returnValue << " for node " << rank << " on running main" << endl;
 }
-//wait a bit between nodes
 
 MPI::Finalize();
 
