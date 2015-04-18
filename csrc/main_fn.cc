@@ -69,7 +69,7 @@ string coFile, ceFile;
 // getting argv inputs
 if (argc==2) timenumber = argv[1];
 else if (argc % 2 && argc>1) {
-	for (unsigned int j=0; j<(int)(argc/2); j++) {
+	for (uint j=0; j<(uint)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
 		if (id.compare("tn")==0 || id.compare("timenumber")==0) timenumber = argv[2*j+2];
@@ -654,7 +654,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				comp Vtrial = 0.0, Vcontrol = 0.0;
 				for (unsigned int j=0; j<ps.N; j++) {
 					double r = ps.r0 + j*ps.a;
-					paramsV  = {r, 0.0};
+					paramsV.epsi = r;
 					V.setParams(paramsV);
 					Vcontrol += pow(p(2*j*ps.Nb),2.0)/2.0 - pow(p(2*j*ps.Nb),4.0)/4.0/pow(r,2.0);
 					Vtrial += V(p(2*j*ps.Nb));
