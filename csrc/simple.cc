@@ -10,6 +10,7 @@ definitions of some very simple functions and classes
 #include <cmath>
 #include <vector>
 #include <complex>
+#include <sys/time.h>
 #include <Eigen/Dense>
 #include "simple.h"
 
@@ -21,7 +22,7 @@ CONTENTS
 	1 - number to string and string to number
 	2 - absDiff
 	3 - factorial
-	4 - currentDateTime
+	4 - currentDateTime, currentPartSec
 	5 - copyFile
 	6 - countLines, countColumns
 	7 - smallestLoc
@@ -129,7 +130,7 @@ int factorial(const int& f_input){
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	4. currentDateTime
+	4. currentDateTime, currentPartSec
 	
 N.B. Visit http://en.cppreference.com/w/cpp/chrono/c/strftime for more information about date/time format
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -142,6 +143,13 @@ string currentDateTime() {
     tstruct = *localtime(&now);
     strftime(buf, sizeof(buf), "%y%m%d%H%M%S", &tstruct);
     return buf;
+}
+
+//getting the part of the second, a number between 0 and 1e6, divide by 1e6 to get the fraction
+string currentPartSec() {
+    timeval tim;
+    gettimeofday(&tim, NULL);
+    return numberToString<double>(tim.tv_usec);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------

@@ -42,6 +42,7 @@ Folder FolderL(l);
 cout << "FolderL =  " << FolderL << endl << endl;
 k.Timenumber = "40";
 cout << "k = " << k << endl;
+j.ID = "testError";
 Folder folder1(j); // test may die here if not run from the folder tests
 cout << "folder1 = " << folder1 << endl;
 cout << "folder2 = ";

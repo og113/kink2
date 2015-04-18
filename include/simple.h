@@ -34,7 +34,7 @@ CONTENTS
 	1 - number to string and string to number
 	2 - absDiff
 	3 - factorial
-	4 - currentDateTime
+	4 - currentDateTime, currentPartSec
 	5 - copyFile
 	6 - countLines, countColumns
 	7 - smallestLoc
@@ -80,11 +80,14 @@ double absDiff (const cMat& A, const cMat& B);
 int factorial(const int& f_input);
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	4. currentDateTime
+	4. currentDateTime, currentPartSec
 -------------------------------------------------------------------------------------------------------------------------*/
 
 //getting the date and time
 string currentDateTime();
+
+// getting the part of the second
+string currentPartSec();
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	5. copyFile
