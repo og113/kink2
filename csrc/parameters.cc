@@ -2,6 +2,7 @@
 	definitions for functions and classes for dealing with parameters
 -------------------------------------------------------------------------------------------------------------------------*/
 
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -396,6 +397,16 @@ void Parameters::print() const {
 			L,Ta,Tb,Tc,R,\
 			dE,theta,reg);
 	printf("\n");
+}
+
+// print File*
+void Parameters::print(FILE* stream) const {
+	fprintf(stream,"%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
+	fprintf(stream,"%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
+			N,Na,Nb,Nc,\
+			L,Ta,Tb,Tc,R,\
+			dE,theta,reg);
+	fprintf(stream,"\n");
 }
 
 // set parameters from PrimaryParameters

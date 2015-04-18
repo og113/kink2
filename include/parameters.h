@@ -5,6 +5,7 @@
 #ifndef __PARAMETERS_H_INCLUDED__
 #define __PARAMETERS_H_INCLUDED__
 
+#include <cstdio>
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -153,6 +154,7 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	bool changeParameters (const string& pName, const double& pValue); 			// change all due to change in one
 	bool changeParameters (const string& pName, const uint& pValue); 			// change all due to change in one
 	void print() const;
+	void print(FILE * stream) const;
 };
 
 /*-------------------------------------------------------------------------------------------------------------------------
