@@ -68,7 +68,6 @@ ostream& operator<<(ostream& os, const PrimaryParameters& p1) {
 	os << setw(20) << "Tb" << setw(20) << p1.Tb << endl;
 	os << setw(20) << "theta" << setw(20) << p1.theta << endl;
 	os << setw(20) << "reg" << setw(20) << p1.reg << endl;
-	os << endl;
 	return os;
 }
 
@@ -665,7 +664,6 @@ ostream& operator<<(ostream& os, const Options& o) {
 	os << setw(20) << "epsiTheta" << setw(20) << o.epsiTheta << endl;
 	os << setw(20) << "loops" << setw(20) << o.loops << endl;
 	os << setw(20) << "printChoice" << setw(20) << o.printChoice << endl;
-	os << endl;
 	return os;
 }
 
@@ -753,7 +751,6 @@ ostream& operator<<(ostream& os, const Closenesses& c) {
 	os << setw(20) << "LR" << setw(20) << c.LR << endl;
 	os << setw(20) << "DT" << setw(20) << c.DT << endl;
 	os << setw(20) << "Profile" << setw(20) << c.Profile << endl;
-	os << endl;
 	return os;
 }
 
