@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include "simple.h"
 #include "folder.h"
 
 using namespace std;
