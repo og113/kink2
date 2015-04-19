@@ -1372,7 +1372,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		// printing results to file
 		if (stepper.keep()) {
 			FILE * actionfile;
-			string resultsFile = "results/mainResults.dat";
+			string resultsFile = "results/"+timenumber+"mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
 			fprintf(actionfile,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
