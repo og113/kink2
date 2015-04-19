@@ -494,17 +494,17 @@ void Folder::refresh() {
     is.open (file.c_str());
 	while ( !is.eof() ){
 		is >> f;
-		if (!f.empty() && (f())[(f()).size()-1]!='~')
+		if (!f.empty() && (f())[(f()).size()-1]!='~' && (f.ID).compare("dataFiles")!=0)
 			if (!isPresent(f) && Comparator(f)) Filenames.push_back(f);
 	}
     is.close();
+    sort();
     string command2 = "rm " + file;
     systemCall = system(command2.c_str());
 	if (systemCall==-1) {
 		FolderError::System e;
 		throw e;
 	}
-    sort();
     }
     catch (FolderError::System e) {
     	cerr << e;
