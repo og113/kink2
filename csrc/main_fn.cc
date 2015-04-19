@@ -1361,7 +1361,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		}
 		else
 			stepper.addResult(1.0); // choice irrelevant but a value is require to make step
-		stepper.step();
 	
 		// printing results to terminal
 		fprintf(cof,"\n");
@@ -1373,7 +1372,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		// printing results to file
 		if (stepper.keep()) {
 			FILE * actionfile;
-			string resultsFile = "./results/mainResults.dat";
+			string resultsFile = "results/mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
 			fprintf(actionfile,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
@@ -1381,6 +1380,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			fclose(actionfile);
 			fprintf(cof,"%12s%30s\n","results:",resultsFile.c_str());
 		}
+		stepper.step();
 		
 		// print everything?, plot too
 		bool printEverything = false;
