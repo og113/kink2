@@ -482,7 +482,7 @@ void Folder::order() {
 // refresh
 void Folder::refresh() {
 	try {
-	string file = "data/"+currentPartSec()+"dataFiles";
+	string file = "data/"+currentPartSec()+"dataFiles.txt";
 	string command1 = "find data/* -type f > " + file;
 	int systemCall = system(command1.c_str());
 	if (systemCall==-1) {
