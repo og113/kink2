@@ -35,6 +35,7 @@ CONTENTS
 		- operator<<
 		- operator==
 		- empty
+		- clear
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // pair
@@ -106,6 +107,15 @@ bool FilenameAttributes::empty() const {
 		return false;
 }
 
+// clear
+void FilenameAttributes::clear() {
+	Directory = "";
+	Timenumber = "";
+	ID = "";
+	Suffix = "";
+	Extras.clear();
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. definitions for Filename etc errors Errors
 		- FilenameError::Extras
@@ -143,159 +153,56 @@ string FolderError::Add::message() const {
 
 // set
 void Filename::set(const string& f) {
-	Directory = "";
-	Timenumber = "";
-	ID = "";
-	Suffix = "";
-	Extras.clear();
+	clear();
 	string temp = f;
 	string firstTwo;
-	try { firstTwo = temp.substr(0,2);}
-	catch (std::out_of_range & ex) {
-		cerr << "Filename error: file, " << f << ", not of expected form";
-		return;
-	}	
+	try {
+	firstTwo = temp.substr(0,2);
 	if (firstTwo.compare("./")==0) {
-		try {temp = temp.substr(2);}
-		catch (std::out_of_range & ex) {
-			cerr << "Filename error: file, " << f << ", not of expected form";
-			return;
-		}
+		temp = temp.substr(2);
 	}
 	size_t stop;
 	stop = temp.find_last_of("/");
 	if (stop!=string::npos) {
-		try {Directory = temp.substr(0,stop); }
-		catch (std::out_of_range & ex) {
-			cerr << "Filename error: file, " << f << ", not of expected form";
-			return;
-		}
-		try {temp = temp.substr(stop+1);}
-		catch (std::out_of_range & ex) {
-			cerr << "Filename error: file, " << f << ", not of expected form";
-			Directory = "";
-			return;
-		}
+		Directory = temp.substr(0,stop);
+		temp = temp.substr(stop+1);
 	}
 	if (temp.find_first_of("0123456789")==0) {
 		stop = temp.find_first_not_of("0123456789");
-		try {Timenumber = temp.substr(0,stop);}
-		catch (std::out_of_range & ex) {
-			Directory = "";
-			cerr << "Filename error: file, " << f << ", not of expected form";
-			return;
-		}
-		try {temp = temp.substr(stop);}
-		catch (std::out_of_range & ex) {
-			Directory = "";
-			Timenumber = "";
-			cerr << "Filename error: file, " << f << ", not of expected form";
-			return;
-		}
+		Timenumber = temp.substr(0,stop);
+		temp = temp.substr(stop);
 	}
 	if (temp.find_first_not_of("_")==0) {
 	 stop = temp.find_first_of("_.");
 	 if (stop==string::npos) {
-	 	try {ID = temp.substr(0,stop);}
-	 	catch (std::out_of_range & ex) {
-	 		Directory = "";
-			Timenumber = "";
-			cerr << "Filename error: file, " << f << ", not of expected form";
-			return;
-		}
-	 	temp = "";
-	 	
+	 	ID = temp.substr(0,stop);
+	 	temp = "";	 	
 	 }
 	 else {
-	 	try {ID = temp.substr(0,stop);}
-	 	catch (std::out_of_range & ex) {
-	 		Directory = "";
-			Timenumber = "";
-			cerr << "Filename error: file, " << f << ", not of expected form";
-			return;
-		}
-	 	try {temp = temp.substr(stop);}
-	 	catch (std::out_of_range & ex) {
-	 		Directory = "";
-			Timenumber = "";
-			ID = "";
-			cerr << "Filename error: file, " << f << ", not of expected form";
-			return;
-		}
+	 	ID = temp.substr(0,stop);
+	 	temp = temp.substr(stop);
 	 }
 	}
 	if (temp[0]=='_') {
-		try {temp = temp.substr(1);}
-		catch (std::out_of_range & ex) {
-			Directory = "";
-			Timenumber = "";
-			ID = "";
-			cerr << "Filename error: file, " << f << ", not of expected form";
-			return;
-		}
+		temp = temp.substr(1);
 		while (stop!=string::npos && !(temp[0]=='.' && temp.find_last_of(".")==0)) {
 			stop = temp.find("_");
 			if (stop==string::npos) {
 				FilenameError::Extras e(f);
-				cerr << e;
-				Directory = "";
-				Timenumber = "";
-				ID = "";
-				Extras.clear();
-				return;
+				throw e;
 			}
 			StringPair sp;
-			try {sp.first = temp.substr(0,stop);}
-			catch (std::out_of_range & ex) {
-				Directory = "";
-				Timenumber = "";
-				ID = "";
-				Extras.clear();
-				cerr << "Filename error: file, " << f << ", not of expected form";
-				return;
-			}
-			try {temp = temp.substr(stop+1);}
-			catch (std::out_of_range & ex) {
-				Directory = "";
-				Timenumber = "";
-				ID = "";
-				Extras.clear();
-				cerr << "Filename error: file, " << f << ", not of expected form";
-				return;
-			}
+			sp.first = temp.substr(0,stop);
+			temp = temp.substr(stop+1);
 			stop = min(temp.find_first_of("_"),temp.find_last_of("."));
-			try {sp.second = temp.substr(0,stop);}
-			catch (std::out_of_range & ex) {
-				Directory = "";
-				Timenumber = "";
-				ID = "";
-				Extras.clear();
-				cerr << "Filename error: file, " << f << ", not of expected form";
-				return;
-			}
+			sp.second = temp.substr(0,stop);
 			Extras.push_back(sp);
 			if (stop==string::npos) 	break;
 			else if (temp[stop]=='_') 	{
-				try {temp = temp.substr(stop+1);}
-				catch (std::out_of_range & ex) {
-					Directory = "";
-					Timenumber = "";
-					ID = "";
-					Extras.clear();
-					cerr << "Filename error: file, " << f << ", not of expected form";
-					return;
-				}
+				temp = temp.substr(stop+1);
 			}
 			else {
-				try {temp = temp.substr(stop);}
-				catch (std::out_of_range & ex) {
-					Directory = "";
-					Timenumber = "";
-					ID = "";
-					Extras.clear();
-					cerr << "Filename error: file, " << f << ", not of expected form";
-					return;
-				}
+				temp = temp.substr(stop);
 			}
 		}
 	}
@@ -303,10 +210,17 @@ void Filename::set(const string& f) {
 		Suffix = temp;
 	}
 	if (f.compare((string)*this)!=0){
-		Directory = "";
-		Timenumber = "";
-		ID = "";
-		Extras.clear();
+		clear();
+	} }
+	catch (std::out_of_range & ex) {
+		clear();
+		//cerr << "Filename error: file, " << f << ", not of expected form";
+		return;
+	}
+	catch (FilenameError::Extras & fe) {
+		clear();
+		//cerr << fe;
+		return;
 	}
 }
 
@@ -567,13 +481,13 @@ void Folder::order() {
 
 // refresh
 void Folder::refresh() {
+	try {
 	string file = "data/"+currentPartSec()+"dataFiles";
 	string command1 = "find data/* -type f > " + file;
 	int systemCall = system(command1.c_str());
 	if (systemCall==-1) {
 		FolderError::System e;
-		cerr << e;
-		return;
+		throw e;
 	}
 	ifstream is;
 	Filename f;
@@ -588,10 +502,14 @@ void Folder::refresh() {
     systemCall = system(command2.c_str());
 	if (systemCall==-1) {
 		FolderError::System e;
-		cerr << e;
-		return;
+		throw e;
 	}
     sort();
+    }
+    catch (FolderError::System e) {
+    	cerr << e;
+    	return;
+    }
 }
 
 // update
