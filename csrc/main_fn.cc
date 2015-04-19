@@ -1403,7 +1403,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		po_simple.column = 1;
 		po_simple.style = "linespoints";
 		po_simple.printMessage = true;
-
 	
 		//printing output phi
 		Filename tpFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
