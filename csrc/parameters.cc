@@ -73,24 +73,32 @@ ostream& operator<<(ostream& os, const PrimaryParameters& p1) {
 
 //save
 void PrimaryParameters::save(const string& filename) const {
+	try {
 	ofstream os;
 	os.open(filename.c_str());
 	if (!os.good()) {
 		FileError::StreamNotGood e(filename);
-		cerr << e;
+		throw e;
 	}
 	os << *this;
 	os << endl;
 	os.close();
+	}
+	catch (FileError::StreamNotGood & e) {
+		cerr << "PrimaryParameters::save error:" << endl;
+		cerr << e;
+		return;
+	}
 }
 
 //load
 void PrimaryParameters::load(const string& filename) {
+	try {
 	ifstream is;
 	is.open(filename.c_str());
 	if (!is.good()) {
 		FileError::StreamNotGood e(filename);
-		cerr << e;
+		throw e;
 	}
 	string dross;
 	is >> dross >> pot;
@@ -104,6 +112,12 @@ void PrimaryParameters::load(const string& filename) {
 	is >> dross >> theta;
 	is >> dross >> reg;
 	is.close();
+	}
+	catch (FileError::StreamNotGood& e) {
+		cerr << "PrimaryParameters::load error:" << endl;
+		cerr << e;
+		return;
+	}
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------

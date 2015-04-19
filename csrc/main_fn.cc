@@ -278,7 +278,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		}
 
 		//copying a version of ps with timenumber
-		Filename paramsRunFile = (string)("./data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
+		Filename paramsRunFile = (string)("data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
 				+"_loop_"+numberToString<uint>(loop));
 		ps.save(paramsRunFile);
 		
@@ -503,7 +503,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			fprintf(cof,"%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
 		else {
-			Filename lastPhi = (string)("./data/" + timenumber + "mainp_fLoop_" + numberToString<uint>(fileLoop) + "_loop_"\
+			Filename lastPhi = (string)("data/" + timenumber + "mainp_fLoop_" + numberToString<uint>(fileLoop) + "_loop_"\
 								 + numberToString<uint>(loop-stepper.local()+1)+".dat");
 			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
@@ -1352,7 +1352,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 			string keep = (stepper.keep()? "y": "n");
 			FILE * stepOs;
-			string stepFile = "./data/"+timenumber+"mainStep_fLoop_"+numberToString<uint>(fileLoop)+".dat";
+			string stepFile = "data/"+timenumber+"mainStep_fLoop_"+numberToString<uint>(fileLoop)+".dat";
 			stepOs = fopen(stepFile.c_str(),"a");
 			fprintf(stepOs,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
@@ -1361,7 +1361,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		}
 		else
 			stepper.addResult(1.0); // choice irrelevant but a value is require to make step
-		stepper.step();
 	
 		// printing results to terminal
 		fprintf(cof,"\n");
@@ -1373,7 +1372,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		// printing results to file
 		if (stepper.keep()) {
 			FILE * actionfile;
-			string resultsFile = "./results/mainResults.dat";
+			string resultsFile = "results/"+timenumber+"mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
 			fprintf(actionfile,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
 						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
@@ -1381,6 +1380,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			fclose(actionfile);
 			fprintf(cof,"%12s%30s\n","results:",resultsFile.c_str());
 		}
+		stepper.step();
 		
 		// print everything?, plot too
 		bool printEverything = false;
@@ -1403,7 +1403,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		po_simple.column = 1;
 		po_simple.style = "linespoints";
 		po_simple.printMessage = true;
-
 	
 		//printing output phi
 		Filename tpFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\

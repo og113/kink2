@@ -52,6 +52,7 @@ public:
 	string 				Suffix;
 	vector<StringPair> 	Extras; 
 	bool				empty() const;
+	void				clear();
 private:
 	void 				copy(const FilenameAttributes&);
 };
