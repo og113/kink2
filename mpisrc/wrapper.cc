@@ -39,7 +39,7 @@ int nodes_req = 8;
 		- copying negEig, omega etc
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-bool copyFiles = false;
+bool copyFiles = true;
 
 if (copyFiles) {
 	for (int k=0; k<nodes_req; k++) {
