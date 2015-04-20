@@ -68,13 +68,15 @@ T stringToNumber ( const string& Text )
 	
 // absDiff double
 double absDiff(const double& numA, const double& numB) {
-	if (abs(numA)>MIN_NUMBER || abs(numB)>MIN_NUMBER) return 2.0*abs(numA-numB)/sqrt(numA*numA+numB*numB);
+	if (abs(numA)>MIN_NUMBER && abs(numB)>MIN_NUMBER) return 2.0*abs(numA-numB)/sqrt(numA*numA+numB*numB);
+	else if (abs(numA)>MIN_NUMBER || abs(numB)>MIN_NUMBER) return abs(numA-numB);
 	else return 0.0;
 }
 
 // absDiff comp
 double absDiff (const comp& numA, const comp& numB) {
-	if (abs(numA)>MIN_NUMBER || abs(numB)>MIN_NUMBER) return 2.0*abs(numA-numB)/sqrt(norm(numA)+norm(numB));
+	if (abs(numA)>MIN_NUMBER && abs(numB)>MIN_NUMBER) return 2.0*abs(numA-numB)/sqrt(norm(numA)+norm(numB));
+	else if (abs(numA)>MIN_NUMBER || abs(numB)>MIN_NUMBER) return abs(numA-numB);
 	else return 0.0;
 }
 
@@ -84,7 +86,8 @@ double absDiff(const vec& A, const vec& B) {
 	double normSqrdB = B.squaredNorm();
 	vec diff = A-B;
 	double normDiff = diff.norm();
-	if (normSqrdA>MIN_NUMBER || normSqrdB>MIN_NUMBER ) return 2.0*normDiff/pow(normSqrdA+normSqrdB,0.5);
+	if (normSqrdA>MIN_NUMBER && normSqrdB>MIN_NUMBER ) return 2.0*normDiff/pow(normSqrdA+normSqrdB,0.5);
+	else if (normSqrdA>MIN_NUMBER || normSqrdB>MIN_NUMBER ) return normDiff;
 	else return 0.0;
 }
 
@@ -94,7 +97,8 @@ double absDiff(const cVec& A, const cVec& B) {
 	double normSqrdB = B.squaredNorm();
 	cVec diff = A-B;
 	double normDiff = diff.norm();
-	if (normSqrdA>MIN_NUMBER || normSqrdB>MIN_NUMBER ) return 2.0*normDiff/pow(normSqrdA+normSqrdB,0.5);
+	if (normSqrdA>MIN_NUMBER && normSqrdB>MIN_NUMBER ) return 2.0*normDiff/pow(normSqrdA+normSqrdB,0.5);
+	else if (normSqrdA>MIN_NUMBER || normSqrdB>MIN_NUMBER ) return normDiff;
 	else return 0.0;
 }
 
@@ -104,7 +108,8 @@ double absDiff(const mat& A, const mat& B) {
 	double normSqrdB = B.squaredNorm();
 	mat diff = A-B;
 	double normDiff = diff.norm();
-	if (normSqrdA>MIN_NUMBER || normSqrdB>MIN_NUMBER ) return 2.0*normDiff/pow(normSqrdA+normSqrdB,0.5);
+	if (normSqrdA>MIN_NUMBER && normSqrdB>MIN_NUMBER ) return 2.0*normDiff/pow(normSqrdA+normSqrdB,0.5);
+	else if (normSqrdA>MIN_NUMBER || normSqrdB>MIN_NUMBER ) return normDiff;
 	else return 0.0;
 }
 
@@ -114,7 +119,8 @@ double absDiff(const cMat& A, const cMat& B) {
 	double normSqrdB = B.squaredNorm();
 	cMat diff = A-B;
 	double normDiff = diff.norm();
-	if (normSqrdA>MIN_NUMBER || normSqrdB>MIN_NUMBER ) return 2.0*normDiff/pow(normSqrdA+normSqrdB,0.5);
+	if (normSqrdA>MIN_NUMBER && normSqrdB>MIN_NUMBER ) return 2.0*normDiff/pow(normSqrdA+normSqrdB,0.5);
+	else if (normSqrdA>MIN_NUMBER || normSqrdB>MIN_NUMBER ) return normDiff;
 	else return 0.0;
 }
 
