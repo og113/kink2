@@ -482,7 +482,7 @@ void Folder::order() {
 // refresh
 void Folder::refresh() {
 	try {
-	string file = "data/"+currentPartSec()+"dataFiles.txt";
+	string file = "temp/"+currentPartSec()+"dataFiles.txt";
 	string command1 = "find data/* -type f > " + file;
 	int systemCall = system(command1.c_str());
 	if (systemCall==-1) {
@@ -499,12 +499,6 @@ void Folder::refresh() {
 	}
     is.close();
     sort();
-    string command2 = "rm " + file;
-    systemCall = system(command2.c_str());
-	if (systemCall==-1) {
-		FolderError::System e;
-		throw e;
-	}
     }
     catch (FolderError::System e) {
     	cerr << e;
