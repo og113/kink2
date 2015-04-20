@@ -91,6 +91,12 @@ bool operator==(const Point2d& lhs, const Point2d& rhs) {
 	return (abs(lhs.X-rhs.X)<MIN_NUMBER && abs(lhs.Y-rhs.Y)<MIN_NUMBER);
 }
 
+// operator^=
+bool operator^=(const Point2d& lhs, const Point2d& rhs) {
+	double closeness = MIN_NUMBER*1.0e4;
+	return (abs(lhs.X-rhs.X)<closeness && abs(lhs.Y-rhs.Y)<closeness);
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. static functions
 		- staticModder
@@ -354,7 +360,7 @@ void Stepper::step() {
 		steps()==0? f_xy_local_minus_loc.erase(f_xy_local_minus_loc.begin()):\
 								 f_xy_local_minus_loc.erase(f_xy_local_minus_loc.begin()+1);
 		for (uint k=0; k<(local()-1); k++) {
-			if (P==(f_xy_local_minus_loc[k]).first) {
+			if (P^=(f_xy_local_minus_loc[k]).first) {
 				srand(time(NULL));
 				angle += randDouble(-pi,pi)/4.0;
 				staticModder(angle,opts);
