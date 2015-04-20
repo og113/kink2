@@ -9,9 +9,9 @@
 #include <string>
 #include <vector>
 #include <mpi.h>
-#include "changeInputs_fn.h"
 #include "folder.h"
 #include "main_fn.h"
+#include "parameters.h"
 #include "simple.h"
 
 using namespace std;
@@ -48,38 +48,13 @@ if (copyFiles) {
 		// n.b. in the examples i have seen all quantities are declared before MPI::Init
 		// should look this up
 	
-		// copying optionsM with changed timenumber
-		int argc_changeInputs = 9;
-		vector <string> argv_changeInputs(argc_changeInputs);
-		argv_changeInputs[0] = "changeInputs";
-		argv_changeInputs[1] = "-fi";
-		argv_changeInputs[2] = "optionsM";
-		argv_changeInputs[3] = "-fo";
-		argv_changeInputs[4] = "data/"+timenumber+"optionsM";
-		argv_changeInputs[5] = "-n";
-		argv_changeInputs[6] = "minTimenumberLoad";
-		argv_changeInputs[7] = "-v";
-		argv_changeInputs[8] = timenumber;
-
-		returnValue = changeInputs_fn(argc_changeInputs,argv_changeInputs);
-		if (returnValue!=0) {
-			cerr << "return " << returnValue << " on running changeInputs" << endl;
-		}
-
-		argc_changeInputs = 7;
-		argv_changeInputs.resize(argc_changeInputs);
-		argv_changeInputs[0] = "changeInputs";
-		argv_changeInputs[1] = "-fi";
-		argv_changeInputs[2] = "data/"+timenumber+"optionsM";
-		argv_changeInputs[3] = "-n";
-		argv_changeInputs[4] = "maxTimenumberLoad";
-		argv_changeInputs[5] = "-v";
-		argv_changeInputs[6] = timenumber;
-
-		returnValue = changeInputs_fn(argc_changeInputs,argv_changeInputs);
-		if (returnValue!=0) {
-			cerr << "return " << returnValue << " on running changeInputs" << endl;
-		}
+		// copying optionsM with changed timenumbers
+		Options opts;
+		opts.load("optionsM");
+		Filename newOptsFile = (string)"data/"+timenumber+"optionsM";
+		opts.minTimenumberLoad = timenumber;
+		opts.maxTimenumberLoad = timenumber;
+		opts.save(newOptsFile);
 
 		// copying omega and negEig files
 		Filename in = (string)"data/stable/eigVec_pot_3_L_5.dat";
