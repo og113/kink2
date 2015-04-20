@@ -346,8 +346,9 @@ void Stepper::step() {
 		return;
 	}
 	if (abs((f_xy_local.back()).second)<MIN_NUMBER && opts.stepType!=StepperOptions::straight) {
-		cerr << "Stepper error: cannot step before giving result of previous step" << endl;
-		return;
+		cerr << "Stepper potential error: either result has not been given before trying to take step or else F=0" << endl;
+		//cerr << "Stepper error: cannot step before giving result of previous step" << endl;
+		//return;
 	}
 	Point2d P0 = (f_xy_steps.back()).first;
 	double x_old = P0.X;
