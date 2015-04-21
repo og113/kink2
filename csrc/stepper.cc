@@ -346,7 +346,7 @@ void Stepper::step() {
 		return;
 	}
 	if (abs((f_xy_local.back()).second)<MIN_NUMBER && opts.stepType!=StepperOptions::straight) {
-		cerr << "Stepper potential error: either result has not been given before trying to take step or else F=0" << endl;
+		cerr << "Stepper possible error: either result has not been given before trying to take step or else F=0" << endl;
 		//cerr << "Stepper error: cannot step before giving result of previous step" << endl;
 		//return;
 	}

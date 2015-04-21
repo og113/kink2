@@ -522,11 +522,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		vec minusDS(2*ps.N*ps.NT+2);
 			
 		//very early vector print
-		so_tp.paramsIn = ps;
-		Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
-				 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.dat");
-		save(earlyPrintFile,so_tp,p);
-	
+		if ((opts.printChoice).compare("n")!=0) {
+			so_tp.paramsIn = ps;
+			Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
+					 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.dat");
+			save(earlyPrintFile,so_tp,p);
+		}
 /*----------------------------------------------------------------------------------------------------------------------------
 	8. beginning newton-raphson loop
 		- beginning newton-raphson loop	
@@ -1383,8 +1384,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		stepper.step();
 		
 		// print everything?, plot too
-		bool printEverything = false;
-		bool plotEverything = false;
+		bool printEverything = ( ((opts.printChoice).compare("E") || (opts.printChoice).compare("P"))? true: false);
+		bool plotEverything = ( (opts.printChoice).compare("P")? true: false);
 	
 		// printing messages for saved files
 		so_tp.printMessage = true;
@@ -1411,25 +1412,27 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		if (plotEverything)
 			plot(tpFile,po_tp);
 		
-		//printing linErg
-		tpFile.ID = "mainlinErg";
-		linErg.conservativeResize(ps.Na);
-		save(tpFile,so_simple,linErg);
-		plotFile = tpFile;
-		plotFile.Suffix = ".png";
-		po_simple.output = plotFile;
-		if (plotEverything)
-			plot(tpFile,po_simple);
+		if ((opts.printChoice).compare("n")!=0) {
+			//printing linErg
+			tpFile.ID = "mainlinErg";
+			linErg.conservativeResize(ps.Na);
+			save(tpFile,so_simple,linErg);
+			plotFile = tpFile;
+			plotFile.Suffix = ".png";
+			po_simple.output = plotFile;
+			if (plotEverything)
+				plot(tpFile,po_simple);
 	
-		//printing erg
-		tpFile.ID = "mainerg";
-		//erg.conservativeResize(ps.Na);
-		save(tpFile,so_simple,erg);
-		plotFile = tpFile;
-		plotFile.Suffix = ".png";
-		po_simple.output = plotFile;
-		if (plotEverything)
-			plot(tpFile,po_simple);
+			//printing erg
+			tpFile.ID = "mainerg";
+			//erg.conservativeResize(ps.Na);
+			save(tpFile,so_simple,erg);
+			plotFile = tpFile;
+			plotFile.Suffix = ".png";
+			po_simple.output = plotFile;
+			if (plotEverything)
+				plot(tpFile,po_simple);
+		}
 	
 		if (printEverything) {
 			//printing output minusDS
