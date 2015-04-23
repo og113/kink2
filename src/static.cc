@@ -102,7 +102,7 @@ Closenesses closenesses;
 closenesses.load("closenessesS");
 
 // declaring Checks
-Check checkAction("mass",closenesses.Action);
+Check checkMass("mass",closenesses.Action);
 Check checkSoln("solution",closenesses.Soln);
 Check checkSolnMax("solution max",closenesses.SolnMax);
 Check checkDelta("delta",closenesses.Delta);
@@ -143,23 +143,18 @@ params_for_V paramsV  = {ps.epsilon, ps.A}, paramsV0  = {ps.epsilon0, ps.A};
 		- p, minusDS, DDS
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-// erg, linErg etc
-comp action = ps.action0;
-double W;
-double E;
-double ergZero = 0.0;
-cVec erg(ps.NT);	
+// Mass
+double Mass;	
 
 //defining some quantities used to stop the Newton-Raphson loop when action stops varying
-comp action_last = action;
 uint runs_count = 0;
 uint min_runs = 3;
 
 //initializing phi (=p), DDS and minusDS
-vec p(2*ps.N*ps.Nb+1);
-p = Eigen::VectorXd::Zero(2*ps.N*ps.Nb+1);
-spMat DDS(2*ps.N*ps.Nb+1,2*ps.N*ps.Nb+1);
-vec minusDS(2*ps.N*ps.Nb+1);
+vec p(ps.N1);
+p = Eigen::VectorXd::Zero(ps.N+1);
+spMat DDS(ps.N+1,ps.N+1);
+vec minusDS(ps.N+1);
 
 
 
