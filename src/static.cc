@@ -50,7 +50,7 @@ opts.load("optionsS");
 //opts.print();
 
 // defining timenumber
-string timenumber = currentDateTime();
+string timenumber = "";//currentDateTime();
 
 // getting argv inputs
 if (argc==2) timenumber = argv[1];
@@ -200,9 +200,9 @@ if (ps.pot==2) {
 	alphaR = rhoProfile.back();
 }
 for (uint j=0; j<ps.N; j++) {
-	double x = real(coord(j,1,ps));
+	double x = -ps.L/2.0+ps.a*(double)j;
 	if (x>alphaR) {
-		p(j) = ps.minima[1];
+		p(j) = ps.minima[0];
 	}
 	else if (x<alphaL) {
 		p(j) = ps.minima[1];
@@ -222,7 +222,7 @@ for (uint j=0; j<ps.N; j++) {
 }
 p(ps.N) = 0.5; // lagrange multiplier for zero mode
 
-// printing and plotting input phi
+// printing input phi
 SaveOptions so_simple;
 so_simple.paramsIn = ps; so_simple.paramsOut = ps;
 so_simple.vectorType = SaveOptions::simple;
@@ -231,6 +231,7 @@ so_simple.printMessage = true;
 Filename earlyFile = (string)("data/"+timenumber+"staticE.dat");
 save(earlyFile,so_simple,p);
 
+// plotting input phi
 PlotOptions po_simple;
 po_simple.column = 1;
 po_simple.style = "linespoints";
