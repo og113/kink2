@@ -31,6 +31,8 @@
 		2 - getting inputs, checks etc.
 		3 - assigning potential fucntions
 		4 - defining quantites
+		5 - calculating thin wall phi
+		6 - beginning newton raphson loop
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -158,7 +160,7 @@ spMat DDS(ps.N+1,ps.N+1);
 vec minusDS(ps.N+1);
 
 /*----------------------------------------------------------------------------------------------------------------------------
-	5. calculating input phi
+	5. calculating thin wall phi
 		- finding phi profile between minima
 		- assigning phi
 		- fixing boundary conditions
@@ -171,9 +173,9 @@ vec minusDS(ps.N+1);
 uint profileSize = ps.N; //more than the minimum
 vector<double> phiProfile(profileSize);
 vector<double> rhoProfile(profileSize);
-double alphaL = -opts.alpha, alphaR = opts.alpha;
-if (ps.R<opts.alpha) {
-	cerr << "R is too small. Not possible to give thinwall input. It should be >> " << opts.alpha;
+double alphaL = -opts.alpha*ps.R, alphaR = opts.alpha*ps.R;
+if (1.0<opts.alpha) {
+	cerr << "R is too small. Not possible to give thinwall input. It should be >> " << opts.alpha*ps.R;
 	return 1;
 }
 if (ps.pot==2) {
@@ -216,7 +218,7 @@ for (uint j=0; j<ps.N; j++) {
         p(j) = phiProfile[minLoc];
 	}
 	else {
-		p(2*j) = (ps.minima[1]+ps.minima[0])/2.0\
+		p(j) = (ps.minima[1]+ps.minima[0])/2.0\
 					+ (ps.minima[0]-ps.minima[1])*tanh(x/2.0)/2.0;
 	}
 }
@@ -239,6 +241,13 @@ po_simple.printMessage = true;
 Filename earlyPlotFile = (string)("data/"+timenumber+"staticE.png");
 po_simple.output = earlyPlotFile;
 plot(earlyFile,po_simple);
+
+/*----------------------------------------------------------------------------------------------------------------------------
+	6. beginning newton-raphson loop
+		- chiX, for fixing zero mode
+		- reserving memory for DDS
+		- initializing erg etc to zero
+----------------------------------------------------------------------------------------------------------------------------*/
 
 return 0;
 }
