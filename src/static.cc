@@ -83,7 +83,7 @@ else if (argc != 1) {
 
 // loading inputs
 Parameters ps;
-ps.load("inputsP");
+ps.load("inputsS");
 if (ps.pot==3) {
 	cerr << "no soliton for potential 3, retry with pot=1 or 2" << endl;
 	return 1;
@@ -107,6 +107,7 @@ Check checkSoln("solution",closenesses.Soln);
 Check checkSolnMax("solution max",closenesses.SolnMax);
 Check checkDelta("delta",closenesses.Delta);
 Check checkInv("matrix inversion",closenesses.Inv*ps.N*ps.NT);
+Check checkProfile("phi input calculation",closenesses.Profile);
 
 // do trivial or redundant checks?
 bool trivialChecks = false;
@@ -151,12 +152,92 @@ uint runs_count = 0;
 uint min_runs = 3;
 
 //initializing phi (=p), DDS and minusDS
-vec p(ps.N1);
+vec p(ps.N+1);
 p = Eigen::VectorXd::Zero(ps.N+1);
 spMat DDS(ps.N+1,ps.N+1);
 vec minusDS(ps.N+1);
 
+/*----------------------------------------------------------------------------------------------------------------------------
+	5. calculating input phi
+		- finding phi profile between minima
+		- assigning phi
+		- fixing boundary conditions
+		- printing input phi
+		- Cp
+----------------------------------------------------------------------------------------------------------------------------*/
+	
 
+//finding phi profile between minima
+uint profileSize = ps.N; //more than the minimum
+vector<double> phiProfile(profileSize);
+vector<double> rhoProfile(profileSize);
+double alphaL = -opts.alpha, alphaR = opts.alpha;
+if (ps.R<opts.alpha) {
+	cerr << "R is too small. Not possible to give thinwall input. It should be >> " << opts.alpha;
+	return 1;
+}
+if (ps.pot==2) {
+	double phiL = ps.minima0[1]-1.0e-2;
+	double phiR = ps.minima0[0]+1.0e-2;
+	for (uint j=0;j<profileSize;j++) {
+		phiProfile[j] = phiL + (phiR-phiL)*j/(profileSize-1.0);
+	}
+
+	double profileError;
+	gsl_function rho_integrand;
+	rho_integrand.function = &rhoIntegrand;
+	rho_integrand.params = &paramsV0;
+	gsl_integration_workspace *w = gsl_integration_workspace_alloc(1e4);
+	w = gsl_integration_workspace_alloc(1e4);
+	for (uint j=0;j<profileSize;j++) {
+		gsl_integration_qags(&rho_integrand, phiProfile[j], 0, 1.0e-16, 1.0e-6, 1e4, w,\
+												 &(rhoProfile[j]), &profileError);
+		checkProfile.add(profileError);
+		checkProfile.checkMessage();
+	}
+	gsl_integration_workspace_free(w);
+	alphaL = rhoProfile[0];
+	alphaR = rhoProfile.back();
+}
+for (uint j=0; j<ps.N; j++) {
+	double x = real(coord(j,1,ps));
+	if (x>alphaR) {
+		p(j) = ps.minima[1];
+	}
+	else if (x<alphaL) {
+		p(j) = ps.minima[1];
+	}
+	else if (ps.pot==2) {
+		vector<double> rhoPos (profileSize,x);
+		for (uint k=0; k<profileSize; k++) {
+			rhoPos[k] -= rhoProfile[k];
+		}
+		uint minLoc = smallestLoc(rhoPos);
+        p(j) = phiProfile[minLoc];
+	}
+	else {
+		p(2*j) = (ps.minima[1]+ps.minima[0])/2.0\
+					+ (ps.minima[0]-ps.minima[1])*tanh(x/2.0)/2.0;
+	}
+}
+p(ps.N) = 0.5; // lagrange multiplier for zero mode
+
+// printing and plotting input phi
+SaveOptions so_simple;
+so_simple.paramsIn = ps; so_simple.paramsOut = ps;
+so_simple.vectorType = SaveOptions::simple;
+so_simple.extras = SaveOptions::none;
+so_simple.printMessage = true;
+Filename earlyFile = (string)("data/"+timenumber+"staticE.dat");
+save(earlyFile,so_simple,p);
+
+PlotOptions po_simple;
+po_simple.column = 1;
+po_simple.style = "linespoints";
+po_simple.printMessage = true;
+Filename earlyPlotFile = (string)("data/"+timenumber+"staticE.png");
+po_simple.output = earlyPlotFile;
+plot(earlyFile,po_simple);
 
 return 0;
 }
