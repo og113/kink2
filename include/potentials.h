@@ -35,6 +35,7 @@ CONTENTS
 struct params_for_V {
 	double epsi;
 	double aa;
+	void setFromParameters(const Parameters&);
 };
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -42,19 +43,21 @@ struct params_for_V {
 		- Potential
 -------------------------------------------------------------------------------------------------------------------------*/
 
-typedef comp(*PotentialType)(const comp&, const struct params_for_V&);
-
+template <class T>
 class Potential {
 public:
+	typedef params_for_V ParamsStruct;
+	typedef T(*PotentialType)(const T&, const ParamsStruct &);
 	Potential();
 	Potential (PotentialType, const Parameters&);
-	Potential(PotentialType, const params_for_V&);
-	void operator()(PotentialType, const params_for_V&);
+	Potential(PotentialType, const ParamsStruct&);
+	void operator()(PotentialType, const ParamsStruct&);
 	void operator()(PotentialType, const Parameters&);
 	~Potential() {}
-	comp operator()(const comp&) const;
-	comp operator()(const comp&, const params_for_V&) const;
-	void setParams(const params_for_V&);
+	T operator()(const T&) const;
+	T operator()(const T&, const ParamsStruct&) const;
+	void setParams(const ParamsStruct&);
+	void setParams(const Parameters&);
 private:
 	params_for_V parameters;
 	PotentialType potential;

@@ -9,63 +9,81 @@
 /*-------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------
 CONTENTS
-	1 - Potential
-	2 - Vs
-	3 - dVs
-	4 - ddVs
-	5 - explicit template instantiation
+	1 - params_for_V
+	2 - Potential
+	3 - Vs
+	4 - dVs
+	5 - ddVs
+	6 - explicit template instantiation
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	1. potential class member function
+	1. params_for_V
+		- setFromParameters
+-------------------------------------------------------------------------------------------------------------------------*/
+
+void params_for_V::setFromParameters(const Parameters& p) {
+	epsi = p.epsilon;
+	aa = p.A;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	2. potential class member function
 		- constructors
 		- operator()
 		- setParams
 -------------------------------------------------------------------------------------------------------------------------*/
 
-Potential::Potential(): parameters(), potential(){}
+template <class T>
+Potential<T>::Potential(): parameters(), potential(){}
 
-Potential::Potential(PotentialType v, const Parameters& p) {
-	params_for_V pfv;
-	pfv.epsi = p.epsilon;
-	pfv.aa = p.A;
-	parameters = pfv;
+template <class T>
+Potential<T>::Potential(PotentialType v, const Parameters& p) {
+	parameters.setFromParameters(p);
 	potential = v;
 }
 
-Potential::Potential(PotentialType v, const params_for_V& p) {
+template <class T>
+Potential<T>::Potential(PotentialType v, const ParamsStruct& p) {
 	parameters = p;
 	potential = v;
 }
 
-void Potential::operator()(PotentialType v, const Parameters& p) {
-	params_for_V pfv;
-	pfv.epsi = p.epsilon;
-	pfv.aa = p.A;
-	parameters = pfv;
+template <class T>
+void Potential<T>::operator()(PotentialType v, const Parameters& p) {
+	parameters.setFromParameters(p);
 	potential = v;
 }
 
-void Potential::operator()(PotentialType v, const params_for_V& p) {
+template <class T>
+void Potential<T>::operator()(PotentialType v, const params_for_V& p) {
 	parameters = p;
 	potential = v;
 }
 
-comp Potential::operator()(const comp& p) const {
+template <class T>
+T Potential<T>::operator()(const T& p) const {
 	return potential(p,parameters);
 }
 
-comp Potential::operator()(const comp& p, const params_for_V& v) const {
+template <class T>
+T Potential<T>::operator()(const T& p, const params_for_V& v) const {
 	return potential(p,v);
 }
 
-void Potential::setParams(const params_for_V& p) {
+template <class T>
+void Potential<T>::setParams(const params_for_V& p) {
 	parameters = p;
 }
 
+template <class T>
+void Potential<T>::setParams(const Parameters& p) {
+	parameters.setFromParameters(p);
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
-	2. potential functions
+	3. potential functions
 		- V1
 		- Z
 		- V2
@@ -100,7 +118,7 @@ comp VrFn (const comp & phi, const double & minimaL, const double & minimaR) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	3. first derivatives of potential functions
+	4. first derivatives of potential functions
 		- dV1
 		- dZ
 		- dV2
@@ -138,7 +156,7 @@ comp dVrFn (const comp & phi, const double & minimaL, const double & minimaR) {
 }
 	
 /*-------------------------------------------------------------------------------------------------------------------------
-	4. second derivatives of potential functions
+	5. second derivatives of potential functions
 		- dV1
 		- dZ
 		- dV2
@@ -177,7 +195,7 @@ comp ddVrFn (const comp & phi, const double & minimaL, const double & minimaR) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	5. explicit template instantiation
+	6. explicit template instantiation
 		- double
 		- complex<double>
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -207,3 +225,6 @@ template comp ddV1<comp>(const comp&, const struct params_for_V&);
 template comp ddZ<comp>(const comp&);
 template comp ddV2<comp>(const comp&, const struct params_for_V&);
 template comp ddV3<comp>(const comp&, const struct params_for_V&);
+
+template class Potential<double>;
+template class Potential<comp>;

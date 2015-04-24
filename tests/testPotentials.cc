@@ -25,9 +25,9 @@ comp c(-1.0,0.0);
 
 //PotentialType pot = &V2<comp>;
 
-Potential classV;
+Potential<comp> classV;
 
-classV((PotentialType)&V2<comp>,paramsV);
+classV((Potential<comp>::PotentialType)&V2<comp>,paramsV);
 
 cout << classV(c) << endl;
 cout << classV(d) << endl;

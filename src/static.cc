@@ -118,16 +118,16 @@ bool trivialChecks = false;
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // assigning potential functions
-Potential V, dV, ddV;
+Potential<double> V, dV, ddV;
 if (ps.pot==1) {
-	V((PotentialType)&V1<comp>,ps);
-	dV((PotentialType)&dV1<comp>,ps);
-	ddV((PotentialType)&ddV1<comp>,ps);
+	V((Potential<double>::PotentialType)&V1<comp>,ps);
+	dV((Potential<double>::PotentialType)&dV1<comp>,ps);
+	ddV((Potential<double>::PotentialType)&ddV1<comp>,ps);
 }
 else if (ps.pot==2) {
-	V((PotentialType)&V2<comp>,ps);
-	dV((PotentialType)&dV2<comp>,ps);
-	ddV((PotentialType)&ddV2<comp>,ps);
+	V((Potential<double>::PotentialType)&V2<comp>,ps);
+	dV((Potential<double>::PotentialType)&dV2<comp>,ps);
+	ddV((Potential<double>::PotentialType)&ddV2<comp>,ps);
 }
 else {
 	cerr << "pot option not available, pot = " << ps.pot << endl;
