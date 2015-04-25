@@ -264,10 +264,10 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	DDS.setZero(); //just making sure
 	Eigen::VectorXi DDS_to_reserve(ps.N+1);//number of non-zero elements per column
 	DDS_to_reserve = Eigen::VectorXi::Constant(ps.N+1,4);
-	DDS_to_reserve(0) = 3; //these need to be changed when boundary conditions need to be more compicated
-	DDS_to_reserve(1) = 3;
-	DDS_to_reserve(ps.N-2) = 3;
-	DDS_to_reserve(ps.N-1) = 3;
+	DDS_to_reserve(0) = 2; //these need to be changed when boundary conditions need to be more compicated
+	DDS_to_reserve(1) = 2;
+	DDS_to_reserve(ps.N-2) = 2;
+	DDS_to_reserve(ps.N-1) = 2;
 	DDS_to_reserve(ps.N) = ps.N;
 	DDS.reserve(DDS_to_reserve);
 
@@ -288,10 +288,10 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	for (uint j = 0; j<ps.N; j++) {	
 	
 		double Dx = ((j==0 || j==(ps.N-1))? ps.a/2.0: ps.a);
-		minusDS(ps.N) 		+= -Dx*(j)*chi(j);
-		minusDS(j) 			+= -Dx*p(ps.N)*chi(j);
-		DDS.insert(j,ps.N)	= Dx*chi(j);
-		DDS.insert(ps.N,j)	= Dx*chi(j);
+		minusDS(ps.N) 		+= -Dx*(j)*chiX(j);
+		minusDS(j) 			+= -Dx*p(ps.N)*chiX(j);
+		DDS.insert(j,ps.N)	= Dx*chiX(j);
+		DDS.insert(ps.N,j)	= Dx*chiX(j);
 		
 		if (j==0) {
 			DDS.insert(j,j) = 1.0;
