@@ -249,5 +249,66 @@ plot(earlyFile,po_simple);
 		- initializing erg etc to zero
 ----------------------------------------------------------------------------------------------------------------------------*/
 
+while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
+	runs_count++;
+
+	//defining the zero mode
+	vec chiX(ps.N);
+	chiX = Eigen::VectorXd::Zero(ps.N);
+	for (uint j=0; j<(ps.N-1); j++){
+		chiX(j) = p(j+1)-p(j);    
+	}
+
+	// allocating memory for DS, DDS
+	minusDS = Eigen::VectorXd::Zero(ps.N+1); //initializing to zero
+	DDS.setZero(); //just making sure
+	Eigen::VectorXi DDS_to_reserve(ps.N+1);//number of non-zero elements per column
+	DDS_to_reserve = Eigen::VectorXi::Constant(ps.N+1,4);
+	DDS_to_reserve(0) = 3; //these need to be changed when boundary conditions need to be more compicated
+	DDS_to_reserve(1) = 3;
+	DDS_to_reserve(ps.N-2) = 3;
+	DDS_to_reserve(ps.N-1) = 3;
+	DDS_to_reserve(ps.N) = ps.N;
+	DDS.reserve(DDS_to_reserve);
+
+	//initializing to zero
+	Mass = 0.0;
+	double posZero = 0.0;
+
+/*----------------------------------------------------------------------------------------------------------------------------
+	9. assigning minusDS, DDS etc
+		- beginning loop over lattice points
+		- fixing zero mode
+		- j=0
+		- j=N-1
+		- bulk
+----------------------------------------------------------------------------------------------------------------------------*/
+
+	// beginning loop over lattice points
+	for (uint j = 0; j<ps.N; j++) {	
+	
+		double Dx = ((j==0 || j==(ps.N-1))? ps.a/2.0: ps.a);
+		minusDS(ps.N) 		+= -Dx*(j)*chi(j);
+		minusDS(j) 			+= -Dx*p(ps.N)*chi(j);
+		DDS.insert(j,ps.N)	= Dx*chi(j);
+		DDS.insert(ps.N,j)	= Dx*chi(j);
+		
+		if (j==0) {
+			DDS.insert(j,j) = 1.0;
+		}
+		else if (j==(ps.N-1)) {
+			DDS.insert(j,j) = 1.0;
+		}
+		else {
+			double dx = ps.a;
+			minusDS(j) 			+= -p(j+1)/dx - p(j-1)/dx + 2.0*p(j)/dx + dV(p(j))*dx;
+			DDS.insert(j,j) 	= -2.0/dx - ddV(p(j))*dx;
+			DDS.insert(j,j+1) 	= 1.0/dx;
+			DDS.insert(j,j-1) 	= 1.0/dx;
+		}
+    }
+
+}
+
 return 0;
 }
