@@ -111,9 +111,6 @@ Check checkDelta("delta",closenesses.Delta);
 Check checkInv("matrix inversion",closenesses.Inv*ps.N*ps.NT);
 Check checkProfile("phi input calculation",closenesses.Profile);
 
-// do trivial or redundant checks?
-bool trivialChecks = false;
-
 /*----------------------------------------------------------------------------------------------------------------------------
 	3. assigning potential functions
 		- assigning potential functions
@@ -138,7 +135,8 @@ else {
 }
 
 // assigning preliminary parameter structs
-params_for_V paramsV  = {ps.epsilon, ps.A}, paramsV0  = {ps.epsilon0, ps.A};
+params_for_V paramsV0  = {ps.epsilon0, ps.A};
+//params_for_V paramsV  = {ps.epsilon, ps.A};
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. defining quantities
@@ -146,10 +144,12 @@ params_for_V paramsV  = {ps.epsilon, ps.A}, paramsV0  = {ps.epsilon0, ps.A};
 		- p, minusDS, DDS
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-// Mass
-double Mass;	
+// Mass, posZero
+double Mass;
+double posZero;
 
 //defining some quantities used to stop the Newton-Raphson loop when action stops varying
+double Mass_last = 2.0/3.0;
 uint runs_count = 0;
 uint min_runs = 3;
 
@@ -165,7 +165,7 @@ vec minusDS(ps.N+1);
 		- assigning phi
 		- fixing boundary conditions
 		- printing input phi
-		- Cp
+		- posZero
 ----------------------------------------------------------------------------------------------------------------------------*/
 	
 
@@ -221,6 +221,10 @@ for (uint j=0; j<ps.N; j++) {
 		p(j) = (ps.minima[1]+ps.minima[0])/2.0\
 					+ (ps.minima[0]-ps.minima[1])*tanh(x/2.0)/2.0;
 	}
+	if (j>0) {
+		if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0))
+			posZero = x*abs(p(j-1))/abs(p(j)-p(j-1)) + (x-ps.a)*abs(p(j))/abs(p(j)-p(j-1));
+	}
 }
 p(ps.N) = 0.5; // lagrange multiplier for zero mode
 
@@ -242,6 +246,9 @@ Filename earlyPlotFile = (string)("data/"+timenumber+"staticE.png");
 po_simple.output = earlyPlotFile;
 plot(earlyFile,po_simple);
 
+// printing posZero
+printf("   posZero: %12.4g\n",posZero);
+
 /*----------------------------------------------------------------------------------------------------------------------------
 	6. beginning newton-raphson loop
 		- chiX, for fixing zero mode
@@ -252,11 +259,19 @@ plot(earlyFile,po_simple);
 while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	runs_count++;
 
-	//defining the zero mode
+	//defining the zero mode, and finding posZero
 	vec chiX(ps.N);
 	chiX = Eigen::VectorXd::Zero(ps.N);
 	for (uint j=0; j<(ps.N-1); j++){
-		chiX(j) = p(j+1)-p(j);    
+	
+		chiX(j) = p(j+1)-p(j); 
+		
+		if (j>0 && runs_count>1) {
+			if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
+				double x = -ps.L/2.0+ps.a*(double)j;
+				posZero = x*abs(p(j-1))/abs(p(j)-p(j-1)) + (x-ps.a)*abs(p(j))/abs(p(j)-p(j-1));
+			}
+		}  
 	}
 
 	// allocating memory for DS, DDS
@@ -273,7 +288,6 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 
 	//initializing to zero
 	Mass = 0.0;
-	double posZero = 0.0;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	9. assigning minusDS, DDS etc
@@ -294,6 +308,8 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 		DDS.insert(ps.N,j)	= Dx*chiX(j);
 		
 		if (j==0) {
+			double dx = ps.a;
+			Mass += pow(p(j+1)-p(j),2.0)/dx;
 			DDS.insert(j,j) = 1.0;
 		}
 		else if (j==(ps.N-1)) {
@@ -301,13 +317,194 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 		}
 		else {
 			double dx = ps.a;
+			Mass += pow(p(j+1)-p(j),2.0)/dx;
 			minusDS(j) 			+= -p(j+1)/dx - p(j-1)/dx + 2.0*p(j)/dx + dV(p(j))*dx;
 			DDS.insert(j,j) 	= -2.0/dx - ddV(p(j))*dx;
 			DDS.insert(j,j+1) 	= 1.0/dx;
 			DDS.insert(j,j-1) 	= 1.0/dx;
 		}
     }
+    
+/*----------------------------------------------------------------------------------------------------------------------------
+	7. solving for delta
+		- defining delta
+		- analyzing pattern
+		- factorizing
+		- solving
+		- check on inversion
+		- p' = p + delta
+----------------------------------------------------------------------------------------------------------------------------*/
 
+	//solving for delta in DDS*delta=minusDS, where p' = p + delta		
+	vec delta(ps.N+1);
+	delta = Eigen::VectorXd::Zero(ps.N+1);
+	DDS.makeCompressed();
+	Eigen::SparseLU<spMat> solver;
+	
+	solver.analyzePattern(DDS);
+	if(solver.info()!=Eigen::Success) {
+		cerr << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
+		return 1;
+	}		
+	solver.factorize(DDS);
+	if(solver.info()!=Eigen::Success) {
+		cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
+		return 1;
+	}
+	delta = solver.solve(minusDS);// use the factorization to solve for the given right hand side
+	if(solver.info()!=Eigen::Success) {
+		cerr << "Solving failed, solver.info() = "<< solver.info() << endl;
+		cerr << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
+		cerr << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
+		return 1;
+	}
+	
+	//independent check on whether calculation worked
+	vec diff(ps.N+1);
+	diff = DDS*delta-minusDS;
+	double maxDiff = diff.maxCoeff();
+	maxDiff = abs(maxDiff);
+	checkInv.add(maxDiff);
+	checkInv.checkMessage();
+	if (!checkInv.good()) {
+		return 1;
+	}
+
+	//assigning values to phi
+	p += delta;
+	
+/*----------------------------------------------------------------------------------------------------------------------------
+	8. printing early
+		- p
+		- minusDS
+		- DDS
+		- delta
+		- chiX
+----------------------------------------------------------------------------------------------------------------------------*/
+		
+	//printing early if desired	
+	if ((opts.printChoice).compare("n")!=0) {
+		Filename basic = (string)("data/"+timenumber+"staticE_run_"+numberToString<uint>(runs_count)+".dat");
+		if ((opts.printChoice).compare("p")==0 || (opts.printChoice).compare("e")==0) {
+			Filename pEFile = basic;
+			pEFile.ID = "staticpE";
+			save(pEFile,so_simple,p);
+		}
+		if ((opts.printChoice).compare("v")==0 || (opts.printChoice).compare("e")==0) {
+			Filename vEFile = basic;
+			vEFile.ID = "staticminusDSE";
+			save(vEFile,so_simple,minusDS);
+		}
+		if ((opts.printChoice).compare("m")==0 || (opts.printChoice).compare("e")==0) {
+			Filename mEFile = basic;
+			mEFile.ID = "staticDDSE";
+			save(mEFile,so_simple,DDS);
+		}
+		if ((opts.printChoice).compare("d")==0 || (opts.printChoice).compare("e")==0) {
+			Filename dEFile = basic;
+			dEFile.ID = "staticdeltaE";
+			save(dEFile,so_simple,delta);
+		}
+		if ((opts.printChoice).compare("z")==0 || (opts.printChoice).compare("e")==0) {
+			Filename zEFile = basic;
+			zEFile.ID = "staticchiXE";
+			save(zEFile,so_simple,chiX);
+		}
+	}
+		
+/*----------------------------------------------------------------------------------------------------------------------------
+	9. convergence issues
+		- checkReg
+		- evaluating norms
+		- evaluating checks to stop n-r loop
+		- printing convergence tests
+		- end of n-r loop
+		- checkDT
+----------------------------------------------------------------------------------------------------------------------------*/
+	
+	// evaluating norms
+	double normDS = minusDS.dot(minusDS);
+	normDS = pow(normDS,0.5);
+	double maxDS = minusDS.maxCoeff();
+	double minDS = minusDS.minCoeff();
+	if (-minDS>maxDS) maxDS = -minDS;
+	double normP = p.dot(p);
+	normP = pow(normP,0.5);
+	double normDelta = delta.dot(delta);
+	normDelta = pow(normDelta,0.5);
+	
+	// evaluating checks to stop n-r loop
+	checkMass.add(absDiff(Mass,Mass_last));
+	Mass_last = Mass;
+	checkSoln.add(normDS/normP);
+	checkSolnMax.add(maxDS);
+	checkDelta.add(normDelta/normP);
+		
+	// printing tests to see convergence
+	if (runs_count==1) {
+		printf("%16s%16s%16s%16s%16s%16s\n","runsCount","MassTest","solTest","solMTest","deltaTest","posZero");
+	}
+	printf("%16i%16g%16g%16g%16g%16g\n",runs_count,checkMass.back(),checkSoln.back()\
+								,checkSolnMax.back(),checkDelta.back(),posZero);
+}
+
+/*----------------------------------------------------------------------------------------------------------------------------
+10. printing output
+	- stopping clock
+	- printing results to terminal
+	- printing results to file
+	- printing (and plotting if vectors):
+		- p
+		- DDS
+		- minusDS
+	- return
+	
+----------------------------------------------------------------------------------------------------------------------------*/
+
+//stopping clock
+time = clock() - time;
+double realtime = time/1000000.0;
+
+//printing results to terminal
+printf("\n");
+printf("%8s%8s%8s%12s%14s%14s%14s\n","runs","time","N","L","dE","posZero","Mass");
+printf("%8i%8g%8i%12g%14.4g%14.4g%14.4g\n",runs_count,realtime,ps.N,ps.L,ps.dE,posZero,Mass);
+printf("\n");
+printf("%60s\n","----------------------------------------------------------------------------------------------------");
+
+//printing results to file
+FILE * staticfile;
+staticfile = fopen("./data/static.dat","a");
+fprintf(staticfile,"%16s%8i%12g%12g%14.4g%14.4g%14.4g\n",timenumber.c_str()\
+			,ps.N,ps.L,ps.dE,posZero,Mass,checkSoln.back());
+fclose(staticfile);
+
+bool printEverything = false;
+
+string prefix = "./data/"+timenumber;
+string suffix = ".dat";
+
+//printing output phi on Euclidean time part
+Filename pFile = (string)(prefix+"staticp"+suffix);
+save(pFile,so_simple,p);
+Filename plotFile = pFile;
+plotFile.Directory = "pics";
+plotFile.Suffix = ".png";
+po_simple.output = plotFile;
+plot(pFile,po_simple);
+
+//printing output DDS
+pFile.ID = "staticDDS";
+save(pFile,so_simple,DDS);
+
+if (printEverything) {
+	//printing output minusDS
+	pFile.ID = "staticminusDS";
+	save(pFile,so_simple,minusDS);
+}
+
+if (!checkDelta.good()) {
+	return 1;
 }
 
 return 0;
