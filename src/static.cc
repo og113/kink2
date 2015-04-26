@@ -108,7 +108,7 @@ Check checkMass("mass",closenesses.Action);
 Check checkSoln("solution",closenesses.Soln);
 Check checkSolnMax("solution max",closenesses.SolnMax);
 Check checkDelta("delta",closenesses.Delta);
-Check checkInv("matrix inversion",closenesses.Inv*ps.N*ps.NT);
+Check checkInv("matrix inversion",closenesses.Inv*ps.N);
 Check checkProfile("phi input calculation",closenesses.Profile);
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -263,8 +263,9 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	vec chiX(ps.N);
 	chiX = Eigen::VectorXd::Zero(ps.N);
 	for (uint j=1; j<(ps.N-1); j++){
+		double dx = ps.a;
 	
-		chiX(j) = p(j+1)-p(j-1); 
+		chiX(j) = (p(j+1)-p(j-1))/dx; 
 		
 		if (runs_count>1) {
 			if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
