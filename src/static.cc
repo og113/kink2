@@ -262,11 +262,11 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	//defining the zero mode, and finding posZero
 	vec chiX(ps.N);
 	chiX = Eigen::VectorXd::Zero(ps.N);
-	for (uint j=0; j<(ps.N-1); j++){
+	for (uint j=1; j<(ps.N-1); j++){
 	
-		chiX(j) = p(j+1)-p(j); 
+		chiX(j) = p(j+1)-p(j-1); 
 		
-		if (j>0 && runs_count>1) {
+		if (runs_count>1) {
 			if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
 				double x = -ps.L/2.0+ps.a*(double)j;
 				posZero = x*abs(p(j-1))/abs(p(j)-p(j-1)) + (x-ps.a)*abs(p(j))/abs(p(j)-p(j-1));
@@ -302,7 +302,7 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	for (uint j = 0; j<ps.N; j++) {	
 	
 		double Dx = ((j==0 || j==(ps.N-1))? ps.a/2.0: ps.a);
-		minusDS(ps.N) 		+= -Dx*(j)*chiX(j);
+		minusDS(ps.N) 		+= -Dx*p(j)*chiX(j);
 		minusDS(j) 			+= -Dx*p(ps.N)*chiX(j);
 		DDS.insert(j,ps.N)	= Dx*chiX(j);
 		DDS.insert(ps.N,j)	= Dx*chiX(j);
@@ -318,10 +318,10 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 		else {
 			double dx = ps.a;
 			Mass += pow(p(j+1)-p(j),2.0)/dx;
-			minusDS(j) 			+= -p(j+1)/dx - p(j-1)/dx + 2.0*p(j)/dx + dV(p(j))*dx;
-			DDS.insert(j,j) 	= -2.0/dx - ddV(p(j))*dx;
-			DDS.insert(j,j+1) 	= 1.0/dx;
-			DDS.insert(j,j-1) 	= 1.0/dx;
+			minusDS(j) 			+= +p(j+1)/dx + p(j-1)/dx - 2.0*p(j)/dx + dV(p(j))*dx;
+			DDS.insert(j,j) 	= 2.0/dx - ddV(p(j))*dx;
+			DDS.insert(j,j+1) 	= -1.0/dx;
+			DDS.insert(j,j-1) 	= -1.0/dx;
 		}
     }
     
@@ -385,6 +385,7 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	//printing early if desired	
 	if ((opts.printChoice).compare("n")!=0) {
 		Filename basic = (string)("data/"+timenumber+"staticE_run_"+numberToString<uint>(runs_count)+".dat");
+		so_simple.printMessage = false;
 		if ((opts.printChoice).compare("p")==0 || (opts.printChoice).compare("e")==0) {
 			Filename pEFile = basic;
 			pEFile.ID = "staticpE";
@@ -468,21 +469,22 @@ double realtime = time/1000000.0;
 //printing results to terminal
 printf("\n");
 printf("%8s%8s%8s%12s%14s%14s%14s\n","runs","time","N","L","dE","posZero","Mass");
-printf("%8i%8g%8i%12g%14.4g%14.4g%14.4g\n",runs_count,realtime,ps.N,ps.L,ps.dE,posZero,Mass);
+printf("%8i%8.1g%8i%12g%14.4g%14.4g%14.4g\n",runs_count,realtime,ps.N,ps.L,ps.dE,posZero,Mass);
 printf("\n");
 printf("%60s\n","----------------------------------------------------------------------------------------------------");
 
 //printing results to file
 FILE * staticfile;
-staticfile = fopen("./data/static.dat","a");
+staticfile = fopen("data/static.dat","a");
 fprintf(staticfile,"%16s%8i%12g%12g%14.4g%14.4g%14.4g\n",timenumber.c_str()\
 			,ps.N,ps.L,ps.dE,posZero,Mass,checkSoln.back());
 fclose(staticfile);
 
 bool printEverything = false;
 
-string prefix = "./data/"+timenumber;
+string prefix = "data/"+timenumber;
 string suffix = ".dat";
+so_simple.printMessage = true;
 
 //printing output phi on Euclidean time part
 Filename pFile = (string)(prefix+"staticp"+suffix);
