@@ -175,14 +175,18 @@ vec minusDS(ps.N+1);
 uint profileSize = ps.N; //more than the minimum
 vector<double> phiProfile(profileSize);
 vector<double> rhoProfile(profileSize);
-double alphaL = -opts.alpha*ps.L/2.0, alphaR = opts.alpha*ps.L/2.0;
+double alpha = opts.alpha*ps.L/2.0;
+double alphaL = -alpha, alphaR = alpha;
+double phiL = ps.minima0[1]-1.0e-2;
+double phiR = ps.minima0[0]+1.0e-2;
+bool linearInterpolate = true;
+if (!linearInterpolate) alpha = 0.0;
+
 if (1.0<opts.alpha) {
 	cerr << "R is too small. Not possible to give thinwall input. It should be >> " << opts.alpha*ps.R;
 	return 1;
 }
 if (ps.pot==2) {
-	double phiL = ps.minima0[1]-1.0e-2;
-	double phiR = ps.minima0[0]+1.0e-2;
 	for (uint j=0;j<profileSize;j++) {
 		phiProfile[j] = phiL + (phiR-phiL)*j/(profileSize-1.0);
 	}
@@ -205,14 +209,20 @@ if (ps.pot==2) {
 }
 for (uint j=0; j<ps.N; j++) {
 	double x = -ps.L/2.0+ps.a*(double)j;
-	if (x>alphaR) {
+	if (x>alphaR && x>alpha) {
 		p(j) = ps.minima[0];
 	}
-	else if (x<alphaL) {
+	else if (x<alphaL && x<-alpha) {
 		p(j) = ps.minima[1];
 	}
+	else if (x>alphaR && x<=alpha) {
+		p(j) = phiR + ((ps.minima[0]-phiR)/(alpha-alphaR))*(x-alphaR);
+	}
+	else if (x<alphaL && x>=-alpha) {
+		p(j) = ps.minima[1] + ((phiL-ps.minima[1])/(alphaL+alpha))*(x+alpha);
+	}
 	else if (ps.pot==2) {
-		vector<double> rhoPos (profileSize,x);
+		vector<double> rhoPos(profileSize,x);
 		for (uint k=0; k<profileSize; k++) {
 			rhoPos[k] -= rhoProfile[k];
 		}
@@ -267,7 +277,7 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	for (uint j=1; j<(ps.N-1); j++){
 		double dx = ps.a;
 	
-		chiX(j) = (p(j+1)-p(j-1))/2.0/dx; 
+		chiX(j) = (p(j+1)-p(j-1))/2.0/dx;
 		
 		if (runs_count>1) {
 			if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
