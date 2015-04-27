@@ -234,7 +234,7 @@ so_simple.paramsIn = ps; so_simple.paramsOut = ps;
 so_simple.vectorType = SaveOptions::simple;
 so_simple.extras = SaveOptions::none;
 so_simple.printMessage = true;
-Filename earlyFile = (string)("data/"+timenumber+"staticE.dat");
+Filename earlyFile = (string)("data/"+timenumber+"staticpE_run_0.dat");
 save(earlyFile,so_simple,p);
 
 // plotting input phi
@@ -242,7 +242,7 @@ PlotOptions po_simple;
 po_simple.column = 1;
 po_simple.style = "linespoints";
 po_simple.printMessage = true;
-Filename earlyPlotFile = (string)("data/"+timenumber+"staticE.png");
+Filename earlyPlotFile = (string)("data/"+timenumber+"staticpE_run_0.png");
 po_simple.output = earlyPlotFile;
 plot(earlyFile,po_simple);
 
@@ -265,7 +265,7 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	for (uint j=1; j<(ps.N-1); j++){
 		double dx = ps.a;
 	
-		chiX(j) = (p(j+1)-p(j-1))/dx; 
+		chiX(j) = (p(j+1)-p(j-1))/2.0/dx; 
 		
 		if (runs_count>1) {
 			if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
@@ -281,8 +281,6 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	Eigen::VectorXi DDS_to_reserve(ps.N+1);//number of non-zero elements per column
 	DDS_to_reserve = Eigen::VectorXi::Constant(ps.N+1,4);
 	DDS_to_reserve(0) = 2; //these need to be changed when boundary conditions need to be more compicated
-	DDS_to_reserve(1) = 2;
-	DDS_to_reserve(ps.N-2) = 2;
 	DDS_to_reserve(ps.N-1) = 2;
 	DDS_to_reserve(ps.N) = ps.N;
 	DDS.reserve(DDS_to_reserve);
@@ -297,6 +295,9 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 		- j=0
 		- j=N-1
 		- bulk
+		
+	eqn to be solved is:
+			-d^2p/dx^2 + V'(p) = 0
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 	// beginning loop over lattice points
@@ -319,10 +320,10 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 		else {
 			double dx = ps.a;
 			Mass += pow(p(j+1)-p(j),2.0)/dx;
-			minusDS(j) 			+= +p(j+1)/dx + p(j-1)/dx - 2.0*p(j)/dx + dV(p(j))*dx;
-			DDS.insert(j,j) 	= 2.0/dx - ddV(p(j))*dx;
-			DDS.insert(j,j+1) 	= -1.0/dx;
-			DDS.insert(j,j-1) 	= -1.0/dx;
+			minusDS(j) 			+= -p(j+1)/dx - p(j-1)/dx + 2.0*p(j)/dx + dV(p(j))*dx;
+			DDS.insert(j,j) 	= -2.0/dx - ddV(p(j))*dx;
+			DDS.insert(j,j+1) 	= 1.0/dx;
+			DDS.insert(j,j-1) 	= 1.0/dx;
 		}
     }
     
@@ -386,7 +387,7 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	//printing early if desired	
 	if ((opts.printChoice).compare("n")!=0) {
 		Filename basic = (string)("data/"+timenumber+"staticE_run_"+numberToString<uint>(runs_count)+".dat");
-		so_simple.printMessage = false;
+		//so_simple.printMessage = false;
 		if ((opts.printChoice).compare("p")==0 || (opts.printChoice).compare("e")==0) {
 			Filename pEFile = basic;
 			pEFile.ID = "staticpE";
