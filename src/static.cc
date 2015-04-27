@@ -93,7 +93,9 @@ if (ps.pot==3) {
 	
 //printing timenumber and parameters
 printf("%12s%12s\n","timenumber: ",timenumber.c_str());
-ps.print();
+printf("%14s%14s%14s%14s%14s%14s\n","N","L","dE","epsilon","minima[0]","minima[1]");
+printf("%14i%14.4g%14.4g%14.4g%14.4g%14.4g\n",ps.N,ps.L,ps.dE,ps.epsilon,(ps.minima)[0],(ps.minima)[1]);
+//ps.print();
 
 //defining a time and starting the clock
 clock_t time;
@@ -120,14 +122,14 @@ Check checkProfile("phi input calculation",closenesses.Profile);
 // assigning potential functions
 Potential<double> V, dV, ddV;
 if (ps.pot==1) {
-	V((Potential<double>::PotentialType)&V1<comp>,ps);
-	dV((Potential<double>::PotentialType)&dV1<comp>,ps);
-	ddV((Potential<double>::PotentialType)&ddV1<comp>,ps);
+	V((Potential<double>::PotentialType)&V1<double>,ps);
+	dV((Potential<double>::PotentialType)&dV1<double>,ps);
+	ddV((Potential<double>::PotentialType)&ddV1<double>,ps);
 }
 else if (ps.pot==2) {
-	V((Potential<double>::PotentialType)&V2<comp>,ps);
-	dV((Potential<double>::PotentialType)&dV2<comp>,ps);
-	ddV((Potential<double>::PotentialType)&ddV2<comp>,ps);
+	V((Potential<double>::PotentialType)&V2<double>,ps);
+	dV((Potential<double>::PotentialType)&dV2<double>,ps);
+	ddV((Potential<double>::PotentialType)&ddV2<double>,ps);
 }
 else {
 	cerr << "pot option not available, pot = " << ps.pot << endl;
@@ -173,7 +175,7 @@ vec minusDS(ps.N+1);
 uint profileSize = ps.N; //more than the minimum
 vector<double> phiProfile(profileSize);
 vector<double> rhoProfile(profileSize);
-double alphaL = -opts.alpha*ps.R, alphaR = opts.alpha*ps.R;
+double alphaL = -opts.alpha*ps.L/2.0, alphaR = opts.alpha*ps.L/2.0;
 if (1.0<opts.alpha) {
 	cerr << "R is too small. Not possible to give thinwall input. It should be >> " << opts.alpha*ps.R;
 	return 1;
