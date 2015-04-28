@@ -2,8 +2,8 @@
  	declarations for functions to compute sphaleron
  -------------------------------------------------------------------------------------------------------------------------*/
  
-#ifndef __SPHALERON_H_INCLUDED__
-#define __SPHALERON_H_INCLUDED__
+#ifndef __SPHALERON_FNS_H_INCLUDED__
+#define __SPHALERON_FNS_H_INCLUDED__
 
 using namespace std;
 
@@ -62,4 +62,4 @@ struct E_params {double Y_0;};
 // energy integrand
 double E_integrand (double x, void * parameters);
 
-#endif // __SPHALERON_H_INCLUDED__
+#endif // __SPHALERON_FNS_H_INCLUDED__
