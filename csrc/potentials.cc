@@ -99,13 +99,16 @@ template <class T> T V1 (const T& phi, const struct params_for_V& params) {
 }
 
 //Z, for V2
-template <class T> T Z (const T& phi) {
-	return exp(-pow(phi,2.0))*(phi + pow(phi,3.0) + pow(phi,5.0));
+template <class T> T Z (const T& x) {
+	return exp(-pow(x,2.0))*(x + pow(x,3.0) + pow(x,5.0));
 }
 	
 //V2
-template <class T> T V2 (const T& phi, const struct params_for_V& params) {
-	return 0.5*pow(phi+1.0,2.0)*(1.0-params.epsi*Z((phi-1.0)/params.aa));
+template <class T> T V2 (const T& x, const struct params_for_V& params) {
+	double epsi = params.epsi;
+	double aa = params.aa;
+	T y = (x-1.0)/aa;
+	return 0.5*pow(x+1.0,2.0)*(1.0-epsi*Z(y));
 }
 
 //V3
@@ -139,10 +142,11 @@ template <class T> T dZ (const T& phi) {
 }
 	
 //dV2
-template <class T> T dV2 (const T& phi, const struct params_for_V& params) {
+template <class T> T dV2 (const T& x, const struct params_for_V& params) {
 	double epsi = params.epsi;
 	double aa = params.aa;
-	return (phi+1.0)*(1.0-epsi*Z((phi-1.0)/aa)) - 0.5*pow(phi+1.0,2.0)*(epsi/aa)*dZ((phi-1.0)/aa);
+	T y = (x-1.0)/aa;
+	return (x+1.0)*(1.0-epsi*Z(y)) - (epsi/2.0/aa)*pow(x+1.0,2.0)*dZ(y);
 }
 
 //dV3
@@ -172,16 +176,17 @@ template <class T> T ddV1 (const T& phi, const struct params_for_V& params) {
 }
 
 //ddZ for ddV2
-template <class T> T ddZ (const T& phi) {
-	return exp(-pow(phi,2.0))*2.0*pow(phi,3.0)*(5.0 - 9.0*pow(phi,2.0) + 2.0*pow(phi,4.0));
+template <class T> T ddZ (const T& x) {
+	return exp(-pow(x,2.0))*2.0*pow(x,3.0)*(5.0 - 9.0*pow(x,2.0) + 2.0*pow(x,4.0));
 }
 
 //ddV2
-template <class T> T ddV2 (const T& phi, const struct params_for_V& params) {
+template <class T> T ddV2 (const T& x, const struct params_for_V& params) {
 	double epsi = params.epsi;
 	double aa = params.aa;
-	return (1.0-epsi*Z((phi-1.0)/aa)) - (phi+1.0)*(epsi/aa)*dZ((phi-1.0)/aa)\
-					- 0.5*pow(phi+1.0,2.0)*(epsi/pow(aa,2.0))*ddZ((phi-1.0)/aa);
+	T y = (x-1.0)/aa;
+	return 1.0-epsi*Z(y) - (2.0*epsi/aa)*(x+1.0)*dZ(y)\
+					- (epsi/2.0/pow(aa,2.0))*pow(x+1.0,2.0)*ddZ(y);
 }
 
 //ddV3
@@ -209,16 +214,17 @@ template <class T> T dddV1 (const T& phi, const struct params_for_V& params) {
 }
 
 //dddZ for dddV2
-template <class T> T dddZ (const T& phi) {
-	return exp(-pow(phi,2.0))*2.0*pow(phi,2.0)*( 15.0 - 55.0*pow(phi,2.0) + 32.0*pow(phi,4.0) - 4.0*pow(phi,6.0));
+template <class T> T dddZ (const T& x) {
+	return exp(-pow(x,2.0))*2.0*pow(x,2.0)*( 15.0 - 55.0*pow(x,2.0) + 32.0*pow(x,4.0) - 4.0*pow(x,6.0));
 }
 
 //dddV2
-template <class T> T dddV2 (const T& phi, const struct params_for_V& params) {
+template <class T> T dddV2 (const T& x, const struct params_for_V& params) {
 	double epsi = params.epsi;
 	double aa = params.aa;
-	return -3.0*(epsi/aa)*dZ((phi-1.0)/aa) - 3.0*(phi+1.0)*(epsi/pow(aa,2.0))*ddZ((phi-1.0)/aa) \
-			- 0.5*pow(phi+1.0,2.0)*(epsi/pow(aa,3.0))*dddZ((phi-1.0)/aa);
+	T y = (x-1.0)/aa;
+	return -3.0*(epsi/aa)*dZ(y) - 3.0*(x+1.0)*(epsi/pow(aa,2.0))*ddZ(y) \
+			- 0.5*pow(x+1.0,2.0)*(epsi/pow(aa,3.0))*dddZ(y);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------

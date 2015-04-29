@@ -2,6 +2,8 @@
 	staticShooting
 		program to solve boundary value problem for static soliton
 		using the shooting method
+		
+n.b. unfinished - started with 2d system of first order o.d.e. but realised that to properly account for b.c.s in shooting method we need a 4d sysytem of equations. have not implemented this yet.
 ----------------------------------------------------------------------------------------------------------------------------*/
 #include <Eigen/Sparse>
 #include <Eigen/Dense>

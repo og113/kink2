@@ -71,9 +71,9 @@ closenesses.load("closenesses");
 // loading inputs
 Parameters psu;
 psu.load("inputsP");
-cout << "input parameters: " << endl;
-psu.print();
-cout << endl;
+//cout << "input parameters: " << endl;
+//psu.print();
+//cout << endl;
 
 // defining timenumber
 string timenumber;
@@ -313,11 +313,12 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	uint runs_count = 0;
 	uint min_runs = 3;
 
-	//initializing phi (=p), DDS and minusDS
+	//initializing phi (=p), DDS and minusDS, and chiX
 	vec p(2*ps.N*ps.Nb+1);
 	p = Eigen::VectorXd::Zero(2*ps.N*ps.Nb+1);
 	spMat DDS(2*ps.N*ps.Nb+1,2*ps.N*ps.Nb+1);
 	vec minusDS(2*ps.N*ps.Nb+1);
+	vec chiX(ps.Nb*ps.N);
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	7. calculating input phi
@@ -504,17 +505,24 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		runs_count++;
 		
 		//defining the zero mode at the final time boundary and the time step before
-		vec chiX(ps.Nb*ps.N);
-		chiX = Eigen::VectorXd::Zero(ps.N*ps.Nb);
-		if (ps.pot!=3) {
-			for (uint j=0; j<ps.N; j++){
-				lint pos = c(ps.Nb-1,j,ps.Nb);
-				long int neighPos = neigh(pos,1,1,ps.Nb,ps.N,ps.pot), neighMin = neigh(pos,1,-1,ps.Nb,ps.N,ps.pot);
-				if(neighPos!=-1 && neighMin!=-1) {
-		        	chiX(pos) = p(2*neighPos)-p(2*neighMin); 								//final time slice
-		        	//chiX(pos-1) = p(2*neigh(pos-1,1,1,ps.Nb,ps.N))-p(2*neigh(pos-1,1,-1,ps.Nb,ps.N,ps.pot)); //penultimate time slice
-		        }
-		    }
+		if (runs_count==1 || ps.pot!=2) {
+			chiX = Eigen::VectorXd::Zero(ps.N*ps.Nb);
+			bool chiOnPenultimate = false;
+			if (ps.pot!=3) {
+				for (uint j=0; j<ps.N; j++){
+					lint pos = c(ps.Nb-1,j,ps.Nb);
+					long int neighPos = neigh(pos,1,1,ps.Nb,ps.N,ps.pot), neighMin = neigh(pos,1,-1,ps.Nb,ps.N,ps.pot); 
+					if(neighPos!=-1 && neighMin!=-1) {
+				    	chiX(pos) = (p(2*neighPos)-p(2*neighMin))/2.0/ps.b; //final time slice
+				    }
+				    if (pos>0 && chiOnPenultimate) {
+				    	long int neighPos2 = neigh(pos-1,1,1,ps.Nb,ps.N,ps.pot), neighMin2 = neigh(pos-1,1,-1,ps.Nb,ps.N,ps.pot);
+						if (neighPos2!=-1 && neighMin2!=-1) {							
+							chiX(pos-1) = (p(2*neighPos2)-p(2*neighMin2))/2.0/ps.b; //penultimate time slice
+						}
+					}
+				}
+			}
 		}
 
 		// allocating memory for DS, DDS
@@ -754,6 +762,10 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		if ((opts.printChoice).compare("n")!=0) {
 			Filename basic = (string)("data/"+timenumber+"basic_loop_"+numberToString<uint>(loop)\
 								+"_run_"+numberToString<uint>(runs_count)+".dat");
+			SaveOptions so_chi;
+			so_chi = so_p;
+			so_chi.vectorType = SaveOptions::realB;
+			so_chi.zeroModes = 0;
 			if ((opts.printChoice).compare("p")==0 || (opts.printChoice).compare("e")==0) {
 				Filename pEFile = basic;
 				pEFile.ID = "pE";
@@ -777,7 +789,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			if ((opts.printChoice).compare("z")==0 || (opts.printChoice).compare("e")==0) {
 				Filename zEFile = basic;
 				zEFile.ID = "chiXE";
-				save(zEFile,so_simple,chiX);
+				save(zEFile,so_chi,chiX);
 			}
 			if ((opts.printChoice).compare("erg")==0 || (opts.printChoice).compare("e")==0) {
 				Filename lEFile = basic;

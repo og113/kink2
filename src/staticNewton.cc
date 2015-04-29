@@ -160,11 +160,12 @@ double Mass_last = 2.0/3.0;
 uint runs_count = 0;
 uint min_runs = 3;
 
-//initializing phi (=p), DDS and minusDS
+//initializing phi (=p), DDS and minusDS, and chiX
 vec p(ps.N+1);
 p = Eigen::VectorXd::Zero(ps.N+1);
 spMat DDS(ps.N+1,ps.N+1);
 vec minusDS(ps.N+1);
+vec chiX(ps.N);
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	5. calculating thin wall phi
@@ -277,19 +278,18 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	runs_count++;
 
 	//defining the zero mode, and finding posZero
-	vec chiX(ps.N);
-	chiX = Eigen::VectorXd::Zero(ps.N);
-	for (uint j=1; j<(ps.N-1); j++){
-		double dx = ps.a;
-	
-		chiX(j) = (p(j+1)-p(j-1))/2.0/dx;
-		
-		if (runs_count>1) {
-			if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
-				double x = -ps.L/2.0+ps.a*(double)j;
-				posZero = x*abs(p(j-1))/abs(p(j)-p(j-1)) + (x-ps.a)*abs(p(j))/abs(p(j)-p(j-1));
-			}
-		}  
+	if (runs_count==1) {
+		chiX = Eigen::VectorXd::Zero(ps.N);
+		for (uint j=1; j<(ps.N-1); j++){
+			double dx = ps.a;
+			chiX(j) = (p(j+1)-p(j-1))/2.0/dx;	
+			if (runs_count>1) {
+				if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
+					double x = -ps.L/2.0+ps.a*(double)j;
+					posZero = x*abs(p(j-1))/abs(p(j)-p(j-1)) + (x-ps.a)*abs(p(j))/abs(p(j)-p(j-1));
+				}
+			}  
+		}
 	}
 
 	// allocating memory for DS, DDS

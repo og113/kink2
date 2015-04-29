@@ -1,8 +1,8 @@
 alpha               0.5                 
 open                1                   
 amp                 0.5                 
-zmx                 nC2                 
-zmt                 nC2                 
+zmx                 dC2                 
+zmt                 dC2                 
 bds                 all                 
 inF                 b                   
 minTimenumberLoad   000                 
@@ -17,5 +17,5 @@ loopMax             0
 epsiTb              0.0001              
 epsiTheta           0.0001              
 loops               1                  
-printChoice         n                   
+printChoice         e                   
 
