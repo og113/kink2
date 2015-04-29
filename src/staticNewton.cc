@@ -1,6 +1,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------
-	static
+	staticNewton
 		program to solve boundary value problem for static soliton
+		using the newton-raphson method
 ----------------------------------------------------------------------------------------------------------------------------*/
 #include <Eigen/Sparse>
 #include <Eigen/Dense>
@@ -33,6 +34,10 @@
 		4 - defining quantites
 		5 - calculating thin wall phi
 		6 - beginning newton raphson loop
+		7 - solving for delta
+		8 - printing early
+		9 - convergence issues
+		10 - printing results
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -93,7 +98,9 @@ if (ps.pot==3) {
 	
 //printing timenumber and parameters
 printf("%12s%12s\n","timenumber: ",timenumber.c_str());
-ps.print();
+printf("%14s%14s%14s%14s%14s%14s\n","N","L","dE","epsilon","minima[0]","minima[1]");
+printf("%14i%14.4g%14.4g%14.4g%14.4g%14.4g\n",ps.N,ps.L,ps.dE,ps.epsilon,(ps.minima)[0],(ps.minima)[1]);
+//ps.print();
 
 //defining a time and starting the clock
 clock_t time;
@@ -120,14 +127,14 @@ Check checkProfile("phi input calculation",closenesses.Profile);
 // assigning potential functions
 Potential<double> V, dV, ddV;
 if (ps.pot==1) {
-	V((Potential<double>::PotentialType)&V1<comp>,ps);
-	dV((Potential<double>::PotentialType)&dV1<comp>,ps);
-	ddV((Potential<double>::PotentialType)&ddV1<comp>,ps);
+	V((Potential<double>::PotentialType)&V1<double>,ps);
+	dV((Potential<double>::PotentialType)&dV1<double>,ps);
+	ddV((Potential<double>::PotentialType)&ddV1<double>,ps);
 }
 else if (ps.pot==2) {
-	V((Potential<double>::PotentialType)&V2<comp>,ps);
-	dV((Potential<double>::PotentialType)&dV2<comp>,ps);
-	ddV((Potential<double>::PotentialType)&ddV2<comp>,ps);
+	V((Potential<double>::PotentialType)&V2<double>,ps);
+	dV((Potential<double>::PotentialType)&dV2<double>,ps);
+	ddV((Potential<double>::PotentialType)&ddV2<double>,ps);
 }
 else {
 	cerr << "pot option not available, pot = " << ps.pot << endl;
@@ -173,14 +180,18 @@ vec minusDS(ps.N+1);
 uint profileSize = ps.N; //more than the minimum
 vector<double> phiProfile(profileSize);
 vector<double> rhoProfile(profileSize);
-double alphaL = -opts.alpha*ps.R, alphaR = opts.alpha*ps.R;
+double alpha = opts.alpha*ps.L/2.0;
+double alphaL = -alpha, alphaR = alpha;
+double phiL = ps.minima0[1]-1.0e-2;
+double phiR = ps.minima0[0]+1.0e-2;
+bool linearInterpolate = true;
+if (!linearInterpolate) alpha = 0.0;
+
 if (1.0<opts.alpha) {
 	cerr << "R is too small. Not possible to give thinwall input. It should be >> " << opts.alpha*ps.R;
 	return 1;
 }
 if (ps.pot==2) {
-	double phiL = ps.minima0[1]-1.0e-2;
-	double phiR = ps.minima0[0]+1.0e-2;
 	for (uint j=0;j<profileSize;j++) {
 		phiProfile[j] = phiL + (phiR-phiL)*j/(profileSize-1.0);
 	}
@@ -203,14 +214,20 @@ if (ps.pot==2) {
 }
 for (uint j=0; j<ps.N; j++) {
 	double x = -ps.L/2.0+ps.a*(double)j;
-	if (x>alphaR) {
+	if (x>alphaR && x>alpha) {
 		p(j) = ps.minima[0];
 	}
-	else if (x<alphaL) {
+	else if (x<alphaL && x<-alpha) {
 		p(j) = ps.minima[1];
 	}
+	else if (x>alphaR && x<=alpha) {
+		p(j) = phiR + ((ps.minima[0]-phiR)/(alpha-alphaR))*(x-alphaR);
+	}
+	else if (x<alphaL && x>=-alpha) {
+		p(j) = ps.minima[1] + ((phiL-ps.minima[1])/(alphaL+alpha))*(x+alpha);
+	}
 	else if (ps.pot==2) {
-		vector<double> rhoPos (profileSize,x);
+		vector<double> rhoPos(profileSize,x);
 		for (uint k=0; k<profileSize; k++) {
 			rhoPos[k] -= rhoProfile[k];
 		}
@@ -234,7 +251,7 @@ so_simple.paramsIn = ps; so_simple.paramsOut = ps;
 so_simple.vectorType = SaveOptions::simple;
 so_simple.extras = SaveOptions::none;
 so_simple.printMessage = true;
-Filename earlyFile = (string)("data/"+timenumber+"staticpE_run_0.dat");
+Filename earlyFile = (string)("data/"+timenumber+"staticNewtonpE_run_0.dat");
 save(earlyFile,so_simple,p);
 
 // plotting input phi
@@ -242,7 +259,7 @@ PlotOptions po_simple;
 po_simple.column = 1;
 po_simple.style = "linespoints";
 po_simple.printMessage = true;
-Filename earlyPlotFile = (string)("data/"+timenumber+"staticpE_run_0.png");
+Filename earlyPlotFile = (string)("data/"+timenumber+"staticNewtonpE_run_0.png");
 po_simple.output = earlyPlotFile;
 plot(earlyFile,po_simple);
 
@@ -265,7 +282,7 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	for (uint j=1; j<(ps.N-1); j++){
 		double dx = ps.a;
 	
-		chiX(j) = (p(j+1)-p(j-1))/2.0/dx; 
+		chiX(j) = (p(j+1)-p(j-1))/2.0/dx;
 		
 		if (runs_count>1) {
 			if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
@@ -386,31 +403,31 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 		
 	//printing early if desired	
 	if ((opts.printChoice).compare("n")!=0) {
-		Filename basic = (string)("data/"+timenumber+"staticE_run_"+numberToString<uint>(runs_count)+".dat");
+		Filename basic = (string)("data/"+timenumber+"staticNewtonE_run_"+numberToString<uint>(runs_count)+".dat");
 		//so_simple.printMessage = false;
 		if ((opts.printChoice).compare("p")==0 || (opts.printChoice).compare("e")==0) {
 			Filename pEFile = basic;
-			pEFile.ID = "staticpE";
+			pEFile.ID = "staticNewtonpE";
 			save(pEFile,so_simple,p);
 		}
 		if ((opts.printChoice).compare("v")==0 || (opts.printChoice).compare("e")==0) {
 			Filename vEFile = basic;
-			vEFile.ID = "staticminusDSE";
+			vEFile.ID = "staticNewtonminusDSE";
 			save(vEFile,so_simple,minusDS);
 		}
 		if ((opts.printChoice).compare("m")==0 || (opts.printChoice).compare("e")==0) {
 			Filename mEFile = basic;
-			mEFile.ID = "staticDDSE";
+			mEFile.ID = "staticNewtonDDSE";
 			save(mEFile,so_simple,DDS);
 		}
 		if ((opts.printChoice).compare("d")==0 || (opts.printChoice).compare("e")==0) {
 			Filename dEFile = basic;
-			dEFile.ID = "staticdeltaE";
+			dEFile.ID = "staticNewtondeltaE";
 			save(dEFile,so_simple,delta);
 		}
 		if ((opts.printChoice).compare("z")==0 || (opts.printChoice).compare("e")==0) {
 			Filename zEFile = basic;
-			zEFile.ID = "staticchiXE";
+			zEFile.ID = "staticNewtonchiXE";
 			save(zEFile,so_simple,chiX);
 		}
 	}
@@ -477,7 +494,7 @@ printf("%60s\n","---------------------------------------------------------------
 
 //printing results to file
 FILE * staticfile;
-staticfile = fopen("data/static.dat","a");
+staticfile = fopen("data/staticNewton.dat","a");
 fprintf(staticfile,"%16s%8i%12g%12g%14.4g%14.4g%14.4g\n",timenumber.c_str()\
 			,ps.N,ps.L,ps.dE,posZero,Mass,checkSoln.back());
 fclose(staticfile);
@@ -489,7 +506,7 @@ string suffix = ".dat";
 so_simple.printMessage = true;
 
 //printing output phi on Euclidean time part
-Filename pFile = (string)(prefix+"staticp"+suffix);
+Filename pFile = (string)(prefix+"staticNewtonp"+suffix);
 save(pFile,so_simple,p);
 Filename plotFile = pFile;
 plotFile.Directory = "pics";
@@ -498,12 +515,12 @@ po_simple.output = plotFile;
 plot(pFile,po_simple);
 
 //printing output DDS
-pFile.ID = "staticDDS";
+pFile.ID = "staticNewtonDDS";
 save(pFile,so_simple,DDS);
 
 if (printEverything) {
 	//printing output minusDS
-	pFile.ID = "staticminusDS";
+	pFile.ID = "staticNewtonminusDS";
 	save(pFile,so_simple,minusDS);
 }
 

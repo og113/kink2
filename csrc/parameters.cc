@@ -219,7 +219,7 @@ static void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE
 		//evaluating new dE
 		newdE = (*(*xEC).function)(*xEpsilon,ECparameters) + *xdE;
 		//evaluating test
-		if (abs(*xdE)>1.0e-16) dE_test.push_back(abs((newdE-(*xdE))/(*xdE)));
+		if (abs(*xdE)>MIN_NUMBER) dE_test.push_back(abs((newdE-(*xdE))/(*xdE)));
 		else 						dE_test.push_back(abs(newdE-(*xdE)));
 		counter++;
 		//test if too many runs
@@ -278,27 +278,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 	
 	// epsilon, minima, mass2, action0
 	if (pp.pot!=3) {
-		//gsl function for V(phi)
-		gsl_function F;
-		F.function = Vd_local_wrapped;
-		F.params = &paramsV;	
-
-		//finding preliminary minima of V(phi)
-		minima[0] = brentMinimum(&F, -1.0, -3.0, 0.0);		////////// minima
-		minima[1] = brentMinimum(&F, 1.2, 0.5, 3.0);		////////// minima
-
-		//gsl function for V(root2)-V(root1)-dE
-		struct ec_params ec_params = { A, minima[0], minima[1], pp.dE};
-		gsl_function EC;
-		EC.function = &ec;
-		EC.params = &ec_params;
-
-		//evaluating epsilon, new root and dE may change slightly
-		epsilonFn(&F,&EC,&pp.dE,&epsilon,&minima);
-
-		//evaluating mass about false vac
-		mass2 = ddVd_local(minima[0],paramsV);					////////// mass2
-
+	
 		//finding root0 of dV0(phi)=0;
 		if (pp.pot==1) {
 			minima0[0] = -1.0; minima0[1] = 1.0;				////////// minima0
@@ -316,6 +296,33 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 			double dE0 = 0.0;
 			epsilonFn(&V0,&EC0,&dE0,&epsilon0,&minima0);		////////// epsilon0, minima0
 		}
+	
+		if (abs(pp.dE)>MIN_NUMBER) {
+			//gsl function for V(phi)
+			gsl_function F;
+			F.function = Vd_local_wrapped;
+			F.params = &paramsV;	
+
+			//finding preliminary minima of V(phi)
+			minima[0] = brentMinimum(&F, -1.0, -3.0, 0.0);		////////// minima
+			minima[1] = brentMinimum(&F, 1.2, 0.5, 3.0);		////////// minima
+
+			//gsl function for V(root2)-V(root1)-dE
+			struct ec_params ec_params = { A, minima[0], minima[1], pp.dE};
+			gsl_function EC;
+			EC.function = &ec;
+			EC.params = &ec_params;
+
+			//evaluating epsilon, new root
+			epsilonFn(&F,&EC,&pp.dE,&epsilon,&minima);
+		}
+		else {
+			minima = minima0;
+			epsilon = epsilon0;
+		}
+
+		//evaluating mass about false vac
+		mass2 = ddVd_local(minima[0],paramsV);					////////// mass2	
 
 		//finding S1
 		double S1, S1error;
@@ -327,7 +334,10 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		gsl_integration_workspace_free(w);
 		if (S1error>1.0e-8) cerr << "S1 error = " << S1error << endl;
 		
-		R = S1/pp.dE;										////////// R
+		if (abs(pp.dE)>MIN_NUMBER)
+			R = S1/pp.dE;									////////// R
+		else
+			R = 10.0;										////////// R
 		action0 = -pi*epsilon*pow(R,2)/2.0 + pi*R*S1;		////////// action0
 		L = pp.LoR*R;										////////// L
 		if (pp.Tb<R) {
