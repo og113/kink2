@@ -14,7 +14,8 @@ CONTENTS
 	3 - Vs
 	4 - dVs
 	5 - ddVs
-	6 - explicit template instantiation
+	6 - dddVs
+	7 - explicit template instantiation
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -180,7 +181,7 @@ template <class T> T ddV2 (const T& phi, const struct params_for_V& params) {
 	double epsi = params.epsi;
 	double aa = params.aa;
 	return (1.0-epsi*Z((phi-1.0)/aa)) - (phi+1.0)*(epsi/aa)*dZ((phi-1.0)/aa)\
-					+ 0.5*pow(phi+1.0,2.0)*(epsi/pow(aa,2.0))*ddZ((phi-1.0)/aa);
+					- 0.5*pow(phi+1.0,2.0)*(epsi/pow(aa,2.0))*ddZ((phi-1.0)/aa);
 }
 
 //ddV3
@@ -195,7 +196,33 @@ comp ddVrFn (const comp & phi, const double & minimaL, const double & minimaR) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	6. explicit template instantiation
+	6. third derivatives of potential functions
+		- dddV1
+		- dddZ
+		- dddV2
+	
+-------------------------------------------------------------------------------------------------------------------------*/
+
+//dddV1
+template <class T> T dddV1 (const T& phi, const struct params_for_V& params) {
+	return 3.0*phi;
+}
+
+//dddZ for dddV2
+template <class T> T dddZ (const T& phi) {
+	return exp(-pow(phi,2.0))*2.0*pow(phi,2.0)*( 15.0 - 55.0*pow(phi,2.0) + 32.0*pow(phi,4.0) - 4.0*pow(phi,6.0));
+}
+
+//dddV2
+template <class T> T dddV2 (const T& phi, const struct params_for_V& params) {
+	double epsi = params.epsi;
+	double aa = params.aa;
+	return -3.0*(epsi/aa)*dZ((phi-1.0)/aa) - 3.0*(phi+1.0)*(epsi/pow(aa,2.0))*ddZ((phi-1.0)/aa) \
+			- 0.5*pow(phi+1.0,2.0)*(epsi/pow(aa,3.0))*dddZ((phi-1.0)/aa);
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	7. explicit template instantiation
 		- double
 		- complex<double>
 -------------------------------------------------------------------------------------------------------------------------*/

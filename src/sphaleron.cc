@@ -153,13 +153,13 @@ while (abs(F-aim)>closeness) {
 		
 	F = y0Vec[iMin]-aim; //as final boundary condition is y(r1)=0.0;
 	dF = y2Vec[iMin];
-	printf("%16i%16i%16g%16g%16g%16.12g",runsCount,i,y[0],yMin,F-aim,Y0);
+	printf("%16i%16i%16g%16g%16g%16.12g",runsCount,i,y[0],yMin,F,Y0);
 	if (abs(dF)>2.0e-16) {
 		Y0 += -F/dF;
 		printf("%16.12g%16g\n",Y0,-F/dF);
 	}
 	gsl_odeiv2_driver_free (d);
-	if (i==(N+1)) F = y[0];
+	if (i==(N+1)) F = y[0]-aim;
 }
 
 // printing solution

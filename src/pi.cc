@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 // loading options
 Options opts;
 opts.load("optionsP");
-//opts.print();
+opts.print();
 
 // loading closenesses
 Closenesses closenesses;
@@ -71,9 +71,9 @@ closenesses.load("closenesses");
 // loading inputs
 Parameters psu;
 psu.load("inputsP");
-//cout << "input parameters: " << endl;
-//psu.print();
-//cout << endl;
+cout << "input parameters: " << endl;
+psu.print();
+cout << endl;
 
 // defining timenumber
 string timenumber;
