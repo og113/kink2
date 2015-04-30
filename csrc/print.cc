@@ -409,8 +409,7 @@ void save(const string& f, const SaveOptions& opts, const spMat& m) {
 	F.precision(16);
 	for (int l=0; l<m.outerSize(); ++l) {
 		for (Eigen::SparseMatrix<double>::InnerIterator it(m,l); it; ++it) {
-			if (opts.extras==SaveOptions::loc)
-				F << setw(25) << it.row()+1 << setw(25) << it.col()+1;
+			F << setw(25) << it.row()+1 << setw(25) << it.col()+1;
 			F << setw(25) << it.value() << endl;
 		}
 	}
@@ -755,6 +754,7 @@ void plot(const string& f, const PlotOptions& opts) {
 	uint col = (opts.column==0? 1: opts.column);
 	string columns1 = (opts.column2==0? numberToString<uint>(col): (numberToString<uint>(col)+":"+numberToString<uint>(opts.column2)));
 	string columns2 = (opts.column3==0? "": (numberToString<uint>(col)+":"+numberToString<uint>(opts.column3)));
+	string columns3 = (opts.column4==0? "": (numberToString<uint>(col)+":"+numberToString<uint>(opts.column4)));
 	if ((opts.gp).empty()) {		
 		string commandOpenStr = "gnuplot -persistent";
 		const char * commandOpen = commandOpenStr.c_str();
@@ -763,6 +763,7 @@ void plot(const string& f, const PlotOptions& opts) {
 		string command2Str = "set output \""+output+"\"";
 		string command3Str = "plot \"" + f + "\" using " + columns1 + " with " + style;
 		if (!columns2.empty()) command3Str += ", \"" + f + "\" using " + columns2 + " with " + style;
+		if (!columns3.empty()) command3Str += ", \"" + f + "\" using " + columns3 + " with " + style;
 		string command4Str = "pause -1";
 		if (output.compare("gui")!=0) {
 			fprintf(gnuplotPipe, "%s \n",command1Str.c_str());

@@ -113,6 +113,7 @@ struct PlotOptions {
 	uint column;
 	uint column2;
 	uint column3;
+	uint column4;
 	string style;
 	string output;
 	bool printMessage;

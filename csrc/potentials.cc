@@ -177,7 +177,7 @@ template <class T> T ddV1 (const T& phi, const struct params_for_V& params) {
 
 //ddZ for ddV2
 template <class T> T ddZ (const T& x) {
-	return exp(-pow(x,2.0))*2.0*pow(x,3.0)*(5.0 - 9.0*pow(x,2.0) + 2.0*pow(x,4.0));
+	return 2.0*pow(x,3.0)*exp(-pow(x,2.0))*(5.0 - 9.0*pow(x,2.0) + 2.0*pow(x,4.0));
 }
 
 //ddV2
@@ -215,7 +215,7 @@ template <class T> T dddV1 (const T& phi, const struct params_for_V& params) {
 
 //dddZ for dddV2
 template <class T> T dddZ (const T& x) {
-	return exp(-pow(x,2.0))*2.0*pow(x,2.0)*( 15.0 - 55.0*pow(x,2.0) + 32.0*pow(x,4.0) - 4.0*pow(x,6.0));
+	return -2.0*pow(x,2.0)*exp(-pow(x,2.0))*( 4.0*pow(x,6.0) - 32.0*pow(x,4.0) + 55.0*pow(x,2.0) - 15.0 );
 }
 
 //dddV2
@@ -223,8 +223,8 @@ template <class T> T dddV2 (const T& x, const struct params_for_V& params) {
 	double epsi = params.epsi;
 	double aa = params.aa;
 	T y = (x-1.0)/aa;
-	return -3.0*(epsi/aa)*dZ(y) - 3.0*(x+1.0)*(epsi/pow(aa,2.0))*ddZ(y) \
-			- 0.5*pow(x+1.0,2.0)*(epsi/pow(aa,3.0))*dddZ(y);
+	return -3.0*epsi*dZ(y)/aa - 3.0*epsi*(x+1.0)*ddZ(y)/pow(aa,2.0) \
+			- 0.5*epsi*pow(x+1.0,2.0)*dddZ(y)/pow(aa,3.0);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -245,6 +245,9 @@ template double ddV1<double>(const double&, const struct params_for_V&);
 template double ddZ<double>(const double&);
 template double ddV2<double>(const double&, const struct params_for_V&);
 template double ddV3<double>(const double&, const struct params_for_V&);
+template double dddV1<double>(const double&, const struct params_for_V&);
+template double dddZ<double>(const double&);
+template double dddV2<double>(const double&, const struct params_for_V&);
 
 template comp V1<comp>(const comp&, const struct params_for_V&);
 template comp Z<comp>(const comp&);
@@ -258,6 +261,9 @@ template comp ddV1<comp>(const comp&, const struct params_for_V&);
 template comp ddZ<comp>(const comp&);
 template comp ddV2<comp>(const comp&, const struct params_for_V&);
 template comp ddV3<comp>(const comp&, const struct params_for_V&);
+template comp dddV1<comp>(const comp&, const struct params_for_V&);
+template comp dddZ<comp>(const comp&);
+template comp dddV2<comp>(const comp&, const struct params_for_V&);
 
 template class Potential<double>;
 template class Potential<comp>;

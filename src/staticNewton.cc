@@ -175,83 +175,89 @@ vec chiX(ps.N);
 		- printing input phi
 		- posZero
 ----------------------------------------------------------------------------------------------------------------------------*/
-	
 
-//finding phi profile between minima
-uint profileSize = ps.N; //more than the minimum
-vector<double> phiProfile(profileSize);
-vector<double> rhoProfile(profileSize);
-double alpha = opts.alpha*ps.L/2.0;
-double alphaL = -alpha, alphaR = alpha;
-double phiL = ps.minima0[1]-1.0e-2;
-double phiR = ps.minima0[0]+1.0e-2;
-bool linearInterpolate = true;
-if (!linearInterpolate) alpha = 0.0;
-
-if (1.0<opts.alpha) {
-	cerr << "R is too small. Not possible to give thinwall input. It should be >> " << opts.alpha*ps.R;
-	return 1;
-}
-if (ps.pot==2) {
-	for (uint j=0;j<profileSize;j++) {
-		phiProfile[j] = phiL + (phiR-phiL)*j/(profileSize-1.0);
-	}
-
-	double profileError;
-	gsl_function rho_integrand;
-	rho_integrand.function = &rhoIntegrand;
-	rho_integrand.params = &paramsV0;
-	gsl_integration_workspace *w = gsl_integration_workspace_alloc(1e4);
-	w = gsl_integration_workspace_alloc(1e4);
-	for (uint j=0;j<profileSize;j++) {
-		gsl_integration_qags(&rho_integrand, phiProfile[j], 0, 1.0e-16, 1.0e-6, 1e4, w,\
-												 &(rhoProfile[j]), &profileError);
-		checkProfile.add(profileError);
-		checkProfile.checkMessage();
-	}
-	gsl_integration_workspace_free(w);
-	alphaL = rhoProfile[0];
-	alphaR = rhoProfile.back();
-}
-for (uint j=0; j<ps.N; j++) {
-	double x = -ps.L/2.0+ps.a*(double)j;
-	if (x>alphaR && x>alpha) {
-		p(j) = ps.minima[0];
-	}
-	else if (x<alphaL && x<-alpha) {
-		p(j) = ps.minima[1];
-	}
-	else if (x>alphaR && x<=alpha) {
-		p(j) = phiR + ((ps.minima[0]-phiR)/(alpha-alphaR))*(x-alphaR);
-	}
-	else if (x<alphaL && x>=-alpha) {
-		p(j) = ps.minima[1] + ((phiL-ps.minima[1])/(alphaL+alpha))*(x+alpha);
-	}
-	else if (ps.pot==2) {
-		vector<double> rhoPos(profileSize,x);
-		for (uint k=0; k<profileSize; k++) {
-			rhoPos[k] -= rhoProfile[k];
-		}
-		uint minLoc = smallestLoc(rhoPos);
-        p(j) = phiProfile[minLoc];
-	}
-	else {
-		p(j) = (ps.minima[1]+ps.minima[0])/2.0\
-					+ (ps.minima[0]-ps.minima[1])*tanh(x/2.0)/2.0;
-	}
-	if (j>0) {
-		if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0))
-			posZero = x*abs(p(j-1))/abs(p(j)-p(j-1)) + (x-ps.a)*abs(p(j))/abs(p(j)-p(j-1));
-	}
-}
-p(ps.N) = 0.5; // lagrange multiplier for zero mode
-
-// printing input phi
 SaveOptions so_simple;
 so_simple.paramsIn = ps; so_simple.paramsOut = ps;
 so_simple.vectorType = SaveOptions::simple;
 so_simple.extras = SaveOptions::none;
 so_simple.printMessage = true;
+
+if ((opts.inF).compare("f")==0) {
+	Filename pFile = (string)"data/staticNewtonp.dat";
+	load(pFile,so_simple,p);
+}
+else {	
+	//finding phi profile between minima
+	uint profileSize = ps.N; //more than the minimum
+	vector<double> phiProfile(profileSize);
+	vector<double> rhoProfile(profileSize);
+	double alpha = opts.alpha*ps.L/2.0;
+	double alphaL = -alpha, alphaR = alpha;
+	double phiL = ps.minima0[1]-1.0e-2;
+	double phiR = ps.minima0[0]+1.0e-2;
+	bool linearInterpolate = true;
+	if (!linearInterpolate) alpha = 0.0;
+
+	if (1.0<opts.alpha) {
+		cerr << "R is too small. Not possible to give thinwall input. It should be >> " << opts.alpha*ps.R;
+		return 1;
+	}
+	if (ps.pot==2) {
+		for (uint j=0;j<profileSize;j++) {
+			phiProfile[j] = phiL + (phiR-phiL)*j/(profileSize-1.0);
+		}
+
+		double profileError;
+		gsl_function rho_integrand;
+		rho_integrand.function = &rhoIntegrand;
+		rho_integrand.params = &paramsV0;
+		gsl_integration_workspace *w = gsl_integration_workspace_alloc(1e4);
+		w = gsl_integration_workspace_alloc(1e4);
+		for (uint j=0;j<profileSize;j++) {
+			gsl_integration_qags(&rho_integrand, phiProfile[j], 0, 1.0e-16, 1.0e-6, 1e4, w,\
+													 &(rhoProfile[j]), &profileError);
+			checkProfile.add(profileError);
+			checkProfile.checkMessage();
+		}
+		gsl_integration_workspace_free(w);
+		alphaL = rhoProfile[0];
+		alphaR = rhoProfile.back();
+	}
+	for (uint j=0; j<ps.N; j++) {
+		double x = -ps.L/2.0+ps.a*(double)j;
+		if (x>alphaR && x>alpha) {
+			p(j) = ps.minima[0];
+		}
+		else if (x<alphaL && x<-alpha) {
+			p(j) = ps.minima[1];
+		}
+		else if (x>alphaR && x<=alpha) {
+			p(j) = phiR + ((ps.minima[0]-phiR)/(alpha-alphaR))*(x-alphaR);
+		}
+		else if (x<alphaL && x>=-alpha) {
+			p(j) = ps.minima[1] + ((phiL-ps.minima[1])/(alphaL+alpha))*(x+alpha);
+		}
+		else if (ps.pot==2) {
+			vector<double> rhoPos(profileSize,x);
+			for (uint k=0; k<profileSize; k++) {
+				rhoPos[k] -= rhoProfile[k];
+			}
+			uint minLoc = smallestLoc(rhoPos);
+		    p(j) = phiProfile[minLoc];
+		}
+		else {
+			p(j) = (ps.minima[1]+ps.minima[0])/2.0\
+						+ (ps.minima[0]-ps.minima[1])*tanh(x/2.0)/2.0;
+		}
+		if (j>0) {
+			if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0))
+				posZero = x*abs(p(j-1))/abs(p(j)-p(j-1)) + (x-ps.a)*abs(p(j))/abs(p(j)-p(j-1));
+		}
+	}
+	p(ps.N) = 0.5; // lagrange multiplier for zero mode
+}
+
+// printing input phi
 Filename earlyFile = (string)("data/"+timenumber+"staticNewtonpE_run_0.dat");
 save(earlyFile,so_simple,p);
 
@@ -283,13 +289,13 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 		for (uint j=1; j<(ps.N-1); j++){
 			double dx = ps.a;
 			chiX(j) = (p(j+1)-p(j-1))/2.0/dx;	
-			if (runs_count>1) {
-				if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
-					double x = -ps.L/2.0+ps.a*(double)j;
-					posZero = x*abs(p(j-1))/abs(p(j)-p(j-1)) + (x-ps.a)*abs(p(j))/abs(p(j)-p(j-1));
-				}
+			if ((p(j)>0 && p(j-1)<0) || (p(j)<0 && p(j-1)>0)) {
+				double x = -ps.L/2.0+ps.a*(double)j;
+				posZero = x*abs(p(j-1))/abs(p(j)-p(j-1)) + (x-ps.a)*abs(p(j))/abs(p(j)-p(j-1));
 			}  
 		}
+		double normChiX = chiX.norm();
+		chiX /= normChiX;
 	}
 
 	// allocating memory for DS, DDS
@@ -320,11 +326,11 @@ while(runs_count<min_runs || !checkSoln.good() || !checkSolnMax.good()) {
 	// beginning loop over lattice points
 	for (uint j = 0; j<ps.N; j++) {	
 	
-		double Dx = ((j==0 || j==(ps.N-1))? ps.a/2.0: ps.a);
-		minusDS(ps.N) 		+= -Dx*p(j)*chiX(j);
-		minusDS(j) 			+= -Dx*p(ps.N)*chiX(j);
-		DDS.insert(j,ps.N)	= Dx*chiX(j);
-		DDS.insert(ps.N,j)	= Dx*chiX(j);
+		//double Dx = ((j==0 || j==(ps.N-1))? ps.a/2.0: ps.a);
+		minusDS(ps.N) 		+= -p(j)*chiX(j);
+		minusDS(j) 			+= -p(ps.N)*chiX(j);
+		DDS.insert(j,ps.N)	= chiX(j);
+		DDS.insert(ps.N,j)	= chiX(j);
 		
 		if (j==0) {
 			double dx = ps.a;

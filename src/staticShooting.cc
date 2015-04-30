@@ -2,8 +2,6 @@
 	staticShooting
 		program to solve boundary value problem for static soliton
 		using the shooting method
-		
-n.b. unfinished - started with 2d system of first order o.d.e. but realised that to properly account for b.c.s in shooting method we need a 4d sysytem of equations. have not implemented this yet.
 ----------------------------------------------------------------------------------------------------------------------------*/
 #include <Eigen/Sparse>
 #include <Eigen/Dense>
@@ -42,8 +40,9 @@ n.b. unfinished - started with 2d system of first order o.d.e. but realised that
 		3 - assigning potential fucntions
 		4 - defining quantites
 		5 - shooting method
-		6 - calculating mass
-		7 - printing results
+		6 - matrix of linear fluctuations
+		7 - calculating mass
+		8 - printing results
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -58,7 +57,7 @@ n.b. unfinished - started with 2d system of first order o.d.e. but realised that
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // Potential V, dV, ddV
-Potential<double> V, dV, ddV;
+Potential<double> V, dV, ddV, dddV;
 
 // void params
 struct void_params {};
@@ -79,8 +78,13 @@ int jac (double t, const double y[], double *dfdy, double dfdt[], void *params) 
 	gsl_matrix_set_all (m, 0.0);
 	gsl_matrix_set (m, 0, 1, 1.0);
 	gsl_matrix_set (m, 1, 0, ddV(y[0]));
+	gsl_matrix_set (m, 2, 3, 1.0);
+	gsl_matrix_set (m, 3, 0, pow(y[2],2.0)*dddV(y[0]));
+	gsl_matrix_set (m, 3, 2, ddV(y[0]));
 	dfdt[0] = 0.0; // no explicit dependence on the variable t
-	dfdt[1] = 0.0; 
+	dfdt[1] = 0.0;
+	dfdt[2] = 0.0; 
+	dfdt[3] = 0.0; 
 	return GSL_SUCCESS;
 }
 
@@ -102,11 +106,11 @@ double Mass_integrand (double x, void * parameters) {
 	double Y_1 = (params->Y_1);
 	double L = (params->L);
 	double minimaL = (params->minimaL);
-	double y_R[2] = { minimaL, Y_1};
+	double y_R[4] = { minimaL, Y_1, 0.0, 1.0};
 	int status;
 	double t = -L/2.0;
 	void_params paramsVoid;
-	gsl_odeiv2_system syse = {func, jac, 2, &paramsVoid};
+	gsl_odeiv2_system syse = {func, jac, 4, &paramsVoid};
 	gsl_odeiv2_driver * de = gsl_odeiv2_driver_alloc_yp_new (&syse,  gsl_odeiv2_step_rk8pd, 1.0e-9, 1.0e-9, 0.0);
 	status = gsl_odeiv2_driver_apply (de, &t, x, y_R);
 	if (status != GSL_SUCCESS) {
@@ -229,7 +233,7 @@ else {
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // Mass, posZero
-double Mass;
+double Mass = (ps.pot==1? 0.667: 3.118);
 double posZero;
 uint iZero = 0;
 
@@ -241,12 +245,12 @@ uint runsCount = 0;
 //initializing phi (=p), dphi/dx (=dp)
 vec p(ps.N+1);
 p = Eigen::VectorXd::Zero(ps.N+1);
-vec dp(ps.N+1);
-dp = Eigen::VectorXd::Zero(ps.N+1);
+vec q(ps.N+1);
+q = Eigen::VectorXd::Zero(ps.N+1);
 
 // system for solving ode
 void_params paramsVoid;
-gsl_odeiv2_system sys = {func, jac, 2, &paramsVoid};
+gsl_odeiv2_system sys = {func, jac, 4, &paramsVoid};
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	5. shooting method
@@ -254,22 +258,22 @@ gsl_odeiv2_system sys = {func, jac, 2, &paramsVoid};
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // initial guess
-double Y1 = -1.25e-6;
+double Y1 = -6.0e-8;
 cout << "initial y1: ";
 cin >> Y1;
 printf("%16s%16s%16s%16s%16s%16s%16s%16s\n","run","N","y(L/2)","yMin","F","Y1Old","Y1New","-F/dF");
 
 // shooting loop
 while (!checkSoln.good()) {
-	double stepStart = checkSoln.closeness();
+	double stepStart = checkSoln.closeness()*1.0e-4;
 	gsl_odeiv2_driver * d = \
-			gsl_odeiv2_driver_alloc_yp_new (&sys,  gsl_odeiv2_step_rk8pd, stepStart, checkSoln.closeness(), 0.0);
-	double y0[2] = { ps.minima[1], Y1};
-	double y[2];
+			gsl_odeiv2_driver_alloc_yp_new (&sys,  gsl_odeiv2_step_rk8pd, stepStart, checkSoln.closeness()*1.0e-3, 0.0);
+	double y0[4] = { ps.minima[1], Y1, 0.0, 1.0};
+	double y[4];
 	memcpy(y, y0, sizeof(y0));
 	double yMin = y[0]-aim;
 	p[0] = y[0];
-	dp[0] = y[1];
+	q[0] = y[2];
 	int status;
 	uint i, iMin = 0;
 	iZero = 0;
@@ -282,11 +286,11 @@ while (!checkSoln.good()) {
 		if (status != GSL_SUCCESS) {
 			printf ("error, return value=%d\n", status);
 			printf ("i = %3i, x = %3g\n",i,x);
-			printf ("y[0] = %3g, y[1] = %3g\n",y[0],y[1]);
-			break;
+			printf ("y[0] = %3g, y[1] = %3g, y[2] = %3g, y[3] = %3g\n",y[0],y[1],y[2],y[3]);
+			return 1;
 		}
 		p[i] = y[0];
-		dp[i] = y[1];
+		q[i] = y[2];
 		//printf ("%.5e %.5e %.5e\n", x, y[0], y[1]);
 		if ((y[0]-aim)<yMin && (y[0]-aim)>0.0) {
 			yMin = y[0]-aim;
@@ -295,31 +299,28 @@ while (!checkSoln.good()) {
 		else if ((y[0]-aim)<0.0) {
 			iMin = i;
 			if ((y[0]-aim)<-0.2) break;
-		}
-		
+		}	
 		if (abs(y[0])<abs(p[iZero]))
 			iZero = i;
+		if (y[0]>1.0e3) {
+			printf ("error, y has grown large\n");
+			printf ("i = %3i, x = %3g\n",i,x);
+			printf ("y[0] = %3g, y[1] = %3g, y[2] = %3g, y[3] = %3g\n",y[0],y[1],y[2],y[3]);
+			return 1;
+		}
 	}
 	if (status != GSL_SUCCESS) {
 		printf ("error, return value=%d\n", status);
 		break;
 	}
 	
-	if (runsCount==0) {
-		dF = dp[iMin];
-	}
-	else {
-		if (abs(F)>MIN_NUMBER)
-			dF = -((p[iMin]-aim) - F)*dF/F;
-		else {
-			dF = dp[iMin];
-		}
-	}
-	
 	F = p[iMin]-aim; //as final boundary condition is y(x1)=0.0;
+	dF = q[iMin];
 	printf("%16i%16i%16.6g%16.6g%16.6g%16.6g",runsCount,i,y[0],yMin,F,Y1);
 	if (abs(dF)>MIN_NUMBER) {
 		Y1 += -F/dF;
+		if(Y1>0.0)
+			Y1 *= -1.0;
 		printf("%16.6g%16.6g\n",Y1,-F/dF);
 	}
 	gsl_odeiv2_driver_free (d);
@@ -328,33 +329,69 @@ while (!checkSoln.good()) {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------------
-	6. calculating mass
-		
+	6. matrix of linear fluctuations
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-//finding Mass
-double Masserror;
-Mass_params paramsMass;
-paramsMass.Y_1 = Y1;
-paramsMass.L = ps.L;
-paramsMass.minimaL = ps.minima[1];
-gsl_function Mass_integrand_gsl;
-Mass_integrand_gsl.function = &Mass_integrand;
-Mass_integrand_gsl.params = &paramsMass;
-gsl_integration_workspace *w = gsl_integration_workspace_alloc(1e4);
-gsl_integration_qag(&Mass_integrand_gsl, -ps.L/2.0, ps.L/2.0, checkSoln.closeness(), checkSolnMax.closeness(), 1e4, 2, w, &Mass, &Masserror);
-gsl_integration_workspace_free(w);
-checkMass.add(Masserror);
-checkMass.checkMessage();
+SaveOptions so_simple;
+so_simple.printMessage = true;
+so_simple.vectorType = SaveOptions::simple;
+so_simple.extras = SaveOptions::none;
+
+// matrix of linear fluctuations
+bool printDDS = true;
+if (printDDS) {
+	spMat DDS(ps.N,ps.N);
+	DDS.setZero();
+	for (uint j=0; j<ps.N; j++) {
+		if (j==0) {
+			DDS.insert(j,j) = 1.0;
+		}
+		else if (j==(ps.N-1)) {
+			DDS.insert(j,j) = 1.0;
+		}
+		else {
+			double dx = ps.a;
+			DDS.insert(j,j) 	= -2.0/dx - ddV(p(j))*dx;
+			DDS.insert(j,j+1) 	= 1.0/dx;
+			DDS.insert(j,j-1) 	= 1.0/dx;
+		}
+	}
+	DDS.makeCompressed();
+	save("data/stable/staticDDS_L_"+numberToString<double>(ps.L)+".dat",so_simple,DDS);
+}
+
+bool allIWantIsDDS = false;
+if (allIWantIsDDS && printDDS) return 0;
 
 /*----------------------------------------------------------------------------------------------------------------------------
-	7. printing results
+	7. calculating mass
+		
+----------------------------------------------------------------------------------------------------------------------------*/
+bool findMass = false;
+if (findMass) {
+	//finding Mass
+	double Masserror;
+	Mass_params paramsMass;
+	paramsMass.Y_1 = Y1;
+	paramsMass.L = ps.L;
+	paramsMass.minimaL = ps.minima[1];
+	gsl_function Mass_integrand_gsl;
+	Mass_integrand_gsl.function = &Mass_integrand;
+	Mass_integrand_gsl.params = &paramsMass;
+	gsl_integration_workspace *w = gsl_integration_workspace_alloc(1e4);
+	gsl_integration_qag(&Mass_integrand_gsl, -ps.L/2.0, ps.L/2.0, checkSoln.closeness(), checkSolnMax.closeness(), 1e4, 4, w, &Mass, &Masserror);
+	gsl_integration_workspace_free(w);
+	checkMass.add(Masserror);
+	checkMass.checkMessage();
+}
+
+/*----------------------------------------------------------------------------------------------------------------------------
+	8. printing results
 		- stopping clock
 		- printing results to terminal
 		- printing results to file
 		- printing (and plotting if vectors):
 			- p
-			- dp
 		- return
 	
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -380,15 +417,8 @@ fprintf(staticfile,"%16s%8i%12g%12g%14.4g%14.4g%14.4g\n",timenumber.c_str()\
 			,ps.N,ps.L,ps.dE,posZero,Mass,checkSoln.back());
 fclose(staticfile);
 
-bool printEverything = false;
-
 string prefix = "data/"+timenumber;
 string suffix = ".dat";
-
-SaveOptions so_simple;
-so_simple.printMessage = true;
-so_simple.vectorType = SaveOptions::simple;
-so_simple.extras = SaveOptions::none;
 
 PlotOptions po_simple;
 po_simple.column = 1;
@@ -403,12 +433,6 @@ plotFile.Directory = "pics";
 plotFile.Suffix = ".png";
 po_simple.output = plotFile;
 plot(pFile,po_simple);
-
-if (printEverything) {
-	//printing output dp
-	pFile.ID = "staticShootingdp";
-	save(pFile,so_simple,dp);
-}
 
 return 0;
 }
