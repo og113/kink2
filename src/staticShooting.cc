@@ -6,7 +6,7 @@
 #include <Eigen/Sparse>
 #include <Eigen/Dense>
 #include <vector>
-#include <algorithm>
+#include <algorithm> //has min
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -258,7 +258,7 @@ gsl_odeiv2_system sys = {func, jac, 4, &paramsVoid};
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // initial guess
-double Y1 = -6.0e-8;
+double Y1 = -5.69e-8;
 cout << "initial y1: ";
 cin >> Y1;
 printf("%16s%16s%16s%16s%16s%16s%16s%16s\n","run","N","y(L/2)","yMin","F","Y1Old","Y1New","-F/dF");
@@ -315,7 +315,7 @@ while (!checkSoln.good()) {
 		break;
 	}
 	
-	F = (i==(ps.N-1)? p[ps.N-1]-aim: p[iMin]-aim); //as final boundary condition is y(x1)=0.0;
+	F = p[iMin]-aim; //as final boundary condition is y(x1)=0.0;
 	dF = q[iMin];
 	printf("%16i%16i%16.6g%16.6g%16.6g%16.6g",runsCount,i,y[0],yMin,F,Y1);
 	if (abs(dF)>MIN_NUMBER) {
@@ -330,6 +330,8 @@ while (!checkSoln.good()) {
 		printf("error, dF = %16.6g\n",dF);
 	}
 	gsl_odeiv2_driver_free (d);
+	checkSoln.add(abs(F));
+	F = (i==ps.N? p[ps.N-1]-aim: F);
 	checkSoln.add(abs(F));
 }
 
@@ -395,8 +397,8 @@ if (findMass) {
 		- stopping clock
 		- printing results to terminal
 		- printing results to file
-		- printing (and plotting if vectors):
-			- p
+		- resizing phi
+		- printing and plotting phi:
 		- return
 	
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -430,13 +432,39 @@ po_simple.column = 1;
 po_simple.style = "linespoints";
 po_simple.printMessage = true;
 
+// resizing phi
+bool beginning = abs(posZero-ps.L/2.0)>abs(posZero+ps.L/2.0);
+double Lnew = (beginning? 2.0*abs(posZero+ps.L/2.0): 2.0*abs(posZero-ps.L/2.0));
+uint Nnew = (uint)((ps.N-1)*Lnew/ps.L + 1);
+double anew = Lnew/(Nnew-1.0);
+if (beginning) {
+	vec ptemp = p.head(Nnew);
+	p.resize(Nnew);
+	p = ptemp;
+}
+else {
+	vec ptemp = p.tail(Nnew);
+	p.resize(Nnew);
+	p = ptemp;
+}
+
+// constructing xVec
+vec xVec(Nnew);
+for (uint j=0; j<Nnew; j++) {
+	xVec(j) = -Lnew/2.0 + j*anew;
+}
+
 //printing output phi on Euclidean time part
 Filename pFile = (string)(prefix+"staticShootingp"+suffix);
+save(pFile,so_simple,xVec);
+so_simple.vectorType = SaveOptions::append;
+so_simple.printMessage = false;
 save(pFile,so_simple,p);
 Filename plotFile = pFile;
 plotFile.Directory = "pics";
 plotFile.Suffix = ".png";
 po_simple.output = plotFile;
+po_simple.column2 = 2;
 plot(pFile,po_simple);
 
 return 0;
