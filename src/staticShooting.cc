@@ -279,6 +279,7 @@ while (!checkSoln.good()) {
 	iZero = 0;
 	double x0 = -ps.L/2.0;
 	double x = x0, xi = x0;
+	double sign = (y[0]-aim)/abs(y[0]-aim);
 	
 	for (i = 1; i < ps.N; i++) {
 		xi += ps.a;
@@ -292,17 +293,17 @@ while (!checkSoln.good()) {
 		p[i] = y[0];
 		q[i] = y[2];
 		//printf ("%.5e %.5e %.5e\n", x, y[0], y[1]);
-		if ((y[0]-aim)<yMin && (y[0]-aim)>0.0) {
+		if (sign*(y[0]-aim)<yMin && sign*(y[0]-aim)>0.0) {
 			yMin = y[0]-aim;
 			iMin = i;
 		}
-		else if ((y[0]-aim)<0.0) {
+		else if (sign*(y[0]-aim)<0.0) {
 			iMin = i;
 			if ((y[0]-aim)<-0.2) break;
 		}	
 		if (abs(y[0])<abs(p[iZero]))
 			iZero = i;
-		if (y[0]>1.0e3) {
+		if (abs(y[0])>1.0e3) {
 			printf ("error, y has grown large\n");
 			printf ("i = %3i, x = %3g\n",i,x);
 			printf ("y[0] = %3g, y[1] = %3g, y[2] = %3g, y[3] = %3g\n",y[0],y[1],y[2],y[3]);
@@ -314,17 +315,21 @@ while (!checkSoln.good()) {
 		break;
 	}
 	
-	F = p[iMin]-aim; //as final boundary condition is y(x1)=0.0;
+	F = (i==(ps.N-1)? p[ps.N-1]-aim: p[iMin]-aim); //as final boundary condition is y(x1)=0.0;
 	dF = q[iMin];
 	printf("%16i%16i%16.6g%16.6g%16.6g%16.6g",runsCount,i,y[0],yMin,F,Y1);
 	if (abs(dF)>MIN_NUMBER) {
 		Y1 += -F/dF;
-		if(Y1>0.0)
-			Y1 *= -1.0;
+		if(Y1*sign>0.0) {
+			double fraction = abs(Y1+F/dF)/abs(F/dF);
+			Y1 = -sign*(abs(Y1+F/dF)-0.5*fraction*F/dF);
+		}
 		printf("%16.6g%16.6g\n",Y1,-F/dF);
 	}
+	else {
+		printf("error, dF = %16.6g\n",dF);
+	}
 	gsl_odeiv2_driver_free (d);
-	if (i==(ps.N-1)) F = y[0]-aim;
 	checkSoln.add(abs(F));
 }
 
@@ -357,7 +362,7 @@ if (printDDS) {
 		}
 	}
 	DDS.makeCompressed();
-	save("data/stable/staticDDS_L_"+numberToString<double>(ps.L)+".dat",so_simple,DDS);
+	save("data/staticShootingDDS.dat",so_simple,DDS);
 }
 
 bool allIWantIsDDS = false;
