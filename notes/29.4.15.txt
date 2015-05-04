@@ -1,0 +1,5 @@
+ah - lots to do!
+	should compare dV with lattice derivative of V etc for pot 2 especially - DONE - PASSES
+	should try to print chiX to see what the matter is with pi
+	should sort out staticNewton once pi is ok with pot=2
+	if necessary return to staticShooting and do it properly by having the derivative of the solution w.r.t. the initial condition as a separate o.d.e. as in sphaleron
