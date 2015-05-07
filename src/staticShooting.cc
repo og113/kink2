@@ -88,6 +88,7 @@ int jac (double t, const double y[], double *dfdy, double dfdt[], void *params) 
 
 struct Mass_params {
 	double Y_0;
+	double Y_1;
 	double L;
 };
 	
@@ -96,7 +97,7 @@ double Mass_integrand (double x, void * parameters) {
 	struct Mass_params * params = (struct Mass_params *)parameters;
 	double Y_0 = (params->Y_0);
 	double L = (params->L);
-	double y_R[2] = { Y_0, 0.0};
+	double y_R[2] = { Y_0, Y_1};
 	int status;
 	double t = -L/2.0;
 	void_params paramsVoid;
@@ -244,6 +245,7 @@ dp = Eigen::VectorXd::Zero(ps.N+1);
 double Y1 = -1.0e-2;
 //cout << "initial y1: ";
 //cin >> Y1;
+printf("%16s%16s%16s%16s%16s%16s%16s%16s\n","run","N","y'(-L/2)","yMin","F-aim","Y0Old","Y0New","-F/dF");
 
 // shooting loop
 while (!checkSoln.good()) {
@@ -280,9 +282,9 @@ while (!checkSoln.good()) {
 	}
 	if (status != GSL_SUCCESS) break;
 		
-	F = y0Vec[iMin]-aim; //as final boundary condition is y(r1)=0.0;
+	F = y0Vec[iMin]-aim; //as final boundary condition is y(L)=minima[0];
 	dF = y1Vec[iMin];
-	printf("%16i%16i%16g%16g%16g%16.12g",runsCount,i,y[0],yMin,F-aim,Y0);
+	printf("%16i%16i%16g%16g%16g%16.12g",runsCount,i,y[1],yMin,F-aim,Y0);
 	if (abs(dF)>MIN_NUMBER) {
 		Y0 += -F/dF;
 		printf("%16.12g%16g\n",Y0,-F/dF);
@@ -297,10 +299,11 @@ while (!checkSoln.good()) {
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-//finding E
-double E, Eerror;
-E_params paramsE;
-paramsE.Y_0 = Y0;
+//finding mass
+double Masserror;
+Mass_params paramsMass;
+paramsMass.Y_0 = Y0;
+paramsMass.L = L;
 gsl_function E_integrand_gsl;
 E_integrand_gsl.function = &E_integrand;
 E_integrand_gsl.params = &paramsE;
