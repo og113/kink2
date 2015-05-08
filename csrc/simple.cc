@@ -24,7 +24,7 @@ CONTENTS
 	3 - factorial
 	4 - currentDateTime, currentPartSec
 	5 - copyFile
-	6 - countLines, countColumns
+	6 - count in files
 	7 - smallestLoc
 	8 - randDouble
 	9 - mod
@@ -170,7 +170,7 @@ void copyFile(const string & inputFile, const string & outputFile) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	6. countLines, countColumns
+	6. countLines, countColumns, countDoubles
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // count lines
@@ -213,6 +213,49 @@ uint countColumns(const string & file_to_count) {
     return counter;
 }
 
+// countDoubles
+uint countDoubles(const string& f) {
+	uint lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	double dross;
+	while (!is.eof()) {
+		is.read(reinterpret_cast<char*>(&dross),sizeof(double));
+		lines++;
+	}
+	is.close();
+	return lines;
+}
+
+// count comp (binary)
+uint countComp(const string& f) {
+	uint lines = -1; 
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	comp dross;
+	while (!is.eof()) {
+		is.read(reinterpret_cast<char*>(&dross),sizeof(comp));
+		lines++;
+	}
+	is.close();
+	return lines;
+}
+
+// count type (binary)
+template <class T>
+uint countType(const string& f, const T& t) {
+	uint lines = -1; 
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	T dross;
+	while (!is.eof()) {
+		is.read(reinterpret_cast<char*>(&dross),sizeof(t));
+		lines++;
+	}
+	is.close();
+	return lines;
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	7. smallestLoc
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -229,7 +272,6 @@ uint smallestLoc(const vector<T>& inVector) {
 	}
 	return loc;
 }
-
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	8. randDouble
@@ -279,6 +321,7 @@ double mod(const double& x, const double& min, const double& max) {
 	10. explicit instantiation
 		- numberToString, stringToNumber
 		- smallestLoc
+		- countType
 -------------------------------------------------------------------------------------------------------------------------*/
 
 template string numberToString<int>(const int&);
@@ -294,4 +337,9 @@ template comp stringToNumber<comp>(const string&);
 template uint smallestLoc<int>(const vector<int>&);
 template uint smallestLoc<double>(const vector<double>&);
 template uint smallestLoc<comp>(const vector<comp>&);
+
+template uint countType(const string&,const int&);
+template uint countType(const string&,const uint&);
+template uint countType(const string&,const double&);
+template uint countType(const string&,const comp&);
 

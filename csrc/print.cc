@@ -10,6 +10,7 @@
  #include <complex>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include "folder.h"
 #include "simple.h" // for countLines
 #include "parameters.h"
 #include "lattice.h"
@@ -31,7 +32,8 @@ CONTENTS
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. save
 		- vec
-			- static SaveVec
+			- static saveVec
+			- static saveVecBinary
 			- static saveVecSimpleAppend
 			- static saveVecB
 			- static saveVec
@@ -60,6 +62,18 @@ static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v
 													F << endl;
 	}
 	F.close();
+}
+
+// save vec - saveVecBinary
+static void saveVecBinary(const string& f, const SaveOptions& opts,  const vec& v) {
+	ofstream os;
+	os.open(f.c_str(),ios::binary);
+	const double* r;
+	for (uint j=0; j<v.size(); j++) {
+		r = &v(j);
+		os.write(reinterpret_cast<const char*>(r),sizeof(double));
+	}
+	os.close();
 }
 
 // save vec - simpleVecAppend
@@ -198,21 +212,32 @@ static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
 
 // save vec
 void save(const string& f, const SaveOptions& opts, const vec& v) {
-	switch(opts.vectorType) {
-		case SaveOptions::simple:	saveVecSimple(f,opts,v);
-									break;
-		case SaveOptions::real:		saveVec(f,opts,v);
-									break;
-		case SaveOptions::complex:	saveVec(f,opts,v);
-									break;
-		case SaveOptions::realB:	saveVecB(f,opts,v);
-									break;
-		case SaveOptions::complexB:	saveVecB(f,opts,v);
-									break;
-		case SaveOptions::append:	saveVecSimpleAppend(f,opts,v);
-									break;
-		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
-									break;
+	Filename F = f;
+	if ((F.Directory).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+		switch(opts.vectorType) {
+				case SaveOptions::simple:	saveVecSimple(f,opts,v);
+											break;
+				case SaveOptions::real:		saveVec(f,opts,v);
+											break;
+				case SaveOptions::complex:	saveVec(f,opts,v);
+											break;
+				case SaveOptions::realB:	saveVecB(f,opts,v);
+											break;
+				case SaveOptions::complexB:	saveVecB(f,opts,v);
+											break;
+				case SaveOptions::append:	saveVecSimpleAppend(f,opts,v);
+											break;
+				default:					cerr << "save error: print vectorType option(" << opts.vectorType;
+											cerr << ") not possible" << endl;
+											break;
+			}
+	}
+	else if ((F.Directory).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+		saveVecBinary(f,opts,v);
+	}
+	else {
+		cerr << "save error: printType option(" << opts.printType << ") not possible" << endl;
+		return;
 	}
 	if (opts.printMessage) {
 		printf("%12s%30s\n","saved: ",f.c_str());
@@ -231,6 +256,18 @@ static void savecVecSimple(const string& f, const SaveOptions& opts, const cVec&
 											F << setw(25) << real(v(j)) << setw(25) << imag(v(j)) << endl;
 	}
 	F.close();
+}
+
+// save cVec - savecVecBinary
+static void savecVecBinary(const string& f, const SaveOptions& opts, const cVec& v) {
+	ofstream os;
+	os.open(f.c_str(),ios::binary);
+	const comp* c;
+	for (uint j=0; j<v.size(); j++) {
+		c = &v(j);
+		os.write(reinterpret_cast<const char*>(c),sizeof(comp));
+	}
+	os.close();
 }
 
 // save cVec - simplecVecAppend
@@ -343,29 +380,54 @@ static void savecVec(const string& f, const SaveOptions& opts, const cVec& v) {
 
 // save cVec
 void save(const string& f, const SaveOptions& opts, const cVec& v) {
-	switch(opts.vectorType) {
-		case SaveOptions::simple:	savecVecSimple(f,opts,v);
-									break;
-		case SaveOptions::real:		savecVec(f,opts,v);
-									break;
-		case SaveOptions::complex:	savecVec(f,opts,v);
-									break;
-		case SaveOptions::realB:	savecVecB(f,opts,v);
-									break;
-		case SaveOptions::complexB:	savecVecB(f,opts,v);
-									break;
-		case SaveOptions::append:	savecVecSimpleAppend(f,opts,v);
-									break;
-		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
-									break;
+	Filename F = f;
+	if ((F.Directory).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+		switch(opts.vectorType) {
+				case SaveOptions::simple:	savecVecSimple(f,opts,v);
+											break;
+				case SaveOptions::real:		savecVec(f,opts,v);
+											break;
+				case SaveOptions::complex:	savecVec(f,opts,v);
+											break;
+				case SaveOptions::realB:	savecVecB(f,opts,v);
+											break;
+				case SaveOptions::complexB:	savecVecB(f,opts,v);
+											break;
+				case SaveOptions::append:	savecVecSimpleAppend(f,opts,v);
+											break;
+				default:					cerr << "save error: print vectorType option(" << opts.vectorType;
+											cerr << ") not possible" << endl;
+											break;
+			}
+	}
+	else if ((F.Directory).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+		savecVecBinary(f,opts,v);
+	}
+	else {
+		cerr << "save error: printType option(" << opts.printType << ") not possible" << endl;
+		return;
 	}
 	if (opts.printMessage) {
 		printf("%12s%30s\n","saved: ",f.c_str());
 	}
 }
 
-// save mat
-void save(const string& f, const SaveOptions& opts, const mat& m) {
+// save mat - binary
+static void saveMatBinary(const string& f, const SaveOptions& opts, const mat& m) {
+	ofstream os;
+	os.open(f.c_str(),ios::binary);
+	const double* d;
+	for (uint j=0; j<m.rows(); j++) {
+		for (uint k=0; k<m.cols(); k++) {
+			d = &m(j,k);
+			os.write(reinterpret_cast<const char*>(d),sizeof(double));
+		}
+	}
+	os.close();
+}
+
+// save mat - ascii
+static void saveMatAscii(const string& f, const SaveOptions& opts, const mat& m) {
 	fstream F;
 	F.open(f.c_str(), ios::out);
 	F << left;
@@ -378,13 +440,42 @@ void save(const string& f, const SaveOptions& opts, const mat& m) {
 		}
 	}
 	F.close();
+}
+
+// save mat
+void save(const string& f, const SaveOptions& opts, const mat& m) {
+	Filename F = f;
+	if ((F.Directory).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+		saveMatAscii(f,opts,m);
+	}
+	else if ((F.Directory).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+		saveMatBinary(f,opts,m);
+	}
+	else {
+		cerr << "save mat error: printType option(" << opts.printType << ") not possible" << endl;
+		return;
+	}
 	if (opts.printMessage) {
 		printf("%12s%30s\n","saved: ",f.c_str());
 	}
 }
 
 // save cMat
-void save(const string& f, const SaveOptions& opts, const cMat& m) {
+static void savecMatBinary(const string& f, const SaveOptions& opts, const cMat& m) {
+	ofstream os;
+	os.open(f.c_str(),ios::binary);
+	const comp* c;
+	for (uint j=0; j<m.rows(); j++) {
+		for (uint k=0; k<m.cols(); k++) {
+			c = &m(j,k);
+			os.write(reinterpret_cast<const char*>(c),sizeof(comp));
+		}
+	}
+	os.close();
+}
+
+// save cMat
+void savecMatAscii(const string& f, const SaveOptions& opts, const cMat& m) {
 	fstream F;
 	F.open(f.c_str(), ios::out);
 	F << left;
@@ -396,6 +487,21 @@ void save(const string& f, const SaveOptions& opts, const cMat& m) {
 		}
 	}
 	F.close();
+}
+
+// save cMat
+void save(const string& f, const SaveOptions& opts, const cMat& m) {
+	Filename F = f;
+	if ((F.Directory).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+		savecMatAscii(f,opts,m);
+	}
+	else if ((F.Directory).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+		savecMatBinary(f,opts,m);
+	}
+	else {
+		cerr << "save cMat error: printType " << opts.printType << " not recognised" << endl;
+		return;
+	}
 	if (opts.printMessage) {
 		printf("%12s%30s\n","saved: ",f.c_str());
 	}
@@ -403,6 +509,9 @@ void save(const string& f, const SaveOptions& opts, const cMat& m) {
 
 // save spMat
 void save(const string& f, const SaveOptions& opts, const spMat& m) {
+	if (opts.printType!=SaveOptions::ascii) {
+		cerr << "save spMat error: printType " << opts.printType << " not available" << endl;
+	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
 	F << left;
@@ -427,6 +536,21 @@ void save(const string& f, const SaveOptions& opts, const spMat& m) {
 		- cMat
 		- spMat
 -------------------------------------------------------------------------------------------------------------------------*/
+
+// loadVecBinary
+void loadVecBinary(const string& f, vec& v) {
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	uint lines = countDoubles(f);
+	v = Eigen::VectorXd::Zero(lines);
+	double d;
+	for (uint j=0; j<lines; j++) {
+		is.read(reinterpret_cast<char*>(&d),sizeof(double));
+		v(j) = d;
+	}
+	is.close();
+}
+
 
 // load vec
 void load(const string& f, const SaveOptions& opts, vec& v) {
@@ -609,8 +733,28 @@ void load(const string& f, const SaveOptions& opts, cVec& v) {
 	}
 }
 
-// load mat - assumes square matrix
-void load(const string& f, const SaveOptions& opts, mat& m) {
+// load mat  - binary - only works for square matrices
+void loadMatBinary(const string& f, const SaveOptions& opts, mat& m) {
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	uint lines = countDoubles(f);
+	uint rows = (uint)sqrt(lines);
+	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
+		cerr << "load mat error: matrix in " << f << " not square" << endl; 
+	}
+	m = Eigen::MatrixXd::Zero(rows,rows);
+	double d;
+	for (uint j=0; j<rows; j++) {
+		for (uint k=0; k<rows; k++) {
+			is.read(reinterpret_cast<char*>(&d),sizeof(double));
+			m(j,k) = d;
+		}
+	}
+	is.close();
+}
+
+// load mat - ascii- assumes square matrix
+void loadMatAscii(const string& f, const SaveOptions& opts, mat& m) {
 	uint rowsF = countLines(f), rows;
 	uint columnsF = countColumns(f), columns;
 	if (opts.extras==SaveOptions::loc && columnsF==3) {
@@ -671,8 +815,43 @@ void load(const string& f, const SaveOptions& opts, mat& m) {
 	}
 }
 
-// load cMat
-void load(const string& f, const SaveOptions& opts, cMat& m) {
+// load mat
+void load(const string& f, const SaveOptions& opts, mat& m) {
+	switch(opts.printType) {
+		case SaveOptions::binary:
+									loadMatBinary(f,opts,m);
+									break;
+		case SaveOptions::ascii:	
+									loadMatAscii(f,opts,m);
+									break;
+		default:
+									cerr << "load mat error: printType " << opts.printType << " not recognised" << endl;
+									break;
+		}
+}
+
+// load cMat - binary - only works for square matrices
+void loadcMatBinary(const string& f, const SaveOptions& opts, cMat& m) {
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	uint lines = countDoubles(f);
+	uint rows = (uint)sqrt(lines);
+	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
+		cerr << "load mat error: matrix in " << f << " not square" << endl; 
+	}
+	m = Eigen::MatrixXcd::Zero(rows,rows);
+	comp c;
+	for (uint j=0; j<rows; j++) {
+		for (uint k=0; k<rows; k++) {
+			is.read(reinterpret_cast<char*>(&c),sizeof(comp));
+			m(j,k) = c;
+		}
+	}
+	is.close();
+}
+
+// load cMat - ascii
+void loadcMatAscii(const string& f, const SaveOptions& opts, cMat& m) {
 	uint fileLength = countLines(f);
 	uint matLength = (uint)sqrt(fileLength);
 	fstream F;
@@ -693,6 +872,21 @@ void load(const string& f, const SaveOptions& opts, cMat& m) {
 	if (opts.printMessage) {
 		printf("%12s%30s\n","loaded: ",f.c_str());
 	}
+}
+
+// load cMat
+void load(const string& f, const SaveOptions& opts, cMat& m) {
+	switch(opts.printType) {
+		case SaveOptions::binary:
+									loadcMatBinary(f,opts,m);
+									break;
+		case SaveOptions::ascii:	
+									loadcMatAscii(f,opts,m);
+									break;
+		default:
+									cerr << "load cMat error: printType " << opts.printType << " not recognised" << endl;
+									break;
+		}
 }
 
 // load spMat

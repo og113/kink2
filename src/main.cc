@@ -467,7 +467,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.zeroModes = 2;
 		so_tp.printMessage = false;
 		if (loop==0) {
-			load(pFolder[0],so_tp,p);
+			load(pFolder[0],so_tp,p); //n.b there may be some problems with zero modes for binary printing
+			if (p.size()<(2*ps.N*ps.NT+2)) {
+				p.conservativeResize(2*ps.N*ps.NT+2);
+				for (uint j=0; j<(2*ps.N*ps.NT+2-p.size()); j++) {
+					p(p.size()+j) = 0.5;
+				}
+			}
 			printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
 		else {

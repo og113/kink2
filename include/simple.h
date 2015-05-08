@@ -36,7 +36,7 @@ CONTENTS
 	3 - factorial
 	4 - currentDateTime, currentPartSec
 	5 - copyFile
-	6 - countLines, countColumns
+	6 - count in files
 	7 - smallestLoc
 	8 - randDouble
 	9 - mod
@@ -97,14 +97,29 @@ string currentPartSec();
 void copyFile(const string & inputFile, const string & outputFile);
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	6. countLines, countColumns
+	6. count in file
+		- countLines
+		- countColumns
+		- countDoubles
+		- countComp
+		- countType
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // count lines
-uint countLines(const string & file_to_count);
+uint countLines(const string & f);
 
 // count columns
-uint countColumns(const string & file_to_count);
+uint countColumns(const string& f);
+
+// count doubles (binary)
+uint countDoubles(const string& f);
+
+// count comp (binary)
+uint countComp(const string& f);
+
+// count type (binary)
+template <class T>
+uint countType(const string& f, const T& t);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	7. smallestLoc
