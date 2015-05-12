@@ -78,6 +78,7 @@ struct PrimaryParameters {
 	double reg;
 	void save(const string& filename) const;
 	void load(const string& filename);
+	bool empty() const;
 };
 
 // operator<<
@@ -155,7 +156,11 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	bool changeParameters (const string& pName, const uint& pValue); 			// change all due to change in one
 	void print() const;
 	void print(FILE * stream) const;
+	bool empty() const;
 };
+
+// operator<<
+ostream& operator<<(ostream&, const Parameters&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	5. Options

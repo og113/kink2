@@ -30,6 +30,51 @@ CONTENTS
 -------------------------------------------------------------------------------------------------------------------------*/
 
 /*-------------------------------------------------------------------------------------------------------------------------
+	1. SaveOptions
+		- good
+		- <<
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// good
+bool SaveOptions::good() const {
+	//if (!paramsIn.empty() && paramsOut.empty())
+	//	paramsOut = paramsIn;
+	switch(vectorType) {
+		case SaveOptions::simple:	if (extras==SaveOptions::none || extras==SaveOptions::loc)
+										return true;
+									else 
+										return (!paramsIn.empty() && !paramsOut.empty());
+									break;
+		case SaveOptions::real:		return (!paramsIn.empty() && !paramsOut.empty());
+									break;
+		case SaveOptions::realB:	return (!paramsIn.empty() && !paramsOut.empty());
+									break;
+		case SaveOptions::complex:	return (!paramsIn.empty() && !paramsOut.empty());
+									break;
+		case SaveOptions::complexB:	return (!paramsIn.empty() && !paramsOut.empty());
+									break;
+		case SaveOptions::append:	return true;
+									break;
+		default:					cerr << "SaveOptions error: vectorType " << vectorType << "not recognized" << endl;
+									return false;
+									break;
+	}
+}
+
+// operator <<
+ostream& operator<<(ostream& os, const SaveOptions& opts){
+	os << opts.printType << endl;
+	os << opts.vectorType << endl;
+	os << opts.extras << endl;
+	os << opts.column << endl;
+	os << opts.zeroModes << endl;
+	os << opts.paramsIn << endl;
+	os << opts.paramsOut << endl;
+	os << opts.printMessage << endl;
+	return os;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
 	2. save
 		- vec
 			- static saveVec
@@ -69,6 +114,12 @@ static void saveVecBinary(const string& f, const SaveOptions& opts,  const vec& 
 	ofstream os;
 	os.open(f.c_str(),ios::binary);
 	const double* r;
+	if (os.good()) {
+		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
+	}
+	else {
+		cerr << "save error: cannot write to " << f << endl;
+	}
 	for (uint j=0; j<v.size(); j++) {
 		r = &v(j);
 		os.write(reinterpret_cast<const char*>(r),sizeof(double));
@@ -212,8 +263,13 @@ static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
 
 // save vec
 void save(const string& f, const SaveOptions& opts, const vec& v) {
+	if (!opts.good()) {
+		cerr << "save error: SaveOptions not good, could not save " << f << endl;
+		cerr << "SaveOptions: " << endl << opts << endl;
+		return;
+	}
 	Filename F = f;
-	if ((F.Directory).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+	if ((F.Suffix).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
 		switch(opts.vectorType) {
 				case SaveOptions::simple:	saveVecSimple(f,opts,v);
 											break;
@@ -232,7 +288,7 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 											break;
 			}
 	}
-	else if ((F.Directory).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+	else if ((F.Suffix).compare(".data")==0 || opts.printType==SaveOptions::binary) {
 		saveVecBinary(f,opts,v);
 	}
 	else {
@@ -263,6 +319,12 @@ static void savecVecBinary(const string& f, const SaveOptions& opts, const cVec&
 	ofstream os;
 	os.open(f.c_str(),ios::binary);
 	const comp* c;
+	if (os.good()) {
+		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
+	}
+	else {
+		cerr << "save error: cannot write to " << f << endl;
+	}
 	for (uint j=0; j<v.size(); j++) {
 		c = &v(j);
 		os.write(reinterpret_cast<const char*>(c),sizeof(comp));
@@ -380,8 +442,13 @@ static void savecVec(const string& f, const SaveOptions& opts, const cVec& v) {
 
 // save cVec
 void save(const string& f, const SaveOptions& opts, const cVec& v) {
+	if (!opts.good()) {
+		cerr << "save error: SaveOptions not good, could not save " << f << endl;
+		cerr << "SaveOptions: " << endl << opts << endl;
+		return;
+	}
 	Filename F = f;
-	if ((F.Directory).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+	if ((F.Suffix).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
 		switch(opts.vectorType) {
 				case SaveOptions::simple:	savecVecSimple(f,opts,v);
 											break;
@@ -400,7 +467,7 @@ void save(const string& f, const SaveOptions& opts, const cVec& v) {
 											break;
 			}
 	}
-	else if ((F.Directory).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+	else if ((F.Suffix).compare(".data")==0 || opts.printType==SaveOptions::binary) {
 		savecVecBinary(f,opts,v);
 	}
 	else {
@@ -444,11 +511,16 @@ static void saveMatAscii(const string& f, const SaveOptions& opts, const mat& m)
 
 // save mat
 void save(const string& f, const SaveOptions& opts, const mat& m) {
+	if (!opts.good()) {
+		cerr << "save error: SaveOptions not good, could not save " << f << endl;
+		cerr << "SaveOptions: " << endl << opts << endl;
+		return;
+	}
 	Filename F = f;
-	if ((F.Directory).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+	if ((F.Suffix).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
 		saveMatAscii(f,opts,m);
 	}
-	else if ((F.Directory).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+	else if ((F.Suffix).compare(".data")==0 || opts.printType==SaveOptions::binary) {
 		saveMatBinary(f,opts,m);
 	}
 	else {
@@ -491,11 +563,16 @@ void savecMatAscii(const string& f, const SaveOptions& opts, const cMat& m) {
 
 // save cMat
 void save(const string& f, const SaveOptions& opts, const cMat& m) {
+	if (!opts.good()) {
+		cerr << "save error: SaveOptions not good, could not save " << f << endl;
+		cerr << "SaveOptions: " << endl << opts << endl;
+		return;
+	}
 	Filename F = f;
-	if ((F.Directory).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+	if ((F.Suffix).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
 		savecMatAscii(f,opts,m);
 	}
-	else if ((F.Directory).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+	else if ((F.Suffix).compare(".data")==0 || opts.printType==SaveOptions::binary) {
 		savecMatBinary(f,opts,m);
 	}
 	else {
@@ -511,6 +588,12 @@ void save(const string& f, const SaveOptions& opts, const cMat& m) {
 void save(const string& f, const SaveOptions& opts, const spMat& m) {
 	if (opts.printType!=SaveOptions::ascii) {
 		cerr << "save spMat error: printType " << opts.printType << " not available" << endl;
+		return;
+	}
+	if (!opts.good()) {
+		cerr << "save error: SaveOptions not good, could not save " << f << endl;
+		cerr << "SaveOptions: " << endl << opts << endl;
+		return;
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
@@ -538,12 +621,18 @@ void save(const string& f, const SaveOptions& opts, const spMat& m) {
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // loadVecBinary
-void loadVecBinary(const string& f, vec& v) {
+static void loadVecBinary(const string& f, SaveOptions& opts, vec& v) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
 	uint lines = countDoubles(f);
 	v = Eigen::VectorXd::Zero(lines);
 	double d;
+	if (is.good()) {
+		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
+	}
+	else {
+		cerr << "cannot read from " << f << endl;
+	}
 	for (uint j=0; j<lines; j++) {
 		is.read(reinterpret_cast<char*>(&d),sizeof(double));
 		v(j) = d;
@@ -553,192 +642,229 @@ void loadVecBinary(const string& f, vec& v) {
 
 
 // load vec
-void load(const string& f, const SaveOptions& opts, vec& v) {
-	uint col = opts.column;
-	if (col==0) {
-		switch(opts.extras) {
-			case SaveOptions::none:		col = 1;
-										break;
-			case SaveOptions::loc:		col = 2;
-										break;
-			case SaveOptions::coords:	col = 4;
-										break;
-			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
-										return;
-										break;
-		}
-	}
-	uint fileLength = countLines(f);
-	uint vLength;
-	switch(opts.vectorType) {
-		case SaveOptions::simple:	vLength = fileLength;
-									break;
-		case SaveOptions::real:		vLength = fileLength;
-									break;
-		case SaveOptions::complex:	vLength = 2*(fileLength-opts.zeroModes)+opts.zeroModes;
-									break;
-		case SaveOptions::realB:	vLength = fileLength;
-									break;
-		case SaveOptions::complexB:	vLength = 2*(fileLength-opts.zeroModes)+opts.zeroModes;
-									break;
-		default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
-									return;
-									break;
-	}	
-	vec vf = Eigen::VectorXd::Zero(vLength);
-	fstream F;
-	F.open(f.c_str(), ios::in);
-	string line, temp;
-	unsigned int j=0;
-	while (getline(F, line)) {
-		if (!line.empty()) {
-			istringstream ss(line);
-			if (col>1) for (unsigned int l=0; l<(col-1); l++) ss >> temp;
-			if (opts.vectorType==SaveOptions::complex || opts.vectorType==SaveOptions::complexB) {
-				if (j>=(fileLength-opts.zeroModes)) 	ss >> vf(fileLength-opts.zeroModes+j);
-				else 									ss >> vf(2*j) >> vf(2*j+1);
-				
-			}
-			else ss >> vf(j);
-			j++;
-		}
-	}
-	F.close();
-	
-	uint N1 = (opts.paramsIn).N, N2 = (opts.paramsOut).N;
-	if (opts.vectorType!=SaveOptions::simple) {
-		uint NT1 = (opts.paramsIn).NT, NT2 = (opts.paramsOut).NT;
-		uint Nb1 = (opts.paramsIn).Nb, Nb2  = (opts.paramsOut).Nb;
-		if (opts.vectorType==SaveOptions::complex && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
-			v = interpolate(vf,opts.paramsIn,opts.paramsOut);
-			if (v.size()<(2*NT2*N2+opts.zeroModes)) {
-				v.conservativeResize(2*NT2*N2+opts.zeroModes);
-				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
-					if (abs(v(2*NT2*N2+zModes))<MIN_NUMBER)  v(2*NT2*N2+zModes) = 0.5;
-				}
-			}
-		}
-		else if (opts.vectorType==SaveOptions::real && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
-			v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
-			if (v.size()<(NT2*N2+opts.zeroModes)) {
-				v.conservativeResize(NT2*N2+opts.zeroModes);
-				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
-					if (abs(v(NT2*N2+zModes))<MIN_NUMBER)  v(NT2*N2+zModes) = 0.5;
-				}
-			}
-		}
-		else if (opts.vectorType==SaveOptions::complexB && N1>0 && N2>0 && Nb1>0 && Nb2>0&& (N1!=N2 || Nb1!=Nb2)) {
-			v = interpolate(vf,opts.paramsIn,opts.paramsOut);
-			if (v.size()<(2*Nb2*N2+opts.zeroModes)) {
-				v.conservativeResize(2*Nb2*N2+opts.zeroModes);
-				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
-					if (abs(v(2*Nb2*N2+zModes))<MIN_NUMBER)  v(2*Nb2*N2+zModes) = 0.5;
-				}
-			}
-		}
-		else if (opts.vectorType==SaveOptions::realB && N1>0 && N2>0 && Nb1>0 && Nb2>0 && (N1!=N2 || Nb1!=Nb2)) {
-			v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
-			if (v.size()<(Nb2*N2+opts.zeroModes)) {
-				v.conservativeResize(Nb2*N2+opts.zeroModes);
-				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
-					if (abs(v(Nb2*N2+zModes))<MIN_NUMBER)  v(Nb2*N2+zModes) = 0.5;
-				}
-			}
-		}
-		else {
-			v = vf;
-		}
+void load(const string& f, SaveOptions& opts, vec& v) {
+	if (opts.printType==SaveOptions::binary) {
+		loadVecBinary(f,opts,v);
 	}
 	else {
-		if (N1!=N2 && N2>0) {
-			v = interpolate1d(vf,vf.size(),N2);
+		uint col = opts.column;
+		if (col==0) {
+			switch(opts.extras) {
+				case SaveOptions::none:		col = 1;
+											break;
+				case SaveOptions::loc:		col = 2;
+											break;
+				case SaveOptions::coords:	col = 4;
+											break;
+				default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+											return;
+											break;
+			}
+		}
+		uint fileLength = countLines(f);
+		uint vLength;
+		switch(opts.vectorType) {
+			case SaveOptions::simple:	vLength = fileLength;
+										break;
+			case SaveOptions::real:		vLength = fileLength;
+										break;
+			case SaveOptions::complex:	vLength = 2*(fileLength-opts.zeroModes)+opts.zeroModes;
+										break;
+			case SaveOptions::realB:	vLength = fileLength;
+										break;
+			case SaveOptions::complexB:	vLength = 2*(fileLength-opts.zeroModes)+opts.zeroModes;
+										break;
+			default:					cerr << "save error: print vectorType option(" << opts.vectorType << ") not possible" << endl;
+										return;
+										break;
+		}	
+		vec vf = Eigen::VectorXd::Zero(vLength);
+		fstream F;
+		F.open(f.c_str(), ios::in);
+		string line, temp;
+		unsigned int j=0;
+		while (getline(F, line)) {
+			if (!line.empty()) {
+				istringstream ss(line);
+				if (col>1) for (unsigned int l=0; l<(col-1); l++) ss >> temp;
+				if (opts.vectorType==SaveOptions::complex || opts.vectorType==SaveOptions::complexB) {
+					if (j>=(fileLength-opts.zeroModes)) 	ss >> vf(fileLength-opts.zeroModes+j);
+					else 									ss >> vf(2*j) >> vf(2*j+1);
+				
+				}
+				else ss >> vf(j);
+				j++;
+			}
+		}
+		F.close();
+	
+		uint N1 = (opts.paramsIn).N, N2 = (opts.paramsOut).N;
+		if (opts.vectorType!=SaveOptions::simple) {
+			uint NT1 = (opts.paramsIn).NT, NT2 = (opts.paramsOut).NT;
+			uint Nb1 = (opts.paramsIn).Nb, Nb2  = (opts.paramsOut).Nb;
+			if (opts.vectorType==SaveOptions::complex && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
+				v = interpolate(vf,opts.paramsIn,opts.paramsOut);
+				if (v.size()<(2*NT2*N2+opts.zeroModes)) {
+					v.conservativeResize(2*NT2*N2+opts.zeroModes);
+					for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+						if (abs(v(2*NT2*N2+zModes))<MIN_NUMBER)  v(2*NT2*N2+zModes) = 0.5;
+					}
+				}
+			}
+			else if (opts.vectorType==SaveOptions::real && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
+				v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
+				if (v.size()<(NT2*N2+opts.zeroModes)) {
+					v.conservativeResize(NT2*N2+opts.zeroModes);
+					for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+						if (abs(v(NT2*N2+zModes))<MIN_NUMBER)  v(NT2*N2+zModes) = 0.5;
+					}
+				}
+			}
+			else if (opts.vectorType==SaveOptions::complexB && N1>0 && N2>0 && Nb1>0 && Nb2>0&& (N1!=N2 || Nb1!=Nb2)) {
+				v = interpolate(vf,opts.paramsIn,opts.paramsOut);
+				if (v.size()<(2*Nb2*N2+opts.zeroModes)) {
+					v.conservativeResize(2*Nb2*N2+opts.zeroModes);
+					for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+						if (abs(v(2*Nb2*N2+zModes))<MIN_NUMBER)  v(2*Nb2*N2+zModes) = 0.5;
+					}
+				}
+			}
+			else if (opts.vectorType==SaveOptions::realB && N1>0 && N2>0 && Nb1>0 && Nb2>0 && (N1!=N2 || Nb1!=Nb2)) {
+				v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
+				if (v.size()<(Nb2*N2+opts.zeroModes)) {
+					v.conservativeResize(Nb2*N2+opts.zeroModes);
+					for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+						if (abs(v(Nb2*N2+zModes))<MIN_NUMBER)  v(Nb2*N2+zModes) = 0.5;
+					}
+				}
+			}
+			else {
+				v = vf;
+			}
 		}
 		else {
-			v = vf;
+			if (N1!=N2 && N2>0) {
+				v = interpolate1d(vf,vf.size(),N2);
+			}
+			else {
+				v = vf;
+			}
 		}
-	}
-	if (opts.printMessage) {
-		printf("%12s%30s\n","loaded: ",f.c_str());
+		if (opts.printMessage) {
+			printf("%12s%30s\n","loaded: ",f.c_str());
+		}
 	}
 }
 
-// load cVec
-void load(const string& f, const SaveOptions& opts, cVec& v) {
-	uint col = opts.column;
-	if (col==0) {
-		switch(opts.extras) {
-			case SaveOptions::none:		col = 1;
-										break;
-			case SaveOptions::loc:		col = 2;
-										break;
-			case SaveOptions::coords:	col = 4;
-										break;
-			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
-										break;
-		}
-	}
-	uint fileLength = countLines(f);
-	uint vLength = fileLength;
-	cVec vf = Eigen::VectorXcd::Zero(vLength);
-	fstream F;
-	F.open(f.c_str(), ios::in);
-	string line, temp;
-	uint j=0;
-	double realPart, imagPart;
-	while (getline(F, line)) {
-		if (!line.empty()) {
-			istringstream ss(line);
-			if (col>1) for (unsigned int l=0; l<(col-1); l++) ss >> temp;
-			ss >> realPart >> imagPart;
-			vf(j) = realPart + comp(0.0,1.0)*imagPart;
-			j++;
-		}
-	}
-	F.close();
-	
-	uint N1 = (opts.paramsIn).N, N2 = (opts.paramsOut).N;
-	if (opts.vectorType!=SaveOptions::simple) {
-		uint NT1 = (opts.paramsIn).NT, NT2 = (opts.paramsOut).NT;
-		uint Nb1 = (opts.paramsIn).Nb, Nb2  = (opts.paramsOut).Nb;
-		if (opts.vectorType==SaveOptions::complex || opts.vectorType==SaveOptions::real) {
-			if ((N1!=N2 || NT1!=NT2) && N1>0 && N2>0 && NT1>0 && NT2>0) {
-				v = interpolate(vf,opts.paramsIn,opts.paramsOut);
-			}
-			else {
-				v = vf;
-			}
-		}
-		else if (opts.vectorType==SaveOptions::complexB || opts.vectorType==SaveOptions::realB) {
-			if ((N1!=N2 || Nb1!=Nb2) && N1>0 && N2>0 && Nb1>0 && Nb2>0) {
-				v = interpolate(vf,opts.paramsIn,opts.paramsOut);
-			}
-			else {
-				v = vf;
-			}
-		}
-		else {
-			v = vf;
-		}
+// loadcVecBinary
+static void loadcVecBinary(const string& f, SaveOptions& opts, cVec& v) {
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	comp c;
+	uint lines = countType(f,c);
+	v = Eigen::VectorXcd::Zero(lines);
+	if (is.good()) {
+		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
 	}
 	else {
-		if (N1!=N2 && N1>0 && N2>0) {
-			v = interpolate1d(vf,N1,N2);
+		cerr << "cannot read from " << f << endl;
+	}
+	for (uint j=0; j<lines; j++) {
+		is.read(reinterpret_cast<char*>(&c),sizeof(comp));
+		v(j) = c;
+	}
+	is.close();
+}
+
+
+// load cVec
+void load(const string& f, SaveOptions& opts, cVec& v) {
+	if (opts.printType==SaveOptions::binary) {
+		loadcVecBinary(f,opts,v);
+	}
+	else {
+		uint col = opts.column;
+		if (col==0) {
+			switch(opts.extras) {
+				case SaveOptions::none:		col = 1;
+											break;
+				case SaveOptions::loc:		col = 2;
+											break;
+				case SaveOptions::coords:	col = 4;
+											break;
+				default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
+											break;
+			}
+		}
+		uint fileLength = countLines(f);
+		uint vLength = fileLength;
+		cVec vf = Eigen::VectorXcd::Zero(vLength);
+		fstream F;
+		F.open(f.c_str(), ios::in);
+		string line, temp;
+		uint j=0;
+		double realPart, imagPart;
+		while (getline(F, line)) {
+			if (!line.empty()) {
+				istringstream ss(line);
+				if (col>1) for (unsigned int l=0; l<(col-1); l++) ss >> temp;
+				ss >> realPart >> imagPart;
+				vf(j) = realPart + comp(0.0,1.0)*imagPart;
+				j++;
+			}
+		}
+		F.close();
+	
+		uint N1 = (opts.paramsIn).N, N2 = (opts.paramsOut).N;
+		if (opts.vectorType!=SaveOptions::simple) {
+			uint NT1 = (opts.paramsIn).NT, NT2 = (opts.paramsOut).NT;
+			uint Nb1 = (opts.paramsIn).Nb, Nb2  = (opts.paramsOut).Nb;
+			if (opts.vectorType==SaveOptions::complex || opts.vectorType==SaveOptions::real) {
+				if ((N1!=N2 || NT1!=NT2) && N1>0 && N2>0 && NT1>0 && NT2>0) {
+					v = interpolate(vf,opts.paramsIn,opts.paramsOut);
+				}
+				else {
+					v = vf;
+				}
+			}
+			else if (opts.vectorType==SaveOptions::complexB || opts.vectorType==SaveOptions::realB) {
+				if ((N1!=N2 || Nb1!=Nb2) && N1>0 && N2>0 && Nb1>0 && Nb2>0) {
+					v = interpolate(vf,opts.paramsIn,opts.paramsOut);
+				}
+				else {
+					v = vf;
+				}
+			}
+			else {
+				v = vf;
+			}
 		}
 		else {
-			v = vf;
+			if (N1!=N2 && N1>0 && N2>0) {
+				v = interpolate1d(vf,N1,N2);
+			}
+			else {
+				v = vf;
+			}
 		}
-	}
-	if (opts.printMessage) {
-		printf("%12s%30s\n","loaded: ",f.c_str());
+		if (opts.printMessage) {
+			printf("%12s%30s\n","loaded: ",f.c_str());
+		}
 	}
 }
 
 // load mat  - binary - only works for square matrices
-void loadMatBinary(const string& f, const SaveOptions& opts, mat& m) {
+void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
 	uint lines = countDoubles(f);
 	uint rows = (uint)sqrt(lines);
+	if (is.good()) {
+		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
+	}
+	else {
+		cerr << "cannot read from " << f << endl;
+	}
 	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
 		cerr << "load mat error: matrix in " << f << " not square" << endl; 
 	}
@@ -754,7 +880,7 @@ void loadMatBinary(const string& f, const SaveOptions& opts, mat& m) {
 }
 
 // load mat - ascii- assumes square matrix
-void loadMatAscii(const string& f, const SaveOptions& opts, mat& m) {
+void loadMatAscii(const string& f, SaveOptions& opts, mat& m) {
 	uint rowsF = countLines(f), rows;
 	uint columnsF = countColumns(f), columns;
 	if (opts.extras==SaveOptions::loc && columnsF==3) {
@@ -816,7 +942,7 @@ void loadMatAscii(const string& f, const SaveOptions& opts, mat& m) {
 }
 
 // load mat
-void load(const string& f, const SaveOptions& opts, mat& m) {
+void load(const string& f, SaveOptions& opts, mat& m) {
 	switch(opts.printType) {
 		case SaveOptions::binary:
 									loadMatBinary(f,opts,m);
@@ -831,11 +957,17 @@ void load(const string& f, const SaveOptions& opts, mat& m) {
 }
 
 // load cMat - binary - only works for square matrices
-void loadcMatBinary(const string& f, const SaveOptions& opts, cMat& m) {
+void loadcMatBinary(const string& f, SaveOptions& opts, cMat& m) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
 	uint lines = countDoubles(f);
 	uint rows = (uint)sqrt(lines);
+	if (is.good()) {
+		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
+	}
+	else {
+		cerr << "cannot read from " << f << endl;
+	}
 	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
 		cerr << "load mat error: matrix in " << f << " not square" << endl; 
 	}
@@ -851,7 +983,7 @@ void loadcMatBinary(const string& f, const SaveOptions& opts, cMat& m) {
 }
 
 // load cMat - ascii
-void loadcMatAscii(const string& f, const SaveOptions& opts, cMat& m) {
+void loadcMatAscii(const string& f, SaveOptions& opts, cMat& m) {
 	uint fileLength = countLines(f);
 	uint matLength = (uint)sqrt(fileLength);
 	fstream F;
@@ -875,7 +1007,7 @@ void loadcMatAscii(const string& f, const SaveOptions& opts, cMat& m) {
 }
 
 // load cMat
-void load(const string& f, const SaveOptions& opts, cMat& m) {
+void load(const string& f, SaveOptions& opts, cMat& m) {
 	switch(opts.printType) {
 		case SaveOptions::binary:
 									loadcMatBinary(f,opts,m);
@@ -890,7 +1022,7 @@ void load(const string& f, const SaveOptions& opts, cMat& m) {
 }
 
 // load spMat
-void load(const string& f , const SaveOptions& opts, spMat& m) {
+void load(const string& f , SaveOptions& opts, spMat& m) {
 	uint fileLength = countLines(f);
 	Eigen::VectorXi to_reserve(fileLength); //an overestimate
 	to_reserve.setZero(fileLength);

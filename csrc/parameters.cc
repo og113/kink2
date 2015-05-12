@@ -53,6 +53,7 @@ string ParameterError::Load::message() const{
 		- operator<<
 		- save
 		- load
+		- empty
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // operator<<
@@ -118,6 +119,12 @@ void PrimaryParameters::load(const string& filename) {
 		cerr << e;
 		return;
 	}
+}
+
+// empty
+bool PrimaryParameters::empty() const {
+	return (pot==0 && N==0 && Na==0 && Nb==0 && Nc==0 && abs(LoR)<MIN_NUMBER && abs(dE)<MIN_NUMBER \
+				&& abs(Tb)<MIN_NUMBER && abs(theta)<MIN_NUMBER && abs(reg)<MIN_NUMBER);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -396,7 +403,9 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 		- print to shell
 		- set secondary parameters
 		- load
+		- empty
 		- change parameters based on change in one
+		- <<
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // empty constructor
@@ -452,6 +461,11 @@ void Parameters::load(const string& f) {
 	PrimaryParameters::load(f);
 	setSecondaryParameters();
 }	
+
+// empty
+bool Parameters::empty() const {
+	return PrimaryParameters::empty();
+}
 
 // change all parameters due to change in one, uint
 bool Parameters::changeParameters (const string& pName, const uint& pValue) {
@@ -549,6 +563,22 @@ bool Parameters::changeParameters (const string& pName, const double& pValue) {
 			cerr << "Parameters::changeParameters error: " << pName << " not changed" << endl;
 		}
 	return anythingChanged;
+}
+
+// operator<< - just prints primary parameters
+ostream& operator<<(ostream& os, const Parameters& p1) {
+	os << left;
+	os << setw(20) << "pot" << setw(20) << p1.pot << endl;
+	os << setw(20) << "N" << setw(20) << p1.N << endl;
+	os << setw(20) << "Na" << setw(20) << p1.Na << endl;
+	os << setw(20) << "Nb" << setw(20) << p1.Nb << endl;
+	os << setw(20) << "Nc" << setw(20) << p1.Nc << endl;
+	os << setw(20) << "LoR" << setw(20) << p1.LoR << endl;
+	os << setw(20) << "dE" << setw(20) << p1.dE << endl;
+	os << setw(20) << "Tb" << setw(20) << p1.Tb << endl;
+	os << setw(20) << "theta" << setw(20) << p1.theta << endl;
+	os << setw(20) << "reg" << setw(20) << p1.reg << endl;
+	return os;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
