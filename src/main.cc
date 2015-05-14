@@ -341,7 +341,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		mat modes(ps.N,ps.N);
 		mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
 		SaveOptions so_simple;
-		so.printType = SaveOptions::binary;
+		so_simple.printType = SaveOptions::binary;
 		so_simple.paramsIn = ps; so_simple.paramsOut = ps;
 		so_simple.vectorType = SaveOptions::simple;
 		so_simple.extras = SaveOptions::none;
@@ -500,9 +500,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			
 		//very early vector print
 		so_tp.paramsIn = ps;
-		//Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
+		/*Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
 				 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.data");
-		//save(earlyPrintFile,so_tp,p);
+		save(earlyPrintFile,so_tp,p);*/
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	8. beginning newton-raphson loop
