@@ -3,31 +3,52 @@
 */
 
 #include <iostream>
+#include <Eigen/Dense>
+#include "folder.h"
+#include "parameters.h"
 #include "print.h"
+#include "simple.h"
 
 using namespace std;
 
 int main() {
 cout << "test print: " << endl;
 
-PrimaryParameters p1;
+Parameters p;
+p.load("inputsM");
 
-p1.pot = 1;
-p1.N = 130;
-p1.Na = 300;
-p1.Nb = 80;
-p1.Nc = 2;
-p1.LoR = 3.2;
-p1.dE = 0.05;
-p1.Tb = 18.0;
-p1.theta = 0.0;
-p1.reg = 0.0;
+SaveOptions so;
+so.printType = SaveOptions::ascii;
+so.vectorType = SaveOptions::complex;
+so.paramsIn = p;
+so.paramsOut = p;
+so.printMessage = true;
+so.zeroModes = 2;
 
-cout << p1;
+Filename f, g;
+f = "data/000tp_fLoop_0_loop_0.dat";
 
-Parameters p(p1);
+vec u, v, w;
 
-cout << "save, load and plot untested" << endl;
+load(f,so,u);
+
+so.printType = SaveOptions::binary;
+g = "data/000tp_fLoop_0_loop_0.data";
+
+save(g,so,u);
+
+load(g,so,v);
+
+cout << "u.size() = " << u.size() << endl;
+cout << "v.size() = " << v.size() << endl;
+cout << "u(0)     = " << u(0) << endl;
+cout << "v(0)     = " << v(0) << endl;
+cout << "u.norm() = " << u.norm() << endl;
+cout << "v.norm() = " << v.norm() << endl;
+
+w = u-v;
+
+cout << "test: " << w.norm() << endl;
 
 return 0;
 }
