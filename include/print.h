@@ -43,7 +43,7 @@ CONTENTS
 
 // SaveOptions
 struct SaveOptions {
-	enum printTypeList { binary=0, ascii=1};
+	enum printTypeList { ascii=0, binary=1};
 	enum vectorTypeList { simple=0, real=1, complex=2, realB=3, complexB=4, append=5 };
 	enum extrasList { none=0, loc=1, coords=2, coordT=3, coordX=4};
 	printTypeList printType;

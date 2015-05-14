@@ -43,6 +43,7 @@ N.B. to change:
 		~150,151 "fa_high.Suffix = ".dat";"
 		~355 "&& false"
 		~467 "so_tp.printType = SaveOptions::ascii;"
+		~480 if (fLoop==0) so_tp.printType = SaveOptions::ascii;
 		
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -390,8 +391,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		vec negVec;
 		if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 			if (ps.pot==3) {
-				Filename eigVecFile = "data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";	
+				Filename eigVecFile = "data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";
+				so_simple.printType = SaveOptions::ascii;	
 				load(eigVecFile,so_simple,negVec); // should automatically interpolate
+				so_simple.printType = SaveOptions::binary;	
 			}
 			else {
 				Filename eigVecFile;
@@ -475,8 +478,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.zeroModes = 2;
 		so_tp.printMessage = false;
 		if (loop==0) {
-			so_tp.printType = SaveOptions::ascii;
+			if (fileLoop==0) so_tp.printType = SaveOptions::ascii;
 			load(pFolder[0],so_tp,p); //n.b there may be some problems with zero modes for binary printing
+			so_tp.printType = SaveOptions::binary;
 			printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
 		else {

@@ -96,6 +96,10 @@ ostream& operator<<(ostream& os, const SaveOptions& opts){
 static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v) {
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F.precision(16);
 	F << left;
 	uint length = v.size();
@@ -113,6 +117,10 @@ static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v
 static void saveVecBinary(const string& f, const SaveOptions& opts,  const vec& v) {
 	ofstream os;
 	os.open(f.c_str(),ios::binary);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	const double* r;
 	if (os.good()) {
 		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
@@ -133,14 +141,20 @@ static void saveVecSimpleAppend(const string& f, const SaveOptions& opts, const 
 	unsigned int lengthIs = countLines(f);
 	ifstream is;
 	is.open(f.c_str(),ios::in);
+	if (!is.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	ofstream os;
 	os.open("data/tempAppend",ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	os.precision(16);
 	os << left;
 	if (lengthOs!=lengthIs) {
 		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
-		is.close();
-		os.close();
 	}
 	else {
 		string lineIn;
@@ -174,6 +188,10 @@ static void saveVecB (const string& f, const SaveOptions& opts, const vec& v) {
 	
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	uint x0 = intCoord(0,1,pout.Nb);
 	F.precision(16);
 	F << left;
@@ -227,6 +245,10 @@ static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	unsigned int x0 = intCoord(0,1,pout.NT);
 	F.precision(16);
 	F << left;
@@ -308,6 +330,10 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 static void savecVecSimple(const string& f, const SaveOptions& opts, const cVec& v) {
 	fstream F;
 	F.open((f).c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F.precision(16);
 	F << left;
 	uint length = v.size();
@@ -325,39 +351,49 @@ static void savecVecBinary(const string& f, const SaveOptions& opts, const cVec&
 	const comp* c;
 	if (os.good()) {
 		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
+		for (uint j=0; j<v.size(); j++) {
+			c = &v(j);
+			os.write(reinterpret_cast<const char*>(c),sizeof(comp));
+		}
+		os.close();
 	}
 	else {
 		cerr << "save error: cannot write to " << f << endl;
 	}
-	for (uint j=0; j<v.size(); j++) {
-		c = &v(j);
-		os.write(reinterpret_cast<const char*>(c),sizeof(comp));
-	}
-	os.close();
 }
 
 // save cVec - simplecVecAppend
 static void savecVecSimpleAppend(const string& f, const SaveOptions& opts, const cVec& v) {
 	ifstream is;
 	is.open(f.c_str(),ios::in);
+	if (!is.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	ofstream os;
 	os.open("data/tempAppend",ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	os.precision(16);
 	os << left;
 	unsigned int lengthOs = v.size();
 	unsigned int lengthIs = countLines(f);
 	if (lengthOs!=lengthIs)
 		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
+		cerr << "in file " << f << endl;
+		return;
 	else {
 		string lineIn;
 		for (unsigned int j=0; j<lengthOs; j++){
 		getline(is,lineIn);
 		os << lineIn << setw(25) << real(v(j)) << setw(25) << imag(v(j)) << endl;
 		}
+		is.close();
+		os.close();
+		copyFile("data/tempAppend",f);
 	}
-	is.close();
-	os.close();
-	copyFile("data/tempAppend",f);
 }	
 
 // save cVec - saveVecB
@@ -372,6 +408,10 @@ static void savecVecB (const string& f, const SaveOptions& opts, const cVec& v) 
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	uint x0 = intCoord(0,1,pout.Nb);
 	F.precision(16);
 	F << left;
@@ -412,36 +452,40 @@ static void savecVec(const string& f, const SaveOptions& opts, const cVec& v) {
 	else {
 		vo = v;
 	}
-	fstream F;
-	F.open(f.c_str(), ios::out);
+	fstream os;
+	os.open(f.c_str(), ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	uint x0 = intCoord(0,1,pout.NT);
-	F.precision(16);
-	F << left;
+	os.precision(16);
+	os << left;
 	for (lint j=0; j<pout.N*pout.NT; j++) {
 		uint x = intCoord(j,1,pout.NT);
 		if (x!=x0) { //this is put in for gnuplot
-			F << endl;
+			os << endl;
 			x0 = x;
 		}
 		switch(opts.extras) {
 			case SaveOptions::none:		break;
-			case SaveOptions::loc: 		F << setw(25) << j;
+			case SaveOptions::loc: 		os << setw(25) << j;
 										break;
-			case SaveOptions::coords:	F << setw(25) << real(coord(j,0,pout)) << setw(25) << imag(coord(j,0,pout));
-										F << setw(25) << real(coord(j,1,pout)); 
+			case SaveOptions::coords:	os << setw(25) << real(coord(j,0,pout)) << setw(25) << imag(coord(j,0,pout));
+										os << setw(25) << real(coord(j,1,pout)); 
 										break;
 			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
 										break;
 		}
-		F << setw(25) << real(vo(j)) << setw(25) << imag(vo(j))  << endl;
+		os << setw(25) << real(vo(j)) << setw(25) << imag(vo(j))  << endl;
 	}
 	if (vo.size()>pout.N*pout.NT) {
-		F << endl;
+		os << endl;
 		for (uint j=0; j<(vo.size()-pout.N*pout.NT);j++) {
-			F << setw(25) << vo(pout.N*pout.NT+j) << endl;
+			os << setw(25) << vo(pout.N*pout.NT+j) << endl;
 		}
 	}
-	F.close();
+	os.close();
 }
 
 // save cVec
@@ -488,6 +532,10 @@ void save(const string& f, const SaveOptions& opts, const cVec& v) {
 static void saveMatBinary(const string& f, const SaveOptions& opts, const mat& m) {
 	ofstream os;
 	os.open(f.c_str(),ios::binary);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	const double* d;
 	for (uint j=0; j<m.rows(); j++) {
 		for (uint k=0; k<m.cols(); k++) {
@@ -502,6 +550,10 @@ static void saveMatBinary(const string& f, const SaveOptions& opts, const mat& m
 static void saveMatAscii(const string& f, const SaveOptions& opts, const mat& m) {
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F << left;
 	F.precision(16);
 	for (uint j=0; j<m.rows(); j++) {
@@ -542,6 +594,10 @@ void save(const string& f, const SaveOptions& opts, const mat& m) {
 static void savecMatBinary(const string& f, const SaveOptions& opts, const cMat& m) {
 	ofstream os;
 	os.open(f.c_str(),ios::binary);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	const comp* c;
 	for (uint j=0; j<m.rows(); j++) {
 		for (uint k=0; k<m.cols(); k++) {
@@ -556,6 +612,10 @@ static void savecMatBinary(const string& f, const SaveOptions& opts, const cMat&
 void savecMatAscii(const string& f, const SaveOptions& opts, const cMat& m) {
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F << left;
 	F.precision(16);
 	for (uint j=0; j<m.rows(); j++) {
@@ -604,6 +664,10 @@ void save(const string& f, const SaveOptions& opts, const spMat& m) {
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F << left;
 	F.precision(16);
 	for (int l=0; l<m.outerSize(); ++l) {
@@ -697,6 +761,10 @@ void load(const string& f, SaveOptions& opts, vec& v) {
 		vec vf = Eigen::VectorXd::Zero(vLength);
 		fstream F;
 		F.open(f.c_str(), ios::in);
+		if (!F.good()) {
+			cerr << "save error: stream not good for " << f << endl;
+			return;
+		}
 		string line, temp;
 		unsigned int j=0;
 		while (getline(F, line)) {
@@ -787,6 +855,7 @@ static void loadcVecBinary(const string& f, SaveOptions& opts, cVec& v) {
 	}
 	else {
 		cerr << "cannot read from " << f << endl;
+		return;
 	}
 	uint pos = is.tellg();
 	uint lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification
@@ -830,6 +899,10 @@ void load(const string& f, SaveOptions& opts, cVec& v) {
 		cVec vf = Eigen::VectorXcd::Zero(vLength);
 		fstream F;
 		F.open(f.c_str(), ios::in);
+		if (!F.good()) {
+			cerr << "save error: stream not good for " << f << endl;
+			return;
+		}
 		string line, temp;
 		uint j=0;
 		double realPart, imagPart;
