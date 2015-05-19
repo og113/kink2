@@ -72,11 +72,35 @@ else if (argc % 2 && argc>1) {
 	for (uint j=0; j<(uint)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
+		if (id.compare("opts")==0 || id.compare("options")==0) optionsFile = argv[2*j+2];
+		else if (id.compare("close")==0 || id.compare("closenesses")==0) closenessesFile = argv[2*j+2];
+	}
+}
+else if (argc != 1) {
+	cerr << "must provide an even number of inputs in format '-name value':" << endl;
+	for (int j=1; j<argc; j++) cerr << argv[j] << " ";
+	cerr << endl;
+	return 1;
+}
+
+// loading opts
+opts.load(optionsFile);
+//opts.print();
+
+// loading closenesses
+closenesses.load(closenessesFile);
+
+// getting argv inputs
+if (argc==2) timenumber = argv[1];
+else if (argc % 2 && argc>1) {
+	for (uint j=0; j<(uint)(argc/2); j++) {
+		string id = argv[2*j+1];
+		if (id[0]=='-') id = id.substr(1);
 		if (id.compare("tn")==0 || id.compare("timenumber")==0) timenumber = argv[2*j+2];
 		else if (id.compare("co")==0) coFile = (string)argv[2*j+2];
 		else if (id.compare("ce")==0) ceFile = (string)argv[2*j+2];
-		else if (id.compare("opts")==0 || id.compare("options")==0) optionsFile = argv[2*j+2];
-		else if (id.compare("close")==0 || id.compare("closenesses")==0) closenessesFile = argv[2*j+2];
+		else if (id.compare("opts")==0 || id.compare("options")==0);
+		else if (id.compare("close")==0 || id.compare("closenesses")==0);
 		else if (id.compare("amp")==0) opts.amp = stringToNumber<double>(argv[2*j+2]);
 		else if (id.compare("open")==0) opts.open = stringToNumber<double>(argv[2*j+2]);
 		else if (id.compare("alpha")==0) opts.alpha = stringToNumber<double>(argv[2*j+2]);
@@ -103,19 +127,6 @@ else if (argc % 2 && argc>1) {
 		}
 	}
 }
-else if (argc != 1) {
-	cerr << "must provide an even number of inputs in format '-name value':" << endl;
-	for (int j=1; j<argc; j++) cerr << argv[j] << " ";
-	cerr << endl;
-	return 1;
-}
-
-// loading opts
-opts.load(optionsFile);
-//opts.print();
-
-// loading closenesses
-closenesses.load(closenessesFile);
 
 // filling empty co and ce filenames
 if (coFile.empty()) coFile = "data/"+timenumber+"co.txt";
