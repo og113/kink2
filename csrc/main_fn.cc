@@ -523,17 +523,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		}
 		else {
 			Filename lastPhi;
+			uint sigma = (stepper.steps()>0? 1:0);
 			if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
 				lastPhi = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
-						+"_loop_"+numberToString<uint>(loop-stepper.local()+1)+".data");
-			}
-			else if (stepped) {
-				lastPhi = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
-						+"_loop_"+numberToString<uint>(loop-stepper.local()+1)+"_step_1.data");
+						+"_loop_"+numberToString<uint>(loop-1)+".data");
 			}
 			else {
 				lastPhi = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
-						+"_loop_"+numberToString<uint>(loop-stepper.local()+1)+"_step_0.data");
+						+"_loop_"+numberToString<uint>(loop-stepper.local()+1+sigma)+"_step_1.data");
 			}
 			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
