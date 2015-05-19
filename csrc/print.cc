@@ -74,6 +74,32 @@ ostream& operator<<(ostream& os, const SaveOptions& opts){
 	return os;
 }
 
+// writeBinary
+ostream& SaveOptions::writeBinary(ostream& os) const {
+	os.write(reinterpret_cast<const char*>(&printType),sizeof(SaveOptions::printTypeList));
+	os.write(reinterpret_cast<const char*>(&vectorType),sizeof(SaveOptions::vectorTypeList));
+	os.write(reinterpret_cast<const char*>(&extras),sizeof(SaveOptions::extrasList));
+	os.write(reinterpret_cast<const char*>(&column),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&zeroModes),sizeof(uint));
+	paramsIn.writeBinary(os);
+	paramsOut.writeBinary(os);
+	os.write(reinterpret_cast<const char*>(&printMessage),sizeof(bool));
+	return os;
+}
+
+// readBinary
+istream& SaveOptions::readBinary(istream& is) {
+	is.read(reinterpret_cast<char*>(&printType),sizeof(SaveOptions::printTypeList));
+	is.read(reinterpret_cast<char*>(&vectorType),sizeof(SaveOptions::vectorTypeList));
+	is.read(reinterpret_cast<char*>(&extras),sizeof(SaveOptions::extrasList));
+	is.read(reinterpret_cast<char*>(&column),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&zeroModes),sizeof(uint));
+	paramsIn.readBinary(is);
+	paramsOut.readBinary(is);
+	is.read(reinterpret_cast<char*>(&printMessage),sizeof(bool));
+	return is;
+}	
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. save
 		- vec
@@ -95,23 +121,23 @@ ostream& operator<<(ostream& os, const SaveOptions& opts){
 
 // save vec - saveVecSimple
 static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v) {
-	fstream F;
-	F.open(f.c_str(), ios::out);
+	fstream os;
+	os.open(f.c_str(), ios::out);
 	if (!os.good()) {
 		cerr << "save error: stream not good for " << f << endl;
 		return;
 	}
-	F.precision(16);
-	F << left;
+	os.precision(16);
+	os << left;
 	uint length = v.size();
 	if (opts.vectorType==SaveOptions::complex && !length%2) length = (uint)(length/2);
 	for (uint j=0; j<length; j++) {
-		if (opts.extras==SaveOptions::loc)			F << setw(25) << j;
-		if (opts.vectorType==SaveOptions::complex)	F << setw(25) << v(2*j) << setw(25) << v(2*j+1);
-		else										F << setw(25) << v(j);
-													F << endl;
+		if (opts.extras==SaveOptions::loc)			os << setw(25) << j;
+		if (opts.vectorType==SaveOptions::complex)	os << setw(25) << v(2*j) << setw(25) << v(2*j+1);
+		else										os << setw(25) << v(j);
+													os << endl;
 	}
-	F.close();
+	os.close();
 }
 
 // save vec - saveVecBinary
@@ -124,7 +150,7 @@ static void saveVecBinary(const string& f, const SaveOptions& opts,  const vec& 
 	}
 	const double* r;
 	if (os.good()) {
-		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
+		opts.writeBinary(os);
 		for (uint j=0; j<v.size(); j++) {
 			r = &v(j);
 			os.write(reinterpret_cast<const char*>(r),sizeof(double));
@@ -353,7 +379,7 @@ static void savecVecBinary(const string& f, const SaveOptions& opts, const cVec&
 	os.open(f.c_str(),ios::binary);
 	const comp* c;
 	if (os.good()) {
-		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
+		opts.writeBinary(os);
 		for (uint j=0; j<v.size(); j++) {
 			c = &v(j);
 			os.write(reinterpret_cast<const char*>(c),sizeof(comp));
@@ -383,10 +409,11 @@ static void savecVecSimpleAppend(const string& f, const SaveOptions& opts, const
 	os << left;
 	unsigned int lengthOs = v.size();
 	unsigned int lengthIs = countLines(f);
-	if (lengthOs!=lengthIs)
+	if (lengthOs!=lengthIs) {
 		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
 		cerr << "in file " << f << endl;
 		return;
+	}
 	else {
 		string lineIn;
 		for (unsigned int j=0; j<lengthOs; j++){
@@ -409,40 +436,40 @@ static void savecVecB (const string& f, const SaveOptions& opts, const cVec& v) 
 	else {
 		vo = v;
 	}
-	fstream F;
-	F.open(f.c_str(), ios::out);
+	fstream os;
+	os.open(f.c_str(), ios::out);
 	if (!os.good()) {
 		cerr << "save error: stream not good for " << f << endl;
 		return;
 	}
 	uint x0 = intCoord(0,1,pout.Nb);
-	F.precision(16);
-	F << left;
+	os.precision(16);
+	os << left;
 	for (lint j=0; j<pout.N*pout.Nb; j++) {
 		uint x = intCoord(j,1,pout.Nb);
 		if (x!=x0) { //this is put in for gnuplot
-			F << endl;
+			os << endl;
 			x0 = x;
 		}
 		switch(opts.extras) {
 			case SaveOptions::none:		break;
-			case SaveOptions::loc: 		F << setw(25) << j;
+			case SaveOptions::loc: 		os << setw(25) << j;
 										break;
-			case SaveOptions::coords:	F << setw(25) << real(coordB(j,0,pout)) << setw(25) << imag(coordB(j,0,pout));
-										F << setw(25) << real(coordB(j,1,pout)); 
+			case SaveOptions::coords:	os << setw(25) << real(coordB(j,0,pout)) << setw(25) << imag(coordB(j,0,pout));
+										os << setw(25) << real(coordB(j,1,pout)); 
 										break;
 			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
 										break;
 		}
-		F << setw(25) << real(vo(j)) << setw(25) << imag(vo(j))  << endl;
+		os << setw(25) << real(vo(j)) << setw(25) << imag(vo(j))  << endl;
 	}
 	if (vo.size()>pout.N*pout.Nb) {
-		F << endl;
+		os << endl;
 		for (unsigned int k=0; k<(vo.size()-pout.N*pout.Nb);k++) {
-			F << setw(25) << vo(pout.N*pout.Nb+k) << endl;
+			os << setw(25) << vo(pout.N*pout.Nb+k) << endl;
 		}
 	}
-	F.close();
+	os.close();
 }
 
 // save cVec - saveVec
@@ -700,7 +727,7 @@ static void loadVecBinary(const string& f, SaveOptions& opts, vec& v) {
 	is.open(f.c_str(),ios::binary);
 	double d;
 	if (is.good()) {
-		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
+		opts.readBinary(is);
 	}
 	else {
 		cerr << "load error: cannot read from " << f << endl;
@@ -854,7 +881,7 @@ static void loadcVecBinary(const string& f, SaveOptions& opts, cVec& v) {
 	is.open(f.c_str(),ios::binary);
 	comp c;
 	if (is.good()) {
-		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
+		opts.readBinary(is);
 	}
 	else {
 		cerr << "cannot read from " << f << endl;
@@ -974,7 +1001,7 @@ void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
 	if (is.good()) {
-		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
+		opts.readBinary(is);
 	}
 	else {
 		cerr << "cannot read from " << f << endl;
@@ -1096,7 +1123,7 @@ void loadcMatBinary(const string& f, SaveOptions& opts, cMat& m) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
 	if (is.good()) {
-		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
+		opts.readBinary(is);
 	}
 	else {
 		cerr << "cannot read from " << f << endl;

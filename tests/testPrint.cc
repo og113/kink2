@@ -18,27 +18,28 @@ Parameters p;
 p.load("inputsM");
 
 SaveOptions so;
-so.printType = SaveOptions::ascii;
 so.vectorType = SaveOptions::complex;
 so.paramsIn = p;
 so.paramsOut = p;
-so.printMessage = true;
+so.printMessage = false;
 so.zeroModes = 2;
 
 
 Filename f, g;
-f = "data/000tp_fLoop_0_loop_0.dat";
+f = "data/000mainp_fLoop_0_loop_0.dat";
+g = "data/000mainp_fLoop_0_loop_0.data";
 
 vec u, v, w;
 
-load(f,so,u);
+uint N = 10;
+for (uint j=0; j<N; j++) {
+	so.printType = SaveOptions::ascii;
+	load(f,so,u);
 
-so.printType = SaveOptions::binary;
-g = "data/000tp_fLoop_0_loop_0.data";
-
-save(g,so,u);
-
-load(g,so,v);
+	so.printType = SaveOptions::binary;
+	save(g,so,u);
+	load(g,so,v);
+}
 
 cout << "u.size() = " << u.size() << endl;
 cout << "v.size() = " << v.size() << endl;

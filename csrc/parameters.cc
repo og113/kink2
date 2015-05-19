@@ -134,6 +134,36 @@ bool operator==(const PrimaryParameters& l, const PrimaryParameters& r){
 				abs(l.dE-r.dE)<MIN_NUMBER && abs(l.Tb-r.Tb)<MIN_NUMBER && abs(l.theta-r.theta)<MIN_NUMBER && abs(l.reg-r.reg)<MIN_NUMBER);
 }
 
+// writeBinary
+ostream& PrimaryParameters::writeBinary(ostream& os) const {
+	os.write(reinterpret_cast<const char*>(&pot),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&N),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&Na),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&Nb),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&Nc),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&LoR),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&dE),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&Tb),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&theta),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&reg),sizeof(double));
+	return os;
+}
+
+// readBinary
+istream& PrimaryParameters::readBinary(istream& is) {
+	is.read(reinterpret_cast<char*>(&pot),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&N),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&Na),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&Nb),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&Nc),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&LoR),sizeof(double));
+	is.read(reinterpret_cast<char*>(&dE),sizeof(double));
+	is.read(reinterpret_cast<char*>(&Tb),sizeof(double));
+	is.read(reinterpret_cast<char*>(&theta),sizeof(double));
+	is.read(reinterpret_cast<char*>(&reg),sizeof(double));
+	return is;
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	3.SecondaryParameters member functions
 		- wrapped functions

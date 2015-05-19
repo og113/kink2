@@ -262,7 +262,7 @@ cout << "n.b. no binary method for printing spMat yet written" << endl;
 // parameters
 cout << "saving parameters in binary ";;
 
-PrimaryParameters p, q;
+Parameters p, q;
 p.load("inputsP");
 
 string pf = "tests/data/p.dat";
@@ -270,7 +270,7 @@ cout << "to " << pf << endl;
 ofstream os;
 os.open(pf.c_str(), ios::binary);
 if (os.good()) {
-	os.write(reinterpret_cast<char*>(&p),sizeof(p));
+	p.writeBinary(os);
 }
 else {
 	cerr << "cannot write to " << pf << endl;
@@ -281,7 +281,7 @@ ifstream is;
 is.open(pf.c_str(), ios::binary);
 string dross;
 if (is.good()) {
-	is.read(reinterpret_cast<char*>(&q),sizeof(q));
+	q.readBinary(is);
 }
 else {
 	cerr << "cannot read from " << pf << endl;

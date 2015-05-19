@@ -80,6 +80,8 @@ struct PrimaryParameters {
 	void save(const string& filename) const;
 	void load(const string& filename);
 	bool empty() const;
+	ostream& writeBinary(ostream&) const;
+	istream& readBinary(istream&);
 };
 
 // operator<<
