@@ -36,14 +36,17 @@ CONTENTS
 /*-------------------------------------------------------------------------------------------------------------------------
 	1. SaveOptions
 		- SaveOptions
+		- <<
 	
 	n.b. SaveOptions will also serve as loadOptions
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // SaveOptions
 struct SaveOptions {
+	enum printTypeList { ascii=0, binary=1};
 	enum vectorTypeList { simple=0, real=1, complex=2, realB=3, complexB=4, append=5 };
-	enum extrasList { none=0, loc=1, coords=2};
+	enum extrasList { none=0, loc=1, coords=2, coordT=3, coordX=4};
+	printTypeList printType;
 	vectorTypeList vectorType;
 	extrasList extras;
 	uint column;					// for load this overrides the other options
@@ -51,7 +54,13 @@ struct SaveOptions {
 	Parameters paramsIn;
 	Parameters paramsOut;
 	bool printMessage;
+	bool good() const;					// checking if all required fields present
+	ostream& writeBinary(ostream& os) const;
+	istream& readBinary(istream& is);	
 };
+
+// operator <<
+ostream& operator<<(ostream& os, const SaveOptions& opts); 
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. save
@@ -87,19 +96,19 @@ void save(const string&, const SaveOptions&, const spMat&);
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // load vec
-void load(const string&, const SaveOptions&, vec&);
+void load(const string&, SaveOptions&, vec&);
 
 // load cVec
-void load(const string&, const SaveOptions&, cVec&);
+void load(const string&, SaveOptions&, cVec&);
 
 // load mat
-void load(const string&, const SaveOptions&, mat&);
+void load(const string&, SaveOptions&, mat&);
 
 // load cMat
-void load(const string&, const SaveOptions&, cMat&);
+void load(const string&, SaveOptions&, cMat&);
 
 // load spMat
-void load(const string&, const SaveOptions&, spMat&);
+void load(const string&, SaveOptions&, spMat&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. plot
@@ -109,10 +118,12 @@ void load(const string&, const SaveOptions&, spMat&);
 
 // PlotOptions
 struct PlotOptions {
+	SaveOptions::printTypeList printType;
 	string gp;
 	uint column;
 	uint column2;
 	uint column3;
+	uint column4;
 	string style;
 	string output;
 	bool printMessage;

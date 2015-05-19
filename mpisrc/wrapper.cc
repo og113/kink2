@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
 	1. defining required nodes
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int nodes_req = 8;
+int nodes_req = 2;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. organizing files
@@ -44,7 +44,6 @@ bool copyFiles = true;
 if (copyFiles) {
 	for (int k=0; k<nodes_req; k++) {
 		string timenumber = "00"+numberToString<int>(k);
-		int returnValue;
 		// n.b. in the examples i have seen all quantities are declared before MPI::Init
 		// should look this up
 	
@@ -93,10 +92,11 @@ if (copyFiles) {
 		- checking required number of nodes
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int argc_main = 3;
+int argc_main = 5;
 vector <string> argv_main(argc_main);
 argv_main[0] = "main";
-argv_main[1] = "-opts";
+argv_main[1] = "-mintn";
+argv_main[3] = "-maxtn";
 
 int nodes, rank;
 int returnValue = 0;
@@ -124,7 +124,8 @@ else {
 		- mpi::finalize
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-argv_main[2] = "data/00"+numberToString<int>(rank)+"optionsM";
+argv_main[2] = "00"+numberToString<int>(rank);
+argv_main[4] = "00"+numberToString<int>(rank);
 
 sleep(rank*2);
 

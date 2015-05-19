@@ -20,6 +20,7 @@ CONTENTS
 	3 - Vs
 	4 - dVs
 	5 - ddVs
+	6 - dddVs
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -138,5 +139,22 @@ template <class T> T ddV3 (const T&, const struct params_for_V&);
 
 //ddVr	
 comp ddVrFn (const comp & phi, const double & minimaL, const double & minimaR);
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	6. third derivatives of potential functions
+		- dddV1
+		- dddZ
+		- dddV2
+	
+-------------------------------------------------------------------------------------------------------------------------*/
+
+//dddV1
+template <class T> T dddV1 (const T&, const struct params_for_V&);
+
+//dddZ for dddV2
+template <class T> T dddZ (const T&);
+
+//dddV2
+template <class T> T dddV2 (const T&, const struct params_for_V&);
 
 #endif // __POTENTIALS_H_INCLUDED__

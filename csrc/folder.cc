@@ -236,6 +236,12 @@ Filename& Filename::operator=(const string& rhs) {
 	return *this;
 }
 
+// operator=
+Filename& Filename::operator=(const char* rhs) {
+	string temp = (string)rhs;
+	set(temp);
+	return *this;
+}
 
 // constructor(const string& filename)
 Filename::Filename(const string& f): FilenameAttributes() {
