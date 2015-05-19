@@ -504,6 +504,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		comp action_last = action;
 		uint runs_count = 0;
 		uint min_runs = 2;
+		uint max_runs = 100;
 
 		//initializing phi (=p)
 		vec p;
@@ -567,6 +568,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//beginning newton-raphson loop	
 		while (!checkSoln.good() || !checkSolnMax.good() || runs_count<min_runs) {
 			runs_count++;
+			if (runs_count>max_runs) {
+				cerr << "main error: max_runs(" << max_runs << ") exceeded for:" << endl;
+				cerr << "timenumber: " << timenumber << "; fileLoop: " << fileLoop << "; loop: " << loop << endl;
+				return 1;				
+			}
 			
 			// zero modes - fixed with chiX and chiT
 			vec chiX(ps.NT*ps.N);	chiX = Eigen::VectorXd::Zero(ps.N*ps.NT); //to fix spatial zero mode
