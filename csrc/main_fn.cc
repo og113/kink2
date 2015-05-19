@@ -1407,6 +1407,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		fprintf(cof,"\n");
 
 		// printing results to file
+		stepped = stepper.keep();
 		if (stepper.keep()) {
 			FILE * actionfile;
 			string resultsFile = "results/"+timenumber+"mainResults.dat";
