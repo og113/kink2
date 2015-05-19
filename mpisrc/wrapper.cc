@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
 	1. defining required nodes
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int nodes_req = 2;
+int nodes_req = 8;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. organizing files
@@ -39,7 +39,7 @@ int nodes_req = 2;
 		- copying negEig, omega etc
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-bool copyFiles = true;
+bool copyFiles = false;
 
 if (copyFiles) {
 	for (int k=0; k<nodes_req; k++) {
@@ -92,11 +92,13 @@ if (copyFiles) {
 		- checking required number of nodes
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int argc_main = 5;
+int argc_main = 7;
 vector <string> argv_main(argc_main);
 argv_main[0] = "main";
 argv_main[1] = "-mintn";
 argv_main[3] = "-maxtn";
+argv_main[5] = "-loops";
+argv_main[6] = "100";
 
 int nodes, rank;
 int returnValue = 0;
