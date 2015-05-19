@@ -1000,10 +1000,7 @@ void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
 	}
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
-	if (is.good()) {
-		opts.readBinary(is);
-	}
-	else {
+	if (!is.good()) {
 		cerr << "cannot read from " << f << endl;
 	}
 	uint pos = is.tellg();
@@ -1122,10 +1119,7 @@ void loadcMatBinary(const string& f, SaveOptions& opts, cMat& m) {
 	}
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
-	if (is.good()) {
-		opts.readBinary(is);
-	}
-	else {
+	if (!is.good()) {
 		cerr << "cannot read from " << f << endl;
 	}
 	uint pos = is.tellg();

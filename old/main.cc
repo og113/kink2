@@ -1,7 +1,6 @@
 /*----------------------------------------------------------------------------------------------------------------------------
-	main_fn
+	main
 		program to solve boundary value problem on contour ABCD
-		main used as a function, not a main process
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 #include <vector>
@@ -17,7 +16,6 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_poly.h>
 #include <gsl/gsl_roots.h>
-#include "main_fn.h"
 #include "main.h"
 
 //#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
@@ -25,7 +23,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
 	CONTENTS
-		1 - argv inputs, loading options, closenesses
+		1 - loading options, closenesses, argv inputs
 		2 - Folders
 		3 - beginning file loop
 		4 - beginning parameter loop
@@ -40,43 +38,45 @@
 		13 - printing early 2
 		14 - convergence
 		15 - printing output
+		
+N.B. to change:
+		~150,151 "fa_high.Suffix = ".dat";"
+		~355 "&& false"
+		~467 "so_tp.printType = SaveOptions::ascii;"
+		~480 if (fLoop==0) so_tp.printType = SaveOptions::ascii;
+		
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int main_fn(int argc, vector<string> argv)
+int main(int argc, char** argv)
 {
 /*----------------------------------------------------------------------------------------------------------------------------
 	1. loading options, argv inputs
-		- defining timenumber and files to load
-		- argv inputs
 		- loading options
 		- loading closenesses
-		- beginning cos and ces 
+		- argv inputs
+		- defining timenumber
 ----------------------------------------------------------------------------------------------------------------------------*/
+
+// loading opts
+Options opts;
+opts.load("optionsM");
+//opts.print();
+
+// loading closenesses
+Closenesses closenesses;
+closenesses.load("closenesses");
 
 // defining timenumber
 string timenumber = currentDateTime();
 
-// options to load
-Options opts;
-Closenesses closenesses;
-string optionsFile = "optionsM";
-string closenessesFile = "closenesses";
-
-// cos and cerr files
-string coFile, ceFile;
-
 // getting argv inputs
 if (argc==2) timenumber = argv[1];
 else if (argc % 2 && argc>1) {
-	for (uint j=0; j<(uint)(argc/2); j++) {
+	for (unsigned int j=0; j<(int)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
 		if (id.compare("tn")==0 || id.compare("timenumber")==0) timenumber = argv[2*j+2];
-		else if (id.compare("co")==0) coFile = (string)argv[2*j+2];
-		else if (id.compare("ce")==0) ceFile = (string)argv[2*j+2];
-		else if (id.compare("opts")==0 || id.compare("options")==0) optionsFile = argv[2*j+2];
-		else if (id.compare("close")==0 || id.compare("closenesses")==0) closenessesFile = argv[2*j+2];
 		else if (id.compare("amp")==0) opts.amp = stringToNumber<double>(argv[2*j+2]);
 		else if (id.compare("open")==0) opts.open = stringToNumber<double>(argv[2*j+2]);
 		else if (id.compare("alpha")==0) opts.alpha = stringToNumber<double>(argv[2*j+2]);
@@ -86,10 +86,10 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("inF")==0) opts.inF = argv[2*j+2];
 		else if (id.compare("minTimenumberLoad")==0 || id.compare("mintn")==0) opts.minTimenumberLoad = argv[2*j+2];
 		else if (id.compare("maxTimenumberLoad")==0 || id.compare("maxtn")==0) opts.maxTimenumberLoad = argv[2*j+2];
-		else if (id.compare("minfLoopLoad")==0 || id.compare("minfLoopLoad")==0) opts.minfLoopLoad = argv[2*j+2];
-		else if (id.compare("maxfLoopLoad")==0 || id.compare("maxfLoopLoad")==0) opts.maxfLoopLoad = argv[2*j+2];
-		else if (id.compare("minLoopLoad")==0 || id.compare("minLoopLoad")==0) opts.minLoopLoad = argv[2*j+2];
-		else if (id.compare("maxLoopLoad")==0 || id.compare("maxLoopLoad")==0) opts.maxLoopLoad = argv[2*j+2];
+		else if (id.compare("minfLoopLoad")==0 || id.compare("minfLoop")==0) opts.minfLoopLoad = argv[2*j+2];
+		else if (id.compare("maxfLoopLoad")==0 || id.compare("maxfLoop")==0) opts.maxfLoopLoad = argv[2*j+2];
+		else if (id.compare("minLoopLoad")==0 || id.compare("minLoop")==0) opts.minLoopLoad = argv[2*j+2];
+		else if (id.compare("maxLoopLoad")==0 || id.compare("maxLoop")==0) opts.maxLoopLoad = argv[2*j+2];
 		else if (id.compare("loopChoice")==0) opts.loopChoice = argv[2*j+2];
 		else if (id.compare("loopMin")==0) opts.loopMin = stringToNumber<double>(argv[2*j+2]);
 		else if (id.compare("loopMax")==0) opts.loopMax = stringToNumber<double>(argv[2*j+2]);
@@ -109,24 +109,6 @@ else if (argc != 1) {
 	cerr << endl;
 	return 1;
 }
-
-// loading opts
-opts.load(optionsFile);
-//opts.print();
-
-// loading closenesses
-closenesses.load(closenessesFile);
-
-// filling empty co and ce filenames
-if (coFile.empty()) coFile = "data/"+timenumber+"co.txt";
-if (ceFile.empty()) ceFile = "data/"+timenumber+"ce.txt";
-
-// beginning cos and ces streams
-fstream cos;
-cos.open(coFile.c_str(),fstream::app);
-
-fstream ces;
-ces.open(ceFile.c_str(),fstream::app);
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. Folders
@@ -164,7 +146,7 @@ else if ((opts.inF).compare("m")==0) {
 	fa_high.ID = "mainp";
 }
 else {
-	ces << "inF error: " << opts.inF << " not recognised" << endl;
+	cerr << "inF error: " << opts.inF << " not recognised" << endl;
 	return 1;
 }
 fa_low.Suffix = ".dat";
@@ -186,19 +168,16 @@ fa_high.Suffix = "";
 fc.set(fa_low,fa_high);
 Folder inputsFolder(fc);
 
-// removeUnshared - not quite working, should be based soley on timenumber and loop
+// removeUnshared - not quite working, shoud be based soley on timenumber and loop
 // removeUnshared(pFolder,inputsFolder);
 
 // printing folders
-if (pFolder.size()>0) {
-	cos << endl;
-	cos << "inputs: " << endl << pFolder << inputsFolder << endl;
-}
+cout << endl;
+if (pFolder.size()>0)
+	cout << "inputs: " << endl << pFolder << inputsFolder << endl;
 else {
-	ces << endl;
-	ces << "not files found for options:" << endl;
-	ces << opts << endl;
-	return 1;
+	cout << "not files found for options:" << endl;
+	cout << opts << endl;
 }
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -213,9 +192,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	// loading parameters
 	Parameters psu;
 	psu.load(inputsFolder[fileLoop]);
-	//cos << "input parameters: " << endl;
+	//cout << "input parameters: " << endl;
 	//psu.print();
-	//cos << endl;
+	//cout << endl;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. beginning parameter loop
@@ -264,13 +243,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if ((opts.loopChoice)[0]=='N') {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,(uint)stepper.x());
 				if (loop==0 && anythingChanged) {
-					cos << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
+					cout << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
 			else if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
 				if (loop==0 && anythingChanged) {
-					cos << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
+					cout << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
 				}
 			}
 			else {
@@ -285,14 +264,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		ps.save(paramsRunFile);
 		
 		//printing timenumber
-		cos.close();
-		FILE* cof;
-		cof = fopen(coFile.c_str(),"a");
-		fprintf(cof,"%12s%12s\n","timenumber: ",timenumber.c_str());
-		cout << "timenumber: " << timenumber << endl;
+		printf("%12s%12s\n","timenumber: ",timenumber.c_str());
 		if (((opts.loopChoice).substr(0,5)).compare("const")==0 && loop>0) {
 			double angleModTwoPi = mod(stepper.stepAngle(),-pi,pi);		
-			fprintf(cof,"%12s%12.3g\n","step angle: ",angleModTwoPi);
+			printf("%12s%12.3g\n","step angle: ",angleModTwoPi);
 		}
 		
 		// declaring Checks
@@ -340,7 +315,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			ddV((Potential<comp>::PotentialType)&ddV3<comp>,ps);
 			}
 		else {
-			ces << "pot option not available, pot = " << ps.pot << endl;
+			cerr << "pot option not available, pot = " << ps.pot << endl;
 			return 1;
 		}
 	
@@ -376,7 +351,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_simple.printMessage = false;
 		{
 			Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
-			omegaM1F = (string)"data/"+(pFolder[0]).Timenumber+"omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
+			omegaM1F = (string)"data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
 							+"_L_"+numberToString<double>(ps.L)+".data";
 			Folder omegaM1Folder(omegaM1F);
 			omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
@@ -386,7 +361,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			freqsF = omegaM1F;			freqsF.ID = "freqs"; 		Folder freqsFolder(freqsF);
 			freqsExpF = omegaM1F;		freqsExpF.ID = "freqsExp";	Folder freqsExpFolder(freqsExpF);
 			if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()==1 \
-				&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
+				&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1 && false) {
 				load(omegaM1Folder[0],so_simple,omega_m1);
 				load(omega0Folder[0],so_simple,omega_0);
 				load(omega1Folder[0],so_simple,omega_1);
@@ -418,16 +393,16 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		vec negVec;
 		if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 			if (ps.pot==3) {
-				Filename eigVecFile = "data/"+(pFolder[0]).Timenumber+"eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";	
-				so_simple.printType = SaveOptions::ascii;
+				Filename eigVecFile = "data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";
+				so_simple.printType = SaveOptions::ascii;	
 				load(eigVecFile,so_simple,negVec); // should automatically interpolate
-				so_simple.printType = SaveOptions::binary;
+				so_simple.printType = SaveOptions::binary;	
 			}
 			else {
 				Filename eigVecFile;
 				string N_load;
 				string Nb_load;
-				Filename lower = "data/"+(pFolder[0]).Timenumber+"eigVec_pot_" + numberToString<uint>(ps.pot)\
+				Filename lower = "data/stable/eigVec_pot_" + numberToString<uint>(ps.pot)\
 									 + "_N_100_Nb_100_L_" + numberToString<double>(ps.L) + ".dat";
 				Filename upper = lower;
 				vector<StringPair> upperExtras = lower.Extras;
@@ -435,7 +410,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				upper.Extras[2] = StringPair("Nb","1000");
 				Folder eigVecFolder(lower,upper);
 				if (eigVecFolder.size()==0) {
-					ces << "no negative eigenvector files found between:" << endl << lower << endl << upper << endl;
+					cerr << "no negative eigenvector files found between:" << endl << lower << endl << upper << endl;
 					return 1;
 				}
 				else {
@@ -508,7 +483,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if (fileLoop==0) so_tp.printType = SaveOptions::ascii;
 			load(pFolder[0],so_tp,p); //n.b there may be some problems with zero modes for binary printing
 			so_tp.printType = SaveOptions::binary;
-			fprintf(cof,"%12s%30s\n","input: ",(pFolder[0]()).c_str());
+			printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
 		else {
 			Filename lastPhi;
@@ -526,11 +501,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
-			fprintf(cof,"%12s%30s\n","input: ",(lastPhi()).c_str());
+			printf("%12s%30s\n","input: ",(lastPhi()).c_str());
 		}
 		
 		// printing parameters
-		ps.print(cof);
+		ps.print();
 		
 		//defining complexified vector Cp
 		cVec Cp;
@@ -541,12 +516,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		vec minusDS(2*ps.N*ps.NT+2);
 			
 		//very early vector print
-		if ((opts.printChoice).compare("n")!=0) {
-			so_tp.paramsIn = ps;
-			Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
-					 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.data");
-			save(earlyPrintFile,so_tp,p);
-		}
+		so_tp.paramsIn = ps;
+		/*Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
+				 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.data");
+		save(earlyPrintFile,so_tp,p);*/
+	
 /*----------------------------------------------------------------------------------------------------------------------------
 	8. beginning newton-raphson loop
 		- beginning newton-raphson loop	
@@ -567,11 +541,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				uint posX, posT, posCe;
 				uint slicesX, slicesT;
 				if (getLastInt(opts.zmx)<0) {
-					ces << "getLastInt error with zmx = " << opts.zmx << endl;
+					cerr << "getLastInt error with zmx = " << opts.zmx << endl;
 					return 1;
 				}
 				if (getLastInt(opts.zmt)<0) {
-					ces << "getLastInt error with zmt = " << opts.zmt << endl;
+					cerr << "getLastInt error with zmt = " << opts.zmt << endl;
 					return 1;
 				}
 				slicesX = getLastInt(opts.zmx);
@@ -582,7 +556,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				posMap['B'] = j*ps.NT + ps.Na-1;
 				posMap['C'] = j*ps.NT+ps.Na+ps.Nb-slicesT;
 				posMap['D'] = j*ps.NT+(ps.NT-1)-slicesT;
-				if ((opts.zmt).size()<3) ces << "zmt lacks info, zmt = " << opts.zmt << endl;
+				if ((opts.zmt).size()<3) cerr << "zmt lacks info, zmt = " << opts.zmt << endl;
 				for (uint l=0;l<((opts.zmt).size()-2);l++) {
 					if (posMap.find(opts.zmt[1+l])!=posMap.end()) {
 						posT = posMap.at(opts.zmt[1+l]);
@@ -594,7 +568,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 							}
 							else if (opts.zmt[0]=='d')	chiT(posT+k) = p(2*(posT+k+1))-p(2*(posT+k));
 							else {
-								ces << "choice of zmt(" << opts.zmt << ") not allowed" << endl;
+								cerr << "choice of zmt(" << opts.zmt << ") not allowed" << endl;
 								return 1;
 							}
 						}
@@ -605,7 +579,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				posMap['C'] = j*ps.NT+ps.Na+ps.Nb-slicesX;
 				posMap['D'] = j*ps.NT+ps.NT-slicesX;
 				posCe = j*ps.Nb+ps.Nb-slicesX;
-				if ((opts.zmx).size()<3) ces << "zmx lacks info, zmx = " << opts.zmx << endl;
+				if ((opts.zmx).size()<3) cerr << "zmx lacks info, zmx = " << opts.zmx << endl;
 				for (uint l=0;l<((opts.zmx).size()-2);l++) {
 					if (posMap.find(opts.zmx[1+l])!=posMap.end()) {
 						posX = posMap.at(opts.zmx[1+l]);
@@ -618,7 +592,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 							else if (opts.zmx[0]=='d' && ps.pot!=3)
 								chiX(posX+k) = p(2*neigh(posX+k,1,1,ps))-p(2*neigh(posX+k,1,-1,ps));
 							else {
-								ces << "choice of zmx(" << opts.zmx << ") not allowed" << endl;
+								cerr << "choice of zmx(" << opts.zmx << ") not allowed" << endl;
 								return 1;
 							}
 						}
@@ -629,7 +603,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			double normT = chiT.norm();
 			normT = pow(normT,0.5);
 			if (abs(normX)<MIN_NUMBER || abs(normT)<MIN_NUMBER) {
-				ces << "norm of chiX = " << normX << ", norm of chiT = " << normT << endl;
+				cerr << "norm of chiX = " << normX << ", norm of chiT = " << normT << endl;
 			}
 			chiX = chiX/normX;
 			chiT = chiT/normT;
@@ -674,13 +648,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				comp Vtrial = 0.0, Vcontrol = 0.0;
 				for (unsigned int j=0; j<ps.N; j++) {
 					double r = ps.r0 + j*ps.a;
-					paramsV.epsi = r;
+					paramsV  = {r, 0.0};
 					V.setParams(paramsV);
 					Vcontrol += pow(p(2*j*ps.Nb),2.0)/2.0 - pow(p(2*j*ps.Nb),4.0)/4.0/pow(r,2.0);
 					Vtrial += V(p(2*j*ps.Nb));
 				}
 				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
-				fprintf(cof,"potTest = %8.4g\n",potTest);
+				cout << "potTest = " << potTest << endl;
 			}
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -1019,7 +993,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if (trivialChecks) {
 				for (uint j=0; j<ps.NT; j++) {
 					double diff = absDiff(erg(j),potErg(j)+derivErg(j));
-					if (diff>1.0e-14) ces << "erg(" << j << ") != potErg + derivErg. absDiff = " << diff << endl;
+					if (diff>1.0e-14) cerr << "erg(" << j << ") != potErg + derivErg. absDiff = " << diff << endl;
 				}
 			}
 			
@@ -1139,8 +1113,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			E_exact /= (double)linearInt;
 			double trueTest = absDiff(E,E_exact);
 			checkTrue.add(trueTest);
-			if (!isfinite(trueTest))
-				ces << "E = " << E << ", E_exact = " << E_exact << ", linearInt = " << linearInt << endl;
+			if (!isfinite(trueTest)) cout << "E = " << E << ", E_exact = " << E_exact << ", linearInt = " << linearInt << endl;
 			
 			//checking lattice small enough for E, should have parameter for this
 			double momTest = E*ps.b/Num/pi; //perhaps should have a not b here
@@ -1222,19 +1195,19 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		
 			solver.analyzePattern(DDS);
 			if(solver.info()!=Eigen::Success) {
-				ces << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
+				cerr << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
 				return 1;
 			}		
 			solver.factorize(DDS);
 			if(solver.info()!=Eigen::Success) {
-				ces << "Factorization failed, solver.info() = "<< solver.info() << endl;
+				cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
 				return 1;
 			}
 			delta = solver.solve(minusDS);// use the factorization to solve for the given right hand side
 			if(solver.info()!=Eigen::Success) {
-				ces << "Solving failed, solver.info() = "<< solver.info() << endl;
-				ces << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
-				ces << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
+				cerr << "Solving failed, solver.info() = "<< solver.info() << endl;
+				cerr << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
+				cerr << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
 				return 1;
 			}
 		
@@ -1306,10 +1279,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			
 			//printing tests to see convergence
 			if (runs_count==1) {
-				fprintf(cof,"%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","linear"\
+				printf("%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","linear"\
 							,"true erg","on shell","AB","ABNE","conserv","latt");
 			}
-			fprintf(cof,"%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,checkSoln.back(),\
+			printf("%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,checkSoln.back(),\
 				checkSolnMax.back(),checkDelta.back(),checkLin.back(),checkTrue.back(),checkOS.back(),checkAB.back(),checkABNE.back(),\
 				checkCon.back(),checkLatt.back());
 			
@@ -1367,7 +1340,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				F = Num;
 			}
 			else {
-				ces << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
+				cerr << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
 				return 1;
 			}
 			double angleToPrint = (loop==0? 0.0: stepper.stepAngle());
@@ -1380,37 +1353,38 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			FILE * stepOs;
 			string stepFile = "data/"+timenumber+"mainStep_fLoop_"+numberToString<uint>(fileLoop)+".dat";
 			stepOs = fopen(stepFile.c_str(),"a");
-			fprintf(stepOs,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
-						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
+			fprintf(stepOs,"%12s%5i%5i%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
+						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
-			//fprintf(cof,"%12s%30s\n","steps:",stepFile.c_str());
+			//printf("%12s%30s\n","steps:",stepFile.c_str());
 		}
 		else
 			stepper.addResult(1.0); // choice irrelevant but a value is require to make step
 	
 		// printing results to terminal
-		fprintf(cof,"\n");
-		fprintf(cof,"%8s%8s%8s%8s%8s%8s%8s%8s%14s%14s%14s%14s\n","runs","time","ps.N","NT","L","Tb","dE","theta","Num","E","im(action)","W");
-		fprintf(cof,"%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
+		printf("\n");
+		printf("%8s%8s%8s%8s%8s%8s%8s%8s%14s%14s%14s%14s\n","runs","time","ps.N","NT","L","Tb","dE","theta","Num","E","im(action)","W");
+		printf("%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
 				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,Num,E,imag(action),W);
-		fprintf(cof,"\n");
+		printf("\n");
 
 		// printing results to file
+		stepped = stepper.keep();
 		if (stepper.keep()) {
 			FILE * actionfile;
-			string resultsFile = "results/"+timenumber+"mainResults.dat";
+			string resultsFile = "results/mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
-			fprintf(actionfile,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
-						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
+			fprintf(actionfile,"%12s%5i%5i%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
+						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
 						,W,checkSoln.back(),checkLin.back(),checkTrue.back());
 			fclose(actionfile);
-			fprintf(cof,"%12s%30s\n","results:",resultsFile.c_str());
+			printf("%12s%30s\n","results:",resultsFile.c_str());
 		}
 		stepper.step();
 		
 		// print everything?, plot too
-		bool printEverything = ( ((opts.printChoice).compare("E")==0 || (opts.printChoice).compare("P")==0)? true: false);
-		bool plotEverything = ( (opts.printChoice).compare("P")==0? true: false);
+		bool printEverything = false;
+		bool plotEverything = false;
 	
 		// printing messages for saved files
 		so_tp.printMessage = true;
@@ -1429,6 +1403,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		po_simple.column = 1;
 		po_simple.style = "linespoints";
 		po_simple.printMessage = true;
+
 	
 		//printing output phi
 		Filename tpFile;
@@ -1447,8 +1422,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		save(tpFile,so_tp,p);
 		if (plotEverything)
 			plot(tpFile,po_tp);
-		
-		if ((opts.printChoice).compare("n")!=0) {
+	
+		if (printEverything) {
 			//printing linErg
 			tpFile.ID = "mainlinErg";
 			linErg.conservativeResize(ps.Na);
@@ -1467,10 +1442,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			plotFile.Suffix = ".png";
 			po_simple.output = plotFile;
 			if (plotEverything)
-				plot(tpFile,po_simple);
-		}
-	
-		if (printEverything) {
+			plot(tpFile,po_simple);
+		
 			//printing output minusDS
 			tpFile.ID = "mainminusDS";
 			save(tpFile,so_tp,minusDS);
@@ -1509,12 +1482,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		if (!checkDelta.good()) {
 				return 1;
 			}
-		fprintf(cof,"\n----------------------------------------------------------------------------------------------------------------------------\n\n");
-		fclose(cof);
+		printf("\n----------------------------------------------------------------------------------------------------------------------------\n\n");
+		
 		} //ending parameter loop
 	} //ending file loop
-
-ces.close();
 
 return 0;
 }

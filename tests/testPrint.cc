@@ -18,27 +18,28 @@ Parameters p;
 p.load("inputsM");
 
 SaveOptions so;
-so.vectorType = SaveOptions::complex;
+so.vectorType = SaveOptions::simple;
 so.paramsIn = p;
 so.paramsOut = p;
 so.printMessage = false;
 so.zeroModes = 2;
 
+cout << "testing vector save and load" << endl;
 
 Filename f, g;
-f = "data/000mainp_fLoop_0_loop_0.dat";
-g = "data/000mainp_fLoop_0_loop_0.data";
+f = "tests/data/u.dat";
+g = "tests/data/v.data";
 
 vec u, v, w;
+uint size = 1000;
+u = Eigen::VectorXd::Random(size);
 
-uint N = 10;
+uint N = 1;
 for (uint j=0; j<N; j++) {
-	so.printType = SaveOptions::ascii;
-	load(f,so,u);
-
-	so.printType = SaveOptions::binary;
-	save(g,so,u);
-	load(g,so,v);
+	save(f,so,u);
+	load(f,so,v);
+	save(g,so,v);
+	load(g,so,u);
 }
 
 cout << "u.size() = " << u.size() << endl;
@@ -50,7 +51,33 @@ cout << "v.norm() = " << v.norm() << endl;
 
 w = u-v;
 
-cout << "test: " << w.norm() << endl;
+cout << "test vector: " << w.norm() << endl;
+
+cout << "testing matrix save and load" << endl;
+
+f = "tests/data/m.dat";
+g = "tests/data/n.data";
+
+mat m, n, o;
+m = Eigen::MatrixXd::Random(size,size);
+
+for (uint j=0; j<N; j++) {
+	save(f,so,m);
+	load(f,so,n);
+	save(g,so,n);
+	load(g,so,m);
+}
+
+cout << "m.size() = " << m.size() << endl;
+cout << "n.size() = " << n.size() << endl;
+cout << "m(0,0)   = " << m(0) << endl;
+cout << "n(0,0)   = " << n(0) << endl;
+cout << "m.norm() = " << m.norm() << endl;
+cout << "n.norm() = " << n.norm() << endl;
+
+o = m-n;
+
+cout << "test matrix: " << o.norm() << endl;
 
 return 0;
 }
