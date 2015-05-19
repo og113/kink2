@@ -84,6 +84,7 @@ ostream& operator<<(ostream& os, const SaveOptions& opts){
 			- static saveVec
 		- cVec
 			- static savecVecSimple
+			- static savecVecBinary
 			- static savecVecSimpleAppend
 			- static savecVecB
 			- static savecVec
@@ -116,15 +117,17 @@ static void saveVecBinary(const string& f, const SaveOptions& opts,  const vec& 
 	const double* r;
 	if (os.good()) {
 		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
+		for (uint j=0; j<v.size(); j++) {
+			r = &v(j);
+			os.write(reinterpret_cast<const char*>(r),sizeof(double));
+		}
+		os.close();
 	}
 	else {
 		cerr << "save error: cannot write to " << f << endl;
+		os.close();
+		return;
 	}
-	for (uint j=0; j<v.size(); j++) {
-		r = &v(j);
-		os.write(reinterpret_cast<const char*>(r),sizeof(double));
-	}
-	os.close();
 }
 
 // save vec - simpleVecAppend

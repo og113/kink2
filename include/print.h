@@ -57,6 +57,16 @@ struct SaveOptions {
 	bool good() const;					// checking if all required fields present
 };
 
+/*os.write(reinterpret_cast<const char*>(&opts.printType),sizeof(SaveOptions::printTypeList));
+os.write(reinterpret_cast<const char*>(&opts.vectorType),sizeof(SaveOptions::vectorTypeList));
+os.write(reinterpret_cast<const char*>(&opts.extras),sizeof(SaveOptions::extrasList));
+os.write(reinterpret_cast<const char*>(&opts.column),sizeof(uint));
+os.write(reinterpret_cast<const char*>(&opts.zeroModes),sizeof(uint));
+os.write(reinterpret_cast<const char*>(&opts.paramsIn),sizeof(Parameters));
+os.write(reinterpret_cast<const char*>(&opts.paramsOut),sizeof(Parameters));
+os.write(reinterpret_cast<const char*>(&opts.printMessage),sizeof(bool));*/
+
+
 // operator <<
 ostream& operator<<(ostream& os, const SaveOptions& opts); 
 

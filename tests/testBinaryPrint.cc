@@ -288,5 +288,7 @@ else {
 }
 cout << q << endl;
 
+cout << "parameters print test = " << 1-(p==q) << endl;
+
 return 0;
 }
