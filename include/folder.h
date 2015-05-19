@@ -129,6 +129,7 @@ public:
 						operator string() const;
 	Filename& 			operator=(const Filename&);
 	Filename& 			operator=(const string&);
+	Filename& 			operator=(const char*);
 	string 				operator()() const;
 private:
 	void 				set(const string&);

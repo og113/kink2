@@ -53,7 +53,7 @@ bool SaveOptions::good() const {
 									break;
 		case SaveOptions::complexB:	return (!paramsIn.empty() && !paramsOut.empty());
 									break;
-		case SaveOptions::append:	return true;
+		case SaveOptions::append:	return (printType!=SaveOptions::binary);
 									break;
 		default:					cerr << "SaveOptions error: vectorType " << vectorType << "not recognized" << endl;
 									return false;
@@ -97,6 +97,10 @@ ostream& operator<<(ostream& os, const SaveOptions& opts){
 static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v) {
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F.precision(16);
 	F << left;
 	uint length = v.size();
@@ -114,6 +118,10 @@ static void saveVecSimple(const string& f, const SaveOptions& opts, const vec& v
 static void saveVecBinary(const string& f, const SaveOptions& opts,  const vec& v) {
 	ofstream os;
 	os.open(f.c_str(),ios::binary);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	const double* r;
 	if (os.good()) {
 		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
@@ -136,22 +144,31 @@ static void saveVecSimpleAppend(const string& f, const SaveOptions& opts, const 
 	unsigned int lengthIs = countLines(f);
 	ifstream is;
 	is.open(f.c_str(),ios::in);
+	if (!is.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	ofstream os;
 	os.open("data/tempAppend",ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	os.precision(16);
 	os << left;
-	if (lengthOs!=lengthIs)
+	if (lengthOs!=lengthIs) {
 		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
+	}
 	else {
 		string lineIn;
 		for (unsigned int j=0; j<lengthOs; j++){
 		getline(is,lineIn);
 		os << lineIn << setw(25) << v(j) << endl;
 		}
+		is.close();
+		os.close();
+		copyFile("data/tempAppend",f);
 	}
-	is.close();
-	os.close();
-	copyFile("data/tempAppend",f);
 }	
 
 // save vec - saveVecB
@@ -174,6 +191,10 @@ static void saveVecB (const string& f, const SaveOptions& opts, const vec& v) {
 	
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	uint x0 = intCoord(0,1,pout.Nb);
 	F.precision(16);
 	F << left;
@@ -227,6 +248,10 @@ static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	unsigned int x0 = intCoord(0,1,pout.NT);
 	F.precision(16);
 	F << left;
@@ -272,7 +297,7 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 		return;
 	}
 	Filename F = f;
-	if ((F.Suffix).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+	if ((F.Suffix).compare(".dat")==0 && opts.printType==SaveOptions::ascii) {
 		switch(opts.vectorType) {
 				case SaveOptions::simple:	saveVecSimple(f,opts,v);
 											break;
@@ -291,11 +316,12 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 											break;
 			}
 	}
-	else if ((F.Suffix).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+	else if ((F.Suffix).compare(".data")==0 && opts.printType==SaveOptions::binary) {
 		saveVecBinary(f,opts,v);
 	}
 	else {
 		cerr << "save error: printType option(" << opts.printType << ") not possible" << endl;
+		cerr << "for file " << F << endl;
 		return;
 	}
 	if (opts.printMessage) {
@@ -307,6 +333,10 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 static void savecVecSimple(const string& f, const SaveOptions& opts, const cVec& v) {
 	fstream F;
 	F.open((f).c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F.precision(16);
 	F << left;
 	uint length = v.size();
@@ -324,39 +354,49 @@ static void savecVecBinary(const string& f, const SaveOptions& opts, const cVec&
 	const comp* c;
 	if (os.good()) {
 		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
+		for (uint j=0; j<v.size(); j++) {
+			c = &v(j);
+			os.write(reinterpret_cast<const char*>(c),sizeof(comp));
+		}
+		os.close();
 	}
 	else {
 		cerr << "save error: cannot write to " << f << endl;
 	}
-	for (uint j=0; j<v.size(); j++) {
-		c = &v(j);
-		os.write(reinterpret_cast<const char*>(c),sizeof(comp));
-	}
-	os.close();
 }
 
 // save cVec - simplecVecAppend
 static void savecVecSimpleAppend(const string& f, const SaveOptions& opts, const cVec& v) {
 	ifstream is;
 	is.open(f.c_str(),ios::in);
+	if (!is.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	ofstream os;
 	os.open("data/tempAppend",ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	os.precision(16);
 	os << left;
 	unsigned int lengthOs = v.size();
 	unsigned int lengthIs = countLines(f);
 	if (lengthOs!=lengthIs)
 		cerr << "save error: length of vector("<< lengthOs << ") to append not equal to file length("<< lengthIs << ")" << endl;
+		cerr << "in file " << f << endl;
+		return;
 	else {
 		string lineIn;
 		for (unsigned int j=0; j<lengthOs; j++){
 		getline(is,lineIn);
 		os << lineIn << setw(25) << real(v(j)) << setw(25) << imag(v(j)) << endl;
 		}
+		is.close();
+		os.close();
+		copyFile("data/tempAppend",f);
 	}
-	is.close();
-	os.close();
-	copyFile("data/tempAppend",f);
 }	
 
 // save cVec - saveVecB
@@ -371,6 +411,10 @@ static void savecVecB (const string& f, const SaveOptions& opts, const cVec& v) 
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	uint x0 = intCoord(0,1,pout.Nb);
 	F.precision(16);
 	F << left;
@@ -411,36 +455,40 @@ static void savecVec(const string& f, const SaveOptions& opts, const cVec& v) {
 	else {
 		vo = v;
 	}
-	fstream F;
-	F.open(f.c_str(), ios::out);
+	fstream os;
+	os.open(f.c_str(), ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	uint x0 = intCoord(0,1,pout.NT);
-	F.precision(16);
-	F << left;
+	os.precision(16);
+	os << left;
 	for (lint j=0; j<pout.N*pout.NT; j++) {
 		uint x = intCoord(j,1,pout.NT);
 		if (x!=x0) { //this is put in for gnuplot
-			F << endl;
+			os << endl;
 			x0 = x;
 		}
 		switch(opts.extras) {
 			case SaveOptions::none:		break;
-			case SaveOptions::loc: 		F << setw(25) << j;
+			case SaveOptions::loc: 		os << setw(25) << j;
 										break;
-			case SaveOptions::coords:	F << setw(25) << real(coord(j,0,pout)) << setw(25) << imag(coord(j,0,pout));
-										F << setw(25) << real(coord(j,1,pout)); 
+			case SaveOptions::coords:	os << setw(25) << real(coord(j,0,pout)) << setw(25) << imag(coord(j,0,pout));
+										os << setw(25) << real(coord(j,1,pout)); 
 										break;
 			default:					cerr << "save error: print extras option(" << opts.extras << ") not possible" << endl;
 										break;
 		}
-		F << setw(25) << real(vo(j)) << setw(25) << imag(vo(j))  << endl;
+		os << setw(25) << real(vo(j)) << setw(25) << imag(vo(j))  << endl;
 	}
 	if (vo.size()>pout.N*pout.NT) {
-		F << endl;
+		os << endl;
 		for (uint j=0; j<(vo.size()-pout.N*pout.NT);j++) {
-			F << setw(25) << vo(pout.N*pout.NT+j) << endl;
+			os << setw(25) << vo(pout.N*pout.NT+j) << endl;
 		}
 	}
-	F.close();
+	os.close();
 }
 
 // save cVec
@@ -451,7 +499,7 @@ void save(const string& f, const SaveOptions& opts, const cVec& v) {
 		return;
 	}
 	Filename F = f;
-	if ((F.Suffix).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+	if ((F.Suffix).compare(".dat")==0 && opts.printType==SaveOptions::ascii) {
 		switch(opts.vectorType) {
 				case SaveOptions::simple:	savecVecSimple(f,opts,v);
 											break;
@@ -470,11 +518,12 @@ void save(const string& f, const SaveOptions& opts, const cVec& v) {
 											break;
 			}
 	}
-	else if ((F.Suffix).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+	else if ((F.Suffix).compare(".data")==0 && opts.printType==SaveOptions::binary) {
 		savecVecBinary(f,opts,v);
 	}
 	else {
 		cerr << "save error: printType option(" << opts.printType << ") not possible" << endl;
+		cerr << "for file " << f << endl;
 		return;
 	}
 	if (opts.printMessage) {
@@ -486,6 +535,10 @@ void save(const string& f, const SaveOptions& opts, const cVec& v) {
 static void saveMatBinary(const string& f, const SaveOptions& opts, const mat& m) {
 	ofstream os;
 	os.open(f.c_str(),ios::binary);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	const double* d;
 	for (uint j=0; j<m.rows(); j++) {
 		for (uint k=0; k<m.cols(); k++) {
@@ -500,6 +553,10 @@ static void saveMatBinary(const string& f, const SaveOptions& opts, const mat& m
 static void saveMatAscii(const string& f, const SaveOptions& opts, const mat& m) {
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F << left;
 	F.precision(16);
 	for (uint j=0; j<m.rows(); j++) {
@@ -520,14 +577,15 @@ void save(const string& f, const SaveOptions& opts, const mat& m) {
 		return;
 	}
 	Filename F = f;
-	if ((F.Suffix).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+	if ((F.Suffix).compare(".dat")==0 && opts.printType==SaveOptions::ascii) {
 		saveMatAscii(f,opts,m);
 	}
-	else if ((F.Suffix).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+	else if ((F.Suffix).compare(".data")==0 && opts.printType==SaveOptions::binary) {
 		saveMatBinary(f,opts,m);
 	}
 	else {
 		cerr << "save mat error: printType option(" << opts.printType << ") not possible" << endl;
+		cerr << "for file " << f << endl;
 		return;
 	}
 	if (opts.printMessage) {
@@ -539,6 +597,10 @@ void save(const string& f, const SaveOptions& opts, const mat& m) {
 static void savecMatBinary(const string& f, const SaveOptions& opts, const cMat& m) {
 	ofstream os;
 	os.open(f.c_str(),ios::binary);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	const comp* c;
 	for (uint j=0; j<m.rows(); j++) {
 		for (uint k=0; k<m.cols(); k++) {
@@ -553,6 +615,10 @@ static void savecMatBinary(const string& f, const SaveOptions& opts, const cMat&
 void savecMatAscii(const string& f, const SaveOptions& opts, const cMat& m) {
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F << left;
 	F.precision(16);
 	for (uint j=0; j<m.rows(); j++) {
@@ -572,14 +638,15 @@ void save(const string& f, const SaveOptions& opts, const cMat& m) {
 		return;
 	}
 	Filename F = f;
-	if ((F.Suffix).compare(".dat")==0 || opts.printType==SaveOptions::ascii) {
+	if ((F.Suffix).compare(".dat")==0 && opts.printType==SaveOptions::ascii) {
 		savecMatAscii(f,opts,m);
 	}
-	else if ((F.Suffix).compare(".data")==0 || opts.printType==SaveOptions::binary) {
+	else if ((F.Suffix).compare(".data")==0 && opts.printType==SaveOptions::binary) {
 		savecMatBinary(f,opts,m);
 	}
 	else {
 		cerr << "save cMat error: printType " << opts.printType << " not recognised" << endl;
+		cerr << "for file " << f << endl;
 		return;
 	}
 	if (opts.printMessage) {
@@ -600,6 +667,10 @@ void save(const string& f, const SaveOptions& opts, const spMat& m) {
 	}
 	fstream F;
 	F.open(f.c_str(), ios::out);
+	if (!F.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
 	F << left;
 	F.precision(16);
 	for (int l=0; l<m.outerSize(); ++l) {
@@ -627,15 +698,23 @@ void save(const string& f, const SaveOptions& opts, const spMat& m) {
 static void loadVecBinary(const string& f, SaveOptions& opts, vec& v) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
-	uint lines = countDoubles(f);
-	v = Eigen::VectorXd::Zero(lines);
 	double d;
 	if (is.good()) {
 		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
 	}
 	else {
-		cerr << "cannot read from " << f << endl;
+		cerr << "load error: cannot read from " << f << endl;
+		return;
 	}
+	uint pos = is.tellg();
+	uint lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification
+	while (!is.eof()) {
+		is.read(reinterpret_cast<char*>(&d),sizeof(double));
+		lines++;
+	}
+	v = Eigen::VectorXd::Zero(lines);
+	is.clear();
+	is.seekg(pos);
 	for (uint j=0; j<lines; j++) {
 		is.read(reinterpret_cast<char*>(&d),sizeof(double));
 		v(j) = d;
@@ -646,10 +725,11 @@ static void loadVecBinary(const string& f, SaveOptions& opts, vec& v) {
 
 // load vec
 void load(const string& f, SaveOptions& opts, vec& v) {
-	if (opts.printType==SaveOptions::binary) {
+	Filename F = f;
+	if (opts.printType==SaveOptions::binary && (F.Suffix).compare(".data")==0) {
 		loadVecBinary(f,opts,v);
 	}
-	else {
+	else if (opts.printType==SaveOptions::ascii && (F.Suffix).compare(".dat")==0) {
 		uint col = opts.column;
 		if (col==0) {
 			switch(opts.extras) {
@@ -684,6 +764,10 @@ void load(const string& f, SaveOptions& opts, vec& v) {
 		vec vf = Eigen::VectorXd::Zero(vLength);
 		fstream F;
 		F.open(f.c_str(), ios::in);
+		if (!F.good()) {
+			cerr << "save error: stream not good for " << f << endl;
+			return;
+		}
 		string line, temp;
 		unsigned int j=0;
 		while (getline(F, line)) {
@@ -757,6 +841,11 @@ void load(const string& f, SaveOptions& opts, vec& v) {
 			printf("%12s%30s\n","loaded: ",f.c_str());
 		}
 	}
+	else {
+		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
+		cerr << "for file " << f << endl;
+		return;
+	}
 }
 
 // loadcVecBinary
@@ -764,14 +853,22 @@ static void loadcVecBinary(const string& f, SaveOptions& opts, cVec& v) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
 	comp c;
-	uint lines = countType(f,c);
-	v = Eigen::VectorXcd::Zero(lines);
 	if (is.good()) {
 		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
 	}
 	else {
 		cerr << "cannot read from " << f << endl;
+		return;
 	}
+	uint pos = is.tellg();
+	uint lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification
+	while (!is.eof()) {
+		is.read(reinterpret_cast<char*>(&c),sizeof(comp));
+		lines++;
+	}
+	is.clear();
+	is.seekg(pos);
+	v = Eigen::VectorXcd::Zero(lines);
 	for (uint j=0; j<lines; j++) {
 		is.read(reinterpret_cast<char*>(&c),sizeof(comp));
 		v(j) = c;
@@ -782,10 +879,11 @@ static void loadcVecBinary(const string& f, SaveOptions& opts, cVec& v) {
 
 // load cVec
 void load(const string& f, SaveOptions& opts, cVec& v) {
-	if (opts.printType==SaveOptions::binary) {
+	Filename F = f;
+	if (opts.printType==SaveOptions::binary && (F.Suffix).compare(".data")==0) {
 		loadcVecBinary(f,opts,v);
 	}
-	else {
+	else if (opts.printType==SaveOptions::ascii && (F.Suffix).compare(".dat")==0) {
 		uint col = opts.column;
 		if (col==0) {
 			switch(opts.extras) {
@@ -804,6 +902,10 @@ void load(const string& f, SaveOptions& opts, cVec& v) {
 		cVec vf = Eigen::VectorXcd::Zero(vLength);
 		fstream F;
 		F.open(f.c_str(), ios::in);
+		if (!F.good()) {
+			cerr << "save error: stream not good for " << f << endl;
+			return;
+		}
 		string line, temp;
 		uint j=0;
 		double realPart, imagPart;
@@ -854,25 +956,43 @@ void load(const string& f, SaveOptions& opts, cVec& v) {
 			printf("%12s%30s\n","loaded: ",f.c_str());
 		}
 	}
+	else {
+		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
+		cerr << "for file " << f << endl;
+		return;
+	}
 }
 
 // load mat  - binary - only works for square matrices
 void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
+	Filename F = f;
+	if ((F.Suffix).compare(".data")!=0) {
+		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
+		cerr << "for file " << f << endl;
+		return;
+	}
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
-	uint lines = countDoubles(f);
-	uint rows = (uint)sqrt(lines);
 	if (is.good()) {
 		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
 	}
 	else {
 		cerr << "cannot read from " << f << endl;
 	}
+	uint pos = is.tellg();
+	uint lines = -1;
+	double d;
+	while (!is.eof()) {
+		is.read(reinterpret_cast<char*>(&d),sizeof(double));
+		lines++;
+	}
+	is.clear();
+	is.seekg(pos);
+	uint rows = (uint)sqrt(lines);
 	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
 		cerr << "load mat error: matrix in " << f << " not square" << endl; 
 	}
 	m = Eigen::MatrixXd::Zero(rows,rows);
-	double d;
 	for (uint j=0; j<rows; j++) {
 		for (uint k=0; k<rows; k++) {
 			is.read(reinterpret_cast<char*>(&d),sizeof(double));
@@ -884,6 +1004,12 @@ void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
 
 // load mat - ascii- assumes square matrix
 void loadMatAscii(const string& f, SaveOptions& opts, mat& m) {
+	Filename F = f;
+	if ((F.Suffix).compare(".dat")!=0) {
+		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
+		cerr << "for file " << f << endl;
+		return;
+	}
 	uint rowsF = countLines(f), rows;
 	uint columnsF = countColumns(f), columns;
 	if (opts.extras==SaveOptions::loc && columnsF==3) {
@@ -903,12 +1029,12 @@ void loadMatAscii(const string& f, SaveOptions& opts, mat& m) {
 		return;
 	}
 	m = Eigen::MatrixXd::Zero(rows,columns);
-	fstream F;
-	F.open(f.c_str(), ios::in);
+	fstream is;
+	is.open(f.c_str(), ios::in);
 	string line;
 	uint j = 0, k = 0;
 	double v;
-	while (getline(F, line)) {
+	while (getline(is, line)) {
 		if (!line.empty()) {
 			istringstream ss(line);
 			if (opts.extras==SaveOptions::loc && columnsF==3) {
@@ -938,7 +1064,7 @@ void loadMatAscii(const string& f, SaveOptions& opts, mat& m) {
 			}
 		}
 	}
-	F.close();
+	is.close();
 	if (opts.printMessage) {
 		printf("%12s%30s\n","loaded: ",f.c_str());
 	}
@@ -961,16 +1087,30 @@ void load(const string& f, SaveOptions& opts, mat& m) {
 
 // load cMat - binary - only works for square matrices
 void loadcMatBinary(const string& f, SaveOptions& opts, cMat& m) {
+	Filename F = f;
+	if ((F.Suffix).compare(".data")!=0) {
+		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
+		cerr << "for file " << f << endl;
+		return;
+	}
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
-	uint lines = countDoubles(f);
-	uint rows = (uint)sqrt(lines);
 	if (is.good()) {
 		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
 	}
 	else {
 		cerr << "cannot read from " << f << endl;
 	}
+	uint pos = is.tellg();
+	uint lines = -1;
+	double d;
+	while (!is.eof()) {
+		is.read(reinterpret_cast<char*>(&d),sizeof(double));
+		lines++;
+	}
+	is.clear();
+	is.seekg(pos);
+	uint rows = (uint)sqrt(lines);
 	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
 		cerr << "load mat error: matrix in " << f << " not square" << endl; 
 	}
@@ -987,15 +1127,21 @@ void loadcMatBinary(const string& f, SaveOptions& opts, cMat& m) {
 
 // load cMat - ascii
 void loadcMatAscii(const string& f, SaveOptions& opts, cMat& m) {
+	Filename F = f;
+	if ((F.Suffix).compare(".dat")!=0) {
+		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
+		cerr << "for file " << f << endl;
+		return;
+	}
 	uint fileLength = countLines(f);
 	uint matLength = (uint)sqrt(fileLength);
-	fstream F;
-	F.open(f.c_str(), ios::in);
+	fstream is;
+	is.open(f.c_str(), ios::in);
 	string line;
 	uint j, k;
 	double realPart, imagPart;
 	m = Eigen::MatrixXcd::Zero(matLength,matLength);
-	while (getline(F, line)) {
+	while (getline(is, line)) {
 		if (!line.empty()) {
 			istringstream ss(line);
 			ss >> j >> k >> realPart >> imagPart;
@@ -1003,7 +1149,7 @@ void loadcMatAscii(const string& f, SaveOptions& opts, cMat& m) {
 			m(j,k) = realPart + comp(0.0,1.0)*imagPart;;
 		}
 	}
-	F.close();
+	is.close();
 	if (opts.printMessage) {
 		printf("%12s%30s\n","loaded: ",f.c_str());
 	}

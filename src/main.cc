@@ -38,6 +38,13 @@
 		13 - printing early 2
 		14 - convergence
 		15 - printing output
+		
+N.B. to change:
+		~150,151 "fa_high.Suffix = ".dat";"
+		~355 "&& false"
+		~467 "so_tp.printType = SaveOptions::ascii;"
+		~480 if (fLoop==0) so_tp.printType = SaveOptions::ascii;
+		
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -335,6 +342,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		mat modes(ps.N,ps.N);
 		mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
 		SaveOptions so_simple;
+		so_simple.printType = SaveOptions::binary;
 		so_simple.paramsIn = ps; so_simple.paramsOut = ps;
 		so_simple.vectorType = SaveOptions::simple;
 		so_simple.extras = SaveOptions::none;
@@ -342,7 +350,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		{
 			Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
 			omegaM1F = (string)"data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
-							+"_L_"+numberToString<double>(ps.L)+".dat";
+							+"_L_"+numberToString<double>(ps.L)+".data";
 			Folder omegaM1Folder(omegaM1F);
 			omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
 			omega1F = omegaM1F; 		omega1F.ID = "omega1"; 		Folder omega1Folder(omega1F);
@@ -351,7 +359,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			freqsF = omegaM1F;			freqsF.ID = "freqs"; 		Folder freqsFolder(freqsF);
 			freqsExpF = omegaM1F;		freqsExpF.ID = "freqsExp";	Folder freqsExpFolder(freqsExpF);
 			if (omegaM1Folder.size()==1 && omega0Folder.size()==1 && omega1Folder.size()==1 && omega2Folder.size()==1 \
-				&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1) {
+				&& modesFolder.size()==1 && freqsFolder.size()==1 && freqsExpFolder.size()==1 && false) {
 				load(omegaM1Folder[0],so_simple,omega_m1);
 				load(omega0Folder[0],so_simple,omega_0);
 				load(omega1Folder[0],so_simple,omega_1);
@@ -383,8 +391,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		vec negVec;
 		if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 			if (ps.pot==3) {
-				Filename eigVecFile = "data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";	
+				Filename eigVecFile = "data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";
+				so_simple.printType = SaveOptions::ascii;	
 				load(eigVecFile,so_simple,negVec); // should automatically interpolate
+				so_simple.printType = SaveOptions::binary;	
 			}
 			else {
 				Filename eigVecFile;
@@ -460,6 +470,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//initializing phi (=p)
 		vec p;
 		SaveOptions so_tp;
+		so_tp.printType = SaveOptions::binary;
 		so_tp.paramsIn = psu;
 		so_tp.paramsOut = ps;
 		so_tp.vectorType = SaveOptions::complex;
@@ -467,18 +478,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.zeroModes = 2;
 		so_tp.printMessage = false;
 		if (loop==0) {
+			if (fileLoop==0) so_tp.printType = SaveOptions::ascii;
 			load(pFolder[0],so_tp,p); //n.b there may be some problems with zero modes for binary printing
-			if (p.size()<(2*ps.N*ps.NT+2)) {
-				p.conservativeResize(2*ps.N*ps.NT+2);
-				for (uint j=0; j<(2*ps.N*ps.NT+2-p.size()); j++) {
-					p(p.size()+j) = 0.5;
-				}
-			}
+			so_tp.printType = SaveOptions::binary;
 			printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
 		else {
 			Filename lastPhi = (string)("data/" + timenumber + "mainp_fLoop_" + numberToString<uint>(fileLoop) + "_loop_"\
-								 + numberToString<uint>(loop-stepper.local()+1)+".dat");
+								 + numberToString<uint>(loop-stepper.local()+1)+".data");
 			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
 			printf("%12s%30s\n","input: ",(lastPhi()).c_str());
@@ -497,9 +504,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			
 		//very early vector print
 		so_tp.paramsIn = ps;
-		Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
-				 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.dat");
-		save(earlyPrintFile,so_tp,p);
+		/*Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
+				 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.data");
+		save(earlyPrintFile,so_tp,p);*/
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	8. beginning newton-raphson loop
@@ -1113,6 +1120,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 		//printing early if desired
 		if ((opts.printChoice).compare("n")!=0) {
+			so_tp.printType = SaveOptions::ascii;
+			so_simple.printType = SaveOptions::ascii;
 			Filename basic = (string)("data/"+timenumber+"basic_fLoop_"+numberToString<uint>(fileLoop)\
 								+"_loop_"+numberToString<uint>(loop)+"_run_"+numberToString<uint>(runs_count)+".dat");
 			if ((opts.printChoice).compare("v")==0 || (opts.printChoice).compare("e")==0) {
@@ -1148,6 +1157,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				abEFile.ID = "mainbkE";
 				save(abEFile,so_simple,b_k);
 			}
+			so_tp.printType = SaveOptions::binary;
+			so_simple.printType = SaveOptions::binary;
 		}
 		
 		
@@ -1211,6 +1222,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 		//printing early if desired
 		if ((opts.printChoice).compare("n")!=0) {
+			so_tp.printType = SaveOptions::ascii;
 			Filename basic = (string)("data/"+timenumber+"basic_fLoop_"+numberToString<uint>(fileLoop)\
 								+"_loop_"+numberToString<uint>(loop)+"_run_"+numberToString<uint>(runs_count)+".dat");
 			if ((opts.printChoice).compare("p")==0 || (opts.printChoice).compare("e")==0) {
@@ -1223,6 +1235,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				dEFile.ID = "maindeltaE";
 				save(dEFile,so_tp,delta);
 			}
+			so_tp.printType = SaveOptions::binary;
 		}
 		
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -1380,32 +1393,32 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	
 		//printing output phi
 		Filename tpFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
-					+"_loop_"+numberToString<uint>(loop)+".dat");
+					+"_loop_"+numberToString<uint>(loop)+".data");
 		save(tpFile,so_tp,p);
 		if (plotEverything)
 			plot(tpFile,po_tp);
-		
-		//printing linErg
-		tpFile.ID = "mainlinErg";
-		linErg.conservativeResize(ps.Na);
-		save(tpFile,so_simple,linErg);
-		plotFile = tpFile;
-		plotFile.Suffix = ".png";
-		po_simple.output = plotFile;
-		if (plotEverything)
-			plot(tpFile,po_simple);
-	
-		//printing erg
-		tpFile.ID = "mainerg";
-		//erg.conservativeResize(ps.Na);
-		save(tpFile,so_simple,erg);
-		plotFile = tpFile;
-		plotFile.Suffix = ".png";
-		po_simple.output = plotFile;
-		if (plotEverything)
-			plot(tpFile,po_simple);
 	
 		if (printEverything) {
+			//printing linErg
+			tpFile.ID = "mainlinErg";
+			linErg.conservativeResize(ps.Na);
+			save(tpFile,so_simple,linErg);
+			plotFile = tpFile;
+			plotFile.Suffix = ".png";
+			po_simple.output = plotFile;
+			if (plotEverything)
+				plot(tpFile,po_simple);
+	
+			//printing erg
+			tpFile.ID = "mainerg";
+			//erg.conservativeResize(ps.Na);
+			save(tpFile,so_simple,erg);
+			plotFile = tpFile;
+			plotFile.Suffix = ".png";
+			po_simple.output = plotFile;
+			if (plotEverything)
+			plot(tpFile,po_simple);
+		
 			//printing output minusDS
 			tpFile.ID = "mainminudDS";
 			save(tpFile,so_tp,minusDS);

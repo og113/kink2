@@ -4,7 +4,7 @@ amp                 0.5
 zmx                 nC9                 
 zmt                 nC2                 
 bds                 all                 
-inF                 m                   
+inF                 p                   
 minTimenumberLoad   000                 
 maxTimenumberLoad   000                 
 minfLoopLoad        0                   
