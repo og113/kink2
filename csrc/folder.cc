@@ -416,16 +416,17 @@ bool FilenameComparator::operator()(const Filename& f) const{
 	if (!(Lower.Suffix).empty()) {
 		if ((f.Suffix).compare(Lower.Suffix)!=0) return false;
 	}
-	size_t NumExtras = (Lower.Extras).size();
+	size_t lExtras = (Lower.Extras).size();
 	size_t fExtras = (f.Extras).size();
-	if (NumExtras>0) {
-		if ((f.Extras).size()!=NumExtras) return false;
+	if (lExtras>0) {
+		//if (fExtras!=lExtras) return false;
+		if (fExtras<lExtras) return false;
 		bool ExtraOK;
-		for (unsigned int n=0; n<NumExtras; n++) {
+		for (uint n=0; n<lExtras; n++) {
 			ExtraOK = false;
-			for (unsigned int m=0; m<NumExtras; m++) {
-				if (((Lower.Extras[m]).first).compare(((f.Extras[n]).first))==0) {
-					if (((f.Extras[n]).second)>=((Lower.Extras[m]).second) && ((f.Extras[n]).second)<=((Upper.Extras[m]).second))
+			for (uint m=0; m<fExtras; m++) {
+				if (((Lower.Extras[n]).first).compare(((f.Extras[m]).first))==0) {
+					if (((f.Extras[m]).second)>=((Lower.Extras[n]).second) && ((f.Extras[m]).second)<=((Upper.Extras[n]).second))
 						ExtraOK = true;
 				}
 			}
