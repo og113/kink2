@@ -88,13 +88,15 @@ bool operator==(const FilenameAttributes& lhs, const FilenameAttributes& rhs) {
 	if ((lhs.ID).compare(rhs.ID)!=0) return false;	
 	if ((lhs.Suffix).compare(rhs.Suffix)!=0) return false;
 	if ((lhs.Extras).size()!=(rhs.Extras).size()) return false;
-	bool ExtraOK;
-	for (unsigned int n=0; n<(lhs.Extras).size(); n++) {
-		ExtraOK = false;
+	bool ExtraEqual;
+	for (unsigned int n=0; n<(rhs.Extras).size(); n++) {
+		ExtraEqual = false;
 		for (unsigned int m=0; m<(lhs.Extras).size(); m++) {
-			if (((lhs.Extras[m]).first).compare(((rhs.Extras[n]).first))==0) ExtraOK = true;
+			if (((lhs.Extras[m]).first).compare(((rhs.Extras[n]).first))==0 && \
+			((lhs.Extras[m]).second).compare(((rhs.Extras[n]).second))==0)
+				ExtraEqual = true;
 		}
-		if (!ExtraOK) return false;
+		if (!ExtraEqual) return false;
 	}
 	return true;
 }
@@ -415,6 +417,7 @@ bool FilenameComparator::operator()(const Filename& f) const{
 		if ((f.Suffix).compare(Lower.Suffix)!=0) return false;
 	}
 	size_t NumExtras = (Lower.Extras).size();
+	size_t fExtras = (f.Extras).size();
 	if (NumExtras>0) {
 		if ((f.Extras).size()!=NumExtras) return false;
 		bool ExtraOK;
