@@ -16,8 +16,6 @@
 
 using namespace std;
 
-#define MASTER 0         // rank of master node
-
 /*----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
 	CONTENTS
@@ -44,12 +42,12 @@ MPI::Init(argc, argv);
 MPI_Comm_size(MPI_COMM_WORLD, &nodes);
 MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 if (nodes==nodes_req) {
-	if (rank==MASTER) {
+	if (rank==0) {
 		cout << "running " << nodes << " nodes" << endl;
 	}
 }
 else {
-	if (rank==MASTER) {
+	if (rank==0) {
 		cerr << "have " << nodes << " nodes available" << endl;
 		cerr << "require " << nodes_req << " nodes to run" << endl;
 	}
@@ -65,7 +63,7 @@ else {
 
 bool copyFiles = true;
 
-if (copyFiles && rank==MASTER) {
+if (copyFiles && rank==0) {
 	for (int k=0; k<nodes_req; k++) {
 		string timenumber = "00"+numberToString<int>(k);
 		// n.b. in the examples i have seen all quantities are declared before MPI::Init
@@ -113,14 +111,16 @@ if (copyFiles && rank==MASTER) {
 	3. finding recent files
 		- getting last timenumbers
 		- getting last loops
+		
+	n.b. there is lots of superfluous numTostr and vice versa due to not knowing how to MPI::Send and receive strings.
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // getting last timenumbers
 bool revertToDefault = false;
 vector<string> timenumbers(nodes_req);
 vector<string> loops(nodes_req);
-char* timenumber;
-char* loop;
+unsigned long long timenumber;
+unsigned long long loop;
 
 FilenameAttributes fa_low;
 fa_low.Directory = "data";
@@ -133,10 +133,9 @@ Folder F(fa_low,fa_high);
 
 if (F.size()==0)
 	revertToDefault = true;
-else if (rank==MASTER) {
+else if (rank==0) {
 	for (int k=0; k<nodes_req; k++) {
 		string maxTimenumber = "0";
-		uint posMax = 0;
 		if (F.size()==0) {
 			revertToDefault = true;
 			break;
@@ -144,7 +143,6 @@ else if (rank==MASTER) {
 		for (uint j=0; j<F.size(); j++) {
 			if ((F[j]).Timenumber>maxTimenumber) {
 				maxTimenumber = (F[j]).Timenumber;
-				posMax = j;
 			}
 		}
 		timenumbers[k] = maxTimenumber;
@@ -174,31 +172,29 @@ else if (rank==MASTER) {
 	}
 }
 
-if (revertToDefault && rank==MASTER) {
+if (revertToDefault && rank==0) {
 	for (int k=0; k<nodes_req; k++) {
 		timenumbers[k] = "00"+numberToString<int>(k);
 		loops[k] = "0";
 	}
 }
 
-/*if (rank==MASTER) {
-	timenumber = new char[12];
-	loop = new char[12];
-	for (int k=0; k<nodes_req; k++) {
-		*timenumber = *(timenumbers[k]).c_str();
-		*loop = *(loops[k]).c_str();
-		MPI_Send(timenumber,(timenumbers[k]).size(), MPI_BYTE, k, 0, MPI_COMM_WORLD);
-		MPI_Send(loop,(timenumbers[k]).size(), MPI_BYTE, k, 1, MPI_COMM_WORLD);
-		cout << "process " << MASTER << " sent " << timenumber << " and " << loop << " to process " << k << endl;
+if (rank==0) {
+	for (int k=1; k<nodes_req; k++) {
+		timenumber = stringToNumber<unsigned long long>(timenumbers[k]); 
+		loop = stringToNumber<unsigned long long>(loops[k]);
+		MPI_Send(&timenumber,1, MPI_UNSIGNED_LONG_LONG, k, 0, MPI_COMM_WORLD);
+		MPI_Send(&loop,1, MPI_UNSIGNED_LONG_LONG, k, 1, MPI_COMM_WORLD);
+		//cout << "process " << 0 << " sent " << timenumber << " and " << loop << " to process " << k << endl;
 	}
-	delete loop;
-	delete timenumber;
+	timenumber = stringToNumber<unsigned long long>(timenumbers[0]);
+	loop = stringToNumber<unsigned long long>(loops[0]);
 }
 else {
-	MPI_Recv(timenumber, 12, MPI_BYTE, MASTER, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	MPI_Recv(loop, 12, MPI_BYTE, MASTER, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	cout << "process " << rank << " received " << timenumber << " and " << loop << " from process " << MASTER << endl;
-}*/
+	MPI_Recv(&timenumber, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	MPI_Recv(&loop, 1, MPI_UNSIGNED_LONG_LONG, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	//cout << "process " << rank << " received " << timenumber << " and " << loop << " from process " << 0 << endl;
+}
 
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -222,15 +218,15 @@ argv_main[7] = "-loopMax";
 		- mpi::finalize
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-argv_main[2] = (string)timenumber;
-argv_main[4] = (string)timenumber;
-argv_main[6] = (string)loop;
-argv_main[8] = (string)loop;
+argv_main[2] = numberToString<unsigned long long>(timenumber);
+argv_main[4] = numberToString<unsigned long long>(timenumber);
+argv_main[6] = numberToString<unsigned long long>(loop);
+argv_main[8] = numberToString<unsigned long long>(loop);
 
 sleep(rank*2);
 
-cout << "node " << rank << " of " << nodes << " running main with: timenumber " << timenumbers[rank];
-cout << ", loop " << loops[rank] << endl;
+cout << "node " << rank << " of " << nodes << " running main with: timenumber " << timenumber;
+cout << ", loop " << loop << endl;
 
 returnValue = main_fn(argc_main,argv_main);
 
