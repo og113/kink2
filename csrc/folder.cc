@@ -248,6 +248,12 @@ Filename::Filename(const string& f): FilenameAttributes() {
 	set(f);
 }
 
+// constructor(const string& filename)
+Filename::Filename(const char* f): FilenameAttributes() {
+	string temp = (string)f;
+	set(temp);
+}
+
 // operator string() - conversion
 Filename::operator string() const {
 	string filename = Directory + "/" + Timenumber + ID;

@@ -249,7 +249,7 @@ uint countType(const string& f, const T& t) {
 	is.open(f.c_str(),ios::binary);
 	T dross;
 	while (!is.eof()) {
-		is.read(reinterpret_cast<char*>(&dross),sizeof(t));
+		is.read(reinterpret_cast<char*>(&dross),sizeof(T));
 		lines++;
 	}
 	is.close();

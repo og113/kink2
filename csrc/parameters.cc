@@ -239,6 +239,8 @@ static void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE
 			break;
 			}
 		}
+	delete Fparameters;
+	delete ECparameters;
 	//*xdE = newdE;
 	}
 
@@ -727,6 +729,7 @@ void Options::save(const string& filename) const {
 	if (!os.good()) {
 		FileError::StreamNotGood e(filename);
 		cerr << e;
+		return;
 	}
 	os << *this;
 	os << endl;
@@ -740,6 +743,7 @@ void Options::load(const string& filename) {
 	if (!is.good()) {
 		FileError::StreamNotGood e(filename);
 		cerr << e;
+		return;
 	}
 	string dross;
 	is >> dross >> alpha;

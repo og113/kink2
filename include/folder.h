@@ -125,6 +125,7 @@ public:
 	Filename(): FilenameAttributes() {}
 	Filename(const Filename& f): FilenameAttributes(f) {}
 	Filename(const string&);
+	Filename(const char*);
 	~Filename() {}
 						operator string() const;
 	Filename& 			operator=(const Filename&);
