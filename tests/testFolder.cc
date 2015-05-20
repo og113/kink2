@@ -73,5 +73,8 @@ Folder F(fc);
 cout << F << endl;
 cout << "compared with typing: ls data/*mainp*.data" << endl;
 
+Filename f1 = "data/150519190830mainp_fLoop_0_loop_3_step_1.data";
+cout << "fc(f1) = " << fc(f1) << endl;
+
 return 0;
 }
