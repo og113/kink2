@@ -25,6 +25,28 @@ typedef Eigen::MatrixXcd cMat;
 #define pi 3.14159265359
 #endif
 
+// save binary simple
+template <class T>
+void saveBinarySimple(const string& f, const T& t) {
+	ofstream os;
+	os.open(f.c_str(),ios::binary);
+	const T* d = &t;
+	os.write(reinterpret_cast<const char*>(d),sizeof(t));
+	os.close();
+}
+
+// load binary simple
+template <class T>
+void loadBinarySimple(const string& f, T& t, uint size=0) {
+	if (size==0) size = sizeof(t);
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	T d;
+	is.read(reinterpret_cast<char*>(&d),size);
+	is.close();
+	t = d;
+}
+
 // save vec
 void saveBinary(const string& f, const vec& v) {
 	ofstream os;
@@ -110,7 +132,7 @@ void loadBinary(const string& f, mat& m) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
 	uint lines = countDoubles(f);
-	uint rows = (uint)sqrt(lines);
+	uint rows = (uint)(sqrt(lines));
 	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
 		cerr << "load mat error: matrix in " << f << " not square" << endl; 
 	}
@@ -129,7 +151,7 @@ void loadBinary(const string& f, mat& m) {
 void loadBinary(const string& f, cMat& m) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
-	uint lines = countDoubles(f);
+	uint lines = countComp(f);
 	uint rows = (uint)sqrt(lines);
 	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
 		cerr << "load mat error: matrix in " << f << " not square" << endl; 
@@ -260,10 +282,10 @@ cout << endl;
 cout << "n.b. no binary method for printing spMat yet written" << endl;
 
 // parameters
-cout << "saving parameters in binary ";;
+cout << "saving parameters in binary " << endl;
 
 Parameters p, q;
-p.load("inputsP");
+p.load("inputsM");
 
 string pf = "tests/data/p.dat";
 cout << "to " << pf << endl;
@@ -287,8 +309,19 @@ else {
 	cerr << "cannot read from " << pf << endl;
 }
 cout << q << endl;
-
 cout << "parameters print test = " << 1-(p==q) << endl;
+
+// simple
+cout << "simple test of binary save/load" << endl;
+string df = "tests/data/simple.dat";
+saveBinarySimple(df,v);
+loadBinarySimple(df,w,sizeof(v));
+w -= v;
+cout << "testSimple = " << w.norm() << endl;
+if (w.norm()>MIN_NUMBER) {
+	cout << "w = " << endl << w << endl;
+	cout << "v = " << endl << v << endl;
+}
 
 return 0;
 }

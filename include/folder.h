@@ -125,6 +125,7 @@ public:
 	Filename(): FilenameAttributes() {}
 	Filename(const Filename& f): FilenameAttributes(f) {}
 	Filename(const string&);
+	Filename(const char*);
 	~Filename() {}
 						operator string() const;
 	Filename& 			operator=(const Filename&);
@@ -159,6 +160,7 @@ public:
 	~FilenameComparator() {}
 	FilenameComparator& operator=(const FilenameComparator&);
 	void 				set(const FilenameAttributes&, const FilenameAttributes&);
+	void 				set(const FilenameAttributes&);
 	void 				setLower(const FilenameAttributes&);
 	void 				setUpper(const FilenameAttributes&);
 	bool 				operator()(const Filename&) const;
@@ -191,6 +193,8 @@ public:
 	Folder& operator=(const Folder&);
 	~Folder() {}
 	void 				set(const FilenameComparator&);
+	void 				set(const FilenameAttributes&, const FilenameAttributes&);
+	void 				set(const FilenameAttributes&);
 	unsigned int 		size() const;
 	FolderIterator 		begin();
 	ConstFolderIterator begin() const;
@@ -208,6 +212,7 @@ private:
 	void 				copy(const Folder&);
 	void 				refresh();
 	void 				sort();
+	void				clear();
 };
 
 ostream& operator<<(ostream&, const Folder&);

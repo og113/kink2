@@ -322,7 +322,7 @@ void save(const string& f, const SaveOptions& opts, const vec& v) {
 		cerr << "SaveOptions: " << endl << opts << endl;
 		return;
 	}
-	Filename F = f;
+	Filename F(f);
 	if ((F.Suffix).compare(".dat")==0 && opts.printType==SaveOptions::ascii) {
 		switch(opts.vectorType) {
 				case SaveOptions::simple:	saveVecSimple(f,opts,v);
@@ -525,7 +525,7 @@ void save(const string& f, const SaveOptions& opts, const cVec& v) {
 		cerr << "SaveOptions: " << endl << opts << endl;
 		return;
 	}
-	Filename F = f;
+	Filename F(f);
 	if ((F.Suffix).compare(".dat")==0 && opts.printType==SaveOptions::ascii) {
 		switch(opts.vectorType) {
 				case SaveOptions::simple:	savecVecSimple(f,opts,v);
@@ -603,7 +603,7 @@ void save(const string& f, const SaveOptions& opts, const mat& m) {
 		cerr << "SaveOptions: " << endl << opts << endl;
 		return;
 	}
-	Filename F = f;
+	Filename F(f);
 	if ((F.Suffix).compare(".dat")==0 && opts.printType==SaveOptions::ascii) {
 		saveMatAscii(f,opts,m);
 	}
@@ -664,7 +664,7 @@ void save(const string& f, const SaveOptions& opts, const cMat& m) {
 		cerr << "SaveOptions: " << endl << opts << endl;
 		return;
 	}
-	Filename F = f;
+	Filename F(f);
 	if ((F.Suffix).compare(".dat")==0 && opts.printType==SaveOptions::ascii) {
 		savecMatAscii(f,opts,m);
 	}
@@ -734,15 +734,19 @@ static void loadVecBinary(const string& f, SaveOptions& opts, vec& v) {
 		return;
 	}
 	uint pos = is.tellg();
-	uint lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification
+	int lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification
 	while (!is.eof()) {
 		is.read(reinterpret_cast<char*>(&d),sizeof(double));
 		lines++;
 	}
+	if (lines==-1) {
+		cerr << "load error: no lines in file " << f << endl;
+		return;
+	}
 	v = Eigen::VectorXd::Zero(lines);
 	is.clear();
 	is.seekg(pos);
-	for (uint j=0; j<lines; j++) {
+	for (int j=0; j<lines; j++) {
 		is.read(reinterpret_cast<char*>(&d),sizeof(double));
 		v(j) = d;
 	}
@@ -752,7 +756,7 @@ static void loadVecBinary(const string& f, SaveOptions& opts, vec& v) {
 
 // load vec
 void load(const string& f, SaveOptions& opts, vec& v) {
-	Filename F = f;
+	Filename F(f);
 	if (opts.printType==SaveOptions::binary && (F.Suffix).compare(".data")==0) {
 		loadVecBinary(f,opts,v);
 	}
@@ -888,15 +892,19 @@ static void loadcVecBinary(const string& f, SaveOptions& opts, cVec& v) {
 		return;
 	}
 	uint pos = is.tellg();
-	uint lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification
+	int lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification
 	while (!is.eof()) {
 		is.read(reinterpret_cast<char*>(&c),sizeof(comp));
 		lines++;
 	}
+	if (lines==-1) {
+		cerr << "load error: no lines in file " << f << endl;
+		return;
+	}
 	is.clear();
 	is.seekg(pos);
 	v = Eigen::VectorXcd::Zero(lines);
-	for (uint j=0; j<lines; j++) {
+	for (int j=0; j<lines; j++) {
 		is.read(reinterpret_cast<char*>(&c),sizeof(comp));
 		v(j) = c;
 	}
@@ -906,7 +914,7 @@ static void loadcVecBinary(const string& f, SaveOptions& opts, cVec& v) {
 
 // load cVec
 void load(const string& f, SaveOptions& opts, cVec& v) {
-	Filename F = f;
+	Filename F(f);
 	if (opts.printType==SaveOptions::binary && (F.Suffix).compare(".data")==0) {
 		loadcVecBinary(f,opts,v);
 	}
@@ -992,7 +1000,7 @@ void load(const string& f, SaveOptions& opts, cVec& v) {
 
 // load mat  - binary - only works for square matrices
 void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
-	Filename F = f;
+	Filename F(f);
 	if ((F.Suffix).compare(".data")!=0) {
 		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
 		cerr << "for file " << f << endl;
@@ -1004,11 +1012,15 @@ void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
 		cerr << "cannot read from " << f << endl;
 	}
 	uint pos = is.tellg();
-	uint lines = -1;
+	int lines = -1;
 	double d;
 	while (!is.eof()) {
 		is.read(reinterpret_cast<char*>(&d),sizeof(double));
 		lines++;
+	}
+	if (lines==-1) {
+		cerr << "load error: no lines in file " << f << endl;
+		return;
 	}
 	is.clear();
 	is.seekg(pos);
@@ -1028,7 +1040,7 @@ void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
 
 // load mat - ascii- assumes square matrix
 void loadMatAscii(const string& f, SaveOptions& opts, mat& m) {
-	Filename F = f;
+	Filename F(f);
 	if ((F.Suffix).compare(".dat")!=0) {
 		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
 		cerr << "for file " << f << endl;
@@ -1111,7 +1123,7 @@ void load(const string& f, SaveOptions& opts, mat& m) {
 
 // load cMat - binary - only works for square matrices
 void loadcMatBinary(const string& f, SaveOptions& opts, cMat& m) {
-	Filename F = f;
+	Filename F(f);
 	if ((F.Suffix).compare(".data")!=0) {
 		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
 		cerr << "for file " << f << endl;
@@ -1123,11 +1135,15 @@ void loadcMatBinary(const string& f, SaveOptions& opts, cMat& m) {
 		cerr << "cannot read from " << f << endl;
 	}
 	uint pos = is.tellg();
-	uint lines = -1;
+	int lines = -1;
 	double d;
 	while (!is.eof()) {
 		is.read(reinterpret_cast<char*>(&d),sizeof(double));
 		lines++;
+	}
+	if (lines==-1) {
+		cerr << "load error: no lines in file " << f << endl;
+		return;
 	}
 	is.clear();
 	is.seekg(pos);
@@ -1148,7 +1164,7 @@ void loadcMatBinary(const string& f, SaveOptions& opts, cMat& m) {
 
 // load cMat - ascii
 void loadcMatAscii(const string& f, SaveOptions& opts, cMat& m) {
-	Filename F = f;
+	Filename F(f);
 	if ((F.Suffix).compare(".dat")!=0) {
 		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
 		cerr << "for file " << f << endl;

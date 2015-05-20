@@ -178,8 +178,8 @@ else {
 	ces << "inF error: " << opts.inF << " not recognised" << endl;
 	return 1;
 }
-fa_low.Suffix = ".dat";
-fa_high.Suffix = ".dat";
+fa_low.Suffix = ".data";
+fa_high.Suffix = ".data";
 fc.set(fa_low,fa_high);
 Folder pFolder(fc);
 

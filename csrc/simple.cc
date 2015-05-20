@@ -249,7 +249,7 @@ uint countType(const string& f, const T& t) {
 	is.open(f.c_str(),ios::binary);
 	T dross;
 	while (!is.eof()) {
-		is.read(reinterpret_cast<char*>(&dross),sizeof(t));
+		is.read(reinterpret_cast<char*>(&dross),sizeof(T));
 		lines++;
 	}
 	is.close();
@@ -326,11 +326,15 @@ double mod(const double& x, const double& min, const double& max) {
 
 template string numberToString<int>(const int&);
 template string numberToString<uint>(const uint&);
+template string numberToString<lint>(const lint&);
+template string numberToString<long long unsigned>(const long long unsigned&);
 template string numberToString<double>(const double&);
 template string numberToString<comp>(const comp&);
 
 template int stringToNumber<int>(const string&);
 template uint stringToNumber<uint>(const string&);
+template lint stringToNumber<lint>(const string&);
+template long long unsigned stringToNumber<long long unsigned>(const string&);
 template double stringToNumber<double>(const string&);
 template comp stringToNumber<comp>(const string&);
 

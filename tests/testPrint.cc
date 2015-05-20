@@ -14,27 +14,30 @@ using namespace std;
 int main() {
 cout << "test print: " << endl;
 
-Parameters p;
-p.load("inputsM");
+//Parameters p;
+//p.load("inputsM");
 
 SaveOptions so;
+so.printType = SaveOptions::binary;
 so.vectorType = SaveOptions::simple;
-so.paramsIn = p;
-so.paramsOut = p;
+//so.paramsIn = p;
+//so.paramsOut = p;
 so.printMessage = false;
-so.zeroModes = 2;
+
+clock_t time;
+time = clock();
 
 cout << "testing vector save and load" << endl;
 
 Filename f, g;
-f = "tests/data/u.dat";
+f = "tests/data/u.data";
 g = "tests/data/v.data";
 
 vec u, v, w;
 uint size = 1000;
 u = Eigen::VectorXd::Random(size);
 
-uint N = 1;
+uint N = 10;
 for (uint j=0; j<N; j++) {
 	save(f,so,u);
 	load(f,so,v);
@@ -42,12 +45,12 @@ for (uint j=0; j<N; j++) {
 	load(g,so,u);
 }
 
-cout << "u.size() = " << u.size() << endl;
-cout << "v.size() = " << v.size() << endl;
-cout << "u(0)     = " << u(0) << endl;
-cout << "v(0)     = " << v(0) << endl;
-cout << "u.norm() = " << u.norm() << endl;
-cout << "v.norm() = " << v.norm() << endl;
+cout << "u.size()          = " << u.size() << endl;
+cout << "v.size()          = " << v.size() << endl;
+cout << "u(u.size()-1)     = " << u(u.size()-1) << endl;
+cout << "v(v.size()-1)     = " << v(v.size()-1) << endl;
+cout << "u.norm()          = " << u.norm() << endl;
+cout << "v.norm()          = " << v.norm() << endl;
 
 w = u-v;
 
@@ -55,7 +58,7 @@ cout << "test vector: " << w.norm() << endl;
 
 cout << "testing matrix save and load" << endl;
 
-f = "tests/data/m.dat";
+f = "tests/data/m.data";
 g = "tests/data/n.data";
 
 mat m, n, o;
@@ -78,6 +81,11 @@ cout << "n.norm() = " << n.norm() << endl;
 o = m-n;
 
 cout << "test matrix: " << o.norm() << endl;
+
+time = clock() - time;
+double realtime = time/1000000.0;
+
+cout << endl << N << " load and save loops took " << realtime << " seconds" << endl << endl;
 
 return 0;
 }

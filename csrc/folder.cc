@@ -88,13 +88,15 @@ bool operator==(const FilenameAttributes& lhs, const FilenameAttributes& rhs) {
 	if ((lhs.ID).compare(rhs.ID)!=0) return false;	
 	if ((lhs.Suffix).compare(rhs.Suffix)!=0) return false;
 	if ((lhs.Extras).size()!=(rhs.Extras).size()) return false;
-	bool ExtraOK;
-	for (unsigned int n=0; n<(lhs.Extras).size(); n++) {
-		ExtraOK = false;
+	bool ExtraEqual;
+	for (unsigned int n=0; n<(rhs.Extras).size(); n++) {
+		ExtraEqual = false;
 		for (unsigned int m=0; m<(lhs.Extras).size(); m++) {
-			if (((lhs.Extras[m]).first).compare(((rhs.Extras[n]).first))==0) ExtraOK = true;
+			if (((lhs.Extras[m]).first).compare(((rhs.Extras[n]).first))==0 && \
+			((lhs.Extras[m]).second).compare(((rhs.Extras[n]).second))==0)
+				ExtraEqual = true;
 		}
-		if (!ExtraOK) return false;
+		if (!ExtraEqual) return false;
 	}
 	return true;
 }
@@ -248,6 +250,12 @@ Filename::Filename(const string& f): FilenameAttributes() {
 	set(f);
 }
 
+// constructor(const string& filename)
+Filename::Filename(const char* f): FilenameAttributes() {
+	string temp = (string)f;
+	set(temp);
+}
+
 // operator string() - conversion
 Filename::operator string() const {
 	string filename = Directory + "/" + Timenumber + ID;
@@ -374,6 +382,12 @@ void FilenameComparator::set(const FilenameAttributes& l, const FilenameAttribut
 	}
 }
 
+// set
+void FilenameComparator::set(const FilenameAttributes& fa) {
+	Lower = fa;
+	Upper = fa;
+}
+
 // setLower
 void FilenameComparator::setLower(const FilenameAttributes& l) {
 	if (check(l,Upper)) {
@@ -402,15 +416,17 @@ bool FilenameComparator::operator()(const Filename& f) const{
 	if (!(Lower.Suffix).empty()) {
 		if ((f.Suffix).compare(Lower.Suffix)!=0) return false;
 	}
-	size_t NumExtras = (Lower.Extras).size();
-	if (NumExtras>0) {
-		if ((f.Extras).size()!=NumExtras) return false;
+	size_t lExtras = (Lower.Extras).size();
+	size_t fExtras = (f.Extras).size();
+	if (lExtras>0) {
+		//if (fExtras!=lExtras) return false;
+		if (fExtras<lExtras) return false;
 		bool ExtraOK;
-		for (unsigned int n=0; n<NumExtras; n++) {
+		for (uint n=0; n<lExtras; n++) {
 			ExtraOK = false;
-			for (unsigned int m=0; m<NumExtras; m++) {
-				if (((Lower.Extras[m]).first).compare(((f.Extras[n]).first))==0) {
-					if (((f.Extras[n]).second)>=((Lower.Extras[m]).second) && ((f.Extras[n]).second)<=((Upper.Extras[m]).second))
+			for (uint m=0; m<fExtras; m++) {
+				if (((Lower.Extras[n]).first).compare(((f.Extras[m]).first))==0) {
+					if (((f.Extras[m]).second)>=((Lower.Extras[n]).second) && ((f.Extras[m]).second)<=((Upper.Extras[n]).second))
 						ExtraOK = true;
 				}
 			}
@@ -434,6 +450,7 @@ ostream& operator<<(ostream& os, const FilenameComparator& fc){
 		- order
 		- update
 		- begin
+		- clear
 		- end
 		- add
 		- erase
@@ -465,6 +482,11 @@ ConstFolderIterator Folder::begin() const{
 	return Filenames.begin();
 }
 
+// clear
+void Folder::clear() {
+	Filenames.clear();
+}
+
 // end
 FolderIterator Folder::end() {
 	return Filenames.end();
@@ -488,6 +510,7 @@ void Folder::order() {
 // refresh
 void Folder::refresh() {
 	try {
+	clear();
 	string file = "temp/"+currentPartSec()+"dataFiles.txt";
 	string command1 = "find data/* -type f > " + file;
 	int systemCall = system(command1.c_str());
@@ -570,6 +593,18 @@ Folder& Folder::operator=(const Folder& f) {
 // set
 void Folder::set(const FilenameComparator& fc) {
 	Comparator = fc;
+	refresh();
+}
+
+// set
+void Folder::set(const FilenameAttributes& l, const FilenameAttributes& u) {
+	Comparator.set(l,u);
+	refresh();
+}
+
+// set
+void Folder::set(const FilenameAttributes& fa) {
+	Comparator.set(fa);
 	refresh();
 }
 
