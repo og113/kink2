@@ -116,7 +116,7 @@ if (copyFiles && rank==0) {
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // getting last timenumbers
-bool revertToDefault = true;
+bool revertToDefault = false;
 vector<string> timenumbers(nodes_req);
 vector<string> loops(nodes_req);
 string timenumber;
@@ -213,7 +213,8 @@ if (rank==0) {
 		temp2[loops[k].length()] = '\0';
 		
 		MPI::COMM_WORLD.Send(&temp2, loops[k].length(), MPI::CHAR, k, 1);
-		cout << "process " << 0 << " sent " << temp << " and " << temp2 << " to process " << k << endl;
+		
+		//cout << "process " << 0 << " sent " << temp << " and " << temp2 << " to process " << k << endl;
 	}
 	timenumber = timenumbers[0];
 	loop = loops[0];
@@ -226,13 +227,15 @@ else {
 	MPI::COMM_WORLD.Recv(buf, l, MPI::CHAR, 0, 0, status);
 	timenumber = string (buf, l);
 	delete [] buf;
+	
 	MPI::COMM_WORLD.Probe(0, 1, status);
 	l = status.Get_count(MPI::CHAR);
 	char *buf2 = new char[l];
 	MPI::COMM_WORLD.Recv(buf2, l, MPI::CHAR, 0, 1, status);
 	loop = string(buf2, l);
 	delete [] buf2;
-	cout << "process " << rank << " recieved " << timenumber << " and " << loop << " from process 0" << endl;
+	
+	//cout << "process " << rank << " recieved " << timenumber << " and " << loop << " from process 0" << endl;
 }
 
 /*----------------------------------------------------------------------------------------------------------------------------
