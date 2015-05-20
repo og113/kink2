@@ -132,7 +132,7 @@ void loadBinary(const string& f, mat& m) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
 	uint lines = countDoubles(f);
-	uint rows = (uint)sqrt(lines);
+	uint rows = (uint)(sqrt(lines));
 	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
 		cerr << "load mat error: matrix in " << f << " not square" << endl; 
 	}
@@ -151,7 +151,7 @@ void loadBinary(const string& f, mat& m) {
 void loadBinary(const string& f, cMat& m) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
-	uint lines = countDoubles(f);
+	uint lines = countComp(f);
 	uint rows = (uint)sqrt(lines);
 	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
 		cerr << "load mat error: matrix in " << f << " not square" << endl; 
@@ -282,17 +282,17 @@ cout << endl;
 cout << "n.b. no binary method for printing spMat yet written" << endl;
 
 // parameters
-cout << "saving parameters in binary ";;
+cout << "saving parameters in binary " << endl;
 
-PrimaryParameters p, q;
-p.load("inputsP");
+Parameters p, q;
+p.load("inputsM");
 
 string pf = "tests/data/p.dat";
 cout << "to " << pf << endl;
 ofstream os;
 os.open(pf.c_str(), ios::binary);
 if (os.good()) {
-	os.write(reinterpret_cast<char*>(&p),sizeof(p));
+	p.writeBinary(os);
 }
 else {
 	cerr << "cannot write to " << pf << endl;
@@ -303,12 +303,13 @@ ifstream is;
 is.open(pf.c_str(), ios::binary);
 string dross;
 if (is.good()) {
-	is.read(reinterpret_cast<char*>(&q),sizeof(q));
+	q.readBinary(is);
 }
 else {
 	cerr << "cannot read from " << pf << endl;
 }
 cout << q << endl;
+cout << "parameters print test = " << 1-(p==q) << endl;
 
 // simple
 cout << "simple test of binary save/load" << endl;

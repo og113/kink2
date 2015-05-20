@@ -54,6 +54,7 @@ string ParameterError::Load::message() const{
 		- save
 		- load
 		- empty
+		- operator==
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // operator<<
@@ -125,6 +126,42 @@ void PrimaryParameters::load(const string& filename) {
 bool PrimaryParameters::empty() const {
 	return (pot==0 && N==0 && Na==0 && Nb==0 && Nc==0 && abs(LoR)<MIN_NUMBER && abs(dE)<MIN_NUMBER \
 				&& abs(Tb)<MIN_NUMBER && abs(theta)<MIN_NUMBER && abs(reg)<MIN_NUMBER);
+}
+
+// operator==
+bool operator==(const PrimaryParameters& l, const PrimaryParameters& r){
+	return (l.pot==r.pot && l.N==r.N && l.Na==r.Na && l.Nb==r.Nb && l.Nc==r.Nc && abs(l.LoR-r.LoR)<MIN_NUMBER && \
+				abs(l.dE-r.dE)<MIN_NUMBER && abs(l.Tb-r.Tb)<MIN_NUMBER && abs(l.theta-r.theta)<MIN_NUMBER && abs(l.reg-r.reg)<MIN_NUMBER);
+}
+
+// writeBinary
+ostream& PrimaryParameters::writeBinary(ostream& os) const {
+	os.write(reinterpret_cast<const char*>(&pot),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&N),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&Na),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&Nb),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&Nc),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&LoR),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&dE),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&Tb),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&theta),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&reg),sizeof(double));
+	return os;
+}
+
+// readBinary
+istream& PrimaryParameters::readBinary(istream& is) {
+	is.read(reinterpret_cast<char*>(&pot),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&N),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&Na),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&Nb),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&Nc),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&LoR),sizeof(double));
+	is.read(reinterpret_cast<char*>(&dE),sizeof(double));
+	is.read(reinterpret_cast<char*>(&Tb),sizeof(double));
+	is.read(reinterpret_cast<char*>(&theta),sizeof(double));
+	is.read(reinterpret_cast<char*>(&reg),sizeof(double));
+	return is;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------

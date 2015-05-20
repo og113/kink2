@@ -59,6 +59,7 @@ public:
 	2. PrimaryParameters
 		- PrimaryParameters
 		- operator<<
+		- operator==
 	
 	N.B. for structs the compiler automatically writes the following member functions, unless user provided:
 	 empty constructor; copy constructor; assignment operator=; destructor
@@ -79,10 +80,15 @@ struct PrimaryParameters {
 	void save(const string& filename) const;
 	void load(const string& filename);
 	bool empty() const;
+	ostream& writeBinary(ostream&) const;
+	istream& readBinary(istream&);
 };
 
 // operator<<
 ostream& operator<<(ostream&, const PrimaryParameters&);
+
+// operator==
+bool operator==(const PrimaryParameters& lhs, const PrimaryParameters& rhs);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3. SecondaryParameters

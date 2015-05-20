@@ -61,5 +61,17 @@ cout << folder1 << endl;
 string str = f;
 cout << str << endl;
 
+FilenameAttributes fa_low;
+fa_low.Directory = "data";
+fa_low.Suffix = ".data";
+fa_low.ID = "mainp";
+fa_low.Timenumber = "0";
+FilenameAttributes fa_high(fa_low);
+fa_high.Timenumber = "999999999999";
+FilenameComparator fc(fa_low,fa_high);
+Folder F(fc);
+cout << F << endl;
+cout << "compared with typing: ls data/*mainp*.data" << endl;
+
 return 0;
 }

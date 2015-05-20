@@ -380,6 +380,12 @@ void FilenameComparator::set(const FilenameAttributes& l, const FilenameAttribut
 	}
 }
 
+// set
+void FilenameComparator::set(const FilenameAttributes& fa) {
+	Lower = fa;
+	Upper = fa;
+}
+
 // setLower
 void FilenameComparator::setLower(const FilenameAttributes& l) {
 	if (check(l,Upper)) {
@@ -440,6 +446,7 @@ ostream& operator<<(ostream& os, const FilenameComparator& fc){
 		- order
 		- update
 		- begin
+		- clear
 		- end
 		- add
 		- erase
@@ -471,6 +478,11 @@ ConstFolderIterator Folder::begin() const{
 	return Filenames.begin();
 }
 
+// clear
+void Folder::clear() {
+	Filenames.clear();
+}
+
 // end
 FolderIterator Folder::end() {
 	return Filenames.end();
@@ -494,6 +506,7 @@ void Folder::order() {
 // refresh
 void Folder::refresh() {
 	try {
+	clear();
 	string file = "temp/"+currentPartSec()+"dataFiles.txt";
 	string command1 = "find data/* -type f > " + file;
 	int systemCall = system(command1.c_str());
@@ -576,6 +589,18 @@ Folder& Folder::operator=(const Folder& f) {
 // set
 void Folder::set(const FilenameComparator& fc) {
 	Comparator = fc;
+	refresh();
+}
+
+// set
+void Folder::set(const FilenameAttributes& l, const FilenameAttributes& u) {
+	Comparator.set(l,u);
+	refresh();
+}
+
+// set
+void Folder::set(const FilenameAttributes& fa) {
+	Comparator.set(fa);
 	refresh();
 }
 

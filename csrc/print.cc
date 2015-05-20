@@ -74,6 +74,32 @@ ostream& operator<<(ostream& os, const SaveOptions& opts){
 	return os;
 }
 
+// writeBinary
+ostream& SaveOptions::writeBinary(ostream& os) const {
+	os.write(reinterpret_cast<const char*>(&printType),sizeof(SaveOptions::printTypeList));
+	os.write(reinterpret_cast<const char*>(&vectorType),sizeof(SaveOptions::vectorTypeList));
+	os.write(reinterpret_cast<const char*>(&extras),sizeof(SaveOptions::extrasList));
+	os.write(reinterpret_cast<const char*>(&column),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&zeroModes),sizeof(uint));
+	paramsIn.writeBinary(os);
+	paramsOut.writeBinary(os);
+	os.write(reinterpret_cast<const char*>(&printMessage),sizeof(bool));
+	return os;
+}
+
+// readBinary
+istream& SaveOptions::readBinary(istream& is) {
+	is.read(reinterpret_cast<char*>(&printType),sizeof(SaveOptions::printTypeList));
+	is.read(reinterpret_cast<char*>(&vectorType),sizeof(SaveOptions::vectorTypeList));
+	is.read(reinterpret_cast<char*>(&extras),sizeof(SaveOptions::extrasList));
+	is.read(reinterpret_cast<char*>(&column),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&zeroModes),sizeof(uint));
+	paramsIn.readBinary(is);
+	paramsOut.readBinary(is);
+	is.read(reinterpret_cast<char*>(&printMessage),sizeof(bool));
+	return is;
+}	
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. save
 		- vec
@@ -84,6 +110,7 @@ ostream& operator<<(ostream& os, const SaveOptions& opts){
 			- static saveVec
 		- cVec
 			- static savecVecSimple
+			- static savecVecBinary
 			- static savecVecSimpleAppend
 			- static savecVecB
 			- static savecVec
@@ -123,7 +150,7 @@ static void saveVecBinary(const string& f, const SaveOptions& opts,  const vec& 
 	}
 	const double* r;
 	if (os.good()) {
-		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
+		opts.writeBinary(os);
 		for (uint j=0; j<v.size(); j++) {
 			r = &v(j);
 			os.write(reinterpret_cast<const char*>(r),sizeof(double));
@@ -132,6 +159,8 @@ static void saveVecBinary(const string& f, const SaveOptions& opts,  const vec& 
 	}
 	else {
 		cerr << "save error: cannot write to " << f << endl;
+		os.close();
+		return;
 	}
 }
 
@@ -350,7 +379,7 @@ static void savecVecBinary(const string& f, const SaveOptions& opts, const cVec&
 	os.open(f.c_str(),ios::binary);
 	const comp* c;
 	if (os.good()) {
-		os.write(reinterpret_cast<const char*>(&opts),sizeof(opts));
+		opts.writeBinary(os);
 		for (uint j=0; j<v.size(); j++) {
 			c = &v(j);
 			os.write(reinterpret_cast<const char*>(c),sizeof(comp));
@@ -698,7 +727,7 @@ static void loadVecBinary(const string& f, SaveOptions& opts, vec& v) {
 	is.open(f.c_str(),ios::binary);
 	double d;
 	if (is.good()) {
-		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
+		opts.readBinary(is);
 	}
 	else {
 		cerr << "load error: cannot read from " << f << endl;
@@ -856,7 +885,7 @@ static void loadcVecBinary(const string& f, SaveOptions& opts, cVec& v) {
 	is.open(f.c_str(),ios::binary);
 	comp c;
 	if (is.good()) {
-		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
+		opts.readBinary(is);
 	}
 	else {
 		cerr << "cannot read from " << f << endl;
@@ -979,10 +1008,7 @@ void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
 	}
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
-	if (is.good()) {
-		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
-	}
-	else {
+	if (!is.good()) {
 		cerr << "cannot read from " << f << endl;
 	}
 	uint pos = is.tellg();
@@ -1105,10 +1131,7 @@ void loadcMatBinary(const string& f, SaveOptions& opts, cMat& m) {
 	}
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
-	if (is.good()) {
-		is.read(reinterpret_cast<char*>(&opts),sizeof(opts));
-	}
-	else {
+	if (!is.good()) {
 		cerr << "cannot read from " << f << endl;
 	}
 	uint pos = is.tellg();

@@ -55,6 +55,8 @@ struct SaveOptions {
 	Parameters paramsOut;
 	bool printMessage;
 	bool good() const;					// checking if all required fields present
+	ostream& writeBinary(ostream& os) const;
+	istream& readBinary(istream& is);	
 };
 
 // operator <<
