@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 		- initializing mpi
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int nodes_req = 2;
+int nodes_req = 8;
 
 int nodes, rank;
 int returnValue = 0;
