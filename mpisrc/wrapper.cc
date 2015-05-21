@@ -158,16 +158,16 @@ else if (rank==0 && !revertToDefault) {
 			fa_low.Timenumber = timenumbers[k];
 			fa_high.Timenumber = timenumbers[k];
 			F.set(fa_low,fa_high);
-			string maxLoop = "0";
+			uint maxLoop = 0;
 			for (uint j=0; j<F.size(); j++) {
 				for (uint l=0; l<(F[j].Extras).size(); l++) {
 					if ((((F[j].Extras)[l]).first).compare("loop")==0) {
-						if (((F[j].Extras)[l]).second>maxLoop)
-							maxLoop = ((F[j].Extras)[l]).second;
+						if (stringToNumber<uint>(((F[j].Extras)[l]).second)>maxLoop)
+							maxLoop = stringToNumber<uint>(((F[j].Extras)[l]).second);
 					}
 				}
 			}
-			loops[k] = maxLoop;
+			loops[k] = numberToString<uint>(maxLoop);
 		}
 	}
 }
