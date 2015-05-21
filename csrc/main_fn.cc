@@ -1394,15 +1394,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		// stepping stepper
 		if(((opts.loopChoice).substr(0,5)).compare("const")==0) {
 			double F = 0.0;
-			if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='W') {
+			if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='W') 
 				F = W;
-			}
-			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='E') {
+			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='E')
 				F = E;
-			}
-			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='N') {
+			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='N')
 				F = Num;
-			}
 			else {
 				ces << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
 				return 1;
@@ -1416,15 +1413,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				opts.save(optionsFile);
 				stepper.addResult(F);
 			}
-			else {
+			else
 				stepper.addResult(F);
-			}
 			string keep = (stepper.keep()? "y": "n");
 			FILE * stepOs;
 			string stepFile = "data/"+timenumber+"mainStep_fLoop_"+numberToString<uint>(fileLoop)+".dat";
 			stepOs = fopen(stepFile.c_str(),"a");
-			fprintf(stepOs,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
-						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
+			fprintf(stepOs,"%12s%5i%5i%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
+						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
 			//fprintf(cof,"%12s%30s\n","steps:",stepFile.c_str());
 		}
@@ -1444,8 +1440,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			FILE * actionfile;
 			string resultsFile = "results/"+timenumber+"mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
-			fprintf(actionfile,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
-						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
+			fprintf(actionfile,"%12s%5i%5i%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
+						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
 						,W,checkSoln.back(),checkLin.back(),checkTrue.back());
 			fclose(actionfile);
 			fprintf(cof,"%12s%30s\n","results:",resultsFile.c_str());
