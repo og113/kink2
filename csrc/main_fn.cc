@@ -164,19 +164,23 @@ fa_high.Timenumber = opts.minTimenumberLoad;
 (fa_high.Extras).push_back(StringPair("fLoop",opts.maxfLoopLoad));
 (fa_low.Extras).push_back(StringPair("loop",opts.minLoopLoad));
 (fa_high.Extras).push_back(StringPair("loop",opts.maxLoopLoad));
-(fa_low.Extras).push_back(StringPair("step","1"));
-(fa_high.Extras).push_back(StringPair("step","1"));
+if ((opts.inF).size()>1) {
+	if ((opts.inF)[1]=='n') {
+		(fa_low.Extras).push_back(StringPair("step","1"));
+		(fa_high.Extras).push_back(StringPair("step","1"));
+	}
+}
 
 // FilenameComparator
 FilenameComparator fc(fa_low,fa_high);
 Folder allFiles(fc);
 
 // pFolder
-if ((opts.inF).compare("p")==0) {
+if ((opts.inF)[0]=='p') {
 	fa_low.ID = "tp";
 	fa_high.ID = "tp";
 }
-else if ((opts.inF).compare("m")==0) {
+else if ((opts.inF)[0]=='m') {
 	fa_low.ID = "mainp";
 	fa_high.ID = "mainp";
 }
@@ -184,17 +188,29 @@ else {
 	ces << "inF error: " << opts.inF << " not recognised" << endl;
 	return 1;
 }
-fa_low.Suffix = ".data";
-fa_high.Suffix = ".data";
+if ((opts.inF).size()>1) {
+	if ((opts.inF)[1]=='n') {
+		fa_low.Suffix = ".data";
+		fa_high.Suffix = ".data";
+	}
+	else {
+		fa_low.Suffix = ".dat";
+		fa_high.Suffix = ".dat";
+	}
+}
+else {
+	fa_low.Suffix = ".dat";
+	fa_high.Suffix = ".dat";
+}
 fc.set(fa_low,fa_high);
 Folder pFolder(fc);
 
 // inputsFolder
-if ((opts.inF).compare("p")==0) {
+if ((opts.inF)[0]=='p') {
 	fa_low.ID = "inputsP";
 	fa_high.ID = "inputsP";
 }
-else if ((opts.inF).compare("m")==0) {
+else if ((opts.inF)[0]=='m') {
 	fa_low.ID = "inputsM";
 	fa_high.ID = "inputsM";
 }
@@ -1396,6 +1412,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				stepper.addResult(opts.loopMin);
 			else if (loop==0) {
 				opts.loopMin = F;
+				opts.inF = "mn";
 				opts.save(optionsFile);
 				stepper.addResult(F);
 			}
