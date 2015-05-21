@@ -227,19 +227,19 @@ else {
 int argc_main = 17;
 vector <string> argv_main(argc_main);
 argv_main[0] = "main";
-argv_main[1] = "-mintn";	argv_main[2] = timenumber;
-argv_main[3] = "-maxtn";	argv_main[4] = timenumber;
-argv_main[5] = "-minll";	argv_main[6] = loop;
-argv_main[7] = "-maxll";	argv_main[8] = loop;
-argv_main[9] = "-opts";		argv_main[10] = "data/00"+numberToString<int>(rank)+"optionsM";
-argv_main[11] = "-loops";	argv_main[12] = "100";
+argv_main[1] = "-mintn";		argv_main[2] = timenumber;
+argv_main[3] = "-maxtn";		argv_main[4] = timenumber;
+argv_main[5] = "-minll";		argv_main[6] = loop;
+argv_main[7] = "-maxll";		argv_main[8] = loop;
+argv_main[9] = "-opts";			argv_main[10] = "data/00"+numberToString<int>(rank)+"optionsM";
+argv_main[11] = "-loops";		argv_main[12] = "100";
 if (rank==0 || rank==7) {
-	argv_main[13] = "-epsiTb";	argv_main[14] = "0.0001";
-	argv_main[15] = "-epsiTb";	argv_main[16] = "0.0001";
+	argv_main[13] = "-epsiTb";		argv_main[14] = "0.0001";
+	argv_main[15] = "-epsiTheta";	argv_main[16] = "0.0001";
 }
 else {
-	argv_main[13] = "-epsiTb";	argv_main[14] = "0.0005";
-	argv_main[15] = "-epsiTb";	argv_main[16] = "0.0005";
+	argv_main[13] = "-epsiTb";		argv_main[14] = "0.0003";
+	argv_main[15] = "-epsiTheta";	argv_main[16] = "0.0003";
 }
 
 if (rank==0 && revertToDefault) {
