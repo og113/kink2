@@ -22,7 +22,6 @@ using namespace std;
 		1 - defining required nodes
 		2 - copying files
 		3 - finding recent files
-		3 - initializing mpi
 		4 - running main
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -127,16 +126,14 @@ fa_low.Directory = "data";
 fa_low.Suffix = ".data";
 fa_low.ID = "mainp";
 fa_low.Timenumber = "0";
-vector<StringPair> extras(1);
-StringPair sp("loop","0");
-fa_low.Extras = extras;
+(fa_low.Extras).push_back(StringPair("step","1"));
 FilenameAttributes fa_high(fa_low);
 fa_high.Timenumber = "999999999999";
 Folder F(fa_low,fa_high);
 
 if (F.size()==0)
 	revertToDefault = true;
-else if (rank==0 & !revertToDefault) {
+else if (rank==0 && !revertToDefault) {
 	for (int k=0; k<nodes_req; k++) {
 		string maxTimenumber = "0";
 		if (F.size()==0) {
@@ -239,30 +236,21 @@ else {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------------
-	4. initializing mpi
+	4. running main
 		- defining argc, argv for main
-		- mpi::init
-		- checking required number of nodes
-----------------------------------------------------------------------------------------------------------------------------*/
-
-int argc_main = 9;
-vector <string> argv_main(argc_main);
-argv_main[0] = "main";
-argv_main[1] = "-mintn";
-argv_main[3] = "-maxtn";
-argv_main[5] = "-loopMin";
-argv_main[7] = "-loopMax";
-
-/*----------------------------------------------------------------------------------------------------------------------------
-	5. running main
 		- running main on each node, with short wait between nodes
 		- mpi::finalize
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-argv_main[2] = timenumber;
-argv_main[4] = timenumber;
-argv_main[6] = loop;
-argv_main[8] = loop;
+int argc_main = 11;
+vector <string> argv_main(argc_main);
+argv_main[0] = "main";
+argv_main[1] = "-mintn";	argv_main[2] = timenumber;
+argv_main[3] = "-maxtn";	argv_main[4] = timenumber;
+argv_main[5] = "-minll";	argv_main[6] = loop;
+argv_main[7] = "-maxll";	argv_main[8] = loop;
+argv_main[9] = "-opts";		argv_main[10] = "data/00"+numberToString<int>(rank)+"optionsM";
+
 if (rank==0 && revertToDefault) {
 	argc_main += 2;
 	argv_main.push_back("-inF");

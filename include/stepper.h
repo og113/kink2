@@ -76,6 +76,9 @@ bool operator^=(const Point2d& lhs, const Point2d& rhs);
 // FxyPair
 typedef pair<Point2d,double> FxyPair;
 
+// <<
+ostream& operator<<(ostream&, const FxyPair&);
+
 // StepperOptions
 struct StepperOptions{
 	enum			stepTypeList {straight=1, constTaylor=2, constPlane=3, constLagrange=4};
@@ -111,12 +114,17 @@ public:
 	bool		keep() const;
 	double		stepAngle() const;
 	double		closeness() const;
+	
+	//friend ostream& operator<<(ostream&, const Stepper&);
 private:
 	StepperOptions 	opts;
 	vector<FxyPair> f_xy_local;
 	vector<FxyPair> f_xy_steps;
 	double			angle;
 };
+
+// <<
+ostream& operator<<(ostream&, const Stepper&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3. static functions for testing
