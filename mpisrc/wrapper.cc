@@ -179,24 +179,6 @@ if (revertToDefault && rank==0) {
 	}
 }
 
-/*if (rank==0) {
-	for (int k=1; k<nodes_req; k++) {
-		timenumber = stringToNumber<unsigned long long>(timenumbers[k]); 
-		loop = stringToNumber<unsigned long long>(loops[k]);
-		MPI_Send(&timenumber,1, MPI_UNSIGNED_LONG_LONG, k, 0, MPI_COMM_WORLD);
-		MPI_Send(&loop,1, MPI_UNSIGNED_LONG_LONG, k, 1, MPI_COMM_WORLD);
-		//cout << "process " << 0 << " sent " << timenumber << " and " << loop << " to process " << k << endl;
-	}
-	timenumber = stringToNumber<unsigned long long>(timenumbers[0]);
-	loop = stringToNumber<unsigned long long>(loops[0]);
-}
-else {
-	MPI_Recv(&timenumber, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	MPI_Recv(&loop, 1, MPI_UNSIGNED_LONG_LONG, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	//cout << "process " << rank << " received " << timenumber << " and " << loop << " from process " << 0 << endl;
-}*/
-
-
 if (rank==0) {
 	for (int k=1; k<nodes_req; k++) {
 		char temp[timenumbers[k].length()+1];
@@ -242,7 +224,7 @@ else {
 		- mpi::finalize
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int argc_main = 11;
+int argc_main = 17;
 vector <string> argv_main(argc_main);
 argv_main[0] = "main";
 argv_main[1] = "-mintn";	argv_main[2] = timenumber;
@@ -250,11 +232,19 @@ argv_main[3] = "-maxtn";	argv_main[4] = timenumber;
 argv_main[5] = "-minll";	argv_main[6] = loop;
 argv_main[7] = "-maxll";	argv_main[8] = loop;
 argv_main[9] = "-opts";		argv_main[10] = "data/00"+numberToString<int>(rank)+"optionsM";
+argv_main[11] = "-loops";	argv_main[12] = "100";
+if (rank==0 || rank==7) {
+	argv_main[13] = "-epsiTb";	argv_main[14] = "0.0001";
+	argv_main[15] = "-epsiTb";	argv_main[16] = "0.0001";
+}
+else {
+	argv_main[13] = "-epsiTb";	argv_main[14] = "0.0005";
+	argv_main[15] = "-epsiTb";	argv_main[16] = "0.0005";
+}
 
 if (rank==0 && revertToDefault) {
 	argc_main += 2;
-	argv_main.push_back("-inF");
-	argv_main.push_back("p");
+	argv_main.push_back("-inF");	argv_main.push_back("p");
 }
 
 sleep(rank*2);
