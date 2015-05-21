@@ -164,6 +164,8 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	void print() const;
 	void print(FILE * stream) const;
 	bool empty() const;
+	ostream& writeBinary(ostream&) const;
+	istream& readBinary(istream&);
 };
 
 // operator<<

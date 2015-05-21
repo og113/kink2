@@ -213,6 +213,8 @@ static bool isClockwise(const double& v, const double& a) {
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3. Stepper
+		- << FxyPair
+		- <<
 		- constructors
 		- setStart
 		- x
@@ -224,6 +226,18 @@ static bool isClockwise(const double& v, const double& a) {
 		- keep
 		
 -------------------------------------------------------------------------------------------------------------------------*/
+
+// << FxyPair
+ostream& operator<<(ostream& os, const FxyPair& p) {
+	os << p.first << " " << p.second;
+	return os;
+}
+
+// <<
+ostream& operator<<(ostream& os, const Stepper& s) {
+	os << s.x() << " " << s.y() << " " << s.result() << " " << s.keep() << " " << s.steps() << " " << s.local();
+	return os;
+}
 
 // constructor
 Stepper::Stepper(const StepperOptions& sto, const double& X, const double& Y, const double& f0):\
@@ -325,8 +339,10 @@ uint Stepper::local() const {
 
 // keep() - n.b. only works after addResult
 bool Stepper::keep() const {
-	double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second);
-	return ( (test<opts.closeness && (steps()==0 || local()==2)) || opts.stepType==StepperOptions::straight);
+	double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second); // just a double check
+	bool firstKeep = (steps()==0 && local()==1);
+	bool laterKeeps = (steps()>0 && local()==2);
+	return ( ( test<opts.closeness && (firstKeep || laterKeeps) ) || opts.stepType==StepperOptions::straight);
 }
 
 // point()

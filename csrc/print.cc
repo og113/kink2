@@ -261,7 +261,7 @@ static void saveVecB (const string& f, const SaveOptions& opts, const vec& v) {
 
 // save vec - saveVec
 static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
-	Parameters pin = opts.paramsIn, pout = opts.paramsOut;
+	Parameters pin(opts.paramsIn), pout(opts.paramsOut);
 	vec vo;
 	if ((pin.N!=pout.N && pout.N!=0) || (pin.NT!=pout.NT && pout.NT!=0)) {
 		if (SaveOptions::real)
@@ -278,11 +278,11 @@ static void saveVec(const string& f, const SaveOptions& opts, const vec& v) {
 		cerr << "save error: stream not good for " << f << endl;
 		return;
 	}
-	unsigned int x0 = intCoord(0,1,pout.NT);
+	uint x0 = intCoord(0,1,pout.NT);
 	F.precision(16);
 	F << left;
-	for (unsigned long int j=0; j<pout.N*pout.NT; j++) {
-		unsigned int x = intCoord(j,1,pout.NT);
+	for (lint j=0; j<pout.N*pout.NT; j++) {
+		uint x = intCoord(j,1,pout.NT);
 		if (x!=x0) { //this is put in for gnuplot
 			F << endl;
 			x0 = x;
@@ -1261,6 +1261,11 @@ void load(const string& f , SaveOptions& opts, spMat& m) {
 
 // plot
 void plot(const string& f, const PlotOptions& opts) {
+	Filename file = f;
+	if ((file.Suffix).compare(".data")==0) {
+		cerr << "plot error: cannot plot binary file: " << f << endl;
+		return;
+	}
 	string style = ((opts.style).empty()? "linespoints": opts.style);
 	string output = ((opts.output).empty()? "pics/pic.png": opts.output);
 	uint col = (opts.column==0? 1: opts.column);
