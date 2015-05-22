@@ -179,6 +179,11 @@ if (revertToDefault && rank==0) {
 	}
 }
 
+// human intervention
+for (int j=0; j<nodes_req; j++) {
+	timenumbers[j] = "1505211206"+numberToString<int>(5+2*j);
+}
+
 if (rank==0) {
 	for (int k=1; k<nodes_req; k++) {
 		char temp[timenumbers[k].length()+1];

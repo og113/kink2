@@ -526,7 +526,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//defining some quantities used to stop the Newton-Raphson loop when action stops varying
 		comp action_last = action;
 		uint runs_count = 0;
-		uint min_runs = 3;
+		uint min_runs = 5;
 		uint max_runs = 100;
 
 		//initializing phi (=p)
@@ -596,7 +596,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				cerr << "timenumber: " << timenumber << "; fileLoop: " << fileLoop << "; loop: " << loop << endl;
 				return 1;				
 			}
-			cout << "pb.norm() = " << p.norm() << endl;
 			
 			// zero modes - fixed with chiX and chiT
 			vec chiX(ps.NT*ps.N);	chiX = Eigen::VectorXd::Zero(ps.N*ps.NT); //to fix spatial zero mode
@@ -1286,9 +1285,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if (!checkInv.good()) return 1;
 
 			//assigning values to phi
-			cout << "p.norm() = " << p.norm() << endl;
 			p += delta;
-			cout << "p'.norm() = " << p.norm() << endl;
 		
 			//passing changes on to complex vector
 			Cp = vecComplex(p,ps.N*ps.NT);
