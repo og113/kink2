@@ -596,6 +596,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				cerr << "timenumber: " << timenumber << "; fileLoop: " << fileLoop << "; loop: " << loop << endl;
 				return 1;				
 			}
+			cout << "pb.norm() = " << p.norm() << endl;
 			
 			// zero modes - fixed with chiX and chiT
 			vec chiX(ps.NT*ps.N);	chiX = Eigen::VectorXd::Zero(ps.N*ps.NT); //to fix spatial zero mode
@@ -1285,7 +1286,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if (!checkInv.good()) return 1;
 
 			//assigning values to phi
+			cout << "p.norm() = " << p.norm() << endl;
 			p += delta;
+			cout << "p'.norm() = " << p.norm() << endl;
 		
 			//passing changes on to complex vector
 			Cp = vecComplex(p,ps.N*ps.NT);
