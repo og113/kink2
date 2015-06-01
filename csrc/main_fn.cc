@@ -134,6 +134,7 @@ if (ceFile.empty()) ceFile = "data/"+timenumber+"ce.txt";
 
 // beginning cos and ces streams
 fstream cos;
+
 cos.open(coFile.c_str(),fstream::app);
 
 fstream ces;
@@ -178,8 +179,8 @@ else {
 	ces << "inF error: " << opts.inF << " not recognised" << endl;
 	return 1;
 }
-fa_low.Suffix = ".data";
-fa_high.Suffix = ".data";
+fa_low.Suffix = ".dat";
+fa_high.Suffix = ".dat";
 fc.set(fa_low,fa_high);
 Folder pFolder(fc);
 
@@ -519,6 +520,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		if (loop==0) {
 			if (fileLoop==0) so_tp.printType = SaveOptions::ascii;
 			load(pFolder[0],so_tp,p); //n.b there may be some problems with zero modes for binary printing
+			if (p.size()==(2*ps.N*ps.NT+1)) { // if came from pi.cc and in binary
+				p.conservativeResize(2*ps.N*ps.NT+2);
+				p(2*ps.N*ps.NT+1) = 0.5;
+			}
 			so_tp.printType = SaveOptions::binary;
 			fprintf(cof,"%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
