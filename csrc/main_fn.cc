@@ -736,9 +736,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				}
 			
 				if (abs(chiX(j))>MIN_NUMBER && ps.pot!=3) { //spatial zero mode lagrange constraint
-					DDS.insert(2*j,2*ps.N*ps.NT) 			= Dx*chiX(j); 
-					DDS.insert(2*ps.N*ps.NT,2*j) 			= Dx*chiX(j);
-					minusDS(2*j) 					+= -Dx*chiX(j)*p(2*ps.N*ps.NT);
+					DDS.insert(2*j,2*ps.N*ps.NT) 		= Dx*chiX(j); 
+					DDS.insert(2*ps.N*ps.NT,2*j) 		= Dx*chiX(j);
+					minusDS(2*j) 						+= -Dx*chiX(j)*p(2*ps.N*ps.NT);
 					minusDS(2*ps.N*ps.NT) 				+= -Dx*chiX(j)*p(2*j);
 				}
 					
@@ -747,8 +747,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					DDS.coeffRef(2*ps.N*ps.NT+1,2*(j+1)) 	+= Dx*chiT(j);
 					DDS.coeffRef(2*j,2*ps.N*ps.NT+1) 		+= -Dx*chiT(j);
 					DDS.coeffRef(2*ps.N*ps.NT+1,2*j) 		+= -Dx*chiT(j);
-		            minusDS(2*(j+1)) 				+= -Dx*chiT(j)*p(2*ps.N*ps.NT+1);
-		            minusDS(2*j) 					+= Dx*chiT(j)*p(2*ps.N*ps.NT+1);
+		            minusDS(2*(j+1)) 						+= -Dx*chiT(j)*p(2*ps.N*ps.NT+1);
+		            minusDS(2*j) 							+= Dx*chiT(j)*p(2*ps.N*ps.NT+1);
 		            minusDS(2*ps.N*ps.NT+1) 				+= -Dx*chiT(j)*(p(2*(j+1))-p(2*j));
 				}
 					
