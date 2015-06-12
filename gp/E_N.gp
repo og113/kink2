@@ -13,6 +13,6 @@ set ytic auto
 set title "E vs N"
 set xlabel "N"
 set ylabel "E"
-plot "results/150521mainResults.dat" using ($9/10.5):($8/18.9) with points
+plot "results/mainResults.dat" using ($9/10.5):($8/18.9) with points
 
 pause -1
