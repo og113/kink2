@@ -22,7 +22,6 @@ using namespace std;
 		1 - defining required nodes
 		2 - copying files
 		3 - finding recent files
-		3 - initializing mpi
 		4 - running main
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -33,7 +32,7 @@ int main(int argc, char** argv) {
 		- initializing mpi
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int nodes_req = 2;
+int nodes_req = 8;
 
 int nodes, rank;
 int returnValue = 0;
@@ -127,16 +126,14 @@ fa_low.Directory = "data";
 fa_low.Suffix = ".data";
 fa_low.ID = "mainp";
 fa_low.Timenumber = "0";
-vector<StringPair> extras(1);
-StringPair sp("loop","0");
-fa_low.Extras = extras;
+(fa_low.Extras).push_back(StringPair("step","1"));
 FilenameAttributes fa_high(fa_low);
 fa_high.Timenumber = "999999999999";
 Folder F(fa_low,fa_high);
 
 if (F.size()==0)
 	revertToDefault = true;
-else if (rank==0 & !revertToDefault) {
+else if (rank==0 && !revertToDefault) {
 	for (int k=0; k<nodes_req; k++) {
 		string maxTimenumber = "0";
 		if (F.size()==0) {
@@ -161,44 +158,33 @@ else if (rank==0 & !revertToDefault) {
 			fa_low.Timenumber = timenumbers[k];
 			fa_high.Timenumber = timenumbers[k];
 			F.set(fa_low,fa_high);
-			string maxLoop = "0";
+			uint maxLoop = 0;
 			for (uint j=0; j<F.size(); j++) {
 				for (uint l=0; l<(F[j].Extras).size(); l++) {
 					if ((((F[j].Extras)[l]).first).compare("loop")==0) {
-						if (((F[j].Extras)[l]).second>maxLoop)
-							maxLoop = ((F[j].Extras)[l]).second;
+						if (stringToNumber<uint>(((F[j].Extras)[l]).second)>maxLoop)
+							maxLoop = stringToNumber<uint>(((F[j].Extras)[l]).second);
 					}
 				}
 			}
-			loops[k] = maxLoop;
+			loops[k] = numberToString<uint>(maxLoop);
 		}
 	}
 }
 
+bool humanIntervention = false;
 if (revertToDefault && rank==0) {
 	for (int k=0; k<nodes_req; k++) {
 		timenumbers[k] = "00"+numberToString<int>(k);
 		loops[k] = "0";
 	}
 }
-
-/*if (rank==0) {
-	for (int k=1; k<nodes_req; k++) {
-		timenumber = stringToNumber<unsigned long long>(timenumbers[k]); 
-		loop = stringToNumber<unsigned long long>(loops[k]);
-		MPI_Send(&timenumber,1, MPI_UNSIGNED_LONG_LONG, k, 0, MPI_COMM_WORLD);
-		MPI_Send(&loop,1, MPI_UNSIGNED_LONG_LONG, k, 1, MPI_COMM_WORLD);
-		//cout << "process " << 0 << " sent " << timenumber << " and " << loop << " to process " << k << endl;
+else if (rank==0 && humanIntervention) {
+	// human intervention
+	for (int j=0; j<nodes_req; j++) {
+		timenumbers[j] = "1505211206"+numberToString<int>(5+2*j);
 	}
-	timenumber = stringToNumber<unsigned long long>(timenumbers[0]);
-	loop = stringToNumber<unsigned long long>(loops[0]);
 }
-else {
-	MPI_Recv(&timenumber, 1, MPI_UNSIGNED_LONG_LONG, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	MPI_Recv(&loop, 1, MPI_UNSIGNED_LONG_LONG, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	//cout << "process " << rank << " received " << timenumber << " and " << loop << " from process " << 0 << endl;
-}*/
-
 
 if (rank==0) {
 	for (int k=1; k<nodes_req; k++) {
@@ -239,34 +225,34 @@ else {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------------
-	4. initializing mpi
+	4. running main
 		- defining argc, argv for main
-		- mpi::init
-		- checking required number of nodes
-----------------------------------------------------------------------------------------------------------------------------*/
-
-int argc_main = 9;
-vector <string> argv_main(argc_main);
-argv_main[0] = "main";
-argv_main[1] = "-mintn";
-argv_main[3] = "-maxtn";
-argv_main[5] = "-loopMin";
-argv_main[7] = "-loopMax";
-
-/*----------------------------------------------------------------------------------------------------------------------------
-	5. running main
 		- running main on each node, with short wait between nodes
 		- mpi::finalize
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-argv_main[2] = timenumber;
-argv_main[4] = timenumber;
-argv_main[6] = loop;
-argv_main[8] = loop;
+int argc_main = 19;
+vector <string> argv_main(argc_main);
+argv_main[0] = "main";
+argv_main[1] = "-mintn";		argv_main[2] = timenumber;
+argv_main[3] = "-maxtn";		argv_main[4] = timenumber;
+argv_main[5] = "-minll";		argv_main[6] = loop;
+argv_main[7] = "-maxll";		argv_main[8] = loop;
+argv_main[9] = "-opts";			argv_main[10] = "data/00"+numberToString<int>(rank)+"optionsM";
+argv_main[11] = "-loops";		argv_main[12] = "100";
+if (rank==0 || rank==7) {
+	argv_main[13] = "-epsiTb";		argv_main[14] = "0.0001";
+	argv_main[15] = "-epsiTheta";		argv_main[16] = "0.0001";
+}
+else {
+	argv_main[13] = "-epsiTb";		argv_main[14] = "0.0002";
+	argv_main[15] = "-epsiTheta";		argv_main[16] = "0.0002";
+}
+argv_main[17] = "-zmt";			argv_main[18] = "nD2";
+
 if (rank==0 && revertToDefault) {
 	argc_main += 2;
-	argv_main.push_back("-inF");
-	argv_main.push_back("p");
+	argv_main.push_back("-inF");	argv_main.push_back("p");
 }
 
 sleep(rank*2);
@@ -277,7 +263,9 @@ cout << ", loop " << loop << endl;
 returnValue = main_fn(argc_main,argv_main);
 
 if (returnValue!=0) {
+	cerr << "---------------------------------------------------------------------" << endl;
 	cerr << "return " << returnValue << " for node " << rank << " on running main" << endl;
+	cerr << "---------------------------------------------------------------------" << endl;
 }
 
 MPI::Finalize();

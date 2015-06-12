@@ -46,6 +46,17 @@ else
 /* -------------------------------------------------------------------------------------------------------------------------
 	3. deciding plot options
 -------------------------------------------------------------------------------------------------------------------------*/
+if ((f.Suffix).compare(".data")==0) {
+	SaveOptions so;
+	so.printType = SaveOptions::binary;
+	so.printMessage = false;
+	vec v;
+	load(f,so,v);
+	so.printType = SaveOptions::ascii;
+	f.Suffix = ".dat";
+	save(f,so,v);
+}
+
 PlotOptions po;
 po.printMessage = true;
 po.output = "gui";
@@ -62,7 +73,7 @@ if ((id.substr(0,6)).compare("static")==0) {
 	isStatic = true;
 }
 
-if (id.compare("DDS")==0 || (id.substr(0,5)).compare("omega")==0 || (id.substr(0,5)).compare("freqs")==0 \
+if (id.compare("DDS")==0 || (id.substr(0,5)).compare("omega")==0 \
 	|| (id.substr(0,5)).compare("modes")==0) {
 	cerr << "cannot plot matrices" << endl;
 	return 1;	

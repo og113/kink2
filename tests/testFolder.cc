@@ -66,12 +66,13 @@ fa_low.Directory = "data";
 fa_low.Suffix = ".data";
 fa_low.ID = "mainp";
 fa_low.Timenumber = "0";
+(fa_low.Extras).push_back(StringPair("loop","3"));
 FilenameAttributes fa_high(fa_low);
 fa_high.Timenumber = "999999999999";
 FilenameComparator fc(fa_low,fa_high);
 Folder F(fc);
 cout << F << endl;
-cout << "compared with typing: ls data/*mainp*.data" << endl;
+cout << "compared with typing: ls data/*mainp*_loop_3*.data" << endl;
 
 Filename f1 = "data/150519190830mainp_fLoop_0_loop_3_step_1.data";
 cout << "fc(f1) = " << fc(f1) << endl;

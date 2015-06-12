@@ -445,6 +445,8 @@ ostream& operator<<(ostream& os, const SecondaryParameters& p2) {
 		- empty
 		- change parameters based on change in one
 		- <<
+		- readBinary
+		- writeBinary
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // empty constructor
@@ -618,6 +620,18 @@ ostream& operator<<(ostream& os, const Parameters& p1) {
 	os << setw(20) << "theta" << setw(20) << p1.theta << endl;
 	os << setw(20) << "reg" << setw(20) << p1.reg << endl;
 	return os;
+}
+
+// writeBinary
+ostream& Parameters::writeBinary(ostream& os) const {
+	return PrimaryParameters::writeBinary(os);
+}
+
+// readBinary
+istream& Parameters::readBinary(istream& is) {
+	PrimaryParameters::readBinary(is);
+	setSecondaryParameters();
+	return is;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------

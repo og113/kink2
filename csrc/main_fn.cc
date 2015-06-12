@@ -57,6 +57,9 @@ int main_fn(int argc, vector<string> argv)
 // defining timenumber
 string timenumber = currentDateTime();
 
+// defining rank
+string rank = "0";
+
 // options to load
 Options opts;
 Closenesses closenesses;
@@ -112,8 +115,8 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("maxTimenumberLoad")==0 || id.compare("maxtn")==0) opts.maxTimenumberLoad = argv[2*j+2];
 		else if (id.compare("minfLoopLoad")==0 || id.compare("minfLoopLoad")==0) opts.minfLoopLoad = argv[2*j+2];
 		else if (id.compare("maxfLoopLoad")==0 || id.compare("maxfLoopLoad")==0) opts.maxfLoopLoad = argv[2*j+2];
-		else if (id.compare("minLoopLoad")==0 || id.compare("minLoopLoad")==0) opts.minLoopLoad = argv[2*j+2];
-		else if (id.compare("maxLoopLoad")==0 || id.compare("maxLoopLoad")==0) opts.maxLoopLoad = argv[2*j+2];
+		else if (id.compare("minLoopLoad")==0 || id.compare("minll")==0) opts.minLoopLoad = argv[2*j+2];
+		else if (id.compare("maxLoopLoad")==0 || id.compare("maxll")==0) opts.maxLoopLoad = argv[2*j+2];
 		else if (id.compare("loopChoice")==0) opts.loopChoice = argv[2*j+2];
 		else if (id.compare("loopMin")==0) opts.loopMin = stringToNumber<double>(argv[2*j+2]);
 		else if (id.compare("loopMax")==0) opts.loopMax = stringToNumber<double>(argv[2*j+2]);
@@ -121,6 +124,7 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("epsiTheta")==0) opts.epsiTheta = stringToNumber<double>(argv[2*j+2]);
 		else if (id.compare("loops")==0) opts.loops = stringToNumber<uint>(argv[2*j+2]);
 		else if (id.compare("printChoice")==0) opts.printChoice = argv[2*j+2];
+		else if (id.compare("rank")==0) rank = argv[2*j+2];
 		else {
 			cerr << "input " << id << " unrecognized" << endl;
 			return 1;
@@ -161,17 +165,23 @@ fa_high.Timenumber = opts.minTimenumberLoad;
 (fa_high.Extras).push_back(StringPair("fLoop",opts.maxfLoopLoad));
 (fa_low.Extras).push_back(StringPair("loop",opts.minLoopLoad));
 (fa_high.Extras).push_back(StringPair("loop",opts.maxLoopLoad));
+if ((opts.inF).size()>1 && ((opts.loopChoice).substr(0,5)).compare("const")==0) {
+	if ((opts.inF)[1]=='n') {
+		(fa_low.Extras).push_back(StringPair("step","1"));
+		(fa_high.Extras).push_back(StringPair("step","1"));
+	}
+}
 
 // FilenameComparator
 FilenameComparator fc(fa_low,fa_high);
 Folder allFiles(fc);
 
 // pFolder
-if ((opts.inF).compare("p")==0) {
+if ((opts.inF)[0]=='p') {
 	fa_low.ID = "tp";
 	fa_high.ID = "tp";
 }
-else if ((opts.inF).compare("m")==0) {
+else if ((opts.inF)[0]=='m') {
 	fa_low.ID = "mainp";
 	fa_high.ID = "mainp";
 }
@@ -179,20 +189,35 @@ else {
 	ces << "inF error: " << opts.inF << " not recognised" << endl;
 	return 1;
 }
-fa_low.Suffix = ".dat";
-fa_high.Suffix = ".dat";
+
+if ((opts.inF).size()>1) {
+	if ((opts.inF)[1]=='n') {
+		fa_low.Suffix = ".data";
+		fa_high.Suffix = ".data";
+	}
+	else {
+		fa_low.Suffix = ".dat";
+		fa_high.Suffix = ".dat";
+	}
+}
+else {
+	fa_low.Suffix = ".dat";
+	fa_high.Suffix = ".dat";
+}
 fc.set(fa_low,fa_high);
 Folder pFolder(fc);
 
 // inputsFolder
-if ((opts.inF).compare("p")==0) {
+if ((opts.inF)[0]=='p') {
 	fa_low.ID = "inputsP";
 	fa_high.ID = "inputsP";
 }
-else if ((opts.inF).compare("m")==0) {
+else if ((opts.inF)[0]=='m') {
 	fa_low.ID = "inputsM";
 	fa_high.ID = "inputsM";
 }
+(fa_low.Extras).resize(fa_low.Extras.size()-1);
+(fa_high.Extras).resize(fa_high.Extras.size()-1);
 fa_low.Suffix = "";
 fa_high.Suffix = "";
 fc.set(fa_low,fa_high);
@@ -202,7 +227,7 @@ Folder inputsFolder(fc);
 // removeUnshared(pFolder,inputsFolder);
 
 // printing folders
-if (pFolder.size()>0) {
+if (pFolder.size()>0 && inputsFolder.size()>0) {
 	cos << endl;
 	cos << "inputs: " << endl << pFolder << inputsFolder << endl;
 }
@@ -292,9 +317,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		}
 
 		//copying a version of ps with timenumber
-		Filename paramsRunFile = (string)("data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
+		/*Filename paramsRunFile = (string)("data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
 				+"_loop_"+numberToString<uint>(loop));
-		ps.save(paramsRunFile);
+		ps.save(paramsRunFile);*/
 		
 		//printing timenumber
 		cos.close();
@@ -388,7 +413,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_simple.printMessage = false;
 		{
 			Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
-			omegaM1F = (string)"data/"+(pFolder[0]).Timenumber+"omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
+			omegaM1F = (string)"data/00"+rank+"omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
 							+"_L_"+numberToString<double>(ps.L)+".data";
 			Folder omegaM1Folder(omegaM1F);
 			omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
@@ -430,7 +455,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		vec negVec;
 		if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 			if (ps.pot==3) {
-				Filename eigVecFile = "data/"+(pFolder[0]).Timenumber+"eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";	
+				Filename eigVecFile = "data/00"+rank+"eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";	
 				so_simple.printType = SaveOptions::ascii;
 				load(eigVecFile,so_simple,negVec); // should automatically interpolate
 				so_simple.printType = SaveOptions::binary;
@@ -439,7 +464,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				Filename eigVecFile;
 				string N_load;
 				string Nb_load;
-				Filename lower = "data/"+(pFolder[0]).Timenumber+"eigVec_pot_" + numberToString<uint>(ps.pot)\
+				Filename lower = "data/00"+rank+"eigVec_pot_" + numberToString<uint>(ps.pot)\
 									 + "_N_100_Nb_100_L_" + numberToString<double>(ps.L) + ".dat";
 				Filename upper = lower;
 				vector<StringPair> upperExtras = lower.Extras;
@@ -462,6 +487,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					}
 				}
 				SaveOptions eigVecOpts;
+				eigVecOpts.printType = SaveOptions::ascii;
 				eigVecOpts.vectorType = SaveOptions::realB;
 				eigVecOpts.extras = SaveOptions::coords;
 				eigVecOpts.paramsOut = ps;
@@ -504,7 +530,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//defining some quantities used to stop the Newton-Raphson loop when action stops varying
 		comp action_last = action;
 		uint runs_count = 0;
-		uint min_runs = 2;
+		uint min_runs = 3;
 		uint max_runs = 100;
 
 		//initializing phi (=p)
@@ -518,7 +544,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.zeroModes = 2;
 		so_tp.printMessage = false;
 		if (loop==0) {
-			if (fileLoop==0) so_tp.printType = SaveOptions::ascii;
+			if (fileLoop==0 && ((pFolder[0]).Suffix).compare(".dat")==0) so_tp.printType = SaveOptions::ascii;
 			load(pFolder[0],so_tp,p); //n.b there may be some problems with zero modes for binary printing
 			if (p.size()==(2*ps.N*ps.NT+1)) { // if came from pi.cc and in binary
 				p.conservativeResize(2*ps.N*ps.NT+2);
@@ -1376,15 +1402,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		// stepping stepper
 		if(((opts.loopChoice).substr(0,5)).compare("const")==0) {
 			double F = 0.0;
-			if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='W') {
+			if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='W') 
 				F = W;
-			}
-			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='E') {
+			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='E')
 				F = E;
-			}
-			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='N') {
+			else if ((opts.loopChoice)[(opts.loopChoice).size()-1]=='N')
 				F = Num;
-			}
 			else {
 				ces << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
 				return 1;
@@ -1392,15 +1415,20 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			double angleToPrint = (loop==0? 0.0: stepper.stepAngle());
 			if (absDiff(opts.loopMin,F)<stepper.closeness() && loop==0)
 				stepper.addResult(opts.loopMin);
-			else {
+			else if (loop==0) {
+				opts.loopMin = F;
+				opts.inF = "mn";
+				opts.save(optionsFile);
 				stepper.addResult(F);
 			}
+			else
+				stepper.addResult(F);
 			string keep = (stepper.keep()? "y": "n");
 			FILE * stepOs;
 			string stepFile = "data/"+timenumber+"mainStep_fLoop_"+numberToString<uint>(fileLoop)+".dat";
 			stepOs = fopen(stepFile.c_str(),"a");
-			fprintf(stepOs,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
-						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
+			fprintf(stepOs,"%12s%5i%5i%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
+						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
 			//fprintf(cof,"%12s%30s\n","steps:",stepFile.c_str());
 		}
@@ -1416,12 +1444,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 		// printing results to file
 		stepped = stepper.keep();
-		if (stepper.keep()) {
+		if (stepped) {
 			FILE * actionfile;
 			string resultsFile = "results/"+timenumber+"mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
-			fprintf(actionfile,"%12s%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
-						timenumber.c_str(),ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
+			fprintf(actionfile,"%12s%5i%5i%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
+						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
 						,W,checkSoln.back(),checkLin.back(),checkTrue.back());
 			fclose(actionfile);
 			fprintf(cof,"%12s%30s\n","results:",resultsFile.c_str());
@@ -1449,20 +1477,36 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		po_simple.column = 1;
 		po_simple.style = "linespoints";
 		po_simple.printMessage = true;
+		
+		//copying a version of ps with timenumber
+		Filename paramsRunFile;
+		if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
+			paramsRunFile = "data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
+					+"_loop_"+numberToString<uint>(loop);
+		}
+		else if (stepped) {
+			paramsRunFile = "data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
+					+"_loop_"+numberToString<uint>(loop)+"_step_1";
+		}
+		else {
+			paramsRunFile = "data/"+timenumber+"inputsM_fLoop_"+numberToString<uint>(fileLoop)\
+					+"_loop_"+numberToString<uint>(loop)+"_step_0";
+		}
+		ps.save(paramsRunFile);
 	
 		//printing output phi
 		Filename tpFile;
 		if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
-			tpFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
-					+"_loop_"+numberToString<uint>(loop)+".data");
+			tpFile = "data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
+					+"_loop_"+numberToString<uint>(loop)+".data";
 		}
 		else if (stepped) {
-			tpFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
-					+"_loop_"+numberToString<uint>(loop)+"_step_1.data");
+			tpFile = "data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
+					+"_loop_"+numberToString<uint>(loop)+"_step_1.data";
 		}
 		else {
-			tpFile = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
-					+"_loop_"+numberToString<uint>(loop)+"_step_0.data");
+			tpFile = "data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
+					+"_loop_"+numberToString<uint>(loop)+"_step_0.data";
 		}
 		save(tpFile,so_tp,p);
 		if (plotEverything)
