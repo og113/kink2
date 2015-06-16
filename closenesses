@@ -1,7 +1,7 @@
 Step                0.01                
 Action              0.01                
-Soln                1e-09               
-SolnMax             1e-08               
+Soln                1e-08               
+SolnMax             1e-07               
 Delta               1                   
 Inv                 1e-16               
 Con                 0.01                
