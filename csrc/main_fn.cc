@@ -164,7 +164,7 @@ fa_high.Timenumber = opts.minTimenumberLoad;
 (fa_high.Extras).push_back(StringPair("fLoop",opts.maxfLoopLoad));
 (fa_low.Extras).push_back(StringPair("loop",opts.minLoopLoad));
 (fa_high.Extras).push_back(StringPair("loop",opts.maxLoopLoad));
-if ((opts.inF).size()>1) {
+if ((opts.inF).size()>1 && ((opts.loopChoice).substr(0,5)).compare("const")==0) {
 	if ((opts.inF)[1]=='n') {
 		(fa_low.Extras).push_back(StringPair("step","1"));
 		(fa_high.Extras).push_back(StringPair("step","1"));
@@ -214,6 +214,8 @@ else if ((opts.inF)[0]=='m') {
 	fa_low.ID = "inputsM";
 	fa_high.ID = "inputsM";
 }
+(fa_low.Extras).resize(fa_low.Extras.size()-1);
+(fa_high.Extras).resize(fa_high.Extras.size()-1);
 fa_low.Suffix = "";
 fa_high.Suffix = "";
 fc.set(fa_low,fa_high);
