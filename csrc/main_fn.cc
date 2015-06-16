@@ -138,6 +138,7 @@ if (ceFile.empty()) ceFile = "data/"+timenumber+"ce.txt";
 
 // beginning cos and ces streams
 fstream cos;
+
 cos.open(coFile.c_str(),fstream::app);
 
 fstream ces;
@@ -188,6 +189,7 @@ else {
 	ces << "inF error: " << opts.inF << " not recognised" << endl;
 	return 1;
 }
+
 if ((opts.inF).size()>1) {
 	if ((opts.inF)[1]=='n') {
 		fa_low.Suffix = ".data";
@@ -544,6 +546,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		if (loop==0) {
 			if (fileLoop==0 && ((pFolder[0]).Suffix).compare(".dat")==0) so_tp.printType = SaveOptions::ascii;
 			load(pFolder[0],so_tp,p); //n.b there may be some problems with zero modes for binary printing
+			if (p.size()==(2*ps.N*ps.NT+1)) { // if came from pi.cc and in binary
+				p.conservativeResize(2*ps.N*ps.NT+2);
+				p(2*ps.N*ps.NT+1) = 0.5;
+			}
 			so_tp.printType = SaveOptions::binary;
 			fprintf(cof,"%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
@@ -756,9 +762,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				}
 			
 				if (abs(chiX(j))>MIN_NUMBER && ps.pot!=3) { //spatial zero mode lagrange constraint
-					DDS.insert(2*j,2*ps.N*ps.NT) 			= Dx*chiX(j); 
-					DDS.insert(2*ps.N*ps.NT,2*j) 			= Dx*chiX(j);
-					minusDS(2*j) 					+= -Dx*chiX(j)*p(2*ps.N*ps.NT);
+					DDS.insert(2*j,2*ps.N*ps.NT) 		= Dx*chiX(j); 
+					DDS.insert(2*ps.N*ps.NT,2*j) 		= Dx*chiX(j);
+					minusDS(2*j) 						+= -Dx*chiX(j)*p(2*ps.N*ps.NT);
 					minusDS(2*ps.N*ps.NT) 				+= -Dx*chiX(j)*p(2*j);
 				}
 					
@@ -767,8 +773,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					DDS.coeffRef(2*ps.N*ps.NT+1,2*(j+1)) 	+= Dx*chiT(j);
 					DDS.coeffRef(2*j,2*ps.N*ps.NT+1) 		+= -Dx*chiT(j);
 					DDS.coeffRef(2*ps.N*ps.NT+1,2*j) 		+= -Dx*chiT(j);
-		            minusDS(2*(j+1)) 				+= -Dx*chiT(j)*p(2*ps.N*ps.NT+1);
-		            minusDS(2*j) 					+= Dx*chiT(j)*p(2*ps.N*ps.NT+1);
+		            minusDS(2*(j+1)) 						+= -Dx*chiT(j)*p(2*ps.N*ps.NT+1);
+		            minusDS(2*j) 							+= Dx*chiT(j)*p(2*ps.N*ps.NT+1);
 		            minusDS(2*ps.N*ps.NT+1) 				+= -Dx*chiT(j)*(p(2*(j+1))-p(2*j));
 				}
 					
