@@ -424,17 +424,16 @@ void Stepper::addResult(const double& f) {
 			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
 			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
 			angle = atan(numerator/denominator);
-			if (!isBetween(angle,opts.angle0,opts.angle0+pi/2.0))
+			//if (!isBetween(angle,opts.angle0-pi/2.0,opts.angle0+pi/2.0) && opts.directed==StepperOptions::local)
 				angle +=pi;
 		}
 		else if (local()==3) {
-			double tempAngle = angle - pi/2.0;
 			Point2d p0 = (f_xy_steps[steps()]).first, p1 = (f_xy_steps[steps()-1]).first, p2 = (f_xy_local[local()-1]).first;
 			double f0 = (f_xy_steps[0]).second, f1 = (f_xy_steps[steps()-1]).second, f2 = (f_xy_local[local()-1]).second;
 			double numerator = (f2-f0)*(p1.Y-p0.Y) - (f1-f0)*(p2.Y-p0.Y);
 			double denominator = (f2-f0)*(p1.X-p0.X) - (f1-f0)*(p2.X-p0.X);
 			angle = atan(numerator/denominator);
-			if (!isBetween(angle,tempAngle,tempAngle+pi/2.0))
+			//if (!isBetween(angle,opts.angle0-pi/2.0,opts.angle0+pi/2.0) && opts.directed==StepperOptions::local)
 				angle +=pi;
 		}
 		else if (local()>3) {
@@ -488,6 +487,8 @@ void Stepper::addResult(const double& f) {
 					angle +=pi;
 			}
 		}
+		if (!isBetween(angle,opts.angle0-pi/2.0,opts.angle0+pi/2.0) && opts.directed==StepperOptions::local)
+				angle +=pi;
 	}
 	/*else if (opts.stepType==StepperOptions::constTaylor) {
 		double test = absDiff((f_xy_local.back()).second,(f_xy_steps[0]).second);
@@ -550,6 +551,5 @@ void Stepper::addResult(const double& f) {
 	else {
 		cerr << "Stepper error: addResult should not have reached this point, 2" << endl;
 	}
-	
 	staticModder(angle,opts);
 }

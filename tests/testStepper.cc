@@ -26,9 +26,9 @@ string stepType;
 cout << "input either t (constTaylor) or p (constPlane): ";
 cin >> stepType;
 
-uint 			loops 				= 10;
-uint			avgLoops			= 1;
-uint 			parameterLoops 		= 1;
+uint 			loops 				= 1000;
+uint			avgLoops			= 1000;
+uint 			parameterLoops 		= 5;
 double			closenessMin 		= 0.005;
 double 			closenessMax 		= 0.025;
 
