@@ -14,6 +14,6 @@ set xlabel "T"
 set ylabel "theta"
 set zlabel "W"
 set grid
-splot "results/main_pot_3.dat" using 5:7:11 with points
+splot "results/mainResults.dat" using 5:7:11 with points
 
 pause -1
