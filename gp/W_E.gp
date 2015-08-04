@@ -13,6 +13,6 @@ set title "W(E,N)"
 set xlabel "E"
 set ylabel "W"
 set grid
-plot "results/main_pot_3.dat" using ($8/18.9):11 with points
+plot "results/mainResults2.dat" using 10:13 with points
 
 pause -1

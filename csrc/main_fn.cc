@@ -138,7 +138,6 @@ if (ceFile.empty()) ceFile = "data/"+timenumber+"ce.txt";
 
 // beginning cos and ces streams
 fstream cos;
-
 cos.open(coFile.c_str(),fstream::app);
 
 fstream ces;
@@ -349,6 +348,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Check checkAB("a_k = Gamma*b_k",closenesses.AB);
 		Check checkABNE("N = Sum(a_k*b_k), E = Sum(w_k*a_k*b_k)",closenesses.ABNE);
 		Check checkLR("linear representation of phi",closenesses.LR);
+		Check checkBoundRe("initial real boundary condition",1.0e-5);
+		Check checkBoundIm("initial imaginary boundary condition",1.0e-5);
 	
 		// do trivial or redundant checks?
 		bool trivialChecks = false;
@@ -579,6 +580,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//defining DDS and minusDS
 		spMat DDS(2*ps.N*ps.NT+2,2*ps.N*ps.NT+2);
 		vec minusDS(2*ps.N*ps.NT+2);
+		
+		// defining a couple of vectors to test whether the initial boundary conditions are satisfied
+		vec boundRe(ps.N);
+		vec boundIm(ps.N);
 			
 		//very early vector print
 		if ((opts.printChoice).compare("n")!=0) {
@@ -713,6 +718,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			potErg = Eigen::VectorXcd::Constant(ps.NT,-ergZero);
 			linErgContm = 0.0;
 			linNumContm = 0.0;
+			boundRe = Eigen::VectorXd::Zero(ps.N);
+			boundIm = Eigen::VectorXd::Zero(ps.N);
 			
 			//testing that the potential term is working for pot3
 			if (ps.pot==3 && trivialChecks) {
@@ -831,6 +838,39 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					derivErg(t) += Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0;
 					erg(t) 		+= Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0;
 					
+					///////////////////////////////////// beginning of boundary test //////////////////////////////////////
+					if (abs(ps.theta)>MIN_NUMBER) {
+						for (uint k=0;k<ps.N;k++) {
+							if (abs(omega_1(x,k))>MIN_NUMBER) {
+								lint m=k*ps.NT;
+								boundRe(x) += -ps.theta*(1.0+ps.Gamma)*omega_1(x,k)*p(2*m+1)/(1.0-ps.Gamma);
+								boundIm(x) += (1.0-ps.Gamma)*omega_1(x,k)*p(2*m)/(1.0+ps.Gamma);
+							}
+						}
+						for (uint k=1; k<2*2; k++) {
+				            int sign = pow(-1,k);
+				            uint direc = (uint)(k/2.0);
+				            int neighb = neigh(j,direc,sign,ps);
+				            double dxd = (sign==1? dx: dxm);
+				            if (direc == 0) {
+				                boundRe(x) 	+= -ps.theta*real(Dx*Cp(j+sign)/dt);
+				                boundIm(x) 	+= -imag(Dx*Cp(j+sign)/dt);
+				            }
+				            else if (neighb!=-1) {                        
+				                boundRe(x) 	+= ps.theta*real(Dt*Cp(neighb)/dxd);
+				                boundIm(x) 	+= imag(Dt*Cp(neighb)/dxd);
+				            }
+                		}
+				        comp temp0 = Dx/dt - Dt*(1.0/dx + 1.0/dxm);
+				        if (neighPosX==-1) 		temp0 += Dt/dx;
+				        else if (neighNegX==-1) temp0 += Dt/dxm;
+				        comp temp1 = Dt*Dx*(dV(Cp(j)) + dVr(Cp(j)));
+				            
+				        boundRe(x) 			+= ps.theta*real(temp0*Cp(j) - temp1);
+				        boundIm(x) 			+= imag(temp0*Cp(j) - temp1);
+					}			
+					///////////////////////////////////// end of boundary test //////////////////////////////////////
+					
 					if ((opts.bds).compare("jd")==0) {
 						minusDS(2*j+1) 					+= Dx*imag(Cp(j+1)/dt);
 					    DDS.coeffRef(2*j+1,2*(j+1)) 	+= -imag(Dx/dt);
@@ -894,7 +934,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					            DDS.coeffRef(2*j+1,2*(j+sign)+1)+= -real(Dx/dt);
 					           }
 					        else if (neighb!=-1) {
-					            minusDS(2*j+1) 					+= - imag(Dt*Cp(neighb))/dxd;
+					            minusDS(2*j+1) 					+= -imag(Dt*Cp(neighb))/dxd;
 					            DDS.coeffRef(2*j+1,2*neighb) 	+= imag(Dt)/dxd;
 					            DDS.coeffRef(2*j+1,2*neighb+1) 	+= real(Dt)/dxd;
 					        }
@@ -951,7 +991,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					            	DDS.coeffRef(2*j,2*(j+sign)+1) 	+= imag(Dx/dt)*ps.theta;
 						        }
 						        else if (neighb!=-1) {
-						            minusDS(2*j) 					+= - real(Dt*Cp(neighb))*ps.theta/dxd;
+						            minusDS(2*j) 					+= -real(Dt*Cp(neighb))*ps.theta/dxd;
 						            DDS.coeffRef(2*j,2*neighb) 		+= real(Dt)*ps.theta/dxd;
 					            	DDS.coeffRef(2*j,2*neighb+1) 	+= -imag(Dt)*ps.theta/dxd;
 						        }
@@ -1057,6 +1097,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- checkIE
 		- checkTrue
 		- checkLatt
+		- checkBound
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
@@ -1190,6 +1231,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			//checking lattice small enough for E, should have parameter for this
 			double momTest = E*ps.b/Num/pi; //perhaps should have a not b here
 			checkLatt.add(momTest);
+			
+			//checking initial boundary conditions satisfied
+			double boundReTest = boundRe.norm();
+			double boundImTest = boundIm.norm();
+			checkBoundRe.add(boundReTest);
+			checkBoundIm.add(boundImTest);
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	11. printing early 1
@@ -1394,6 +1441,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		checkCon.checkMessage();
 		checkIE.checkMessage();
 		checkLatt.checkMessage();
+		checkBoundRe.checkMessage();
+		checkBoundIm.checkMessage();
 		
 		//stopping clock
 		time = clock() - time;
@@ -1444,7 +1493,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 		// printing results to file
 		stepped = stepper.keep();
-		if (stepped) {
+		if (stepped && checkDelta.good()) {
 			FILE * actionfile;
 			string resultsFile = "results/"+timenumber+"mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");

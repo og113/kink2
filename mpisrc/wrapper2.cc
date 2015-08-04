@@ -115,7 +115,7 @@ if (copyFiles && rank==0) {
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 // getting last timenumbers
-bool revertToDefault = true;
+bool revertToDefault = false;
 vector<string> timenumbers(nodes_req);
 vector<string> loops(nodes_req);
 string timenumber;
@@ -126,7 +126,7 @@ fa_low.Directory = "data";
 fa_low.Suffix = ".data";
 fa_low.ID = "mainp";
 fa_low.Timenumber = "0";
-(fa_low.Extras).push_back(StringPair("step","1"));
+//(fa_low.Extras).push_back(StringPair("step","1"));
 FilenameAttributes fa_high(fa_low);
 fa_high.Timenumber = "999999999999";
 Folder F(fa_low,fa_high);
@@ -241,8 +241,8 @@ argv_main[7] = "-maxll";		argv_main[8] = loop;
 argv_main[9] = "-opts";			argv_main[10] = "data/00"+numberToString<int>(rank)+"optionsM";
 argv_main[11] = "-loops";		argv_main[12] = "101";
 argv_main[13] = "-loopChoice";	argv_main[14] = "theta";
-argv_main[15] = "-loopMin";		argv_main[16] = "0.0";
-argv_main[17] = "-loopMax";		argv_main[18] = "0.01";
+argv_main[15] = "-loopMin";		argv_main[16] = "0.02";
+argv_main[17] = "-loopMax";		argv_main[18] = "0.03";
 argv_main[19] = "-zmt";			argv_main[20] = "nD2";
 
 if (rank==0 && revertToDefault) {

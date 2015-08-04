@@ -12,6 +12,6 @@ set ytic auto
 set title "W(N)"
 set xlabel "N"
 set ylabel "W"
-plot "results/main_pot_3.dat" using 9:11 with points
+plot "results/mainResults2.dat" using 11:13 with points
 
 pause -1
