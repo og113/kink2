@@ -45,11 +45,16 @@ bool Check::good() const {
 
 // checkMessage
 void Check::checkMessage() const {
+	checkMessage(cout);
+}
+
+// checkMessage
+void Check::checkMessage(ostream& os) const {
 	if (!good()) {
 		if (Tests.empty())
-			cout << "Check " << Message << ": no tests done yet" << endl;
+			os << "Check " << Message << ": no tests done yet" << endl;
 		else
-			cout << "Check " << Message << ": test(" << Tests.back() << ") > closeness(" << Closeness << ")" << endl;
+			os << "Check " << Message << ": test(" << Tests.back() << ") > closeness(" << Closeness << ")" << endl;
 	}
 }
 	

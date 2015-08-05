@@ -138,7 +138,6 @@ if (ceFile.empty()) ceFile = "data/"+timenumber+"ce.txt";
 
 // beginning cos and ces streams
 fstream cos;
-
 cos.open(coFile.c_str(),fstream::app);
 
 fstream ces;
@@ -228,12 +227,12 @@ Folder inputsFolder(fc);
 
 // printing folders
 if (pFolder.size()>0 && inputsFolder.size()>0) {
-	cos << endl;
-	cos << "inputs: " << endl << pFolder << inputsFolder << endl;
+	cos << endl << "inputs: " << endl << pFolder << inputsFolder << endl;
+	if ((opts.printChoice).compare("gui")==0)
+		cout << endl << "inputs: " << endl << pFolder << inputsFolder << endl;
 }
 else {
-	ces << endl;
-	ces << "not files found for options:" << endl;
+	ces << endl << "not files found for options:" << endl;
 	ces << opts << endl;
 	return 1;
 }
@@ -250,9 +249,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	// loading parameters
 	Parameters psu;
 	psu.load(inputsFolder[fileLoop]);
-	//cos << "input parameters: " << endl;
-	//psu.print();
-	//cos << endl;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	4. beginning parameter loop
@@ -302,12 +298,16 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,(uint)stepper.x());
 				if (loop==0 && anythingChanged) {
 					cos << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
+					if ((opts.printChoice).compare("gui")==0)
+						cos << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
 			else if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
 				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
 				if (loop==0 && anythingChanged) {
 					cos << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
+					if ((opts.printChoice).compare("gui")==0)
+						cos << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
 				}
 			}
 			else {
@@ -330,6 +330,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		if (((opts.loopChoice).substr(0,5)).compare("const")==0 && loop>0) {
 			double angleModTwoPi = mod(stepper.stepAngle(),-pi,pi);		
 			fprintf(cof,"%12s%12.3g\n","step angle: ",angleModTwoPi);
+			if ((opts.printChoice).compare("gui")==0)
+				printf("%12s%12.3g\n","step angle: ",angleModTwoPi);
 		}
 		
 		// declaring Checks
@@ -349,6 +351,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Check checkAB("a_k = Gamma*b_k",closenesses.AB);
 		Check checkABNE("N = Sum(a_k*b_k), E = Sum(w_k*a_k*b_k)",closenesses.ABNE);
 		Check checkLR("linear representation of phi",closenesses.LR);
+		Check checkBoundRe("initial real boundary condition",closenesses.Soln);
+		Check checkBoundIm("initial imaginary boundary condition",closenesses.Soln);
 	
 		// do trivial or redundant checks?
 		bool trivialChecks = false;
@@ -552,6 +556,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 			so_tp.printType = SaveOptions::binary;
 			fprintf(cof,"%12s%30s\n","input: ",(pFolder[0]()).c_str());
+			if ((opts.printChoice).compare("gui")==0)
+				printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
 		}
 		else {
 			Filename lastPhi;
@@ -567,10 +573,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
 			fprintf(cof,"%12s%30s\n","input: ",(lastPhi()).c_str());
+			if ((opts.printChoice).compare("gui")==0)
+				printf("%12s%30s\n","input: ",(lastPhi()).c_str());
 		}
 		
 		// printing parameters
 		ps.print(cof);
+		if ((opts.printChoice).compare("gui")==0)
+			ps.print();
 		
 		//defining complexified vector Cp
 		cVec Cp;
@@ -579,6 +589,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//defining DDS and minusDS
 		spMat DDS(2*ps.N*ps.NT+2,2*ps.N*ps.NT+2);
 		vec minusDS(2*ps.N*ps.NT+2);
+		
+		// defining a couple of vectors to test whether the initial boundary conditions are satisfied
+		vec boundRe(ps.N);
+		vec boundIm(ps.N);
 			
 		//very early vector print
 		if ((opts.printChoice).compare("n")!=0) {
@@ -713,6 +727,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			potErg = Eigen::VectorXcd::Constant(ps.NT,-ergZero);
 			linErgContm = 0.0;
 			linNumContm = 0.0;
+			boundRe = Eigen::VectorXd::Zero(ps.N);
+			boundIm = Eigen::VectorXd::Zero(ps.N);
 			
 			//testing that the potential term is working for pot3
 			if (ps.pot==3 && trivialChecks) {
@@ -726,6 +742,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				}
 				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
 				fprintf(cof,"potTest = %8.4g\n",potTest);
+				if ((opts.printChoice).compare("gui")==0)
+					printf("potTest = %8.4g\n",potTest);
 			}
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -831,135 +849,129 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					derivErg(t) += Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0;
 					erg(t) 		+= Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0;
 					
-					if ((opts.bds).compare("jd")==0) {
-						minusDS(2*j+1) 					+= Dx*imag(Cp(j+1)/dt);
-					    DDS.coeffRef(2*j+1,2*(j+1)) 	+= -imag(Dx/dt);
-					    DDS.coeffRef(2*j+1,2*(j+1)+1)	+= -real(Dx/dt);
-					    minusDS(2*j+1) 					+= imag(-Dx*Cp(j)/dt);
-					    DDS.coeffRef(2*j+1,2*j) 		+= imag(Dx/dt);
-					    DDS.coeffRef(2*j+1,2*j+1) 		+= real(Dx/dt);
-					    if (abs(ps.theta)<MIN_NUMBER) {
-							/////////////////////////////////////equation R - theta=0//////////////////////////////////////
-							for (uint k=0;k<ps.N;k++) {
-								if (abs(omega_1(x,k))>MIN_NUMBER) {
-									lint m=k*ps.NT;
-									DDS.coeffRef(2*j,2*m+1) += -2.0*omega_1(x,k);
-									minusDS(2*j) 			+= 2.0*omega_1(x,k)*p(2*m+1);
-								}
+					///////////////////////////////////// beginning of boundary test //////////////////////////////////////
+					if (abs(ps.theta)>MIN_NUMBER) {
+						for (uint k=0;k<ps.N;k++) {
+							if (abs(omega_1(x,k))>MIN_NUMBER) {
+								lint m=k*ps.NT;
+								boundRe(x) += -(1.0+ps.Gamma)*omega_1(x,k)*p(2*m+1)/(1.0-ps.Gamma);
+								boundIm(x) += (1.0-ps.Gamma)*omega_1(x,k)*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma);
 							}
-							////////////////////////////////////////////////////////////////////////////////////////
 						}
-						else {
-							for (uint k=0;k<ps.N;k++) {
-								if (abs(omega_1(x,k))>MIN_NUMBER) {
-									/////////////////////equation I - theta!=0//////////////
-									lint m=k*ps.NT;
-									DDS.coeffRef(2*j+1,2*m) += (1.0-ps.Gamma)*omega_1(x,k)/(1.0+ps.Gamma);
-									minusDS(2*j+1) 			+= -(1.0-ps.Gamma)*omega_1(x,k)*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma);
-									/////////////////////equation R - theta!=0//////////////
-									minusDS(2*j) 			+= ps.theta*p(2*m+1)*omega_1(x,k)*(1+ps.Gamma)/(1-ps.Gamma);
-									DDS.coeffRef(2*j,2*m+1)	+= -ps.theta*omega_1(x,k)*(1.0+ps.Gamma)/(1.0-ps.Gamma);
-									bound 		+= -(1.0-ps.Gamma)*omega_1(x,k)*(p(2*j)-ps.minima[0])*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma)\
-																 + (1.0+ps.Gamma)*omega_1(x,k)*p(2*j+1)*p(2*m+1)/(1.0-ps.Gamma);
-								}
-							}
-							//////////////////////////////////////equation R - theta!=0//////////////////////////////
-				            minusDS(2*j) 					+= ps.theta*Dx*real(Cp(j+1)/dt);
-			            	DDS.coeffRef(2*j,2*(j+1)) 		+= -ps.theta*real(Dx/dt);
-			            	DDS.coeffRef(2*j,2*(j+1)+1) 	+= ps.theta*imag(Dx/dt);
-						    minusDS(2*j) 					+= ps.theta*real(-Dx*Cp(j)/dt);
-					    	DDS.coeffRef(2*j,2*j) 			+= ps.theta*real(Dx/dt);
-					    	DDS.coeffRef(2*j,2*j+1) 		+= ps.theta*imag(-Dx/dt);
-						}
-					}
-					else { ///////////////////////////////// including other terms in action at t=0 ///////////////////////////
-						if (neighPosX!=-1) {
-							kineticS 	+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
-							derivErg(t) += pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
-							erg(t) 		+= pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
-						}
-						potV 		+= Dt*Dx*V(Cp(j));
-						pot_r 		+= Dt*Dx*Vr(Cp(j));
-						potErg(t) 	+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
-						erg(t) 		+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
-						//////////////////////////////////////equation I - both///////////////////////////////////
 						for (uint k=1; k<2*2; k++) {
+				            int sign = pow(-1,k+1);
+				            uint direc = (uint)(k/2.0);
+				            int neighb = neigh(j,direc,sign,ps);
+				            double dxd = (sign==1? dx: dxm);
+				            if (direc == 0) {
+				                boundRe(x) 	+= -real(Dx*Cp(j+sign)/dt);
+				                boundIm(x) 	+= -imag(Dx*Cp(j+sign)/dt);
+				            }
+				            else if (neighb!=-1) {                        
+				                boundRe(x) 	+= real(Dt*Cp(neighb)/dxd);
+				                boundIm(x) 	+= imag(Dt*Cp(neighb)/dxd);
+				            }
+                		}
+				        comp temp0 = Dx/dt - Dt*(1.0/dx + 1.0/dxm);
+				        if (neighPosX==-1) 		temp0 += Dt/dx;
+				        else if (neighNegX==-1) temp0 += Dt/dxm;
+				        comp temp1 = Dt*Dx*(dV(Cp(j)) + dVr(Cp(j)));
+				            
+				        boundRe(x) 			+= real(temp0*Cp(j) - temp1);
+				        boundIm(x) 			+= imag(temp0*Cp(j) - temp1);
+					}			
+					///////////////////////////////////// end of boundary test //////////////////////////////////////
+					
+					///////////////////////////////// including other terms in action at t=0 ///////////////////////////
+					if (neighPosX!=-1) {
+						kineticS 	+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
+						derivErg(t) += pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
+						erg(t) 		+= pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
+					}
+					potV 		+= Dt*Dx*V(Cp(j));
+					pot_r 		+= Dt*Dx*Vr(Cp(j));
+					potErg(t) 	+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
+					erg(t) 		+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
+					double tnt = 1.0;
+					if ((opts.bds).compare("uc")!=0)
+						tnt *= ps.theta;
+					//////////////////////////////////////equation I - both///////////////////////////////////
+					for (uint k=1; k<2*2; k++) {
+				        int sign = pow(-1,k+1);
+				        uint direc = (uint)(k/2.0);
+				        int neighb = neigh(j,direc,sign,ps);
+				        double dxd = (sign==1? dx: dxm);
+				        if (direc == 0) {
+				            minusDS(2*j+1) 					+= Dx*imag(Cp(j+sign)/dt);
+				            DDS.coeffRef(2*j+1,2*(j+sign)) 	+= -imag(Dx/dt);
+				            DDS.coeffRef(2*j+1,2*(j+sign)+1)+= -real(Dx/dt);
+				           }
+				        else if (neighb!=-1) {
+				            minusDS(2*j+1) 					+= -imag(Dt*Cp(neighb))/dxd;
+				            DDS.coeffRef(2*j+1,2*neighb) 	+= imag(Dt)/dxd;
+				            DDS.coeffRef(2*j+1,2*neighb+1) 	+= real(Dt)/dxd;
+				        }
+				    }
+				    comp temp0 = Dx/dt - Dt*(1.0/dx+1.0/dxm);
+				    if (neighPosX==-1) 		temp0 += Dt/dx;
+				    else if (neighNegX==-1) temp0 += Dt/dxm;
+				    comp temp1 = Dt*Dx*( dV(Cp(j)) + dVr(Cp(j)) );//dV terms should be small
+				    comp temp2 = Dt*Dx*(ddV(Cp(j)) + ddVr(Cp(j)));
+				    
+				    minusDS(2*j+1) 				+= imag(-temp0*Cp(j) + temp1 );
+				    DDS.coeffRef(2*j+1,2*j) 	+= imag(temp0 - temp2 );
+				    DDS.coeffRef(2*j+1,2*j+1) 	+= real(temp0 - temp2 );
+					/////////////////////////////////////////////////////////////////////////////////////////
+					if (abs(ps.theta)<MIN_NUMBER) {
+						//simplest boundary conditions replaced by ones continuously connected to theta!=0 ones
+						//DDS.insert(2*j+1,2*(j+1)+1) = 1.0; //zero imaginary part of time derivative
+						//DDS.insert(2*j,2*j+1) = 1.0; //zero imaginary part
+					
+						/////////////////////////////////////equation R - theta=0//////////////////////////////////////
+						for (uint k=0;k<ps.N;k++) {
+							if (abs(omega_1(x,k))>MIN_NUMBER) {
+								lint m=k*ps.NT;
+								DDS.coeffRef(2*j,2*m+1) += -2.0*omega_1(x,k);
+								minusDS(2*j) 			+= 2.0*omega_1(x,k)*p(2*m+1);
+							}
+						}
+						////////////////////////////////////////////////////////////////////////////////////////
+					}
+					else {
+						for (uint k=0;k<ps.N;k++) {
+							if (abs(omega_1(x,k))>MIN_NUMBER) {
+								/////////////////////equation I - theta!=0//////////////
+								lint m=k*ps.NT;
+								DDS.coeffRef(2*j+1,2*m) += (1.0-ps.Gamma)*omega_1(x,k)/(1.0+ps.Gamma);
+								minusDS(2*j+1) 			+= -(1.0-ps.Gamma)*omega_1(x,k)*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma);
+								/////////////////////equation R - theta!=0//////////////
+								minusDS(2*j) 			+= tnt*p(2*m+1)*omega_1(x,k)*(1+ps.Gamma)/(1-ps.Gamma);
+								DDS.coeffRef(2*j,2*m+1)	+= -tnt*omega_1(x,k)*(1.0+ps.Gamma)/(1.0-ps.Gamma);
+								bound 				+= -(1.0-ps.Gamma)*omega_1(x,k)*(p(2*j)-ps.minima[0])\
+															*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma)
+															 + (1.0+ps.Gamma)*omega_1(x,k)*p(2*j+1)*p(2*m+1)/(1.0-ps.Gamma);
+							}
+						}
+						//////////////////////////////////////equation R - theta!=0//////////////////////////////
+						for (uint k=1; k<2*2; k++){
 					        int sign = pow(-1,k+1);
 					        uint direc = (uint)(k/2.0);
 					        int neighb = neigh(j,direc,sign,ps);
 					        double dxd = (sign==1? dx: dxm);
 					        if (direc == 0) {
-					            minusDS(2*j+1) 					+= Dx*imag(Cp(j+sign)/dt);
-					            DDS.coeffRef(2*j+1,2*(j+sign)) 	+= -imag(Dx/dt);
-					            DDS.coeffRef(2*j+1,2*(j+sign)+1)+= -real(Dx/dt);
-					           }
+					            minusDS(2*j) 					+= tnt*Dx*real(Cp(j+sign)/dt);
+				            	DDS.coeffRef(2*j,2*(j+sign)) 	+= -tnt*real(Dx/dt);
+				            	DDS.coeffRef(2*j,2*(j+sign)+1) 	+= tnt*imag(Dx/dt);
+					        }
 					        else if (neighb!=-1) {
-					            minusDS(2*j+1) 					+= - imag(Dt*Cp(neighb))/dxd;
-					            DDS.coeffRef(2*j+1,2*neighb) 	+= imag(Dt)/dxd;
-					            DDS.coeffRef(2*j+1,2*neighb+1) 	+= real(Dt)/dxd;
+					            minusDS(2*j) 					+= -tnt*real(Dt*Cp(neighb))/dxd;
+					            DDS.coeffRef(2*j,2*neighb) 		+= tnt*real(Dt)/dxd;
+				            	DDS.coeffRef(2*j,2*neighb+1) 	+= -tnt*imag(Dt)/dxd;
 					        }
 					    }
-					    comp temp0 = Dx/dt - Dt*(1.0/dx+1.0/dxm);
-					    if (neighPosX==-1) 		temp0 += Dt/dx;
-					    else if (neighNegX==-1) temp0 += Dt/dxm;
-					    comp temp1 = Dt*Dx*( dV(Cp(j)) + dVr(Cp(j)) );//dV terms should be small
-					    comp temp2 = Dt*Dx*(ddV(Cp(j)) + ddVr(Cp(j)));
-					    
-					    minusDS(2*j+1) 				+= imag(-temp0*Cp(j) + temp1 );
-					    DDS.coeffRef(2*j+1,2*j) 	+= imag(temp0 - temp2 );
-					    DDS.coeffRef(2*j+1,2*j+1) 	+= real(temp0 - temp2 );
-						/////////////////////////////////////////////////////////////////////////////////////////
-						if (abs(ps.theta)<MIN_NUMBER) {
-							//simplest boundary conditions replaced by ones continuously connected to theta!=0 ones
-							//DDS.insert(2*j+1,2*(j+1)+1) = 1.0; //zero imaginary part of time derivative
-							//DDS.insert(2*j,2*j+1) = 1.0; //zero imaginary part
-						
-							/////////////////////////////////////equation R - theta=0//////////////////////////////////////
-							for (uint k=0;k<ps.N;k++) {
-								if (abs(omega_1(x,k))>MIN_NUMBER) {
-									lint m=k*ps.NT;
-									DDS.coeffRef(2*j,2*m+1) += -2.0*omega_1(x,k);
-									minusDS(2*j) 			+= 2.0*omega_1(x,k)*p(2*m+1);
-								}
-							}
-							////////////////////////////////////////////////////////////////////////////////////////
-						}
-						else {
-							for (uint k=0;k<ps.N;k++) {
-								if (abs(omega_1(x,k))>MIN_NUMBER) {
-									/////////////////////equation I - theta!=0//////////////
-									lint m=k*ps.NT;
-									DDS.coeffRef(2*j+1,2*m) += (1.0-ps.Gamma)*omega_1(x,k)/(1.0+ps.Gamma);
-									minusDS(2*j+1) 			+= -(1.0-ps.Gamma)*omega_1(x,k)*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma);
-									/////////////////////equation R - theta!=0//////////////
-									minusDS(2*j) 			+= p(2*m+1)*omega_1(x,k)*(1+ps.Gamma)*ps.theta/(1-ps.Gamma);
-									DDS.coeffRef(2*j,2*m+1)	+= -omega_1(x,k)*(1.0+ps.Gamma)*ps.theta/(1.0-ps.Gamma);
-									bound 				+= -(1.0-ps.Gamma)*omega_1(x,k)*(p(2*j)-ps.minima[0])\
-																*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma)
-																 + (1.0+ps.Gamma)*omega_1(x,k)*p(2*j+1)*p(2*m+1)/(1.0-ps.Gamma);
-								}
-							}
-							//////////////////////////////////////equation R - theta!=0//////////////////////////////
-							for (uint k=1; k<2*2; k++){
-						        int sign = pow(-1,k+1);
-						        uint direc = (uint)(k/2.0);
-						        int neighb = neigh(j,direc,sign,ps);
-						        double dxd = (sign==1? dx: dxm);
-						        if (direc == 0) {
-						            minusDS(2*j) 					+= Dx*real(Cp(j+sign)/dt)*ps.theta;
-					            	DDS.coeffRef(2*j,2*(j+sign)) 	+= -real(Dx/dt)*ps.theta;
-					            	DDS.coeffRef(2*j,2*(j+sign)+1) 	+= imag(Dx/dt)*ps.theta;
-						        }
-						        else if (neighb!=-1) {
-						            minusDS(2*j) 					+= - real(Dt*Cp(neighb))*ps.theta/dxd;
-						            DDS.coeffRef(2*j,2*neighb) 		+= real(Dt)*ps.theta/dxd;
-					            	DDS.coeffRef(2*j,2*neighb+1) 	+= -imag(Dt)*ps.theta/dxd;
-						        }
-						    }
-						    minusDS(2*j) 			+= ps.theta*real(-temp0*Cp(j) + temp1 );
-					    	DDS.coeffRef(2*j,2*j) 	+= ps.theta*real(temp0 - temp2 );
-					    	DDS.coeffRef(2*j,2*j+1) += ps.theta*imag(-temp0 + temp2 );
-						}
+					    minusDS(2*j) 			+= tnt*real(-temp0*Cp(j) + temp1 );
+				    	DDS.coeffRef(2*j,2*j) 	+= tnt*real(temp0 - temp2 );
+				    	DDS.coeffRef(2*j,2*j+1) += tnt*imag(-temp0 + temp2 );
 					}
 				}
 
@@ -1057,6 +1069,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- checkIE
 		- checkTrue
 		- checkLatt
+		- checkBound
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
@@ -1147,7 +1160,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			
 			//checking pot_r is much smaller than the other potential terms
 			checkReg.add(abs(pot_r/potV));
-			checkReg.checkMessage();
+			checkReg.checkMessage(ces);
 						
 			//checking linearisation of linErg and linNum
 			double linTestE;		double linTestN;
@@ -1190,6 +1203,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			//checking lattice small enough for E, should have parameter for this
 			double momTest = E*ps.b/Num/pi; //perhaps should have a not b here
 			checkLatt.add(momTest);
+			
+			//checking initial boundary conditions satisfied
+			double boundReTest = boundRe.norm()/ps.N;
+			double boundImTest = boundIm.norm()/ps.N;
+			checkBoundRe.add(boundReTest);
+			checkBoundIm.add(boundImTest);
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	11. printing early 1
@@ -1289,7 +1308,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			double maxDiff = diff.maxCoeff();
 			maxDiff = abs(maxDiff);
 			checkInv.add(maxDiff);
-			checkInv.checkMessage();
+			checkInv.checkMessage(ces);
 			if (!checkInv.good()) return 1;
 
 			//assigning values to phi
@@ -1353,13 +1372,20 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if (runs_count==1) {
 				fprintf(cof,"%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","linear"\
 							,"true erg","on shell","AB","ABNE","conserv","latt");
+				if ((opts.printChoice).compare("gui")==0)
+					printf("%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","linear"\
+							,"true erg","on shell","AB","ABNE","conserv","latt");
 			}
 			fprintf(cof,"%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,checkSoln.back(),\
 				checkSolnMax.back(),checkDelta.back(),checkLin.back(),checkTrue.back(),checkOS.back(),checkAB.back(),checkABNE.back(),\
 				checkCon.back(),checkLatt.back());
+			if ((opts.printChoice).compare("gui")==0)
+				printf("%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,checkSoln.back(),\
+					checkSolnMax.back(),checkDelta.back(),checkLin.back(),checkTrue.back(),checkOS.back(),checkAB.back(),\
+					checkABNE.back(),checkCon.back(),checkLatt.back());
 			
 			if (!checkDelta.good()) {
-				checkDelta.checkMessage();
+				checkDelta.checkMessage(ces);
 				break;
 			}
 			
@@ -1387,13 +1413,15 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 ----------------------------------------------------------------------------------------------------------------------------*/
 
 		// check messages
-		checkTrue.checkMessage();
-		checkOS.checkMessage();
-		checkABNE.checkMessage();
-		if (ps.pot==3 && abs(ps.theta)<MIN_NUMBER) checkContm.checkMessage();
-		checkCon.checkMessage();
-		checkIE.checkMessage();
-		checkLatt.checkMessage();
+		checkTrue.checkMessage(ces);
+		checkOS.checkMessage(ces);
+		checkABNE.checkMessage(ces);
+		if (ps.pot==3 && abs(ps.theta)<MIN_NUMBER) checkContm.checkMessage(ces);
+		checkCon.checkMessage(ces);
+		checkIE.checkMessage(ces);
+		checkLatt.checkMessage(ces);
+		checkBoundRe.checkMessage(ces);
+		checkBoundIm.checkMessage(ces);
 		
 		//stopping clock
 		time = clock() - time;
@@ -1431,6 +1459,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
 			//fprintf(cof,"%12s%30s\n","steps:",stepFile.c_str());
+			//if ((opts.printChoice).compare("gui")==0)
+			//printf("%12s%30s\n","steps:",stepFile.c_str());
 		}
 		else
 			stepper.addResult(1.0); // choice irrelevant but a value is require to make step
@@ -1441,10 +1471,18 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		fprintf(cof,"%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
 				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,Num,E,imag(action),W);
 		fprintf(cof,"\n");
+		if ((opts.printChoice).compare("gui")==0) {
+			printf("\n");
+			printf("%8s%8s%8s%8s%8s%8s%8s%8s%14s%14s%14s%14s\n","runs","time","ps.N","NT","L","Tb","dE",\
+				"theta","Num","E","im(action)","W");
+			printf("%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
+				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,Num,E,imag(action),W);
+			printf("\n");
+		}
 
 		// printing results to file
 		stepped = stepper.keep();
-		if (stepped) {
+		if (stepped && checkDelta.good()) {
 			FILE * actionfile;
 			string resultsFile = "results/"+timenumber+"mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
@@ -1453,6 +1491,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 						,W,checkSoln.back(),checkLin.back(),checkTrue.back());
 			fclose(actionfile);
 			fprintf(cof,"%12s%30s\n","results:",resultsFile.c_str());
+			if ((opts.printChoice).compare("gui")==0)
+				printf("%12s%30s\n","results:",resultsFile.c_str());
 		}
 		stepper.step();
 		

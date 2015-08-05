@@ -830,6 +830,16 @@ void Options::print() const {
 	printf("\n");
 }
 
+// print File*
+void Options::print(FILE* stream) const {
+	fprintf(stream,"%12s%12s%12s%12s%12s%12s%12s%12s%12s%12s\n","alpha","open","zmx","zmt","bds","inF","loopChoice","loopMin","loopMax","loops");
+	fprintf(stream,"%12.1g%12.1g%12s%12s%12s%12s%12s%12.4g%12.4g%12i\n",\
+			alpha,open,zmx.c_str(),zmt.c_str(),\
+			bds.c_str(),inF.c_str(),loopChoice.c_str(),loopMin,loopMax,\
+			loops);
+	fprintf(stream,"\n");
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	5. Closenesses
 		- operator<<

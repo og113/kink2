@@ -12,6 +12,6 @@ set ytic auto
 set title "E vs T"
 set xlabel "T"
 set ylabel "E"
-plot "results/main_pot_3.dat" using 5:($8/18.9) with points
+plot "results/mainResults.dat" using 5:($8/18.9) with points
 
 pause -1

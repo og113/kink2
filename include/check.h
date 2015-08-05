@@ -29,6 +29,7 @@ public:
 	void 			add(const double& t);			// add test to Tests
 	bool 			good() const;					// carry out check
 	void 			checkMessage() const;			// carry out check and print message if !good()
+	void			checkMessage(ostream&) const;	// print message to given stream
 	double 			back() const;					// gives result of last test
 	vector<double> 	tests() const;					// gives Tests
 	double 			closeness() const;				// gives closeness

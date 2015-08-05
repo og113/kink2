@@ -204,6 +204,7 @@ struct Options {
 	bool changeOptions (const string& pName, const string& pValue);
 	void save(const string& filename) const;
 	void load(const string& filename);
+	void print(FILE * stream) const;
 	void print() const;
 };
 
