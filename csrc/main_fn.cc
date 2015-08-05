@@ -849,39 +849,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					derivErg(t) += Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0;
 					erg(t) 		+= Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0;
 					
-					///////////////////////////////////// beginning of boundary test //////////////////////////////////////
-					if (abs(ps.theta)>MIN_NUMBER) {
-						for (uint k=0;k<ps.N;k++) {
-							if (abs(omega_1(x,k))>MIN_NUMBER) {
-								lint m=k*ps.NT;
-								boundRe(x) += -(1.0+ps.Gamma)*omega_1(x,k)*p(2*m+1)/(1.0-ps.Gamma);
-								boundIm(x) += (1.0-ps.Gamma)*omega_1(x,k)*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma);
-							}
-						}
-						for (uint k=1; k<2*2; k++) {
-				            int sign = pow(-1,k+1);
-				            uint direc = (uint)(k/2.0);
-				            int neighb = neigh(j,direc,sign,ps);
-				            double dxd = (sign==1? dx: dxm);
-				            if (direc == 0) {
-				                boundRe(x) 	+= -real(Dx*Cp(j+sign)/dt);
-				                boundIm(x) 	+= -imag(Dx*Cp(j+sign)/dt);
-				            }
-				            else if (neighb!=-1) {                        
-				                boundRe(x) 	+= real(Dt*Cp(neighb)/dxd);
-				                boundIm(x) 	+= imag(Dt*Cp(neighb)/dxd);
-				            }
-                		}
-				        comp temp0 = Dx/dt - Dt*(1.0/dx + 1.0/dxm);
-				        if (neighPosX==-1) 		temp0 += Dt/dx;
-				        else if (neighNegX==-1) temp0 += Dt/dxm;
-				        comp temp1 = Dt*Dx*(dV(Cp(j)) + dVr(Cp(j)));
-				            
-				        boundRe(x) 			+= real(temp0*Cp(j) - temp1);
-				        boundIm(x) 			+= imag(temp0*Cp(j) - temp1);
-					}			
-					///////////////////////////////////// end of boundary test //////////////////////////////////////
-					
 					///////////////////////////////// including other terms in action at t=0 ///////////////////////////
 					if (neighPosX!=-1) {
 						kineticS 	+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
@@ -1050,6 +1017,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		    	linNum = linNumOffShell;
 		    }
 		    
+		    for (uint x=1; x<(ps.N-1); x++) {
+		    	lint m = x*ps.NT;
+		    	boundRe(x) = minusDS(2*m);
+		    	boundIm(x) = minusDS(2*m+1);
+		    }
+		    
 		    //defining E, Num and W
 			E = real(linErg(0));
 			Num = real(linNum(0));
@@ -1205,8 +1178,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			checkLatt.add(momTest);
 			
 			//checking initial boundary conditions satisfied
-			double boundReTest = boundRe.norm()/ps.N;
-			double boundImTest = boundIm.norm()/ps.N;
+			double boundReTest = boundRe.norm()/(ps.N-2.0);
+			double boundImTest = boundIm.norm()/(ps.N-2.0);
 			checkBoundRe.add(boundReTest);
 			checkBoundIm.add(boundImTest);
 	
