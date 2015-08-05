@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <utility> // for pair
 #include <cstdlib> // for system
@@ -99,17 +100,18 @@ load(f,so,data);
 	n.b. T = 2Tb
 -------------------------------------------------------------------------------------------------------------------------*/
 
-vec error(data.rows());
 vector<uint> toRemove;
 
-cout << "removing rows: " << endl;
+cout << endl << "removing rows with values>" << closeness << " in column " << colError << endl << endl;
+cout << left;
+cout << setw(20) << "value" << setw(20) << "column" << endl;
 for (uint j=0; j<data.rows(); j++) {
-	error(j) = data(j,colError);
-	if (abs(error(j))>closeness) {
+	if (abs(data(j,colError))>closeness) {
 		toRemove.push_back(j);
-		cout << j << endl;
+		cout << setw(20) << data(j,colError) << setw(20) << j << endl;
 	}
 }
+cout << endl;
 
 for (uint j=0; j<toRemove.size(); j++) {
 	removeRow(data,toRemove[toRemove.size()-1-j]);
