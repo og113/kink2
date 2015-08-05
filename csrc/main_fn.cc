@@ -786,7 +786,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					minusDS(2*ps.N*ps.NT) 				+= -Dx*chiX(j)*p(2*j);
 				}
 					
-				if (abs(chiT(j))>MIN_NUMBER && t<(ps.NT-1)) {
+				if (abs(chiT(j))>MIN_NUMBER && t<(ps.NT-1) && (ps.pot!=3 || (x>0 && x<(ps.N-1)))) {
 					DDS.coeffRef(2*(j+1),2*ps.N*ps.NT+1) 	+= Dx*chiT(j); //chiT should be 0 at t=(ps.NT-1) or this line will go wrong
 					DDS.coeffRef(2*ps.N*ps.NT+1,2*(j+1)) 	+= Dx*chiT(j);
 					DDS.coeffRef(2*j,2*ps.N*ps.NT+1) 		+= -Dx*chiT(j);
