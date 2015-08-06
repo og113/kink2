@@ -172,7 +172,7 @@ else if (rank==0 && !revertToDefault) {
 	}
 }
 
-bool humanIntervention = false;
+bool humanIntervention = true;
 if (revertToDefault && rank==0) {
 	for (int k=0; k<nodes_req; k++) {
 		timenumbers[k] = "00"+numberToString<int>(k);
@@ -181,9 +181,23 @@ if (revertToDefault && rank==0) {
 }
 else if (rank==0 && humanIntervention) {
 	// human intervention
-	for (int j=0; j<nodes_req; j++) {
-		timenumbers[j] = "1505211206"+numberToString<int>(5+2*j);
+	ifstream is;
+	is.open("wrapperFiles.txt");
+	if (is) {
+		for (int j=0; j<nodes_req; j++) {
+			if (!is.eof())
+				is >> timenumbers[j] >> loops[j];
+			else {
+				cerr << "wrapperFiles.txt contains fewer than "<< nodes_req << " filenames" << endl;
+				return 1;
+			}
+		}
 	}
+	else {
+		cerr << "wrapperFiles.txt not opened properly" << endl;
+		return 1;
+	}
+	is.close();
 }
 
 if (rank==0) {

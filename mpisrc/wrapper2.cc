@@ -181,9 +181,23 @@ if (revertToDefault && rank==0) {
 }
 else if (rank==0 && humanIntervention) {
 	// human intervention
-	for (int j=0; j<nodes_req; j++) {
-		timenumbers[j] = "1505211206"+numberToString<int>(5+2*j);
+	ifstream is;
+	is.open("wrapper2Files.txt");
+	if (is) {
+		for (int j=0; j<nodes_req; j++) {
+			if (!is.eof())
+				is >> timenumbers[j] >> loops[j];
+			else {
+				cerr << "wrapper2Files.txt contains fewer than "<< nodes_req << " filenames" << endl;
+				return 1;
+			}
+		}
 	}
+	else {
+		cerr << "wrapper2Files.txt not opened properly" << endl;
+		return 1;
+	}
+	is.close();
 }
 
 if (rank==0) {
