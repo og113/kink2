@@ -534,7 +534,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		//defining some quantities used to stop the Newton-Raphson loop when action stops varying
 		comp action_last = action;
 		uint runs_count = 0;
-		uint min_runs = 2;
+		uint min_runs = 1;
 		uint max_runs = 100;
 
 		//initializing phi (=p)
