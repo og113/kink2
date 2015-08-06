@@ -273,13 +273,31 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		point(psu.Tb,psu.theta);
 	}
 	else {
-		step_opts.epsi_x =  (opts.loopMax - opts.loopMin)/(opts.loops-1.0);;
+		if (opts.loops>1 && abs(opts.loopMax - opts.loopMin)>MIN_NUMBER) {
+			step_opts.epsi_x =  (opts.loopMax - opts.loopMin)/(opts.loops-1.0);
+			point(opts.loopMin,0.0);
+		}
+		else if ((opts.loopChoice).compare("theta")==0) {
+			step_opts.epsi_x = opts.epsiTheta;
+			point(psu.theta,0.0);
+		}
+		else if ((opts.loopChoice).compare("Tb")==0) {
+			step_opts.epsi_x = opts.epsiTb;
+			point(psu.Tb,0.0);
+		}
+		else if (opts.loops>1) {
+			ces << endl << "loopChoice and stepper options not possible:" << endl;
+			ces << opts << endl;
+			return 1;
+		}
+		else {
+			step_opts.epsi_x = 0.0;
+		}
 		step_opts.epsi_y = 0.0;
 		step_opts.angle0 = 0.0;
 		step_opts.stepType = StepperOptions::straight;
 		step_opts.directed = StepperOptions::undirected;
 		step_opts.closeness = closenesses.Step; // irrelevant here
-		point(opts.loopMin,0.0);
 	}
 	Stepper stepper(step_opts,point);
 	
