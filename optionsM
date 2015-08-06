@@ -10,7 +10,7 @@ maxTimenumberLoad   150805155940
 minfLoopLoad        0                   
 maxfLoopLoad        0                   
 minLoopLoad         0                   
-maxLoopLoad         100                   
+maxLoopLoad         99                   
 loopChoice          n              
 loopMin             0.000              
 loopMax             0.01                   
