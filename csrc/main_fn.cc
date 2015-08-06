@@ -549,7 +549,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.printMessage = false;
 		if (loop==0) {
 			if (fileLoop==0 && ((pFolder[0]).Suffix).compare(".dat")==0) so_tp.printType = SaveOptions::ascii;
-			load(pFolder[0],so_tp,p); //n.b there may be some problems with zero modes for binary printing
+			load(pFolder[fileLoop],so_tp,p); //n.b there may be some problems with zero modes for binary printing
 			if (p.size()==(2*ps.N*ps.NT+1)) { // if came from pi.cc and in binary
 				p.conservativeResize(2*ps.N*ps.NT+2);
 				p(2*ps.N*ps.NT+1) = 0.5;

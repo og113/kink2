@@ -47,7 +47,7 @@ n.b. the first column is column 0
 
 Filename f = ("results/mainResults2.dat");
 mat data;
-uint colError = 13;
+uint column = 13;
 double closeness = 1.0e-5;
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ else if (argc % 2 && argc>1) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
 		if (id.compare("f")==0 || id.compare("file")==0) f = (string)(argv[2*j+2]);
-		else if (id.compare("col")==0 || id.compare("column")==0) colError = stringToNumber<uint>(argv[2*j+2]);
+		else if (id.compare("col")==0 || id.compare("column")==0) column = stringToNumber<uint>(argv[2*j+2]);
 		else if (id.compare("close")==0 || id.compare("closeness")==0) closeness = stringToNumber<double>(argv[2*j+2]);
 		else {
 			cerr << "input " << id << " unrecognized" << endl;
@@ -102,13 +102,13 @@ load(f,so,data);
 
 vector<uint> toRemove;
 
-cout << endl << "removing rows with values>" << closeness << " in column " << colError << endl << endl;
+cout << endl << "removing rows with values>" << closeness << " in column " << column << endl << endl;
 cout << left;
 cout << setw(20) << "value" << setw(20) << "column" << endl;
 for (uint j=0; j<data.rows(); j++) {
-	if (abs(data(j,colError))>closeness) {
+	if (abs(data(j,column))>closeness) {
 		toRemove.push_back(j);
-		cout << setw(20) << data(j,colError) << setw(20) << j << endl;
+		cout << setw(20) << data(j,column) << setw(20) << j << endl;
 	}
 }
 cout << endl;
@@ -128,6 +128,9 @@ for (uint j=0; j<toRemove.size(); j++) {
 // saving vectors to file
 Filename fo = f;
 fo.ID = f.ID + "fix";
+if (column!=13) {
+	(fo.Extras).push_back(StringPair("col",numberToString<uint>(column)));
+}
 save(fo,so,data);
 
 return 0;
