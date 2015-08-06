@@ -117,6 +117,7 @@ if (copyFiles && rank==0) {
 
 // getting last timenumbers
 bool revertToDefault = false;
+bool humanIntervention = true;
 vector<string> timenumbers(nodes_req);
 vector<string> loops(nodes_req);
 string timenumber;
@@ -134,7 +135,7 @@ Folder F(fa_low,fa_high);
 
 if (F.size()==0)
 	revertToDefault = true;
-else if (rank==0 && !revertToDefault) {
+else if (!revertToDefault && !humanIntervention && rank==0) {
 	for (int k=0; k<nodes_req; k++) {
 		string maxTimenumber = "0";
 		if (F.size()==0) {
@@ -173,14 +174,13 @@ else if (rank==0 && !revertToDefault) {
 	}
 }
 
-bool humanIntervention = false;
 if (revertToDefault && rank==0) {
 	for (int k=0; k<nodes_req; k++) {
 		timenumbers[k] = "00"+numberToString<int>(k);
 		loops[k] = "0";
 	}
 }
-else if (rank==0 && humanIntervention) {
+else if (humanIntervention && rank==0) {
 	// human intervention
 	ifstream is;
 	is.open("wrapper2Files.txt");
