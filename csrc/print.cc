@@ -590,8 +590,9 @@ static void saveMatAscii(const string& f, const SaveOptions& opts, const mat& m)
 		for (uint k=0; k<m.cols(); k++) {
 			if (opts.extras==SaveOptions::loc)
 				F << setw(25) << j << setw(25) << k;
-			F << setw(25) << m(j,k) << endl;
+			F << setw(25) << m(j,k);
 		}
+		F << endl;
 	}
 	F.close();
 }
@@ -1038,7 +1039,7 @@ void loadMatBinary(const string& f, SaveOptions& opts, mat& m) {
 	is.close();
 }
 
-// load mat - ascii- assumes square matrix
+// load mat - ascii
 void loadMatAscii(const string& f, SaveOptions& opts, mat& m) {
 	Filename F(f);
 	if ((F.Suffix).compare(".dat")!=0) {
