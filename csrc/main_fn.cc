@@ -555,9 +555,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				p(2*ps.N*ps.NT+1) = 0.5;
 			}
 			so_tp.printType = SaveOptions::binary;
-			fprintf(cof,"%12s%30s\n","input: ",(pFolder[0]()).c_str());
+			fprintf(cof,"%12s%30s\n","input: ",(pFolder[fileLoop]()).c_str());
 			if ((opts.printChoice).compare("gui")==0)
-				printf("%12s%30s\n","input: ",(pFolder[0]()).c_str());
+				printf("%12s%30s\n","input: ",(pFolder[fileLoop]()).c_str());
 		}
 		else {
 			Filename lastPhi;
