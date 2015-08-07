@@ -254,10 +254,10 @@ argv_main[3] = "-maxtn";		argv_main[4] = timenumber;
 argv_main[5] = "-minll";		argv_main[6] = loop;
 argv_main[7] = "-maxll";		argv_main[8] = loop;
 argv_main[9] = "-opts";			argv_main[10] = "data/00"+numberToString<int>(rank)+"optionsM";
-argv_main[11] = "-loops";		argv_main[12] = "81";
+argv_main[11] = "-loops";		argv_main[12] = "101";
 argv_main[13] = "-loopChoice";	argv_main[14] = "theta";
-argv_main[15] = "-loopMin";		argv_main[16] = "0.02";
-argv_main[17] = "-loopMax";		argv_main[18] = "0.10";
+argv_main[15] = "-loopMin";		argv_main[16] = "0.00";
+argv_main[17] = "-loopMax";		argv_main[18] = "0.00";
 argv_main[19] = "-zmt";			argv_main[20] = "nD2";
 
 if (rank==0 && revertToDefault) {
