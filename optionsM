@@ -4,7 +4,7 @@ amp                 0.5
 zmx                 nC2                 
 zmt                 nD2                 
 bds                 uc                               
-inF                 m                 
+inF                 mn                 
 minTimenumberLoad   001        
 maxTimenumberLoad   001        
 minfLoopLoad        0                   
@@ -14,8 +14,8 @@ maxLoopLoad         0
 loopChoice          theta              
 loopMin             0.0              
 loopMax             0.0                   
-epsiTb              0.0001              
-epsiTheta           0.0001              
+epsiTb              0.001              
+epsiTheta           0.001              
 loops               10                 
-printChoice         gui                   
+printChoice         n                   
 
