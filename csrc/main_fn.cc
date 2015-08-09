@@ -682,7 +682,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				posMap['A'] = j*ps.NT;
 				posMap['B'] = j*ps.NT + ps.Na-1;
 				posMap['C'] = j*ps.NT+ps.Na+ps.Nb-slicesT;
-				posMap['D'] = j*ps.NT+(ps.NT-1)-slicesT-1; // extra -1 (so actually D-1) as chiT orthogonal to forward time derivative
+				posMap['D'] = j*ps.NT+ps.NT-slicesT-1; // extra -1 (so actually D-1) as chiT orthogonal to forward time derivative
 				if ((opts.zmt).size()<3) {
 					ces << "zmt lacks info, zmt = " << opts.zmt << endl;
 					if ((opts.printChoice).compare("gui")==0)

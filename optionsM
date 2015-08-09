@@ -11,11 +11,11 @@ minfLoopLoad        0
 maxfLoopLoad        0                   
 minLoopLoad         11                   
 maxLoopLoad         11                   
-loopChoice          n              
+loopChoice          theta              
 loopMin             0.0              
 loopMax             0.0                   
 epsiTb              0.001              
 epsiTheta           0.001              
-loops               1                 
+loops               2                 
 printChoice         gui                   
 
