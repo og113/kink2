@@ -246,7 +246,7 @@ else {
 		- mpi::finalize
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int argc_main = 19;
+int argc_main = 21;
 vector <string> argv_main(argc_main);
 argv_main[0] = "main";
 argv_main[1] = "-mintn";		argv_main[2] = timenumber;
@@ -264,6 +264,7 @@ else {
 	argv_main[15] = "-epsiTheta";		argv_main[16] = "0.002";
 }
 argv_main[17] = "-zmt";			argv_main[18] = "nD2";
+argv_main[19] = "-loopChoice";	argv_main[20] = "constW";
 
 if (rank==0 && revertToDefault) {
 	argc_main += 2;
