@@ -186,6 +186,8 @@ else if ((opts.inF)[0]=='m') {
 }
 else {
 	ces << "inF error: " << opts.inF << " not recognised" << endl;
+	if ((opts.printChoice).compare("gui")==0)
+		cerr << "inF error: " << opts.inF << " not recognised" << endl;
 	return 1;
 }
 
@@ -236,6 +238,10 @@ if (pFolder.size()>0 && inputsFolder.size()>0) {
 else {
 	ces << endl << "not files found for options:" << endl;
 	ces << opts << endl;
+	if ((opts.printChoice).compare("gui")==0) {
+		cerr << endl << "not files found for options:" << endl;
+		cerr << opts << endl;
+	}
 	return 1;
 }
 
@@ -290,6 +296,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		else if (opts.loops>1) {
 			ces << endl << "loopChoice and stepper options not possible:" << endl;
 			ces << opts << endl;
+			if ((opts.printChoice).compare("gui")==0) {
+				cerr << endl << "loopChoice and stepper options not possible:" << endl;
+				cerr << opts << endl;
+			}
 			return 1;
 		}
 		else {
@@ -402,6 +412,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 		else {
 			ces << "pot option not available, pot = " << ps.pot << endl;
+			if ((opts.printChoice).compare("gui")==0)
+				cerr << "pot option not available, pot = " << ps.pot << endl;
 			return 1;
 		}
 	
@@ -497,6 +509,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				Folder eigVecFolder(lower,upper);
 				if (eigVecFolder.size()==0) {
 					ces << "no negative eigenvector files found between:" << endl << lower << endl << upper << endl;
+					if ((opts.printChoice).compare("gui")==0)
+						cerr << "no negative eigenvector files found between:" << endl << lower << endl << upper << endl;
 					return 1;
 				}
 				else {
@@ -634,8 +648,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		while (!checkSoln.good() || !checkSolnMax.good() || runs_count<min_runs) {
 			runs_count++;
 			if (runs_count>max_runs) {
-				cerr << "main error: max_runs(" << max_runs << ") exceeded for:" << endl;
-				cerr << "timenumber: " << timenumber << "; fileLoop: " << fileLoop << "; loop: " << loop << endl;
+				ces << "main error: max_runs(" << max_runs << ") exceeded for:" << endl;
+				ces << "timenumber: " << timenumber << "; fileLoop: " << fileLoop << "; loop: " << loop << endl;
+				if ((opts.printChoice).compare("gui")==0) {
+					cerr << "main error: max_runs(" << max_runs << ") exceeded for:" << endl;
+					cerr << "timenumber: " << timenumber << "; fileLoop: " << fileLoop << "; loop: " << loop << endl;
+				}
 				return 1;				
 			}
 			
@@ -647,10 +665,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				uint slicesX, slicesT;
 				if (getLastInt(opts.zmx)<0) {
 					ces << "getLastInt error with zmx = " << opts.zmx << endl;
+					if ((opts.printChoice).compare("gui")==0)
+						cerr << "getLastInt error with zmx = " << opts.zmx << endl;
 					return 1;
 				}
 				if (getLastInt(opts.zmt)<0) {
 					ces << "getLastInt error with zmt = " << opts.zmt << endl;
+					if ((opts.printChoice).compare("gui")==0)
+						cerr << "getLastInt error with zmt = " << opts.zmt << endl;
 					return 1;
 				}
 				slicesX = getLastInt(opts.zmx);
@@ -660,8 +682,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				posMap['A'] = j*ps.NT;
 				posMap['B'] = j*ps.NT + ps.Na-1;
 				posMap['C'] = j*ps.NT+ps.Na+ps.Nb-slicesT;
-				posMap['D'] = j*ps.NT+(ps.NT-1)-slicesT;
-				if ((opts.zmt).size()<3) ces << "zmt lacks info, zmt = " << opts.zmt << endl;
+				posMap['D'] = j*ps.NT+ps.NT-slicesT-1; // extra -1 (so actually D-1) as chiT orthogonal to forward time derivative
+				if ((opts.zmt).size()<3) {
+					ces << "zmt lacks info, zmt = " << opts.zmt << endl;
+					if ((opts.printChoice).compare("gui")==0)
+						cerr << "zmt lacks info, zmt = " << opts.zmt << endl;
+				}
 				for (uint l=0;l<((opts.zmt).size()-2);l++) {
 					if (posMap.find(opts.zmt[1+l])!=posMap.end()) {
 						posT = posMap.at(opts.zmt[1+l]);
@@ -674,6 +700,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 							else if (opts.zmt[0]=='d')	chiT(posT+k) = p(2*(posT+k+1))-p(2*(posT+k));
 							else {
 								ces << "choice of zmt(" << opts.zmt << ") not allowed" << endl;
+								if ((opts.printChoice).compare("gui")==0)
+									cerr << "choice of zmt(" << opts.zmt << ") not allowed" << endl;
 								return 1;
 							}
 						}
@@ -684,7 +712,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				posMap['C'] = j*ps.NT+ps.Na+ps.Nb-slicesX;
 				posMap['D'] = j*ps.NT+ps.NT-slicesX;
 				posCe = j*ps.Nb+ps.Nb-slicesX;
-				if ((opts.zmx).size()<3) ces << "zmx lacks info, zmx = " << opts.zmx << endl;
+				if ((opts.zmx).size()<3) {
+					ces << "zmx lacks info, zmx = " << opts.zmx << endl;
+					if ((opts.printChoice).compare("gui")==0)
+						cerr << "zmx lacks info, zmx = " << opts.zmx << endl;
+				}
 				for (uint l=0;l<((opts.zmx).size()-2);l++) {
 					if (posMap.find(opts.zmx[1+l])!=posMap.end()) {
 						posX = posMap.at(opts.zmx[1+l]);
@@ -698,6 +730,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 								chiX(posX+k) = p(2*neigh(posX+k,1,1,ps))-p(2*neigh(posX+k,1,-1,ps));
 							else {
 								ces << "choice of zmx(" << opts.zmx << ") not allowed" << endl;
+								if ((opts.printChoice).compare("gui")==0)
+									cerr << "choice of zmx(" << opts.zmx << ") not allowed" << endl;
 								return 1;
 							}
 						}
@@ -709,6 +743,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			normT = pow(normT,0.5);
 			if (abs(normX)<MIN_NUMBER || abs(normT)<MIN_NUMBER) {
 				ces << "norm of chiX = " << normX << ", norm of chiT = " << normT << endl;
+				if ((opts.printChoice).compare("gui")==0)
+					cerr << "norm of chiX = " << normX << ", norm of chiT = " << normT << endl;
 			}
 			chiX = chiX/normX;
 			chiT = chiT/normT;
@@ -1070,7 +1106,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if (trivialChecks) {
 				for (uint j=0; j<ps.NT; j++) {
 					double diff = absDiff(erg(j),potErg(j)+derivErg(j));
-					if (diff>1.0e-14) ces << "erg(" << j << ") != potErg + derivErg. absDiff = " << diff << endl;
+					if (diff>1.0e-14) {
+						ces << "erg(" << j << ") != potErg + derivErg. absDiff = " << diff << endl;
+						if ((opts.printChoice).compare("gui")==0)
+							cerr << "erg(" << j << ") != potErg + derivErg. absDiff = " << diff << endl;
+					}
 				}
 			}
 			
@@ -1154,6 +1194,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			//checking pot_r is much smaller than the other potential terms
 			checkReg.add(abs(pot_r/potV));
 			checkReg.checkMessage(ces);
+			if ((opts.printChoice).compare("gui")==0)
+				checkReg.checkMessage(cerr);
 						
 			//checking linearisation of linErg and linNum
 			double linTestE;		double linTestN;
@@ -1190,8 +1232,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			E_exact /= (double)linearInt;
 			double trueTest = absDiff(E,E_exact);
 			checkTrue.add(trueTest);
-			if (!isfinite(trueTest))
+			if (!isfinite(trueTest)) {
 				ces << "E = " << E << ", E_exact = " << E_exact << ", linearInt = " << linearInt << endl;
+				if ((opts.printChoice).compare("gui")==0)
+					cerr << "E = " << E << ", E_exact = " << E_exact << ", linearInt = " << linearInt << endl;
+			}
 			
 			//checking lattice small enough for E, should have parameter for this
 			double momTest = E*ps.b/Num/pi; //perhaps should have a not b here
@@ -1280,11 +1325,15 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			solver.analyzePattern(DDS);
 			if(solver.info()!=Eigen::Success) {
 				ces << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
+				if ((opts.printChoice).compare("gui")==0)
+					cerr << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
 				return 1;
 			}		
 			solver.factorize(DDS);
 			if(solver.info()!=Eigen::Success) {
 				ces << "Factorization failed, solver.info() = "<< solver.info() << endl;
+				if ((opts.printChoice).compare("gui")==0)
+					cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
 				return 1;
 			}
 			delta = solver.solve(minusDS);// use the factorization to solve for the given right hand side
@@ -1292,6 +1341,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				ces << "Solving failed, solver.info() = "<< solver.info() << endl;
 				ces << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
 				ces << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
+				if ((opts.printChoice).compare("gui")==0) {
+					cerr << "Solving failed, solver.info() = "<< solver.info() << endl;
+					cerr << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
+					cerr << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
+				}
 				return 1;
 			}
 		
@@ -1302,6 +1356,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			maxDiff = abs(maxDiff);
 			checkInv.add(maxDiff);
 			checkInv.checkMessage(ces);
+			if ((opts.printChoice).compare("gui")==0)
+				checkInv.checkMessage(cerr);
 			if (!checkInv.good()) return 1;
 
 			//assigning values to phi
@@ -1379,6 +1435,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			
 			if (!checkDelta.good()) {
 				checkDelta.checkMessage(ces);
+				if ((opts.printChoice).compare("gui")==0)
+					checkDelta.checkMessage(cerr);
 				break;
 			}
 			
@@ -1415,6 +1473,17 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		checkLatt.checkMessage(ces);
 		checkBoundRe.checkMessage(ces);
 		checkBoundIm.checkMessage(ces);
+		if ((opts.printChoice).compare("gui")==0) {
+			checkTrue.checkMessage(cerr);
+			checkOS.checkMessage(cerr);
+			checkABNE.checkMessage(cerr);
+			if (ps.pot==3 && abs(ps.theta)<MIN_NUMBER) checkContm.checkMessage(cerr);
+			checkCon.checkMessage(cerr);
+			checkIE.checkMessage(cerr);
+			checkLatt.checkMessage(cerr);
+			checkBoundRe.checkMessage(cerr);
+			checkBoundIm.checkMessage(cerr);
+		}
 		
 		//stopping clock
 		time = clock() - time;
@@ -1431,6 +1500,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				F = Num;
 			else {
 				ces << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
+				if ((opts.printChoice).compare("gui")==0)
+					cerr << "Stepper error: option " << opts.loopChoice << " not possible" << endl;
 				return 1;
 			}
 			double angleToPrint = (loop==0? 0.0: stepper.stepAngle());
