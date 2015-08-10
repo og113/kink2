@@ -1,0 +1,149 @@
+/opt/torque/home/mom_priv/jobs/1023071.cosmic.private.damtp.cam.ac.uk.SC: line 19: cd: kink2: No such file or directory
+running 8 nodes
+node 0 of 8 running main with: timenumber 000, loop 0
+node 1 of 8 running main with: timenumber 001, loop 0
+node 2 of 8 running main with: timenumber 002, loop 0
+node 3 of 8 running main with: timenumber 003, loop 0
+node 4 of 8 running main with: timenumber 004, loop 0
+node 5 of 8 running main with: timenumber 005, loop 0
+node 6 of 8 running main with: timenumber 006, loop 0
+---------------------------------------------------------------------
+return 1 for node 0 on running main
+---------------------------------------------------------------------
+node 7 of 8 running main with: timenumber 007, loop 0
+timenumber: 150805144537
+timenumber: 150805144539
+timenumber: 150805144541
+timenumber: 150805144543
+timenumber: 150805144545
+timenumber: 150805144547
+timenumber: 150805144549
+     saved: data/150805144539mainp_fLoop_0_loop_0.data
+timenumber: 150805144539
+     saved: data/150805144545mainp_fLoop_0_loop_0.data
+timenumber: 150805144545
+     saved: data/150805144543mainp_fLoop_0_loop_0.data
+timenumber: 150805144543
+---------------------------------------------------------------------
+return 1 for node 6 on running main
+---------------------------------------------------------------------
+     saved: data/150805144541mainp_fLoop_0_loop_0.data
+timenumber: 150805144541
+     saved: data/150805144549mainp_fLoop_0_loop_0.data
+timenumber: 150805144549
+     saved: data/150805144537mainp_fLoop_0_loop_0.data
+timenumber: 150805144537
+     saved: data/150805144545mainp_fLoop_0_loop_1.data
+timenumber: 150805144545
+     saved: data/150805144543mainp_fLoop_0_loop_1.data
+timenumber: 150805144543
+     saved: data/150805144539mainp_fLoop_0_loop_1.data
+timenumber: 150805144539
+     saved: data/150805144549mainp_fLoop_0_loop_1.data
+timenumber: 150805144549
+     saved: data/150805144541mainp_fLoop_0_loop_1.data
+timenumber: 150805144541
+     saved: data/150805144545mainp_fLoop_0_loop_2.data
+timenumber: 150805144545
+     saved: data/150805144543mainp_fLoop_0_loop_2.data
+timenumber: 150805144543
+     saved: data/150805144537mainp_fLoop_0_loop_1.data
+timenumber: 150805144537
+     saved: data/150805144549mainp_fLoop_0_loop_2.data
+timenumber: 150805144549
+     saved: data/150805144539mainp_fLoop_0_loop_2.data
+timenumber: 150805144539
+     saved: data/150805144541mainp_fLoop_0_loop_2.data
+timenumber: 150805144541
+     saved: data/150805144545mainp_fLoop_0_loop_3.data
+timenumber: 150805144545
+     saved: data/150805144543mainp_fLoop_0_loop_3.data
+timenumber: 150805144543
+     saved: data/150805144549mainp_fLoop_0_loop_3.data
+timenumber: 150805144549
+     saved: data/150805144537mainp_fLoop_0_loop_2.data
+timenumber: 150805144537
+     saved: data/150805144539mainp_fLoop_0_loop_3.data
+timenumber: 150805144539
+     saved: data/150805144543mainp_fLoop_0_loop_4.data
+timenumber: 150805144543
+     saved: data/150805144545mainp_fLoop_0_loop_4.data
+timenumber: 150805144545
+     saved: data/150805144541mainp_fLoop_0_loop_3.data
+timenumber: 150805144541
+     saved: data/150805144549mainp_fLoop_0_loop_4.data
+timenumber: 150805144549
+     saved: data/150805144537mainp_fLoop_0_loop_3.data
+timenumber: 150805144537
+     saved: data/150805144539mainp_fLoop_0_loop_4.data
+timenumber: 150805144539
+     saved: data/150805144543mainp_fLoop_0_loop_5.data
+timenumber: 150805144543
+     saved: data/150805144545mainp_fLoop_0_loop_5.data
+timenumber: 150805144545
+     saved: data/150805144549mainp_fLoop_0_loop_5.data
+timenumber: 150805144549
+     saved: data/150805144541mainp_fLoop_0_loop_4.data
+timenumber: 150805144541
+     saved: data/150805144537mainp_fLoop_0_loop_4.data
+timenumber: 150805144537
+     saved: data/150805144543mainp_fLoop_0_loop_6.data
+timenumber: 150805144543
+     saved: data/150805144545mainp_fLoop_0_loop_6.data
+timenumber: 150805144545
+     saved: data/150805144539mainp_fLoop_0_loop_5.data
+timenumber: 150805144539
+     saved: data/150805144549mainp_fLoop_0_loop_6.data
+timenumber: 150805144549
+     saved: data/150805144541mainp_fLoop_0_loop_5.data
+timenumber: 150805144541
+     saved: data/150805144543mainp_fLoop_0_loop_7.data
+timenumber: 150805144543
+     saved: data/150805144545mainp_fLoop_0_loop_7.data
+timenumber: 150805144545
+     saved: data/150805144537mainp_fLoop_0_loop_5.data
+timenumber: 150805144537
+     saved: data/150805144549mainp_fLoop_0_loop_7.data
+timenumber: 150805144549
+     saved: data/150805144539mainp_fLoop_0_loop_6.data
+timenumber: 150805144539
+     saved: data/150805144541mainp_fLoop_0_loop_6.data
+timenumber: 150805144541
+     saved: data/150805144545mainp_fLoop_0_loop_8.data
+timenumber: 150805144545
+     saved: data/150805144549mainp_fLoop_0_loop_8.data
+timenumber: 150805144549
+     saved: data/150805144543mainp_fLoop_0_loop_8.data
+timenumber: 150805144543
+     saved: data/150805144539mainp_fLoop_0_loop_7.data
+timenumber: 150805144539
+     saved: data/150805144537mainp_fLoop_0_loop_6.data
+timenumber: 150805144537
+     saved: data/150805144545mainp_fLoop_0_loop_9.data
+timenumber: 150805144545
+     saved: data/150805144541mainp_fLoop_0_loop_7.data
+timenumber: 150805144541
+     saved: data/150805144549mainp_fLoop_0_loop_9.data
+timenumber: 150805144549
+     saved: data/150805144539mainp_fLoop_0_loop_8.data
+timenumber: 150805144539
+     saved: data/150805144543mainp_fLoop_0_loop_9.data
+timenumber: 150805144543
+     saved: data/150805144539mainp_fLoop_0_loop_9.data
+timenumber: 150805144539
+     saved: data/150805144545mainp_fLoop_0_loop_10.data
+     saved: data/150805144549mainp_fLoop_0_loop_10.data
+     saved: data/150805144537mainp_fLoop_0_loop_7.data
+timenumber: 150805144537
+     saved: data/150805144541mainp_fLoop_0_loop_8.data
+timenumber: 150805144541
+     saved: data/150805144543mainp_fLoop_0_loop_10.data
+     saved: data/150805144539mainp_fLoop_0_loop_10.data
+     saved: data/150805144541mainp_fLoop_0_loop_9.data
+timenumber: 150805144541
+     saved: data/150805144537mainp_fLoop_0_loop_8.data
+timenumber: 150805144537
+     saved: data/150805144541mainp_fLoop_0_loop_10.data
+     saved: data/150805144537mainp_fLoop_0_loop_9.data
+timenumber: 150805144537
+     saved: data/150805144537mainp_fLoop_0_loop_10.data

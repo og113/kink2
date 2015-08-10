@@ -1,0 +1,511 @@
+/opt/torque/home/mom_priv/jobs/174244.cosmos2.private.damtp.cam.ac.uk.SC: line 19: cd: kink2: No such file or directory
+running 8 nodes
+node 0 of 8 running main with: timenumber 000, loop 0
+node 1 of 8 running main with: timenumber 001, loop 0
+node 2 of 8 running main with: timenumber 002, loop 0
+node 3 of 8 running main with: timenumber 003, loop 0
+node 4 of 8 running main with: timenumber 004, loop 0
+node 5 of 8 running main with: timenumber 005, loop 0
+node 6 of 8 running main with: timenumber 006, loop 0
+---------------------------------------------------------------------
+return 1 for node 0 on running main
+---------------------------------------------------------------------
+node 7 of 8 running main with: timenumber 007, loop 0
+timenumber: 150629081837
+timenumber: 150629081839
+timenumber: 150629081841
+timenumber: 150629081843
+timenumber: 150629081845
+timenumber: 150629081847
+timenumber: 150629081849
+     saved: data/150629081839mainp_fLoop_0_loop_0.data
+timenumber: 150629081839
+     saved: data/150629081837mainp_fLoop_0_loop_0.data
+timenumber: 150629081837
+     saved: data/150629081845mainp_fLoop_0_loop_0.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_0.data
+timenumber: 150629081841
+     saved: data/150629081847mainp_fLoop_0_loop_0.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_0.data
+timenumber: 150629081843
+     saved: data/150629081849mainp_fLoop_0_loop_0.data
+timenumber: 150629081849
+     saved: data/150629081839mainp_fLoop_0_loop_1.data
+timenumber: 150629081839
+     saved: data/150629081837mainp_fLoop_0_loop_1.data
+timenumber: 150629081837
+     saved: data/150629081847mainp_fLoop_0_loop_1.data
+timenumber: 150629081847
+     saved: data/150629081849mainp_fLoop_0_loop_1.data
+timenumber: 150629081849
+     saved: data/150629081845mainp_fLoop_0_loop_1.data
+timenumber: 150629081845
+     saved: data/150629081843mainp_fLoop_0_loop_1.data
+timenumber: 150629081843
+     saved: data/150629081841mainp_fLoop_0_loop_1.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_2.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_2.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_2.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_2.data
+timenumber: 150629081847
+     saved: data/150629081845mainp_fLoop_0_loop_2.data
+timenumber: 150629081845
+     saved: data/150629081843mainp_fLoop_0_loop_2.data
+timenumber: 150629081843
+     saved: data/150629081841mainp_fLoop_0_loop_2.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_3.data
+timenumber: 150629081839
+     saved: data/150629081837mainp_fLoop_0_loop_3.data
+timenumber: 150629081837
+     saved: data/150629081849mainp_fLoop_0_loop_3.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_3.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_3.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_3.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_3.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_4.data
+timenumber: 150629081839
+     saved: data/150629081837mainp_fLoop_0_loop_4.data
+timenumber: 150629081837
+     saved: data/150629081849mainp_fLoop_0_loop_4.data
+timenumber: 150629081849
+     saved: data/150629081845mainp_fLoop_0_loop_4.data
+timenumber: 150629081845
+     saved: data/150629081843mainp_fLoop_0_loop_4.data
+timenumber: 150629081843
+     saved: data/150629081847mainp_fLoop_0_loop_4.data
+timenumber: 150629081847
+     saved: data/150629081841mainp_fLoop_0_loop_4.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_5.data
+timenumber: 150629081839
+     saved: data/150629081837mainp_fLoop_0_loop_5.data
+timenumber: 150629081837
+     saved: data/150629081849mainp_fLoop_0_loop_5.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_5.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_5.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_5.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_5.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_6.data
+timenumber: 150629081839
+     saved: data/150629081837mainp_fLoop_0_loop_6.data
+timenumber: 150629081837
+     saved: data/150629081849mainp_fLoop_0_loop_6.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_6.data
+timenumber: 150629081847
+     saved: data/150629081845mainp_fLoop_0_loop_6.data
+timenumber: 150629081845
+     saved: data/150629081843mainp_fLoop_0_loop_6.data
+timenumber: 150629081843
+     saved: data/150629081841mainp_fLoop_0_loop_6.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_7.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_7.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_7.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_7.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_7.data
+timenumber: 150629081845
+     saved: data/150629081837mainp_fLoop_0_loop_7.data
+timenumber: 150629081837
+     saved: data/150629081841mainp_fLoop_0_loop_7.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_8.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_8.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_8.data
+timenumber: 150629081847
+     saved: data/150629081841mainp_fLoop_0_loop_8.data
+timenumber: 150629081841
+     saved: data/150629081845mainp_fLoop_0_loop_8.data
+timenumber: 150629081845
+     saved: data/150629081843mainp_fLoop_0_loop_8.data
+timenumber: 150629081843
+     saved: data/150629081837mainp_fLoop_0_loop_8.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_9.data
+timenumber: 150629081839
+     saved: data/150629081847mainp_fLoop_0_loop_9.data
+timenumber: 150629081847
+     saved: data/150629081849mainp_fLoop_0_loop_9.data
+timenumber: 150629081849
+     saved: data/150629081843mainp_fLoop_0_loop_9.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_9.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_9.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_9.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_10.data
+timenumber: 150629081839
+     saved: data/150629081847mainp_fLoop_0_loop_10.data
+timenumber: 150629081847
+     saved: data/150629081849mainp_fLoop_0_loop_10.data
+timenumber: 150629081849
+     saved: data/150629081843mainp_fLoop_0_loop_10.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_10.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_10.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_10.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_11.data
+timenumber: 150629081839
+     saved: data/150629081847mainp_fLoop_0_loop_11.data
+timenumber: 150629081847
+     saved: data/150629081849mainp_fLoop_0_loop_11.data
+timenumber: 150629081849
+     saved: data/150629081843mainp_fLoop_0_loop_11.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_11.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_11.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_11.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_12.data
+timenumber: 150629081839
+     saved: data/150629081845mainp_fLoop_0_loop_12.data
+timenumber: 150629081845
+     saved: data/150629081849mainp_fLoop_0_loop_12.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_12.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_12.data
+timenumber: 150629081843
+     saved: data/150629081841mainp_fLoop_0_loop_12.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_12.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_13.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_13.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_13.data
+timenumber: 150629081847
+     saved: data/150629081845mainp_fLoop_0_loop_13.data
+timenumber: 150629081845
+     saved: data/150629081843mainp_fLoop_0_loop_13.data
+timenumber: 150629081843
+     saved: data/150629081841mainp_fLoop_0_loop_13.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_13.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_14.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_14.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_14.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_14.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_14.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_14.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_14.data
+timenumber: 150629081837
+     saved: data/150629081849mainp_fLoop_0_loop_15.data
+timenumber: 150629081849
+     saved: data/150629081839mainp_fLoop_0_loop_15.data
+timenumber: 150629081839
+     saved: data/150629081847mainp_fLoop_0_loop_15.data
+timenumber: 150629081847
+     saved: data/150629081845mainp_fLoop_0_loop_15.data
+timenumber: 150629081845
+     saved: data/150629081843mainp_fLoop_0_loop_15.data
+timenumber: 150629081843
+     saved: data/150629081841mainp_fLoop_0_loop_15.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_15.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_16.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_16.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_16.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_16.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_16.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_16.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_17.data
+timenumber: 150629081839
+     saved: data/150629081837mainp_fLoop_0_loop_16.data
+timenumber: 150629081837
+     saved: data/150629081849mainp_fLoop_0_loop_17.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_17.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_17.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_17.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_17.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_18.data
+timenumber: 150629081839
+     saved: data/150629081837mainp_fLoop_0_loop_17.data
+timenumber: 150629081837
+     saved: data/150629081849mainp_fLoop_0_loop_18.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_18.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_18.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_18.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_18.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_19.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_19.data
+timenumber: 150629081849
+     saved: data/150629081837mainp_fLoop_0_loop_18.data
+timenumber: 150629081837
+     saved: data/150629081847mainp_fLoop_0_loop_19.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_19.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_19.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_19.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_20.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_20.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_20.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_20.data
+timenumber: 150629081843
+     saved: data/150629081837mainp_fLoop_0_loop_19.data
+timenumber: 150629081837
+     saved: data/150629081845mainp_fLoop_0_loop_20.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_20.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_21.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_21.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_21.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_21.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_21.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_21.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_20.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_22.data
+timenumber: 150629081839
+     saved: data/150629081847mainp_fLoop_0_loop_22.data
+timenumber: 150629081847
+     saved: data/150629081849mainp_fLoop_0_loop_22.data
+timenumber: 150629081849
+     saved: data/150629081843mainp_fLoop_0_loop_22.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_22.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_22.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_23.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_23.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_23.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_23.data
+timenumber: 150629081843
+     saved: data/150629081837mainp_fLoop_0_loop_21.data
+timenumber: 150629081837
+     saved: data/150629081845mainp_fLoop_0_loop_23.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_23.data
+timenumber: 150629081841
+     saved: data/150629081839mainp_fLoop_0_loop_24.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_24.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_24.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_24.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_24.data
+timenumber: 150629081845
+     saved: data/150629081841mainp_fLoop_0_loop_24.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_22.data
+timenumber: 150629081837
+     saved: data/150629081839mainp_fLoop_0_loop_25.data
+timenumber: 150629081839
+     saved: data/150629081849mainp_fLoop_0_loop_25.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_25.data
+timenumber: 150629081847
+     saved: data/150629081843mainp_fLoop_0_loop_25.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_25.data
+timenumber: 150629081845
+     saved: data/150629081839mainp_fLoop_0_loop_26.data
+timenumber: 150629081839
+     saved: data/150629081841mainp_fLoop_0_loop_25.data
+timenumber: 150629081841
+     saved: data/150629081837mainp_fLoop_0_loop_23.data
+timenumber: 150629081837
+     saved: data/150629081847mainp_fLoop_0_loop_26.data
+timenumber: 150629081847
+     saved: data/150629081849mainp_fLoop_0_loop_26.data
+timenumber: 150629081849
+     saved: data/150629081843mainp_fLoop_0_loop_26.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_26.data
+timenumber: 150629081845
+     saved: data/150629081839mainp_fLoop_0_loop_27.data
+timenumber: 150629081839
+     saved: data/150629081841mainp_fLoop_0_loop_26.data
+timenumber: 150629081841
+     saved: data/150629081849mainp_fLoop_0_loop_27.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_27.data
+timenumber: 150629081847
+     saved: data/150629081837mainp_fLoop_0_loop_24.data
+timenumber: 150629081837
+     saved: data/150629081843mainp_fLoop_0_loop_27.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_27.data
+timenumber: 150629081845
+     saved: data/150629081839mainp_fLoop_0_loop_28.data
+timenumber: 150629081839
+     saved: data/150629081841mainp_fLoop_0_loop_27.data
+timenumber: 150629081841
+     saved: data/150629081849mainp_fLoop_0_loop_28.data
+timenumber: 150629081849
+     saved: data/150629081847mainp_fLoop_0_loop_28.data
+timenumber: 150629081847
+Check imaginary part of energy: test(1.00802e-05) > closeness(1e-05)
+     saved: data/150629081837mainp_fLoop_0_loop_25.data
+timenumber: 150629081837
+     saved: data/150629081843mainp_fLoop_0_loop_28.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_28.data
+timenumber: 150629081845
+     saved: data/150629081839mainp_fLoop_0_loop_29.data
+timenumber: 150629081839
+     saved: data/150629081841mainp_fLoop_0_loop_28.data
+timenumber: 150629081841
+     saved: data/150629081847mainp_fLoop_0_loop_29.data
+timenumber: 150629081847
+     saved: data/150629081849mainp_fLoop_0_loop_29.data
+timenumber: 150629081849
+Check imaginary part of energy: test(1.04903e-05) > closeness(1e-05)
+     saved: data/150629081837mainp_fLoop_0_loop_26.data
+timenumber: 150629081837
+     saved: data/150629081843mainp_fLoop_0_loop_29.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_29.data
+timenumber: 150629081845
+Check imaginary part of energy: test(1.02727e-05) > closeness(1e-05)
+     saved: data/150629081839mainp_fLoop_0_loop_30.data
+timenumber: 150629081839
+     saved: data/150629081847mainp_fLoop_0_loop_30.data
+timenumber: 150629081847
+     saved: data/150629081841mainp_fLoop_0_loop_29.data
+timenumber: 150629081841
+     saved: data/150629081849mainp_fLoop_0_loop_30.data
+timenumber: 150629081849
+     saved: data/150629081843mainp_fLoop_0_loop_30.data
+timenumber: 150629081843
+Check imaginary part of energy: test(1.09009e-05) > closeness(1e-05)
+     saved: data/150629081837mainp_fLoop_0_loop_27.data
+timenumber: 150629081837
+     saved: data/150629081845mainp_fLoop_0_loop_30.data
+timenumber: 150629081845
+Check imaginary part of energy: test(1.06243e-05) > closeness(1e-05)
+     saved: data/150629081839mainp_fLoop_0_loop_31.data
+timenumber: 150629081839
+     saved: data/150629081847mainp_fLoop_0_loop_31.data
+timenumber: 150629081847
+     saved: data/150629081841mainp_fLoop_0_loop_30.data
+timenumber: 150629081841
+     saved: data/150629081849mainp_fLoop_0_loop_31.data
+timenumber: 150629081849
+     saved: data/150629081843mainp_fLoop_0_loop_31.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_31.data
+timenumber: 150629081845
+Check imaginary part of energy: test(1.09762e-05) > closeness(1e-05)
+     saved: data/150629081839mainp_fLoop_0_loop_32.data
+timenumber: 150629081839
+Check imaginary part of energy: test(1.13118e-05) > closeness(1e-05)
+     saved: data/150629081837mainp_fLoop_0_loop_28.data
+timenumber: 150629081837
+     saved: data/150629081847mainp_fLoop_0_loop_32.data
+timenumber: 150629081847
+     saved: data/150629081841mainp_fLoop_0_loop_31.data
+timenumber: 150629081841
+     saved: data/150629081849mainp_fLoop_0_loop_32.data
+timenumber: 150629081849
+     saved: data/150629081843mainp_fLoop_0_loop_32.data
+timenumber: 150629081843
+     saved: data/150629081845mainp_fLoop_0_loop_32.data
+timenumber: 150629081845
+Check imaginary part of energy: test(1.13283e-05) > closeness(1e-05)
+     saved: data/150629081839mainp_fLoop_0_loop_33.data
+timenumber: 150629081839
+     saved: data/150629081847mainp_fLoop_0_loop_33.data
+timenumber: 150629081847
+Check imaginary part of energy: test(1.1723e-05) > closeness(1e-05)
+     saved: data/150629081837mainp_fLoop_0_loop_29.data
+timenumber: 150629081837
+     saved: data/150629081849mainp_fLoop_0_loop_33.data
+timenumber: 150629081849
+     saved: data/150629081843mainp_fLoop_0_loop_33.data
+timenumber: 150629081843
+     saved: data/150629081841mainp_fLoop_0_loop_32.data
+timenumber: 150629081841
+     saved: data/150629081845mainp_fLoop_0_loop_33.data
+timenumber: 150629081845
+Check imaginary part of energy: test(1.16806e-05) > closeness(1e-05)
+     saved: data/150629081839mainp_fLoop_0_loop_34.data
+timenumber: 150629081839
+     saved: data/150629081847mainp_fLoop_0_loop_34.data
+timenumber: 150629081847
+     saved: data/150629081849mainp_fLoop_0_loop_34.data
+timenumber: 150629081849
+Check imaginary part of energy: test(1.21347e-05) > closeness(1e-05)
+     saved: data/150629081837mainp_fLoop_0_loop_30.data
+timenumber: 150629081837
+     saved: data/150629081843mainp_fLoop_0_loop_34.data
+timenumber: 150629081843
+     saved: data/150629081841mainp_fLoop_0_loop_33.data
+timenumber: 150629081841
+     saved: data/150629081845mainp_fLoop_0_loop_34.data
+timenumber: 150629081845

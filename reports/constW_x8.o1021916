@@ -1,0 +1,2019 @@
+/opt/torque/home/mom_priv/jobs/1021916.cosmic.private.damtp.cam.ac.uk.SC: line 19: cd: kink2: No such file or directory
+running 8 nodes
+node 0 of 8 running main with: timenumber 150629155135, loop 43
+node 1 of 8 running main with: timenumber 150629155133, loop 33
+node 2 of 8 running main with: timenumber 150629155131, loop 35
+node 3 of 8 running main with: timenumber 150629155129, loop 33
+node 4 of 8 running main with: timenumber 150629155127, loop 29
+node 5 of 8 running main with: timenumber 150629155125, loop 29
+node 6 of 8 running main with: timenumber 150629155123, loop 19
+node 7 of 8 running main with: timenumber 150629155121, loop 43
+timenumber: 150629170044
+timenumber: 150629170048
+timenumber: 150629170046
+timenumber: 150629170050
+timenumber: 150629170052
+timenumber: 150629170054
+timenumber: 150629170058
+timenumber: 150629170056
+Check imaginary part of energy: test(3.13667e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(9.24478e-05) > closeness(1e-05)
+Check imaginary part of energy: test(5.58983e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150629170048
+     saved: data/150629170058mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000137564) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000133827) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(7.80012e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150629170046
+Check delta: test(1.14398) > closeness(1)
+Check linear energy equal true energy: test(0.147677) > closeness(0.05)
+Check energy conservation: test(1.69246) > closeness(0.01)
+Check imaginary part of energy: test(0.0108073) > closeness(1e-05)
+     saved: data/150629170054mainp_fLoop_0_loop_0_step_1.data
+---------------------------------------------------------------------
+return 1 for node 5 on running main
+---------------------------------------------------------------------
+     saved: data/150629170056mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.15426e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.61331e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.29359e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.84237e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000134432) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.00013828) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.1317e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.58189e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.21869e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.77778e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(0.00013716) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(3.15254e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000133445) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(5.61102e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.28661e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.83603e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.14345e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.59814e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.00013435) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000138225) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.25028e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.80444e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(3.16841e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.63221e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.3284e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.8719e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000137734) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000133861) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(3.1593e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.61929e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(7.84021e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(9.29195e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000138886) > closeness(1e-05)
+Check imaginary part of energy: test(0.000134873) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150629170052
+     saved: data/150629170050mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(3.18427e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.6534e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.3702e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.90781e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.17514e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.64047e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000138393) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000134382) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(9.33365e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.87608e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.20013e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.67457e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000139548) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000135395) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(9.41173e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.94369e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(3.19098e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_9_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.66157e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(7.91184e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_10_step_0.data
+Check imaginary part of energy: test(9.37476e-05) > closeness(1e-05)
+timenumber: 150629170046
+     saved: data/150629170048mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000139053) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000134903) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(3.21598e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.69568e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.45271e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.97953e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000135912) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000140203) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_11_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.20681e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.68257e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.41503e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(7.94753e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.7167e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.23183e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000135411) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000139698) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.49261e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.01528e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_13_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.22263e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.7034e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.4537e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000136416) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000140845) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(7.98311e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.24768e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.73751e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.53039e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000135901) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.05088e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.00014032) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_15_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.72387e-05) > closeness(1e-05)
+Check imaginary part of energy: test(3.23845e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_16_step_0.data
+     saved: data/150629170044mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150629170058
+timenumber: 150629170044
+Check imaginary part of energy: test(9.48936e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000136895) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.01846e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(0.000141458) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(3.2635e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.75792e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.56413e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000136356) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.0862e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_17_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.25423e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.74367e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000140899) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.51966e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000137326) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.05338e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.27931e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.77753e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.59042e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000142016) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_19_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(8.12096e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(3.26998e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.76217e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000136748) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(9.54118e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.29506e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.08747e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000141401) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.79556e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.00013767) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(9.60403e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.28565e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.15463e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.77836e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000142471) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000137035) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(9.54997e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.31074e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_23_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.11997e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.81058e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_23_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000137862) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000141775) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(9.59853e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_23_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.30116e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.18617e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_23_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.79071e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000137167) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000142751) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.32624e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(9.54318e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.82028e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000137824) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.14952e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000141969) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.31637e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.79734e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.56925e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.21368e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000138169) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_22_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000142754) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.3414e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_27_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.82154e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_27_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.54411e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150629170048
+     saved: data/150629170056mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(8.17388e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(3.331e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000137516) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(5.7967e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000143545) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_22_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.54834e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150629170048
+     saved: data/150629170056mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(8.23389e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_27_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(3.35588e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.81162e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000143795) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000138159) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(9.55858e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.34455e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.18995e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.78885e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.00014425) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_24_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000138799) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36904e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.24197e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(9.6251e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.79083e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000138444) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.0001438) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.35618e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(9.63076e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_30_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.19436e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.7773e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000139123) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_27_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000144765) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_26_step_1.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.37967e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(9.58528e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.23246e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.76629e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000138476) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000144106) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36467e-05) > closeness(1e-05)
+Check imaginary part of energy: test(9.6331e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150629170044
+     saved: data/150629170048mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.18522e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.7697e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000145093) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_28_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000139118) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.38592e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(9.68118e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.20229e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.75271e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000139825) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_30_step_1.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_35_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36863e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000144324) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.65723e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.77343e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(8.18809e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.00013964) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.3854e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000145155) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.70633e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_35_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.76182e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(8.18489e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_37_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36705e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000140258) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_32_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000145928) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.73707e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_36_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.78489e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(8.19246e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(3.37633e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000145849) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.73503e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_37_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.7859e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000139676) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_39_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(8.15922e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(3.3604e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.79189e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.77658e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_38_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000140382) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000146545) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.19994e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.35976e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.80715e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.73677e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_39_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000145975) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_41_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(0.000140881) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(3.35196e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.18168e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.79425e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.79078e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_40_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.00014692) > closeness(1e-05)
+     saved: data/150629170056mainp_fLoop_0_loop_42_step_0.data
+     saved: data/150629170052mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150629170056
+timenumber: 150629170052
+Check imaginary part of energy: test(3.34233e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000141258) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.22438e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.81709e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.73661e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_41_step_0.data
+timenumber: 150629170048
+     saved: data/150629170056mainp_fLoop_0_loop_43_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.34784e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.22997e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.79431e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000141496) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000146168) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.77821e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.33549e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_45_step_1.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(8.23017e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.81338e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_45_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000147007) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_37_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000141102) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(9.74499e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_43_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.78883e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.35244e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_46_step_0.data
+Check imaginary part of energy: test(8.26494e-05) > closeness(1e-05)
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_45_step_0.data
+     saved: data/150629170046mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150629170056
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000141947) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(9.77312e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000147634) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_38_step_1.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.79639e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.34557e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_47_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.23143e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000141372) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(9.7411e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_45_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000147186) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_39_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(3.36086e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.80451e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(8.28156e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_45_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000142295) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(9.73806e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000148036) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(3.36386e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_49_step_1.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.79121e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_49_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(8.23613e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(9.84236e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_47_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000141651) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(3.36499e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.78008e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.00014841) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.27898e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_47_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(9.82017e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000142487) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(5.7674e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.37813e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_51_step_1.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(0.000148075) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.23077e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(9.86976e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_49_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.77603e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36657e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000141781) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000148904) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.25478e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.7785e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.38352e-05) > closeness(1e-05)
+Check imaginary part of energy: test(9.82072e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_53_step_1.data
+timenumber: 150629170044
+     saved: data/150629170048mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000142446) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_45_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.25188e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000148218) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.79113e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.36599e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(9.86882e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000143219) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_46_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000149093) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_45_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.23393e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.77118e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.37868e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(9.92487e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_52_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000143243) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.25325e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000149702) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_46_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.78576e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_55_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36102e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(9.91345e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000143756) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_48_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.23101e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000149983) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36446e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.77047e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.95954e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_54_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.32561e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_54_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000143252) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.00015042) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_48_step_1.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_57_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.35295e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.79526e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(9.91506e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_55_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.3125e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_55_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000144106) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_50_step_1.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(9.96739e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_56_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.79036e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.3462e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000149964) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.35298e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_56_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.80518e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.34686e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_59_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(9.91167e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_57_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000143459) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000150974) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_50_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.31298e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_57_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.81457e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_61_step_1.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.33432e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_61_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000144273) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_52_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(9.9473e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.35589e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_58_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.80899e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_61_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.34818e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000150327) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.91734e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_59_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000143557) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.30761e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_59_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.82975e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.33803e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000151382) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_52_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.94404e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000144189) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(5.81006e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_63_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.35594e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.33397e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000150634) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.91755e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_61_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000144975) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.83151e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.35456e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.33387e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_61_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000151571) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(9.93609e-05) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.80674e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_65_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.3624e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000144748) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.30788e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000100234) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.81914e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_67_step_1.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.3716e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_67_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000152213) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000145404) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.34487e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_63_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000100166) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.79764e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_67_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36484e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.0001524) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.39923e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_64_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000144804) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000100603) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.38063e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_69_step_1.data
+timenumber: 150629170044
+     saved: data/150629170056mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.79618e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_69_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000152917) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000145566) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.37738e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_65_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000100175) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.81073e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_69_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36468e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000152429) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.41948e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_66_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000144847) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000100692) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_67_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(5.82445e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_70_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.37881e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_71_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000153533) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.37542e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_67_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.84055e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_72_step_1.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(0.000101154) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_68_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.3606e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000145429) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_61_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.41242e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_72_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.82795e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_73_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000101287) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_69_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.36654e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_73_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000145936) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_62_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000152937) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.46689e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_69_step_1.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_73_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.84897e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000101615) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_70_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.35299e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000154082) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_61_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000145297) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_63_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.47748e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_74_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.86428e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_75_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.34843e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_75_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000101283) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000145941) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.50667e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_71_step_1.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_75_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(0.00015342) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.85698e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.3461e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000101859) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_72_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000146543) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.47846e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.87743e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_77_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_76_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.33416e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_77_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000154507) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000101345) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_73_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.00014612) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.52314e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_73_step_1.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_77_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.88841e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_78_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.34551e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000101881) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_74_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000146803) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_67_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.4773e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000153761) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.89431e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_79_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.33387e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_79_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000101315) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_75_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.51451e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_75_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000154733) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.90965e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_80_step_1.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_79_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(0.00014724) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_68_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(3.35213e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000101654) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.57183e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_76_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000153906) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.89666e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_81_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.34811e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_81_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000146988) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_69_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.00010156) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_77_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.56833e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_77_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_81_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.91828e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_82_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.35956e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000154654) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_67_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000147642) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_70_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.60496e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_78_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.89494e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.36615e-05) > closeness(1e-05)
+     saved: data/150629170056mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150629170056
+     saved: data/150629170044mainp_fLoop_0_loop_83_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000101414) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000154512) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.91158e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36306e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000147018) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000154904) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_69_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.56895e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_79_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000101585) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_79_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.37763e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_85_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(5.94293e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_85_step_1.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(0.000147715) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000102396) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_80_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.61458e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_80_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(5.93944e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_85_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36336e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000155585) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_70_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000148301) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_73_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000102154) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_81_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.56668e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_81_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.95898e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_87_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.37817e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_87_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000155704) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000102659) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_82_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.59986e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000148645) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(5.93991e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_87_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.35989e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000156275) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_72_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000102155) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.57474e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000148929) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_75_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(5.96029e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.36756e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_89_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000102635) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.58795e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000155755) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_73_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.98382e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_90_step_1.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_89_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.35269e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000103201) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_85_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.56986e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_85_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000156707) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_74_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000148523) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(5.98572e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_91_step_0.data
+     saved: data/150629170056mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150629170058
+timenumber: 150629170056
+Check imaginary part of energy: test(3.34987e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_91_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000103023) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.63501e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_86_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000149352) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_77_step_1.data
+timenumber: 150629170050
+     saved: data/150629170056mainp_fLoop_0_loop_91_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(6.00314e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_92_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000103512) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_87_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.3454e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.00015596) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_75_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.5906e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_87_step_0.data
+timenumber: 150629170046
+     saved: data/150629170056mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.98733e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.33421e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_93_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000103033) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000148737) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000156866) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_93_step_1.data
+timenumber: 150629170056
+Check imaginary part of energy: test(6.0089e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_94_step_1.data
+timenumber: 150629170058
+Check imaginary part of energy: test(8.62826e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(3.34353e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000103541) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000149629) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_79_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000157568) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_77_step_1.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.98463e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(0.000103926) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_90_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(3.33111e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_95_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(8.68253e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_89_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000148935) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.00015765) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(5.99933e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150629170058
+Check imaginary part of energy: test(3.34908e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000103532) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.67066e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.0001497) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_81_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(5.98627e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.34323e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_97_step_1.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000104057) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_92_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.71051e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_91_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.00015826) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_79_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.98626e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150629170058
+     saved: data/150629170056mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(3.35688e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150629170044
+Check imaginary part of energy: test(0.000103502) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000148957) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.67022e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000157736) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(5.98897e-05) > closeness(1e-05)
+     saved: data/150629170058mainp_fLoop_0_loop_99_step_0.data
+Check imaginary part of energy: test(3.36151e-05) > closeness(1e-05)
+     saved: data/150629170044mainp_fLoop_0_loop_99_step_1.data
+     saved: data/150629170056mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150629170056
+Check imaginary part of energy: test(0.000103893) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000149491) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(8.71208e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000158777) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_81_step_1.data
+timenumber: 150629170052
+     saved: data/150629170056mainp_fLoop_0_loop_99_step_0.data
+Check imaginary part of energy: test(0.000103781) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.75379e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_94_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000149369) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000158077) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000103755) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.77704e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.00014956) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_85_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000159113) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_83_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000104041) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150629170048
+Check imaginary part of energy: test(8.79814e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_96_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000149028) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000104625) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_98_step_1.data
+timenumber: 150629170048
+Check imaginary part of energy: test(0.000158311) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.77651e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000104555) > closeness(1e-05)
+     saved: data/150629170048mainp_fLoop_0_loop_99_step_0.data
+Check imaginary part of energy: test(0.000150019) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_87_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000159184) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_85_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.82257e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_98_step_1.data
+timenumber: 150629170046
+Check imaginary part of energy: test(0.000149344) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000159834) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_86_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(8.77971e-05) > closeness(1e-05)
+     saved: data/150629170046mainp_fLoop_0_loop_99_step_0.data
+Check imaginary part of energy: test(0.000149968) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000159345) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_87_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000150659) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_90_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000160232) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_88_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000150269) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000150951) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000159456) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000160281) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.00015139) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_93_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000160721) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000151226) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.00015185) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_95_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000159543) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000160623) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000151255) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000151993) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_97_step_1.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000161098) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_94_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.0001612) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000151256) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150629170050
+Check imaginary part of energy: test(0.000151807) > closeness(1e-05)
+     saved: data/150629170050mainp_fLoop_0_loop_99_step_0.data
+Check imaginary part of energy: test(0.000161797) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_96_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000161269) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.000162225) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_98_step_1.data
+timenumber: 150629170052
+Check imaginary part of energy: test(0.00016146) > closeness(1e-05)
+     saved: data/150629170052mainp_fLoop_0_loop_99_step_0.data
