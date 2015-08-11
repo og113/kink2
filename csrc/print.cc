@@ -800,6 +800,7 @@ void load(const string& f, SaveOptions& opts, vec& v) {
 			cerr << "save error: stream not good for " << f << endl;
 			return;
 		}
+
 		string line, temp;
 		unsigned int j=0;
 		while (getline(F, line)) {

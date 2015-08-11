@@ -383,6 +383,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Check checkLR("linear representation of phi",closenesses.LR);
 		Check checkBoundRe("initial real boundary condition",closenesses.Soln);
 		Check checkBoundIm("initial imaginary boundary condition",closenesses.Soln);
+		Check checkChiT("time zero mode condition",closenesses.Soln);
 	
 		// do trivial or redundant checks?
 		bool trivialChecks = false;
@@ -629,8 +630,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		vec boundIm(ps.N);
 			
 		//very early vector print
+		so_tp.paramsIn = ps;
 		if ((opts.printChoice).compare("n")!=0) {
-			so_tp.paramsIn = ps;
 			Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
 					 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.data");
 			save(earlyPrintFile,so_tp,p);
@@ -1099,6 +1100,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- checkTrue
 		- checkLatt
 		- checkBound
+		- checkChiT
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
@@ -1243,10 +1245,15 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			checkLatt.add(momTest);
 			
 			//checking initial boundary conditions satisfied
-			double boundReTest = boundRe.norm()/(ps.N-2.0);
-			double boundImTest = boundIm.norm()/(ps.N-2.0);
+			double normP = p.norm();
+			double boundReTest = boundRe.norm()*(2*ps.N*ps.NT+2)/normP/(ps.N-2.0);
+			double boundImTest = boundIm.norm()*(2*ps.N*ps.NT+2)/normP/(ps.N-2.0);
 			checkBoundRe.add(boundReTest);
 			checkBoundIm.add(boundImTest);
+			
+			// checking chiT orthogonality satisfied
+			double chiTTest = minusDS(2*ps.N*ps.NT+1)*(2*ps.N*ps.NT+2)/normP;
+			checkChiT.add(chiTTest);
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	11. printing early 1
@@ -1407,7 +1414,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			double maxP = p.maxCoeff();
 			double minP = p.minCoeff();
 			if (-minP>maxP) maxP = -minP;
-			double normP = p.norm();
 			double normDelta = delta.norm();
 		
 			// adding convergence checks
@@ -1416,22 +1422,27 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			checkSoln.add(normDS/normP);
 			checkSolnMax.add(maxDS/maxP);
 			checkDelta.add(normDelta/normP);
+
+			// rate of convergence
+			double convergRate = (checkDelta.size()>1? \
+				log((checkDelta.tests())[checkDelta.size()-1])/log((checkDelta.tests())[checkDelta.size()-2]):0.0);
 			
 			//printing tests to see convergence
 			if (runs_count==1) {
-				fprintf(cof,"%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","linear"\
-							,"true erg","on shell","AB","ABNE","conserv","latt");
+				fprintf(cof,"%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","converg"\
+				,"linear","true erg","on shell","AB","ABNE","conserv","latt");
 				if ((opts.printChoice).compare("gui")==0)
-					printf("%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","linear"\
-							,"true erg","on shell","AB","ABNE","conserv","latt");
+					printf("%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","converg"\
+					,"linear","true erg","on shell","AB","ABNE","conserv","latt");
 			}
-			fprintf(cof,"%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,checkSoln.back(),\
-				checkSolnMax.back(),checkDelta.back(),checkLin.back(),checkTrue.back(),checkOS.back(),checkAB.back(),checkABNE.back(),\
+			fprintf(cof,"%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count\
+			,checkSoln.back(),checkSolnMax.back(),checkDelta.back(),convergRate,checkLin.back(),checkTrue.back()\
+			,checkOS.back(),checkAB.back(),checkABNE.back(),\
 				checkCon.back(),checkLatt.back());
 			if ((opts.printChoice).compare("gui")==0)
-				printf("%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,checkSoln.back(),\
-					checkSolnMax.back(),checkDelta.back(),checkLin.back(),checkTrue.back(),checkOS.back(),checkAB.back(),\
-					checkABNE.back(),checkCon.back(),checkLatt.back());
+				printf("%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count\
+				,checkSoln.back(),checkSolnMax.back(),checkDelta.back(),convergRate,checkLin.back(),checkTrue.back()\
+				,checkOS.back(),checkAB.back(),checkABNE.back(),checkCon.back(),checkLatt.back());
 			
 			if (!checkDelta.good()) {
 				checkDelta.checkMessage(ces);
