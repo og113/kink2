@@ -1,0 +1,1409 @@
+running 8 nodes
+node 0 of 8 running main with: timenumber 000, loop 0
+node 1 of 8 running main with: timenumber 001, loop 0
+node 2 of 8 running main with: timenumber 002, loop 0
+node 3 of 8 running main with: timenumber 003, loop 0
+node 4 of 8 running main with: timenumber 004, loop 0
+node 5 of 8 running main with: timenumber 005, loop 0
+node 6 of 8 running main with: timenumber 006, loop 0
+node 7 of 8 running main with: timenumber 007, loop 0
+timenumber: 150807134123
+timenumber: 150807134127
+timenumber: 150807134125
+timenumber: 150807134129
+timenumber: 150807134131
+timenumber: 150807134133
+timenumber: 150807134135
+timenumber: 150807134137
+     saved: data/150807134125mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150807134125
+     saved: data/150807134127mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150807134131
+Stepper possible error: either result has not been given before trying to take step or else F=0
+     saved: data/150807134123mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150807134123
+     saved: data/150807134135mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150807134131
+     saved: data/150807134133mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150807134135
+     saved: data/150807134125mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150807134125
+     saved: data/150807134123mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150807134123
+     saved: data/150807134137mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150807134131
+     saved: data/150807134133mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150807134135
+     saved: data/150807134123mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150807134123
+     saved: data/150807134125mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150807134125
+     saved: data/150807134137mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150807134129
+     saved: data/150807134133mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150807134127
+     saved: data/150807134125mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150807134125
+     saved: data/150807134123mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150807134123
+     saved: data/150807134137mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150807134131
+     saved: data/150807134133mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150807134133
+find: `data/150807132627ce.txt': No such file or directory
+find: `data/150807132627ce.txt': No such file or directory
+find: `data/150807132627ce.txt': No such file or directory
+find: `data/150807132627co.txt': No such file or directory
+find: `data/150807132627co.txt': No such file or directory
+find: `data/150807132627co.txt': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132629ce.txt': No such file or directory
+find: `data/150807132629ce.txt': No such file or directory
+find: `data/150807132629ce.txt': No such file or directory
+find: `data/150807132629co.txt': No such file or directory
+find: `data/150807132629co.txt': No such file or directory
+find: `data/150807132629co.txt': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132631ce.txt': No such file or directory
+find: `data/150807132631ce.txt': No such file or directory
+find: `data/150807132631ce.txt': No such file or directory
+find: `data/150807132631co.txt': No such file or directory
+find: `data/150807132631co.txt': No such file or directory
+find: `data/150807132631co.txt': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132633ce.txt': No such file or directory
+find: `data/150807132633ce.txt': No such file or directory
+find: `data/150807132633ce.txt': No such file or directory
+find: `data/150807132633co.txt': No such file or directory
+find: `data/150807132633co.txt': No such file or directory
+find: `data/150807132633co.txt': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132635ce.txt': No such file or directory
+find: `data/150807132635ce.txt': No such file or directory
+find: `data/150807132635ce.txt': No such file or directory
+find: `data/150807132635co.txt': No such file or directory
+find: `data/150807132635co.txt': No such file or directory
+find: `data/150807132635co.txt': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132637ce.txt': No such file or directory
+find: `data/150807132637ce.txt': No such file or directory
+find: `data/150807132637ce.txt': No such file or directory
+find: `data/150807132637co.txt': No such file or directory
+find: `data/150807132637co.txt': No such file or directory
+find: `data/150807132637co.txt': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132639ce.txt': No such file or directory
+find: `data/150807132639ce.txt': No such file or directory
+find: `data/150807132639ce.txt': No such file or directory
+find: `data/150807132639co.txt': No such file or directory
+find: `data/150807132639co.txt': No such file or directory
+find: `data/150807132639co.txt': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132641ce.txt': No such file or directory
+find: `data/150807132641ce.txt': No such file or directory
+find: `data/150807132641ce.txt': No such file or directory
+find: `data/150807132641co.txt': No such file or directory
+find: `data/150807132641co.txt': No such file or directory
+find: `data/150807132641co.txt': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132643ce.txt': No such file or directory
+find: `data/150807132643ce.txt': No such file or directory
+find: `data/150807132643ce.txt': No such file or directory
+find: `data/150807132643co.txt': No such file or directory
+find: `data/150807132643co.txt': No such file or directory
+find: `data/150807132643co.txt': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_3.data': No such file or directory
+     saved: data/150807134127mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150807134127
+     saved: data/150807134125mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150807134125
+     saved: data/150807134137mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150807134137
+     saved: data/150807134123mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150807134123
+     saved: data/150807134135mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150807134129
+     saved: data/150807134133mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150807134137
+     saved: data/150807134125mainp_fLoop_0_loop_5_step_0.data
+timenumber: 150807134125
+     saved: data/150807134135mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150807134129
+     saved: data/150807134123mainp_fLoop_0_loop_5_step_0.data
+timenumber: 150807134123
+     saved: data/150807134127mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150807134137
+     saved: data/150807134125mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150807134125
+     saved: data/150807134135mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150807134133
+     saved: data/150807134137mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_7_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150807134129
+     saved: data/150807134123mainp_fLoop_0_loop_6_step_0.data
+---------------------------------------------------------------------
+return 1 for node 0 on running main
+---------------------------------------------------------------------
+     saved: data/150807134125mainp_fLoop_0_loop_7_step_0.data
+---------------------------------------------------------------------
+return 1 for node 1 on running main
+---------------------------------------------------------------------
+     saved: data/150807134137mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_9_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_9_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_11_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_9_step_0.data
+timenumber: 150807134127
+     saved: data/150807134135mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_12_step_1.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_11_step_0.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_11_step_0.data
+timenumber: 150807134133
+     saved: data/150807134127mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_11_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_13_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_11_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150807134131
+     saved: data/150807134133mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150807134133
+     saved: data/150807134127mainp_fLoop_0_loop_11_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_13_step_0.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150807134131
+     saved: data/150807134133mainp_fLoop_0_loop_13_step_0.data
+timenumber: 150807134133
+     saved: data/150807134127mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_14_step_1.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150807134131
+     saved: data/150807134133mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150807134133
+     saved: data/150807134129mainp_fLoop_0_loop_13_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_13_step_0.data
+timenumber: 150807134127
+     saved: data/150807134135mainp_fLoop_0_loop_15_step_0.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150807134131
+     saved: data/150807134133mainp_fLoop_0_loop_15_step_0.data
+timenumber: 150807134133
+     saved: data/150807134129mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_17_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_15_step_0.data
+timenumber: 150807134129
+     saved: data/150807134133mainp_fLoop_0_loop_16_step_1.data
+timenumber: 150807134133
+     saved: data/150807134127mainp_fLoop_0_loop_15_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_17_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_19_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_17_step_0.data
+timenumber: 150807134133
+     saved: data/150807134129mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150807134135
+     saved: data/150807134127mainp_fLoop_0_loop_16_step_1.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_18_step_1.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_19_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_17_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_19_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_17_step_0.data
+timenumber: 150807134127
+     saved: data/150807134133mainp_fLoop_0_loop_19_step_0.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_20_step_1.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_20_step_1.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150807134133
+     saved: data/150807134127mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_19_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_22_step_1.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_22_step_1.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_19_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150807134127
+     saved: data/150807134135mainp_fLoop_0_loop_24_step_1.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_26_step_1.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150807134127
+     saved: data/150807134133mainp_fLoop_0_loop_24_step_1.data
+timenumber: 150807134133
+     saved: data/150807134129mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150807134133
+     saved: data/150807134127mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_26_step_1.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150807134135
+     saved: data/150807134127mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150807134129
+     saved: data/150807134133mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_28_step_1.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_28_step_1.data
+timenumber: 150807134133
+     saved: data/150807134129mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150807134129
+     saved: data/150807134133mainp_fLoop_0_loop_30_step_1.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150807134127
+     saved: data/150807134133mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_32_step_1.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_35_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150807134127
+     saved: data/150807134133mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_32_step_1.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_34_step_1.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150807134133
+     saved: data/150807134137mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_30_step_1.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_35_step_0.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_34_step_1.data
+timenumber: 150807134133
+     saved: data/150807134137mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_35_step_0.data
+timenumber: 150807134133
+     saved: data/150807134137mainp_fLoop_0_loop_39_step_0.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_35_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_36_step_1.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_41_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_37_step_0.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_34_step_0.data
+     saved: data/150807134131mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150807134129
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150807134127
+     saved: data/150807134133mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_43_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150807134127
+     saved: data/150807134133mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_41_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_39_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150807134129
+     saved: data/150807134133mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150807134133
+     saved: data/150807134127mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_45_step_0.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_41_step_0.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_46_step_1.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_35_step_0.data
+timenumber: 150807134127
+     saved: data/150807134135mainp_fLoop_0_loop_43_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_41_step_0.data
+timenumber: 150807134131
+     saved: data/150807134133mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150807134133
+     saved: data/150807134127mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_45_step_0.data
+timenumber: 150807134135
+     saved: data/150807134127mainp_fLoop_0_loop_37_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_43_step_0.data
+timenumber: 150807134133
+     saved: data/150807134135mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_43_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150807134135
+     saved: data/150807134133mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150807134133
+     saved: data/150807134131mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_39_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150807134137
+     saved: data/150807134133mainp_fLoop_0_loop_45_step_0.data
+---------------------------------------------------------------------
+return 1 for node 5 on running main
+---------------------------------------------------------------------
+     saved: data/150807134135mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_45_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150807134129
+     saved: data/150807134135mainp_fLoop_0_loop_49_step_1.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_41_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150807134127
+     saved: data/150807134135mainp_fLoop_0_loop_51_step_1.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_55_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150807134135
+     saved: data/150807134127mainp_fLoop_0_loop_43_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_45_step_1.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_53_step_1.data
+timenumber: 150807134135
+     saved: data/150807134127mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_57_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_50_step_1.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_45_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_55_step_0.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_59_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150807134131
+     saved: data/150807134135mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150807134135
+     saved: data/150807134127mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_57_step_0.data
+timenumber: 150807134135
+     saved: data/150807134131mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_61_step_0.data
+timenumber: 150807134137
+     saved: data/150807134135mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150807134135
+     saved: data/150807134129mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150807134127
+     saved: data/150807134135mainp_fLoop_0_loop_59_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_63_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_50_step_1.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_55_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150807134127
+     saved: data/150807134135mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150807134135
+     saved: data/150807134137mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_65_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_57_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_52_step_1.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_66_step_1.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_67_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_69_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_55_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_61_step_0.data
+timenumber: 150807134131
+---------------------------------------------------------------------
+return 1 for node 6 on running main
+---------------------------------------------------------------------
+     saved: data/150807134129mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_55_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_57_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_73_step_1.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_57_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_75_step_1.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_59_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_77_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_59_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_67_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_61_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_78_step_1.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_68_step_1.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_79_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_80_step_1.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_61_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_69_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_63_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_81_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_82_step_1.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_64_step_1.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_63_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150807134137
+     saved: data/150807134137mainp_fLoop_0_loop_84_step_1.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_65_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_85_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_73_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_65_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_86_step_1.data
+timenumber: 150807134137
+     saved: data/150807134137mainp_fLoop_0_loop_87_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_67_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150807134129
+     saved: data/150807134137mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_75_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_67_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_69_step_1.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_69_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_77_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_79_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_73_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150807134137
+     saved: data/150807134127mainp_fLoop_0_loop_73_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_81_step_1.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_74_step_1.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150807134137
+     saved: data/150807134131mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_75_step_0.data
+timenumber: 150807134127
+     saved: data/150807134137mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150807134137
+     saved: data/150807134129mainp_fLoop_0_loop_75_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150807134131
+     saved: data/150807134137mainp_fLoop_0_loop_99_step_0.data
+     saved: data/150807134127mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_76_step_1.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_77_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_85_step_1.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_77_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_79_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_87_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_79_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_81_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_81_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_85_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_87_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_85_step_1.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_87_step_1.data
+timenumber: 150807134129
+     saved: data/150807134131mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150807134131
+     saved: data/150807134131mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150807134131
+     saved: data/150807134127mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150807134131
+     saved: data/150807134129mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150807134127
+     saved: data/150807134131mainp_fLoop_0_loop_99_step_1.data
+     saved: data/150807134127mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150807134127
+     saved: data/150807134129mainp_fLoop_0_loop_93_step_1.data
+timenumber: 150807134129
+     saved: data/150807134127mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150807134127
+     saved: data/150807134127mainp_fLoop_0_loop_99_step_0.data
+     saved: data/150807134129mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150807134129
+     saved: data/150807134129mainp_fLoop_0_loop_95_step_1.data
+timenumber: 150807134129
+     saved: data/150807134129mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150807134129
+     saved: data/150807134129mainp_fLoop_0_loop_97_step_1.data
+timenumber: 150807134129
+     saved: data/150807134129mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150807134129
+     saved: data/150807134129mainp_fLoop_0_loop_99_step_0.data

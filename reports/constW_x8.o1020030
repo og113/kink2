@@ -1,0 +1,79 @@
+/opt/torque/home/mom_priv/jobs/1020030.cosmic.private.damtp.cam.ac.uk.SC: line 19: cd: kink2: No such file or directory
+running 8 nodes
+node 0 of 8 running main with: timenumber 150521183108, loop 0
+return 1 for node 0 on running main
+node 1 of 8 running main with: timenumber 150521183106, loop 63
+timenumber: 150521232005
+node 2 of 8 running main with: timenumber 150521183104, loop 40
+timenumber: 150521232007
+node 3 of 8 running main with: timenumber 150521183102, loop 0
+timenumber: 150521232009
+node 4 of 8 running main with: timenumber 150521183100, loop 29
+timenumber: 150521232011
+node 5 of 8 running main with: timenumber 150521183058, loop 0
+timenumber: 150521232013
+node 6 of 8 running main with: timenumber 150521183056, loop 0
+timenumber: 150521232015
+node 7 of 8 running main with: timenumber 150521170032, loop 12
+timenumber: 150521232017
+Check imaginary part of energy: test(2.1117e-05) > closeness(1e-05)
+     saved: data/150521232005mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521232005
+Check imaginary part of energy: test(1.87668e-05) > closeness(1e-05)
+     saved: data/150521232007mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521232007
+Check imaginary part of energy: test(1.34918e-05) > closeness(1e-05)
+     saved: data/150521232011mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521232011
+Check imaginary part of energy: test(1.65879e-05) > closeness(1e-05)
+     saved: data/150521232009mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521232009
+Check imaginary part of energy: test(1.14972e-05) > closeness(1e-05)
+     saved: data/150521232013mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521232013
+     saved: data/150521232015mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521232015
+     saved: data/150521232017mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521232017
+Check imaginary part of energy: test(2.14861e-05) > closeness(1e-05)
+     saved: data/150521232005mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150521232005
+Check imaginary part of energy: test(1.40232e-05) > closeness(1e-05)
+     saved: data/150521232011mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150521232011
+Check imaginary part of energy: test(2.10628e-05) > closeness(1e-05)
+     saved: data/150521232005mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150521232005
+Check imaginary part of energy: test(1.34546e-05) > closeness(1e-05)
+     saved: data/150521232011mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150521232011
+Check imaginary part of energy: test(2.14496e-05) > closeness(1e-05)
+     saved: data/150521232005mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150521232005
+Check imaginary part of energy: test(1.39828e-05) > closeness(1e-05)
+     saved: data/150521232011mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150521232011
+Check imaginary part of energy: test(2.16303e-05) > closeness(1e-05)
+     saved: data/150521232005mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150521232005
+main error: max_runs(100) exceeded for:
+timenumber: 150521232013; fileLoop: 0; loop: 1
+return 1 for node 5 on running main
+main error: max_runs(100) exceeded for:
+timenumber: 150521232007; fileLoop: 0; loop: 1
+return 1 for node 2 on running main
+main error: max_runs(100) exceeded for:
+timenumber: 150521232009; fileLoop: 0; loop: 1
+return 1 for node 3 on running main
+main error: max_runs(100) exceeded for:
+timenumber: 150521232017; fileLoop: 0; loop: 1
+return 1 for node 7 on running main
+main error: max_runs(100) exceeded for:
+timenumber: 150521232015; fileLoop: 0; loop: 1
+return 1 for node 6 on running main
+main error: max_runs(100) exceeded for:
+timenumber: 150521232011; fileLoop: 0; loop: 4
+return 1 for node 4 on running main
+main error: max_runs(100) exceeded for:
+timenumber: 150521232005; fileLoop: 0; loop: 5
+return 1 for node 1 on running main

@@ -1,0 +1,358 @@
+running 6 nodes
+node 0 of 6 running main with: timenumber 150805155950, loop 80
+node 1 of 6 running main with: timenumber 150805155948, loop 80
+node 2 of 6 running main with: timenumber 150805155946, loop 80
+node 3 of 6 running main with: timenumber 150805155944, loop 80
+node 4 of 6 running main with: timenumber 150805155942, loop 68
+node 5 of 6 running main with: timenumber 150805155940, loop 68
+timenumber: 150807132633
+timenumber: 150807132635
+timenumber: 150807132637
+timenumber: 150807132641
+timenumber: 150807132643
+timenumber: 150807132639
+     saved: data/150807132637mainp_fLoop_0_loop_0.data
+timenumber: 150807132637
+     saved: data/150807132635mainp_fLoop_0_loop_0.data
+timenumber: 150807132635
+     saved: data/150807132633mainp_fLoop_0_loop_0.data
+timenumber: 150807132633
+     saved: data/150807132639mainp_fLoop_0_loop_0.data
+timenumber: 150807132639
+     saved: data/150807132641mainp_fLoop_0_loop_0.data
+timenumber: 150807132641
+     saved: data/150807132643mainp_fLoop_0_loop_0.data
+timenumber: 150807132643
+     saved: data/150807132633mainp_fLoop_0_loop_1.data
+timenumber: 150807132633
+     saved: data/150807132635mainp_fLoop_0_loop_1.data
+timenumber: 150807132635
+     saved: data/150807132637mainp_fLoop_0_loop_1.data
+timenumber: 150807132637
+     saved: data/150807132641mainp_fLoop_0_loop_1.data
+timenumber: 150807132641
+     saved: data/150807132639mainp_fLoop_0_loop_1.data
+timenumber: 150807132639
+     saved: data/150807132643mainp_fLoop_0_loop_1.data
+timenumber: 150807132643
+     saved: data/150807132633mainp_fLoop_0_loop_2.data
+timenumber: 150807132633
+     saved: data/150807132635mainp_fLoop_0_loop_2.data
+timenumber: 150807132635
+     saved: data/150807132633mainp_fLoop_0_loop_3.data
+timenumber: 150807132633
+     saved: data/150807132637mainp_fLoop_0_loop_2.data
+timenumber: 150807132637
+     saved: data/150807132641mainp_fLoop_0_loop_2.data
+timenumber: 150807132641
+     saved: data/150807132639mainp_fLoop_0_loop_2.data
+timenumber: 150807132639
+     saved: data/150807132643mainp_fLoop_0_loop_2.data
+timenumber: 150807132643
+     saved: data/150807132633mainp_fLoop_0_loop_4.data
+timenumber: 150807132633
+     saved: data/150807132635mainp_fLoop_0_loop_3.data
+timenumber: 150807132635
+     saved: data/150807132637mainp_fLoop_0_loop_3.data
+timenumber: 150807132637
+     saved: data/150807132633mainp_fLoop_0_loop_5.data
+timenumber: 150807132633
+     saved: data/150807132641mainp_fLoop_0_loop_3.data
+timenumber: 150807132641
+     saved: data/150807132639mainp_fLoop_0_loop_3.data
+timenumber: 150807132639
+     saved: data/150807132643mainp_fLoop_0_loop_3.data
+timenumber: 150807132643
+     saved: data/150807132633mainp_fLoop_0_loop_6.data
+timenumber: 150807132633
+     saved: data/150807132637mainp_fLoop_0_loop_4.data
+timenumber: 150807132637
+     saved: data/150807132635mainp_fLoop_0_loop_4.data
+timenumber: 150807132635
+find: `data/150807132627ce.txt': No such file or directory
+find: `data/150807132627ce.txt': No such file or directory
+find: `data/150807132627co.txt': No such file or directory
+find: `data/150807132627co.txt': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132627inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132627mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132629ce.txt': No such file or directory
+find: `data/150807132629ce.txt': No such file or directory
+find: `data/150807132629co.txt': No such file or directory
+find: `data/150807132629co.txt': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132629inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132629mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132631ce.txt': No such file or directory
+find: `data/150807132631ce.txt': No such file or directory
+find: `data/150807132631co.txt': No such file or directory
+find: `data/150807132631co.txt': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132631inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132631mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132633ce.txt': No such file or directory
+find: `data/150807132633ce.txt': No such file or directory
+find: `data/150807132633co.txt': No such file or directory
+find: `data/150807132633co.txt': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132633inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132633mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132635ce.txt': No such file or directory
+find: `data/150807132635ce.txt': No such file or directory
+find: `data/150807132635co.txt': No such file or directory
+find: `data/150807132635co.txt': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132635inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132635mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132637ce.txt': No such file or directory
+find: `data/150807132637ce.txt': No such file or directory
+find: `data/150807132637co.txt': No such file or directory
+find: `data/150807132637co.txt': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132637inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132637mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132639ce.txt': No such file or directory
+find: `data/150807132639ce.txt': No such file or directory
+find: `data/150807132639co.txt': No such file or directory
+find: `data/150807132639co.txt': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132639inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132639mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132641ce.txt': No such file or directory
+find: `data/150807132641ce.txt': No such file or directory
+find: `data/150807132641co.txt': No such file or directory
+find: `data/150807132641co.txt': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_4': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_5': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132641inputsM_fLoop_0_loop_6': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_4.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_5.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132641mainp_fLoop_0_loop_6.data': No such file or directory
+find: `data/150807132643ce.txt': No such file or directory
+find: `data/150807132643ce.txt': No such file or directory
+find: `data/150807132643co.txt': No such file or directory
+find: `data/150807132643co.txt': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_0': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_1': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_2': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132643inputsM_fLoop_0_loop_3': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_0.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_1.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_2.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_3.data': No such file or directory
+find: `data/150807132643mainp_fLoop_0_loop_3.data': No such file or directory
+load error: cannot read from data/150807132637mainp_fLoop_0_loop_4.data
+vecComplex errorassertion failed: index >= 0 && index < size() in function Eigen::internal::traits<Derived>::Scalar &Eigen::DenseCoeffsBase<Derived, 1>::operator()(Eigen::internal::traits<Derived>::Index) [with Derived = Eigen::Matrix<double, -1, 1, 0, -1, 1>] at /nfs/home/share/x86_64/pp8/eigen-3.2.0/include/Eigen/src/Core/DenseCoeffsBase.h:394
+MPT: On host cosmos, Program /nfs/home/users/dc-goul1/kink2/wrapper2, Rank 2, Process 138399 received signal SIGABRT/SIGIOT(6)
+
+
+MPT: --------stack traceback-------
+MPT: Attaching to program: /proc/138399/exe, process 138399
+MPT: Try: zypper install -C "debuginfo(build-id)=d4191084441e39a7b480fc4b41f67083812e9811"
+MPT: (no debugging symbols found)...done.
+MPT: Try: zypper install -C "debuginfo(build-id)=2f51a06469a025d507534fe292dcf4e02235bd18"
+MPT: (no debugging symbols found)...done.
+MPT: Try: zypper install -C "debuginfo(build-id)=3b149eccd897f1f37dce50ad22614043eba757a2"
+MPT: (no debugging symbols found)...done.
+MPT: Try: zypper install -C "debuginfo(build-id)=4aee0c3923838575483ebd16be6db85ecb6f0b75"
+MPT: (no debugging symbols found)...done.
+MPT: Try: zypper install -C "debuginfo(build-id)=32c1c7a7a20b54ac3af6b2f436b3375ffeb12f0b"
+MPT: (no debugging symbols found)...done.
+MPT: Try: zypper install -C "debuginfo(build-id)=91334fd8105f0b62c0bdbbec14b45a9fd043f4c3"
+MPT: (no debugging symbols found)...done.
+MPT: [Thread debugging using libthread_db enabled]
+MPT: Using host libthread_db library "/lib64/libthread_db.so.1".
+MPT: Try: zypper install -C "debuginfo(build-id)=a95c0ce9f9752baf052d3b55b3b8ce19f662d2eb"
+MPT: (no debugging symbols found)...done.
+MPT: Try: zypper install -C "debuginfo(build-id)=682e4f7a27ee294a58f17249a0717861db546f2d"
+MPT: (no debugging symbols found)...done.
+MPT: 0x00002aaaada6b435 in waitpid () from /lib64/libc.so.6
+MPT: (gdb) #0  0x00002aaaada6b435 in waitpid () from /lib64/libc.so.6
+MPT: #1  0x00002aaaac35ad5c in mpi_sgi_system (command=<optimized out>) at sig.c:96
+MPT: #2  MPI_SGI_stacktraceback (header=<optimized out>) at sig.c:280
+MPT: #3  0x00002aaaac35b64f in first_arriver_handler (signo=6, 
+MPT:     stack_trace_sem=0x2aaab0e80500) at sig.c:428
+MPT: #4  0x00002aaaac35b8df in slave_sig_handler (signo=6, siginfo=<optimized out>, 
+MPT:     extra=<optimized out>) at sig.c:502
+MPT: #5  <signal handler called>
+MPT: #6  0x00002aaaad9f5885 in raise () from /lib64/libc.so.6
+MPT: #7  0x00002aaaad9f6e61 in abort () from /lib64/libc.so.6
+MPT: #8  0x0000000000431356 in Eigen::internal::assert_fail (
+MPT:     condition=0x21c9f <Address 0x21c9f out of bounds>, 
+MPT:     function=0x21c9f <Address 0x21c9f out of bounds>, 
+MPT:     file=0x6 <Address 0x6 out of bounds>, line=-1)
+MPT:     at /nfs/home/share/x86_64/pp8/eigen-3.2.0/include/Eigen/src/Core/util/Macros.h:193
+MPT: #9  0x00000000004b6c42 in main_fn (argc=138399, 
+MPT:     argv=<error reading variable: Cannot access memory at address 0x21c9f>)
+MPT:     at /nfs/home/share/x86_64/pp8/eigen-3.2.0/include/Eigen/src/Core/DenseCoeffsBase.h:394
+MPT: #10 0x0000000000407472 in main (argc=1, argv=0x7fffffffc5b8)
+MPT:     at mpisrc/wrapper2.cc:273
+MPT: (gdb) A debugging session is active.
+MPT: 
+MPT: 	Inferior 1 [process 138399] will be detached.
+MPT: 
+MPT: Quit anyway? (y or n) [answered Y; input not from terminal]
+MPT: Detaching from program: /proc/138399/exe, process 138399
+
+MPT: -----stack traceback ends-----
+MPT: On host cosmos, Program /nfs/home/users/dc-goul1/kink2/wrapper2, Rank 2, Process 138399: Dumping core on signal SIGABRT/SIGIOT(6) into directory /nfs/home/users/dc-goul1/kink2
+MPT: MPI_COMM_WORLD rank 2 has terminated without calling MPI_Finalize()
+	aborting job
+MPT: Received signal 6
+

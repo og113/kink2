@@ -1,0 +1,165 @@
+/opt/torque/home/mom_priv/jobs/1023075.cosmic.private.damtp.cam.ac.uk.SC: line 19: cd: kink2: No such file or directory
+running 8 nodes
+node 0 of 8 running main with: timenumber 150805144549, loop 10
+node 1 of 8 running main with: timenumber 150805144545, loop 10
+node 2 of 8 running main with: timenumber 150805144543, loop 10
+node 3 of 8 running main with: timenumber 150805144541, loop 10
+node 4 of 8 running main with: timenumber 150805144539, loop 10
+node 5 of 8 running main with: timenumber 150805144537, loop 10
+node 6 of 8 running main with: timenumber 150630141623, loop 100
+timenumber: 150805152537
+node 7 of 8 running main with: timenumber 150630141621, loop 0
+timenumber: 150805152539
+timenumber: 150805152541
+timenumber: 150805152543
+timenumber: 150805152545
+timenumber: 150805152547
+timenumber: 150805152549
+timenumber: 150805152551
+---------------------------------------------------------------------
+return 1 for node 7 on running main
+---------------------------------------------------------------------
+     saved: data/150805152537mainp_fLoop_0_loop_0.data
+timenumber: 150805152537
+     saved: data/150805152541mainp_fLoop_0_loop_0.data
+timenumber: 150805152541
+     saved: data/150805152545mainp_fLoop_0_loop_0.data
+timenumber: 150805152545
+     saved: data/150805152543mainp_fLoop_0_loop_0.data
+timenumber: 150805152543
+     saved: data/150805152547mainp_fLoop_0_loop_0.data
+timenumber: 150805152547
+     saved: data/150805152539mainp_fLoop_0_loop_0.data
+timenumber: 150805152539
+     saved: data/150805152537mainp_fLoop_0_loop_1.data
+timenumber: 150805152537
+     saved: data/150805152545mainp_fLoop_0_loop_1.data
+timenumber: 150805152545
+     saved: data/150805152543mainp_fLoop_0_loop_1.data
+timenumber: 150805152543
+     saved: data/150805152539mainp_fLoop_0_loop_1.data
+timenumber: 150805152539
+     saved: data/150805152541mainp_fLoop_0_loop_1.data
+timenumber: 150805152541
+     saved: data/150805152549mainp_fLoop_0_loop_0.data
+timenumber: 150805152549
+     saved: data/150805152547mainp_fLoop_0_loop_1.data
+timenumber: 150805152547
+     saved: data/150805152537mainp_fLoop_0_loop_2.data
+timenumber: 150805152537
+     saved: data/150805152539mainp_fLoop_0_loop_2.data
+timenumber: 150805152539
+     saved: data/150805152543mainp_fLoop_0_loop_2.data
+timenumber: 150805152543
+     saved: data/150805152541mainp_fLoop_0_loop_2.data
+timenumber: 150805152541
+     saved: data/150805152545mainp_fLoop_0_loop_2.data
+timenumber: 150805152545
+     saved: data/150805152537mainp_fLoop_0_loop_3.data
+timenumber: 150805152537
+     saved: data/150805152543mainp_fLoop_0_loop_3.data
+timenumber: 150805152543
+     saved: data/150805152541mainp_fLoop_0_loop_3.data
+timenumber: 150805152541
+     saved: data/150805152539mainp_fLoop_0_loop_3.data
+timenumber: 150805152539
+     saved: data/150805152545mainp_fLoop_0_loop_3.data
+timenumber: 150805152545
+     saved: data/150805152547mainp_fLoop_0_loop_2.data
+timenumber: 150805152547
+     saved: data/150805152549mainp_fLoop_0_loop_1.data
+timenumber: 150805152549
+     saved: data/150805152537mainp_fLoop_0_loop_4.data
+timenumber: 150805152537
+     saved: data/150805152543mainp_fLoop_0_loop_4.data
+timenumber: 150805152543
+     saved: data/150805152541mainp_fLoop_0_loop_4.data
+timenumber: 150805152541
+     saved: data/150805152539mainp_fLoop_0_loop_4.data
+timenumber: 150805152539
+     saved: data/150805152545mainp_fLoop_0_loop_4.data
+timenumber: 150805152545
+     saved: data/150805152543mainp_fLoop_0_loop_5.data
+timenumber: 150805152543
+     saved: data/150805152537mainp_fLoop_0_loop_5.data
+timenumber: 150805152537
+     saved: data/150805152541mainp_fLoop_0_loop_5.data
+timenumber: 150805152541
+     saved: data/150805152547mainp_fLoop_0_loop_3.data
+timenumber: 150805152547
+     saved: data/150805152539mainp_fLoop_0_loop_5.data
+timenumber: 150805152539
+     saved: data/150805152543mainp_fLoop_0_loop_6.data
+timenumber: 150805152543
+     saved: data/150805152545mainp_fLoop_0_loop_5.data
+timenumber: 150805152545
+     saved: data/150805152549mainp_fLoop_0_loop_2.data
+timenumber: 150805152549
+     saved: data/150805152537mainp_fLoop_0_loop_6.data
+timenumber: 150805152537
+     saved: data/150805152541mainp_fLoop_0_loop_6.data
+timenumber: 150805152541
+     saved: data/150805152539mainp_fLoop_0_loop_6.data
+timenumber: 150805152539
+     saved: data/150805152543mainp_fLoop_0_loop_7.data
+timenumber: 150805152543
+     saved: data/150805152537mainp_fLoop_0_loop_7.data
+timenumber: 150805152537
+     saved: data/150805152545mainp_fLoop_0_loop_6.data
+timenumber: 150805152545
+     saved: data/150805152541mainp_fLoop_0_loop_7.data
+timenumber: 150805152541
+     saved: data/150805152547mainp_fLoop_0_loop_4.data
+timenumber: 150805152547
+     saved: data/150805152543mainp_fLoop_0_loop_8.data
+timenumber: 150805152543
+     saved: data/150805152537mainp_fLoop_0_loop_8.data
+timenumber: 150805152537
+     saved: data/150805152539mainp_fLoop_0_loop_7.data
+timenumber: 150805152539
+     saved: data/150805152549mainp_fLoop_0_loop_3.data
+timenumber: 150805152549
+     saved: data/150805152541mainp_fLoop_0_loop_8.data
+timenumber: 150805152541
+     saved: data/150805152545mainp_fLoop_0_loop_7.data
+timenumber: 150805152545
+     saved: data/150805152543mainp_fLoop_0_loop_9.data
+timenumber: 150805152543
+     saved: data/150805152537mainp_fLoop_0_loop_9.data
+timenumber: 150805152537
+     saved: data/150805152541mainp_fLoop_0_loop_9.data
+timenumber: 150805152541
+     saved: data/150805152539mainp_fLoop_0_loop_8.data
+timenumber: 150805152539
+     saved: data/150805152547mainp_fLoop_0_loop_5.data
+timenumber: 150805152547
+     saved: data/150805152545mainp_fLoop_0_loop_8.data
+timenumber: 150805152545
+     saved: data/150805152537mainp_fLoop_0_loop_10.data
+     saved: data/150805152543mainp_fLoop_0_loop_10.data
+     saved: data/150805152549mainp_fLoop_0_loop_4.data
+timenumber: 150805152549
+     saved: data/150805152541mainp_fLoop_0_loop_10.data
+     saved: data/150805152539mainp_fLoop_0_loop_9.data
+timenumber: 150805152539
+     saved: data/150805152547mainp_fLoop_0_loop_6.data
+timenumber: 150805152547
+     saved: data/150805152545mainp_fLoop_0_loop_9.data
+timenumber: 150805152545
+     saved: data/150805152539mainp_fLoop_0_loop_10.data
+     saved: data/150805152549mainp_fLoop_0_loop_5.data
+timenumber: 150805152549
+     saved: data/150805152545mainp_fLoop_0_loop_10.data
+     saved: data/150805152547mainp_fLoop_0_loop_7.data
+timenumber: 150805152547
+     saved: data/150805152549mainp_fLoop_0_loop_6.data
+timenumber: 150805152549
+     saved: data/150805152547mainp_fLoop_0_loop_8.data
+timenumber: 150805152547
+     saved: data/150805152549mainp_fLoop_0_loop_7.data
+timenumber: 150805152549
+     saved: data/150805152547mainp_fLoop_0_loop_9.data
+timenumber: 150805152547
+     saved: data/150805152549mainp_fLoop_0_loop_8.data
+timenumber: 150805152549
+     saved: data/150805152547mainp_fLoop_0_loop_10.data
