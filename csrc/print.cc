@@ -727,8 +727,9 @@ static void loadVecBinary(const string& f, SaveOptions& opts, vec& v) {
 	ifstream is;
 	is.open(f.c_str(),ios::binary);
 	double d;
+	SaveOptions optsIn;
 	if (is.good()) {
-		opts.readBinary(is);
+		optsIn.readBinary(is);
 	}
 	else {
 		cerr << "load error: cannot read from " << f << endl;
@@ -758,8 +759,9 @@ static void loadVecBinary(const string& f, SaveOptions& opts, vec& v) {
 // load vec
 void load(const string& f, SaveOptions& opts, vec& v) {
 	Filename F(f);
+	vec vf;
 	if (opts.printType==SaveOptions::binary && (F.Suffix).compare(".data")==0) {
-		loadVecBinary(f,opts,v);
+		loadVecBinary(f,opts,vf);
 	}
 	else if (opts.printType==SaveOptions::ascii && (F.Suffix).compare(".dat")==0) {
 		uint col = opts.column;
@@ -793,7 +795,7 @@ void load(const string& f, SaveOptions& opts, vec& v) {
 										return;
 										break;
 		}	
-		vec vf = Eigen::VectorXd::Zero(vLength);
+		vf = Eigen::VectorXd::Zero(vLength);
 		fstream F;
 		F.open(f.c_str(), ios::in);
 		if (!F.good()) {
@@ -817,67 +819,72 @@ void load(const string& f, SaveOptions& opts, vec& v) {
 			}
 		}
 		F.close();
-	
-		uint N1 = (opts.paramsIn).N, N2 = (opts.paramsOut).N;
-		if (opts.vectorType!=SaveOptions::simple) {
-			uint NT1 = (opts.paramsIn).NT, NT2 = (opts.paramsOut).NT;
-			uint Nb1 = (opts.paramsIn).Nb, Nb2  = (opts.paramsOut).Nb;
-			if (opts.vectorType==SaveOptions::complex && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
-				v = interpolate(vf,opts.paramsIn,opts.paramsOut);
-				if (v.size()<(2*NT2*N2+opts.zeroModes)) {
-					v.conservativeResize(2*NT2*N2+opts.zeroModes);
-					for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
-						if (abs(v(2*NT2*N2+zModes))<MIN_NUMBER)  v(2*NT2*N2+zModes) = 0.5;
-					}
-				}
-			}
-			else if (opts.vectorType==SaveOptions::real && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
-				v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
-				if (v.size()<(NT2*N2+opts.zeroModes)) {
-					v.conservativeResize(NT2*N2+opts.zeroModes);
-					for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
-						if (abs(v(NT2*N2+zModes))<MIN_NUMBER)  v(NT2*N2+zModes) = 0.5;
-					}
-				}
-			}
-			else if (opts.vectorType==SaveOptions::complexB && N1>0 && N2>0 && Nb1>0 && Nb2>0&& (N1!=N2 || Nb1!=Nb2)) {
-				v = interpolate(vf,opts.paramsIn,opts.paramsOut);
-				if (v.size()<(2*Nb2*N2+opts.zeroModes)) {
-					v.conservativeResize(2*Nb2*N2+opts.zeroModes);
-					for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
-						if (abs(v(2*Nb2*N2+zModes))<MIN_NUMBER)  v(2*Nb2*N2+zModes) = 0.5;
-					}
-				}
-			}
-			else if (opts.vectorType==SaveOptions::realB && N1>0 && N2>0 && Nb1>0 && Nb2>0 && (N1!=N2 || Nb1!=Nb2)) {
-				v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
-				if (v.size()<(Nb2*N2+opts.zeroModes)) {
-					v.conservativeResize(Nb2*N2+opts.zeroModes);
-					for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
-						if (abs(v(Nb2*N2+zModes))<MIN_NUMBER)  v(Nb2*N2+zModes) = 0.5;
-					}
-				}
-			}
-			else {
-				v = vf;
-			}
-		}
-		else {
-			if (N1!=N2 && N2>0) {
-				v = interpolate1d(vf,vf.size(),N2);
-			}
-			else {
-				v = vf;
-			}
-		}
-		if (opts.printMessage) {
-			printf("%12s%30s\n","loaded: ",f.c_str());
-		}
 	}
 	else {
 		cerr << "load error: printType " << opts.printType << " not recognised" << endl;
 		cerr << "for file " << f << endl;
 		return;
+	}
+	
+	uint N1 = (opts.paramsIn).N, N2 = (opts.paramsOut).N;
+	cout << "test print: " << (opts.paramsIn).NT << " " << (opts.paramsOut).NT << endl;
+	if (opts.vectorType!=SaveOptions::simple) {
+		uint NT1 = (opts.paramsIn).NT, NT2 = (opts.paramsOut).NT;
+		uint Nb1 = (opts.paramsIn).Nb, Nb2  = (opts.paramsOut).Nb;
+		if (opts.vectorType==SaveOptions::complex && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
+			cout << "test print 1: " << opts.zeroModes << " " << vf.size() << " " << 2*(opts.paramsIn).NT*(opts.paramsIn).N+2 << endl;
+			v = interpolate(vf,opts.paramsIn,opts.paramsOut);
+			if (v.size()<(2*NT2*N2+opts.zeroModes)) {
+				cout << "test print 1.1: " << opts.zeroModes << endl;
+				v.conservativeResize(2*NT2*N2+opts.zeroModes);
+				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+					if (abs(v(2*NT2*N2+zModes))<MIN_NUMBER)  v(2*NT2*N2+zModes) = 0.5;
+				}
+			}
+		}
+		else if (opts.vectorType==SaveOptions::real && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
+			v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
+			if (v.size()<(NT2*N2+opts.zeroModes)) {
+				v.conservativeResize(NT2*N2+opts.zeroModes);
+				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+					if (abs(v(NT2*N2+zModes))<MIN_NUMBER)  v(NT2*N2+zModes) = 0.5;
+				}
+			}
+		}
+		else if (opts.vectorType==SaveOptions::complexB && N1>0 && N2>0 && Nb1>0 && Nb2>0&& (N1!=N2 || Nb1!=Nb2)) {
+			v = interpolate(vf,opts.paramsIn,opts.paramsOut);
+			if (v.size()<(2*Nb2*N2+opts.zeroModes)) {
+				v.conservativeResize(2*Nb2*N2+opts.zeroModes);
+				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+					if (abs(v(2*Nb2*N2+zModes))<MIN_NUMBER)  v(2*Nb2*N2+zModes) = 0.5;
+				}
+			}
+		}
+		else if (opts.vectorType==SaveOptions::realB && N1>0 && N2>0 && Nb1>0 && Nb2>0 && (N1!=N2 || Nb1!=Nb2)) {
+			v = interpolateReal(vf,opts.paramsIn,opts.paramsOut);
+			if (v.size()<(Nb2*N2+opts.zeroModes)) {
+				v.conservativeResize(Nb2*N2+opts.zeroModes);
+				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
+					if (abs(v(Nb2*N2+zModes))<MIN_NUMBER)  v(Nb2*N2+zModes) = 0.5;
+				}
+			}
+		}
+		else {
+			v = vf;
+		}
+	}
+	else {
+		if (N1!=N2 && N2>0) {
+			v = interpolate1d(vf,vf.size(),N2);
+		}
+		else {
+			v = vf;
+		}
+	}
+	cout << "test print 2" << endl;
+	
+	if (opts.printMessage) {
+		printf("%12s%30s\n","loaded: ",f.c_str());
 	}
 }
 

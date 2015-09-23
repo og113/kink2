@@ -444,7 +444,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
 		SaveOptions so_simple;
 		so_simple.printType = SaveOptions::binary;
-		so_simple.paramsIn = ps; so_simple.paramsOut = ps;
+		so_simple.paramsIn = psu; so_simple.paramsOut = ps;
 		so_simple.vectorType = SaveOptions::simple;
 		so_simple.extras = SaveOptions::none;
 		so_simple.printMessage = false;
@@ -529,6 +529,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				eigVecOpts.printType = SaveOptions::ascii;
 				eigVecOpts.vectorType = SaveOptions::realB;
 				eigVecOpts.extras = SaveOptions::coords;
+				eigVecOpts.paramsOut = psu;
 				eigVecOpts.paramsOut = ps;
 				eigVecOpts.printMessage = false;
 				Parameters pIn = ps;
@@ -589,6 +590,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				p.conservativeResize(2*ps.N*ps.NT+2);
 				p(2*ps.N*ps.NT+1) = 0.5;
 			}
+			so_tp.paramsIn = ps;
 			so_tp.printType = SaveOptions::binary;
 			fprintf(cof,"%12s%30s\n","input: ",(pFolder[fileLoop]()).c_str());
 			if ((opts.printChoice).compare("gui")==0)
@@ -802,6 +804,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				if ((opts.printChoice).compare("gui")==0)
 					printf("potTest = %8.4g\n",potTest);
 			}
+			cout << "test3" << endl;
+			cout << p.size() << " " << 2*ps.N*ps.NT+2 << endl;
+			cout << Cp.size() << " " << ps.N*ps.NT << " " << ps.N*ps.Nb << endl;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	9. assigning minusDS, DDS etc
@@ -1059,14 +1064,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	    	linNumOffShell(ps.NT-1) = linNumOffShell(ps.NT-2);
 	    	
 		    if (ps.pot==3) {
-		    	action 		*= 4.0*pi;
-		    	derivErg 	*= 4.0*pi;
-		    	potErg 		*= 4.0*pi;
-		    	erg			*= 4.0*pi;
-		    	linErg		*= 4.0*pi;
-		    	linNum		*= 4.0*pi;
-		    	linNumOffShell *= 4.0*pi;
-		    	linErgOffShell *= 4.0*pi;
+		    	action 			*= 4.0*pi;
+		    	derivErg 		*= 4.0*pi;
+		    	potErg 			*= 4.0*pi;
+		    	erg				*= 4.0*pi;
+		    	linErg			*= 4.0*pi;
+		    	linNum			*= 4.0*pi;
+		    	linNumOffShell 	*= 4.0*pi;
+		    	linErgOffShell 	*= 4.0*pi;
 		    }
 		   
 		    if (abs(ps.theta)<MIN_NUMBER) {
@@ -1084,6 +1089,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			E = real(linErg(0));
 			Num = real(linNum(0));
 			W = - E*2.0*ps.Tb - ps.theta*Num - bound + 2.0*imag(action);
+			cout << "test4" << endl;
 			
 /*----------------------------------------------------------------------------------------------------------------------------
 	10. checks
