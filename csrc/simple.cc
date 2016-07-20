@@ -342,8 +342,8 @@ template uint smallestLoc<int>(const vector<int>&);
 template uint smallestLoc<double>(const vector<double>&);
 template uint smallestLoc<comp>(const vector<comp>&);
 
-template uint countType(const string&,const int&);
-template uint countType(const string&,const uint&);
-template uint countType(const string&,const double&);
-template uint countType(const string&,const comp&);
+template uint countType<int>(const string&,const int&);
+template uint countType<uint>(const string&,const uint&);
+template uint countType<double>(const string&,const double&);
+template uint countType<comp>(const string&,const comp&);
 
