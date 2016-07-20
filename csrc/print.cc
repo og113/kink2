@@ -578,8 +578,8 @@ static void saveMatBinary(const string& f, const SaveOptions& opts, const mat& m
 
 // save mat - ascii
 static void saveMatAscii(const string& f, const SaveOptions& opts, const mat& m) {
-	fstream F;
-	F.open(f.c_str(), ios::out);
+	ofstream F;
+	F.open(f.c_str());
 	if (!F.good()) {
 		cerr << "save error: stream not good for " << f << endl;
 		return;
@@ -589,8 +589,8 @@ static void saveMatAscii(const string& f, const SaveOptions& opts, const mat& m)
 	for (uint j=0; j<m.rows(); j++) {
 		for (uint k=0; k<m.cols(); k++) {
 			if (opts.extras==SaveOptions::loc)
-				F << setw(25) << j << setw(25) << k;
-			F << setw(25) << m(j,k);
+				F << setw(24) << j << setw(24) << k;
+			F << setw(24) << m(j,k);
 		}
 		F << endl;
 	}
@@ -827,15 +827,12 @@ void load(const string& f, SaveOptions& opts, vec& v) {
 	}
 	
 	uint N1 = (opts.paramsIn).N, N2 = (opts.paramsOut).N;
-	cout << "test print: " << (opts.paramsIn).NT << " " << (opts.paramsOut).NT << endl;
 	if (opts.vectorType!=SaveOptions::simple) {
 		uint NT1 = (opts.paramsIn).NT, NT2 = (opts.paramsOut).NT;
 		uint Nb1 = (opts.paramsIn).Nb, Nb2  = (opts.paramsOut).Nb;
 		if (opts.vectorType==SaveOptions::complex && N1>0 && N2>0 && NT1>0 && NT2>0 && (N1!=N2 || NT1!=NT2)) {
-			cout << "test print 1: " << opts.zeroModes << " " << vf.size() << " " << 2*(opts.paramsIn).NT*(opts.paramsIn).N+2 << endl;
 			v = interpolate(vf,opts.paramsIn,opts.paramsOut);
 			if (v.size()<(2*NT2*N2+opts.zeroModes)) {
-				cout << "test print 1.1: " << opts.zeroModes << endl;
 				v.conservativeResize(2*NT2*N2+opts.zeroModes);
 				for (uint zModes=0; zModes<opts.zeroModes; zModes++) {
 					if (abs(v(2*NT2*N2+zModes))<MIN_NUMBER)  v(2*NT2*N2+zModes) = 0.5;
@@ -869,19 +866,15 @@ void load(const string& f, SaveOptions& opts, vec& v) {
 				}
 			}
 		}
-		else {
+		else
 			v = vf;
-		}
 	}
 	else {
-		if (N1!=N2 && N2>0) {
+		if (N1!=N2 && N2>0)
 			v = interpolate1d(vf,vf.size(),N2);
-		}
-		else {
+		else
 			v = vf;
-		}
 	}
-	cout << "test print 2" << endl;
 	
 	if (opts.printMessage) {
 		printf("%12s%30s\n","loaded: ",f.c_str());

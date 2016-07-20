@@ -607,7 +607,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				lastPhi = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
 						+"_loop_"+numberToString<uint>(loop-stepper.local()+1+sigma)+"_step_1.data");
 			}
-			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
 			fprintf(cof,"%12s%30s\n","input: ",(lastPhi()).c_str());
 			if ((opts.printChoice).compare("gui")==0)
@@ -804,9 +803,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				if ((opts.printChoice).compare("gui")==0)
 					printf("potTest = %8.4g\n",potTest);
 			}
-			cout << "test3" << endl;
-			cout << p.size() << " " << 2*ps.N*ps.NT+2 << endl;
-			cout << Cp.size() << " " << ps.N*ps.NT << " " << ps.N*ps.Nb << endl;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	9. assigning minusDS, DDS etc
@@ -1089,7 +1085,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			E = real(linErg(0));
 			Num = real(linNum(0));
 			W = - E*2.0*ps.Tb - ps.theta*Num - bound + 2.0*imag(action);
-			cout << "test4" << endl;
 			
 /*----------------------------------------------------------------------------------------------------------------------------
 	10. checks
@@ -1696,6 +1691,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 		fprintf(cof,"\n----------------------------------------------------------------------------------------------------------------------------\n\n");
 		fclose(cof);
+		psu = ps;
 		} //ending parameter loop
 	} //ending file loop
 

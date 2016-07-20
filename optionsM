@@ -12,10 +12,10 @@ maxfLoopLoad        0
 minLoopLoad         0                   
 maxLoopLoad         0                   
 loopChoice          Nc              
-loopMin             4              
-loopMax             12                   
+loopMin             2              
+loopMax             4                   
 epsiTb              0.001              
 epsiTheta           0.001              
 loops               2                 
-printChoice         gui                   
+printChoice         e                   
 

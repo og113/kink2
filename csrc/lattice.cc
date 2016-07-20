@@ -263,7 +263,7 @@ vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 		neigh_x = neigh(pos,1,1,Nt_old,N_old,p_old.pot);
 		neigh_tx = neigh(neigh_t,1,1,Nt_old,N_old,p_old.pot);
 		if  (t_old<(Nt_old-1) ) {
-			if (neigh_t!=-1 && neigh_x) {
+			if (neigh_t!=-1 && neigh_x!=-1) {
 				vec_new(2*l) = (1.0-rem_t_old)*(1.0-rem_x_old)*vec_old(2*pos) \
 							+ (1.0-rem_t_old)*rem_x_old*vec_old(2*neigh_x) \
 							+ rem_t_old*(1.0-rem_x_old)*vec_old(2*neigh_t) \
