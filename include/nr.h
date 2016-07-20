@@ -62,9 +62,9 @@ void mdKineticT (const uint& j, const vec& p, const Parameters& p, const comp& f
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // ddKineticS
-void ddKineticS (const uint& j, const uint& k, const vec& p, const Parameters& p, const comp& f, mat& dds);
+void ddKineticS (const uint& j, const vec& p, const Parameters& p, const comp& f, spMat& dds);
 
 // ddKineticT
-void ddKineticT (const uint& j, const uint& k, const vec& p, const Parameters& p, const comp& f, mat& dds);
+void ddKineticT (const uint& j, const vec& p, const Parameters& p, const comp& f, spMat& dds);
 
 #endif // __NR_H_INCLUDED__
