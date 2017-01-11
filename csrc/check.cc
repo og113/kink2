@@ -24,6 +24,7 @@ CONTENTS
 		- checkMessage
 		- back
 		- tests
+		- size
 		- closeness
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -68,6 +69,12 @@ double Check::back() const {
 vector<double> Check::tests() const {
 	return Tests;
 }
+
+// size
+uint Check::size() const {
+	return Tests.size();
+}
+
 
 // closeness
 double Check::closeness() const {

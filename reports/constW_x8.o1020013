@@ -1,0 +1,3038 @@
+/opt/torque/home/mom_priv/jobs/1020013.cosmic.private.damtp.cam.ac.uk.SC: line 19: cd: kink2: No such file or directory
+running 8 nodes
+node 0 of 8 running main with: timenumber 000, loop 0
+return 1 for node 0 on running main
+node 1 of 8 running main with: timenumber 001, loop 0
+timenumber: 150521120605
+node 2 of 8 running main with: timenumber 002, loop 0
+timenumber: 150521120607
+node 3 of 8 running main with: timenumber 003, loop 0
+timenumber: 150521120609
+node 4 of 8 running main with: timenumber 004, loop 0
+timenumber: 150521120611
+node 5 of 8 running main with: timenumber 005, loop 0
+timenumber: 150521120613
+node 6 of 8 running main with: timenumber 006, loop 0
+timenumber: 150521120615
+node 7 of 8 running main with: timenumber 007, loop 0
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521120605
+     saved: data/150521120607mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150521120607
+     saved: data/150521120605mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_0_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150521120607
+     saved: data/150521120605mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_1_step_0.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150521120607
+     saved: data/150521120605mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_2_step_0.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150521120607
+     saved: data/150521120605mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_3_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_4_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_5_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_6_step_0.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_7_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_9_step_1.data
+     saved: data/150521120617mainp_fLoop_0_loop_8_step_0.data
+timenumber: 150521120617
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_9_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150521120611
+     saved: data/150521120607mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_9_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_11_step_0.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_10_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_11_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_11_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_13_step_0.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_12_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_13_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_14_step_1.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_13_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_14_step_1.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_15_step_0.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_14_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_15_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_16_step_1.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_15_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_16_step_1.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_17_step_0.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_16_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_17_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_18_step_1.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_17_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_19_step_0.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_18_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_20_step_1.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_19_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150521120605
+     saved: data/150521120607mainp_fLoop_0_loop_21_step_0.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_20_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_22_step_1.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_21_step_1.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150521120607
+     saved: data/150521120613mainp_fLoop_0_loop_23_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_22_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_23_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_23_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_23_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_24_step_1.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_23_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_23_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_24_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_26_step_1.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_25_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_25_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_27_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_26_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_27_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_27_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_27_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_28_step_1.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_27_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_27_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_28_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_30_step_1.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_29_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_29_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_31_step_0.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_30_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_32_step_1.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_31_step_1.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_32_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150521120615
+     saved: data/150521120607mainp_fLoop_0_loop_34_step_1.data
+timenumber: 150521120607
+     saved: data/150521120617mainp_fLoop_0_loop_33_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_33_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_35_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_36_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_34_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_35_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_37_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_35_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_38_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_36_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_37_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_39_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_37_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_40_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_39_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_38_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_41_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_39_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_42_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_41_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_40_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_43_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_42_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_41_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_44_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_43_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_45_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_42_step_1.data
+timenumber: 150521120605
+     saved: data/150521120607mainp_fLoop_0_loop_45_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_45_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_45_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_46_step_1.data
+timenumber: 150521120607
+     saved: data/150521120605mainp_fLoop_0_loop_43_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_45_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_45_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_47_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_44_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_47_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_48_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_47_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_45_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_47_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_49_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_46_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_49_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_50_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_49_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_49_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_47_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_51_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_51_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_51_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_48_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_52_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_51_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_51_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_53_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_49_step_0.data
+timenumber: 150521120605
+     saved: data/150521120607mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_53_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_53_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150521120607
+     saved: data/150521120605mainp_fLoop_0_loop_50_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_53_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_53_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_51_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_52_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_55_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_53_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_57_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_54_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_55_step_0.data
+timenumber: 150521120605
+     saved: data/150521120607mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_61_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_61_step_1.data
+timenumber: 150521120607
+     saved: data/150521120605mainp_fLoop_0_loop_56_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_61_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_61_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150521120607
+     saved: data/150521120605mainp_fLoop_0_loop_57_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_61_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_61_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_58_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_63_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_59_step_1.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150521120613
+     saved: data/150521120607mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_60_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150521120609
+     saved: data/150521120607mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_65_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_61_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_67_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150521120609
+     saved: data/150521120607mainp_fLoop_0_loop_67_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_67_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_67_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_62_step_0.data
+timenumber: 150521120605
+     saved: data/150521120607mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_67_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_67_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_69_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_63_step_0.data
+timenumber: 150521120605
+     saved: data/150521120607mainp_fLoop_0_loop_69_step_1.data
+timenumber: 150521120607
+     saved: data/150521120615mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_69_step_1.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_69_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_64_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_69_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_69_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_71_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_65_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_71_step_1.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_71_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_66_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_71_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_73_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_67_step_1.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_73_step_1.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_73_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_73_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_73_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_75_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_68_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_75_step_1.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_69_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_75_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_75_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_75_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_77_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_70_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_77_step_1.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_77_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_71_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_77_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_77_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_79_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_72_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_79_step_1.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_79_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_73_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_79_step_1.data
+     saved: data/150521120611mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150521120611
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_79_step_1.data
+timenumber: 150521120617
+     saved: data/150521120613mainp_fLoop_0_loop_81_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_74_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_81_step_1.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_81_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_75_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_81_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_83_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_81_step_1.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_83_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_76_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_83_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_83_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_77_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_85_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_83_step_1.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_85_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_78_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_85_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_85_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_87_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_85_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_79_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_87_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_80_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_87_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_87_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_89_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_87_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_81_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_88_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_82_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_89_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_91_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_89_step_1.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_90_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_83_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_91_step_1.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_93_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_84_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_91_step_1.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_92_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_85_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_95_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_93_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_93_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_86_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_94_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_87_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_97_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_95_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_95_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_88_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_96_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_97_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_89_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_99_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_97_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_97_step_1.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_98_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_99_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_100_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_90_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_99_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_100_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_101_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_99_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_99_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_91_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_101_step_1.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_100_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_102_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_100_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_100_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_92_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_102_step_0.data
+timenumber: 150521120611
+     saved: data/150521120609mainp_fLoop_0_loop_101_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_103_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_101_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_101_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_93_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_103_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_104_step_0.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_102_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_102_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_102_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_94_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_104_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_105_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_103_step_0.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_103_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_103_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_95_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_106_step_0.data
+     saved: data/150521120609mainp_fLoop_0_loop_104_step_1.data
+     saved: data/150521120611mainp_fLoop_0_loop_105_step_1.data
+timenumber: 150521120609
+timenumber: 150521120611
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_104_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_104_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_96_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_106_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_107_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_105_step_0.data
+timenumber: 150521120609
+     saved: data/150521120617mainp_fLoop_0_loop_105_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_105_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_97_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_107_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_108_step_0.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_106_step_1.data
+timenumber: 150521120609
+     saved: data/150521120617mainp_fLoop_0_loop_106_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_106_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_98_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_108_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_109_step_1.data
+timenumber: 150521120613
+     saved: data/150521120609mainp_fLoop_0_loop_107_step_0.data
+timenumber: 150521120609
+     saved: data/150521120617mainp_fLoop_0_loop_107_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_107_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_99_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_109_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_110_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_108_step_0.data
+timenumber: 150521120617
+     saved: data/150521120609mainp_fLoop_0_loop_108_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_108_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_100_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_110_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_111_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_109_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_109_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_109_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_101_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_111_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_112_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_110_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_110_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_110_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_102_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_112_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_113_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_111_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_111_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_111_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_103_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_113_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_114_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_112_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_112_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_112_step_1.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_104_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_114_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_115_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_113_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_113_step_1.data
+timenumber: 150521120615
+main error: max_runs(100) exceeded for:
+timenumber: 150521120607; fileLoop: 0; loop: 70
+return 1 for node 2 on running main
+     saved: data/150521120609mainp_fLoop_0_loop_113_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_105_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_115_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_116_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_114_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_114_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_114_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_116_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_117_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_106_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_115_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_115_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_115_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_117_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_118_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_107_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_116_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_116_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_116_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_118_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_119_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_117_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_117_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_108_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_117_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_119_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_120_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_118_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_118_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_109_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_118_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_120_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_121_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_119_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_119_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_110_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_119_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_121_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_122_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_120_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_120_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_111_step_0.data
+timenumber: 150521120605
+     saved: data/150521120609mainp_fLoop_0_loop_120_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_122_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_123_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_121_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_121_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_121_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_112_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_123_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_124_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_122_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_122_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_122_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_124_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_125_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_113_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_123_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_123_step_1.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_123_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_125_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_126_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_124_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_114_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_124_step_0.data
+timenumber: 150521120615
+     saved: data/150521120609mainp_fLoop_0_loop_124_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_126_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_127_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_125_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_125_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_115_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.01403e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_125_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_127_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_128_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_126_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_126_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_116_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.02405e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_126_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_128_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_129_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_127_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_127_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_117_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.03364e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_127_step_0.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_129_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_130_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_128_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_128_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_118_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.05065e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_128_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_130_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_131_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_129_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_129_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_119_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.06248e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_129_step_0.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_132_step_0.data
+timenumber: 150521120613
+     saved: data/150521120611mainp_fLoop_0_loop_131_step_0.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_130_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_130_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_120_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.06709e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_130_step_1.data
+timenumber: 150521120609
+     saved: data/150521120613mainp_fLoop_0_loop_133_step_1.data
+timenumber: 150521120613
+     saved: data/150521120611mainp_fLoop_0_loop_132_step_1.data
+timenumber: 150521120611
+     saved: data/150521120617mainp_fLoop_0_loop_131_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_131_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_121_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_134_step_0.data
+timenumber: 150521120613
+     saved: data/150521120611mainp_fLoop_0_loop_133_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.09196e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_131_step_0.data
+timenumber: 150521120609
+     saved: data/150521120617mainp_fLoop_0_loop_132_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_132_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.09607e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_132_step_1.data
+timenumber: 150521120609
+     saved: data/150521120611mainp_fLoop_0_loop_134_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_135_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_122_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_133_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_133_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_135_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_136_step_0.data
+timenumber: 150521120613
+Check imaginary part of energy: test(1.10344e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_133_step_0.data
+timenumber: 150521120609
+     saved: data/150521120617mainp_fLoop_0_loop_134_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_123_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_134_step_0.data
+timenumber: 150521120615
+     saved: data/150521120613mainp_fLoop_0_loop_137_step_1.data
+     saved: data/150521120611mainp_fLoop_0_loop_136_step_1.data
+timenumber: 150521120613
+timenumber: 150521120611
+Check imaginary part of energy: test(1.12273e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_134_step_1.data
+timenumber: 150521120609
+     saved: data/150521120617mainp_fLoop_0_loop_135_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_124_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_135_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_137_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_138_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_136_step_0.data
+timenumber: 150521120617
+Check imaginary part of energy: test(1.13723e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_135_step_0.data
+timenumber: 150521120609
+     saved: data/150521120605mainp_fLoop_0_loop_125_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_136_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_138_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_139_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_137_step_1.data
+timenumber: 150521120617
+Check imaginary part of energy: test(1.14866e-05) > closeness(1e-05)
+     saved: data/150521120609mainp_fLoop_0_loop_136_step_1.data
+timenumber: 150521120609
+     saved: data/150521120615mainp_fLoop_0_loop_137_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_126_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_139_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_140_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_138_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_138_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_127_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_140_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_141_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_139_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_139_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_128_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_141_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_142_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_140_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_140_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_129_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_142_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_143_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_141_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_141_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_130_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_143_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_144_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_142_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_142_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_131_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_144_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_145_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_143_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_143_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_132_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_145_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_146_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_144_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_144_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_133_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_146_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_147_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_145_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_145_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_147_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_148_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_134_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_146_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_146_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_148_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_149_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_147_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_135_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_147_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_149_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_150_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_148_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_148_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_136_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_150_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_151_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_149_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_149_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_137_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_151_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_152_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_150_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_150_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_138_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_152_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_153_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_151_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_151_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_153_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_139_step_0.data
+timenumber: 150521120605
+     saved: data/150521120613mainp_fLoop_0_loop_154_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_152_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_152_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_154_step_1.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_155_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_153_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_140_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_153_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_155_step_0.data
+timenumber: 150521120611
+     saved: data/150521120613mainp_fLoop_0_loop_156_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_154_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_154_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_141_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_156_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.00797e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_157_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_155_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_155_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_142_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_157_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.01816e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_158_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_156_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_156_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_143_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_158_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.02929e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_159_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_157_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_157_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_159_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.04002e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_160_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_144_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_158_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_158_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_160_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.05012e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_161_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_159_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_145_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_159_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_161_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.06194e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_162_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_160_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_160_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_146_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_162_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.06971e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_163_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_161_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_161_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_147_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_163_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.08382e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_164_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_162_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_162_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_164_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_148_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.08521e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_165_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_163_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_163_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_165_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.1044e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_166_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_149_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_164_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_164_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_166_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.07498e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_167_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_165_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_150_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_165_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_167_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.05409e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_168_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_166_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_166_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_151_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_168_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.05602e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_169_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_167_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_167_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_169_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_152_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.04183e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_170_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_168_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_168_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_170_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.03244e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_171_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_153_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_169_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_169_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_171_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.03587e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_172_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_170_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_154_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_170_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_172_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.02112e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_173_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_171_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_155_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_171_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_173_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.04354e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_174_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_172_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_172_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_156_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_174_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.03638e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_175_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_173_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_173_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_175_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_157_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.05416e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_176_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_174_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_174_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_176_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.05946e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_177_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_158_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_175_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_175_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_177_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.05838e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_178_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_176_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_159_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_176_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_178_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.07754e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_179_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_177_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_160_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_177_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_179_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.09281e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_180_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_178_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_178_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_161_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_180_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.09585e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_181_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_179_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_179_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_181_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_162_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.11078e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_182_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_180_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_180_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_182_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.11733e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_183_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_163_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_181_step_1.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_181_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_183_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.12508e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_184_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_164_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_182_step_0.data
+timenumber: 150521120617
+     saved: data/150521120615mainp_fLoop_0_loop_182_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_184_step_1.data
+timenumber: 150521120611
+main error: max_runs(100) exceeded for:
+timenumber: 150521120609; fileLoop: 0; loop: 137
+return 1 for node 3 on running main
+Check imaginary part of energy: test(1.13727e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_185_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_183_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_165_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_183_step_1.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_185_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.15042e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_186_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_184_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_166_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_184_step_0.data
+timenumber: 150521120615
+     saved: data/150521120611mainp_fLoop_0_loop_186_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.15524e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_187_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_185_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_167_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_187_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_185_step_1.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.17176e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_188_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_186_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_188_step_1.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_186_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_168_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.16258e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_189_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_187_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_189_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_187_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_169_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.18634e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_190_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_188_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_190_step_1.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_188_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.18243e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_191_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_170_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_189_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_191_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_189_step_1.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.19644e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_192_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_190_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_171_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_192_step_1.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_190_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.20288e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_193_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_191_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_172_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_193_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_191_step_1.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.21522e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_194_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_192_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_173_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_194_step_1.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_192_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.22459e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_195_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_193_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_195_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_193_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_174_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.23167e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_196_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_194_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_196_step_1.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_194_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.23229e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_197_step_1.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_175_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_195_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_197_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_195_step_1.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.25585e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_198_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_196_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_176_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_198_step_1.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_196_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.25343e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_199_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_197_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_177_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_199_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_197_step_1.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.26537e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_200_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_198_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_200_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_178_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_198_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.27068e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_201_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_199_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_201_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_199_step_1.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.28663e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_202_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_179_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_200_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_202_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_200_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.29285e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_203_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_201_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_180_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_203_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_201_step_1.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.29892e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_204_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_202_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_181_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_204_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_202_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.30978e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_205_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_203_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_182_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_205_step_0.data
+timenumber: 150521120611
+     saved: data/150521120615mainp_fLoop_0_loop_203_step_1.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.32711e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_206_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_204_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_206_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_183_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_204_step_0.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.31632e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_207_step_1.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_205_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_207_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_184_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_205_step_1.data
+timenumber: 150521120615
+Check imaginary part of energy: test(1.34035e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_208_step_0.data
+timenumber: 150521120613
+     saved: data/150521120617mainp_fLoop_0_loop_206_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_208_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.33522e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_209_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_206_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_185_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_207_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_209_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.35071e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_210_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_207_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_208_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_186_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_210_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.35738e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_211_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_208_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_209_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_187_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_211_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.36727e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_212_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_209_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_210_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_188_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_212_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.37867e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_213_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_210_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_211_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_189_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_213_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.38723e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_214_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_211_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_212_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_214_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_190_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.3783e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_215_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_212_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_213_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_215_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_191_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.40235e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_216_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_213_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_214_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_216_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.38884e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_217_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_214_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_192_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_215_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_217_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.41131e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_218_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_215_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_216_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_193_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_218_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.4124e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_219_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_216_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_217_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_194_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_219_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.41868e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_220_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_217_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_218_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_195_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_220_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.4288e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_221_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_218_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_219_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_221_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_196_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.44531e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_222_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_219_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_220_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_222_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.45186e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_223_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_220_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_197_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_221_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_223_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.45443e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_224_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_221_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_198_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_222_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_224_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.45043e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_225_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_222_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_223_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_199_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_225_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.47438e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_226_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_223_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_224_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_200_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_226_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.46077e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_227_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_224_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_225_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_201_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_227_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.48335e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_228_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_225_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_226_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_228_step_0.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_202_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.48425e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_229_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_226_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_227_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_229_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.49091e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_230_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_227_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_203_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_228_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_230_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.50149e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_231_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_228_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_229_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_204_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_231_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.51727e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_232_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_229_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_230_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_205_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_232_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.5245e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_233_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_230_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_231_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_206_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_233_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.52745e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_234_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_231_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_232_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_234_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_207_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.53002e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_235_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_232_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_233_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_235_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.55317e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_236_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_233_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_208_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_234_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_236_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.50799e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_237_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_234_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_235_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_209_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_237_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.51501e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_238_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_235_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_236_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_210_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_238_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.48548e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_239_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_236_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_237_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_211_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_239_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.48822e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_240_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_237_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_238_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_240_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_212_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.46506e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_241_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_238_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_239_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_241_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.45453e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_242_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_239_step_1.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_213_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_240_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_242_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.44237e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_243_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_240_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_241_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_214_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_243_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.45108e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_244_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_241_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_242_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_215_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_244_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.4452e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_245_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_242_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_243_step_1.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_216_step_0.data
+timenumber: 150521120605
+     saved: data/150521120611mainp_fLoop_0_loop_245_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.46915e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_246_step_0.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_243_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_244_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_246_step_1.data
+timenumber: 150521120611
+     saved: data/150521120605mainp_fLoop_0_loop_217_step_0.data
+timenumber: 150521120605
+Check imaginary part of energy: test(1.46931e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_247_step_1.data
+timenumber: 150521120613
+     saved: data/150521120615mainp_fLoop_0_loop_244_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_245_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_247_step_0.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.46773e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_248_step_0.data
+timenumber: 150521120613
+     saved: data/150521120605mainp_fLoop_0_loop_218_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_245_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_246_step_0.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_248_step_1.data
+timenumber: 150521120611
+Check imaginary part of energy: test(1.4904e-05) > closeness(1e-05)
+     saved: data/150521120613mainp_fLoop_0_loop_249_step_1.data
+     saved: data/150521120615mainp_fLoop_0_loop_246_step_0.data
+timenumber: 150521120615
+     saved: data/150521120605mainp_fLoop_0_loop_219_step_0.data
+timenumber: 150521120605
+     saved: data/150521120617mainp_fLoop_0_loop_247_step_1.data
+timenumber: 150521120617
+     saved: data/150521120611mainp_fLoop_0_loop_249_step_0.data
+     saved: data/150521120615mainp_fLoop_0_loop_247_step_1.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_248_step_0.data
+timenumber: 150521120617
+     saved: data/150521120605mainp_fLoop_0_loop_220_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_248_step_0.data
+timenumber: 150521120615
+     saved: data/150521120617mainp_fLoop_0_loop_249_step_1.data
+     saved: data/150521120605mainp_fLoop_0_loop_221_step_0.data
+timenumber: 150521120605
+     saved: data/150521120615mainp_fLoop_0_loop_249_step_1.data
+     saved: data/150521120605mainp_fLoop_0_loop_222_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_223_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_224_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_225_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_226_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_227_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_228_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_229_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_230_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_231_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_232_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_233_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_234_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_235_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_236_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_237_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_238_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_239_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_240_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_241_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_242_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_243_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_244_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_245_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_246_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_247_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_248_step_0.data
+timenumber: 150521120605
+     saved: data/150521120605mainp_fLoop_0_loop_249_step_0.data

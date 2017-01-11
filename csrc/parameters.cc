@@ -533,7 +533,7 @@ bool Parameters::changeParameters (const string& pName, const uint& pValue) {
 		else if ( pName.compare("Nc")==0) {
 			if (Nc!=pValue) anythingChanged = true;
 			Nc = pValue;
-			NT = Nc + Nb + Nc;
+			NT = Na + Nb + Nc;
 			Tc = b*(double)Nc;
 		}
 		else if ( pName.compare("pot")==0) { // would not recommend change pot this way

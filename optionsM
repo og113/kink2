@@ -2,20 +2,24 @@ alpha               0.5
 open                1                   
 amp                 0.5                 
 zmx                 nC2                 
-zmt                 nD1                 
+zmt                 nD2                 
 bds                 uc                               
-inF                 mn                 
-minTimenumberLoad   150809162650        
-maxTimenumberLoad   150809162650        
+inF                 m                 
+minTimenumberLoad   000        
+maxTimenumberLoad   000        
 minfLoopLoad        0                   
 maxfLoopLoad        0                   
-minLoopLoad         11                   
-maxLoopLoad         11                   
-loopChoice          theta              
-loopMin             0.0              
-loopMax             0.0                   
+minLoopLoad         0                   
+maxLoopLoad         0                   
+loopChoice          Nc              
+loopMin             2              
+loopMax             4                   
 epsiTb              0.001              
 epsiTheta           0.001              
 loops               2                 
+<<<<<<< HEAD
 printChoice         p                   
+=======
+printChoice         e                   
+>>>>>>> 991aa3884da6cd26bffa4b1a5332910df010380a
 
