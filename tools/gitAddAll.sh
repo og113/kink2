@@ -9,6 +9,7 @@ git add --all pics/*.svg
 # adding .cc and .h files
 git add --all mpisrc/*.cc
 git add --all csrc/*.cc
+git add --all fnsrc/*.cc
 git add --all src/*.cc
 git add --all tests/*.cc
 git add --all include/*.h
