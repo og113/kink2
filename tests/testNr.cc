@@ -76,16 +76,20 @@ for (uint j=0; j<length; j++) {
 	}
 	else {
 		// bulk
+		
+		// temporal kinetic term
 		Kinetic_nr(j,0,p,pr,f,action);
-		Kinetic_nr(j,0,p,pr,f,action);
-		Potential_nr(j,p,pr,V,f,action);
-	
 		mdKinetic_nr(j,0,p,pr,f,mds);
-		mdKinetic_nr(j,1,p,pr,f,mds);
-		mdPotential_nr(j,p,pr,dV,f,mds);
-	
 		ddKinetic_nr(j,0,p,pr,f,dds);
+		
+		// spatial kinetic term
+		Kinetic_nr(j,0,p,pr,f,action);
+		mdKinetic_nr(j,1,p,pr,f,mds);
 		ddKinetic_nr(j,1,p,pr,f,dds);
+		
+		// potential term
+		Potential_nr(j,p,pr,V,f,action);
+		mdPotential_nr(j,p,pr,dV,f,mds);
 		ddPotential_nr(j,p,pr,ddV,f,dds);
 	}
 }
