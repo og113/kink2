@@ -8,11 +8,9 @@
 #include <complex>
 #include "simple.h"
 #include "parameters.h"
-#include "potential.h"
+#include "potentials.h"
 
 using namespace std;
-
-typedef complex<double> comp;
 
 /*-------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------
@@ -39,32 +37,34 @@ CONTENTS
 	2 - nr scalar functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// KineticS
-void KineticS (const uint& j, const vec& p, const Parameters& p, const cVec& f, comp& result);
+// KineticS_nr
+void KineticS_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, comp& result);
 
+// KineticT_nr
+void KineticT_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, comp& result);
 
-// KineticT
-void KineticT (const uint& j, const vec& p, const Parameters& p, const cVec& f, comp& result);
+// Potential_nr
+void Potential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, comp& result);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3 - nr vector functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// mdKineticS
-void mdKineticS (const uint& j, const vec& p, const Parameters& p, const cVec& f, vec& mds);
+// mdKineticS_nr
+void mdKineticS_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, vec& mds);
 
 
-// mdKineticT
-void mdKineticT (const uint& j, const vec& p, const Parameters& p, const cVec& f, vec& mds);
+// mdKineticT_nr
+void mdKineticT_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, vec& mds);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4 - nr matrix functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// ddKineticS
-void ddKineticS (const uint& j, const vec& p, const Parameters& p, const cVec& f, spMat& dds);
+// ddKineticS_nr
+void ddKineticS_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
 
-// ddKineticT
-void ddKineticT (const uint& j, const vec& p, const Parameters& p, const cVec& f, spMat& dds);
+// ddKineticT_nr
+void ddKineticT_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
 
 #endif // __NR_H_INCLUDED__
