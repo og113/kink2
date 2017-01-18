@@ -16,7 +16,7 @@ PrimaryParameters pr1;
 pr1.pot=3;
 pr1.N = 4;
 pr1.Na = 0;
-pr1.Nb = 2;
+pr1.Nb = 4;
 pr1.Nc = 0;
 pr1.LoR = 1.0;
 pr1.dE = 0.01;
@@ -68,7 +68,35 @@ for (uint j=0; j<length; j++) {
 		dds.insert(2*j+1,2*j+1) = 1.0;
 	}
 	else if (t==0) {
-		// initial conditions
+		// initial conditions - PROBABLY WANT TO REJIGG ALL OF THIS
+				
+		if (abs(pr.theta)<MIN_NUMBER) {
+			dds.insert(2*j+1,2*(j+1)+1) = 1.0; //zero imaginary part of time derivative
+			dds.insert(2*j,2*j+1) = 1.0; //zero imaginary part
+		}
+		else {
+			// temporal kinetic term
+			Kinetic_nr(j,0,p,pr,f,action);
+			mdKinetic_nr(j,0,p,pr,f,mds);
+			ddKinetic_nr(j,0,p,pr,f,dds);
+		
+			// spatial kinetic term
+			Kinetic_nr(j,0,p,pr,f,action);
+			mdKinetic_nr(j,1,p,pr,f,mds);
+			ddKinetic_nr(j,1,p,pr,f,dds);
+		
+			// potential term
+			Potential_nr(j,p,pr,V,f,action);
+			mdPotential_nr(j,p,pr,dV,f,mds);
+			ddPotential_nr(j,p,pr,ddV,f,dds);
+			
+			// omega terms
+			//
+			//
+			//
+			//
+			//
+		}
 	}
 	else if (t==pr.NT-1) {
 		dds.insert(2*j,2*(j-1)+1) = 1.0; //zero imaginary part of time derivative
@@ -93,6 +121,14 @@ for (uint j=0; j<length; j++) {
 		ddPotential_nr(j,p,pr,ddV,f,dds);
 	}
 }
+
+// lagrange multiplier terms
+//for (uint j=0; j<length; j++) {
+//
+//}
+//
+//
+//
 
 cout << "p = ";
 for (uint j=0; j<length; j++) {
