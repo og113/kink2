@@ -37,11 +37,8 @@ CONTENTS
 	2 - nr scalar functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// KineticS_nr
-void KineticS_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, comp& result);
-
-// KineticT_nr
-void KineticT_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, comp& result);
+// Kinetic_nr
+void Kinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, comp& result);
 
 // Potential_nr
 void Potential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, comp& result);
@@ -50,21 +47,20 @@ void Potential_nr (const uint& j, const vec& p, const Parameters& pr, const Pote
 	3 - nr vector functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// mdKineticS_nr
-void mdKineticS_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, vec& mds);
+// mdKinetic_nr
+void mdKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, vec& mds);
 
-
-// mdKineticT_nr
-void mdKineticT_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, vec& mds);
+// mdPotential_nr
+void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, vec& mds);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4 - nr matrix functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
-// ddKineticS_nr
-void ddKineticS_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
+// ddKinetic_nr
+void ddKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
 
-// ddKineticT_nr
-void ddKineticT_nr (const uint& j, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
+// ddPotential_nr
+void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, spMat& dds);
 
 #endif // __NR_H_INCLUDED__
