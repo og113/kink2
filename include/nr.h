@@ -58,9 +58,9 @@ void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Po
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // ddKinetic_nr
-void ddKinetic_nr (const uint& j, const uint& k, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
+void ddKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
 
 // ddPotential_nr
-void ddPotential_nr (const uint& j, const uint& k, const vec& p, const Parameters& pr, const Potential<comp>& ddv, const cVec& f, spMat& dds);
+void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& ddv, const cVec& f, spMat& dds);
 
 #endif // __NR_H_INCLUDED__

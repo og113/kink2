@@ -49,27 +49,44 @@ ddV((Potential<comp>::PotentialType)&ddV3<comp>,pr);
 // assigning preliminary parameter structs
 params_for_V paramsV  = {pr.epsilon, pr.A};
 
-for (uint i=0; i<length; i++) {
-	//uint t= intCoord(i,0,pr); //coordinates
-	uint x = intCoord(i,1,pr);
+for (uint j=0; j<length; j++) {
+	uint t= intCoord(j,0,pr); //coordinates
+	uint x = intCoord(j,1,pr);
 			
 	paramsV.epsi = pr.r0+x*pr.a;
 	V.setParams(paramsV);
 	dV.setParams(paramsV);
 	ddV.setParams(paramsV);
-
-	Kinetic_nr(i,0,p,pr,f,action);
-	Kinetic_nr(i,0,p,pr,f,action);
-	Potential_nr(i,p,pr,V,f,action);
 	
-	mdKinetic_nr(i,0,p,pr,f,mds);
-	mdKinetic_nr(i,1,p,pr,f,mds);
-	mdPotential_nr(i,p,pr,dV,f,mds);
+	// boundaries
+	if (x==0) {	
+		dds.insert(2*j,2*j) 	= 1.0; // p=0 at r=0
+		dds.insert(2*j+1,2*j+1) = 1.0;
+	}
+	else if (x==(pr.N-1)) {
+		dds.insert(2*j,2*j) 	= 1.0; // p=0 at r=R
+		dds.insert(2*j+1,2*j+1) = 1.0;
+	}
+	else if (t==0) {
+		// initial conditions
+	}
+	else if (t==pr.NT-1) {
+		dds.insert(2*j,2*(j-1)+1) = 1.0; //zero imaginary part of time derivative
+		dds.insert(2*j+1,2*j+1)   = 1.0; //zero imaginary part
+	}
+	else {
+		// bulk
+		Kinetic_nr(j,0,p,pr,f,action);
+		Kinetic_nr(j,0,p,pr,f,action);
+		Potential_nr(j,p,pr,V,f,action);
 	
-	for (uint j=0; j<length; j++) {
-		ddKinetic_nr(i,j,0,p,pr,f,dds);
-		ddKinetic_nr(i,j,1,p,pr,f,dds);
-		ddPotential_nr(i,j,p,pr,ddV,f,dds);
+		mdKinetic_nr(j,0,p,pr,f,mds);
+		mdKinetic_nr(j,1,p,pr,f,mds);
+		mdPotential_nr(j,p,pr,dV,f,mds);
+	
+		ddKinetic_nr(j,0,p,pr,f,dds);
+		ddKinetic_nr(j,1,p,pr,f,dds);
+		ddPotential_nr(j,p,pr,ddV,f,dds);
 	}
 }
 
