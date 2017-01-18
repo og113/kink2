@@ -7,6 +7,7 @@
 #include "lattice.h"
 #include "nr.h"
 #include "simple.h"
+#include "main.h"
 
 /*-------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------
@@ -66,8 +67,9 @@ void mdKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameter
 }
 
 // mdPotential_nr
-void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, vec& mds) {
-
+void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& dv, const cVec& f, vec& mds) {
+	  mds(2*j) -= real(f(j)*dv(p(2*j) + ii*p(2*j + 1)));
+	  mds(2*j+1) -= imag(f(j)*dv(p(2*j) + ii*p(2*j + 1)));
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -75,7 +77,7 @@ void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Po
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // ddKinetic_nr
-void ddKinetic_nr (const uint& j, const uint& dir, const uint& k, const vec& p, const Parameters& pr, const cVec& f, spMat& dds) {
+void ddKinetic_nr (const uint& j, const uint& k, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, spMat& dds) {
 	long mj = neigh(j,dir,-1,pr);
 	long mk = neigh(k,dir,-1,pr);
 	long pj = neigh(j,dir,1,pr);
@@ -112,6 +114,11 @@ void ddKinetic_nr (const uint& j, const uint& dir, const uint& k, const vec& p, 
 }
 
 // ddPotential_nr
-void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, spMat& dds) {
+void ddPotential_nr (const uint& j, const uint& k, const vec& p, const Parameters& pr, const Potential<comp>& ddv, const cVec& f, spMat& dds) {
 
+	dds.coeffRef(2*j,2*k) += real(f(j)*ddv(p(2*j) + ii*p(2*j + 1))); 
+	dds.coeffRef(2*j,2*k+1) += - imag(f(j)*ddv(p(2*j) + ii*p(2*j + 1)));
+	dds.coeffRef(2*j+1,2*k) += imag(f(j)*ddv(p(2*j) + ii*p(2*j + 1)));
+	dds.coeffRef(2*j+1,2*k+1) += real(f(j)*ddv(p(2*j) + ii*p(2*j + 1)));
+	
 }

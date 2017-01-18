@@ -51,16 +51,16 @@ void Potential_nr (const uint& j, const vec& p, const Parameters& pr, const Pote
 void mdKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, vec& mds);
 
 // mdPotential_nr
-void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, vec& mds);
+void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& dv, const cVec& f, vec& mds);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4 - nr matrix functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // ddKinetic_nr
-void ddKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
+void ddKinetic_nr (const uint& j, const uint& k, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
 
 // ddPotential_nr
-void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, spMat& dds);
+void ddPotential_nr (const uint& j, const uint& k, const vec& p, const Parameters& pr, const Potential<comp>& ddv, const cVec& f, spMat& dds);
 
 #endif // __NR_H_INCLUDED__

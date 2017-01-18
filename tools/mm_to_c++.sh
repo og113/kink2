@@ -62,5 +62,6 @@ else
 			sed -i 's/2\*(\([c-v]\+\))/2*\1/g' $1
 			sed -i 's/a(\([c-v]\+\))/real(f(\1))/g' $1
 			sed -i 's/b(\([c-v]\+\))/imag(f(\1))/g' $1
+			sed -i 's/Complex(0,1)/ii/g' $1
 	fi
 fi
