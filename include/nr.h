@@ -40,31 +40,31 @@ CONTENTS
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // KineticS
-void KineticS (const uint& j, const vec& p, const Parameters& p, const comp& f, comp& result);
+void KineticS (const uint& j, const vec& p, const Parameters& p, const cVec& f, comp& result);
 
 
 // KineticT
-void KineticT (const uint& j, const vec& p, const Parameters& p, const comp& f, comp& result);
+void KineticT (const uint& j, const vec& p, const Parameters& p, const cVec& f, comp& result);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	3 - nr vector functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // mdKineticS
-void mdKineticS (const uint& j, const vec& p, const Parameters& p, const comp& f, vec& mds);
+void mdKineticS (const uint& j, const vec& p, const Parameters& p, const cVec& f, vec& mds);
 
 
 // mdKineticT
-void mdKineticT (const uint& j, const vec& p, const Parameters& p, const comp& f, vec& mds);
+void mdKineticT (const uint& j, const vec& p, const Parameters& p, const cVec& f, vec& mds);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4 - nr matrix functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // ddKineticS
-void ddKineticS (const uint& j, const vec& p, const Parameters& p, const comp& f, spMat& dds);
+void ddKineticS (const uint& j, const vec& p, const Parameters& p, const cVec& f, spMat& dds);
 
 // ddKineticT
-void ddKineticT (const uint& j, const vec& p, const Parameters& p, const comp& f, spMat& dds);
+void ddKineticT (const uint& j, const vec& p, const Parameters& p, const cVec& f, spMat& dds);
 
 #endif // __NR_H_INCLUDED__
