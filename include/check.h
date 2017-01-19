@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include "simple.h"
 
 using namespace std;
 

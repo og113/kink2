@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------------------------------------------------------
-	main_fn2
+	main_fn
 		program to solve boundary value problem on contour ABCD
 		main used as a function, not a main process
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -17,7 +17,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_poly.h>
 #include <gsl/gsl_roots.h>
-#include "main_fn.h"
+#include "main_fn3.h"
 #include "main.h"
 
 //#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
@@ -43,7 +43,7 @@
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int main_fn2(int argc, vector<string> argv)
+int main_fn(int argc, vector<string> argv)
 {
 /*----------------------------------------------------------------------------------------------------------------------------
 	1. loading options, argv inputs
@@ -383,6 +383,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Check checkLR("linear representation of phi",closenesses.LR);
 		Check checkBoundRe("initial real boundary condition",closenesses.Soln);
 		Check checkBoundIm("initial imaginary boundary condition",closenesses.Soln);
+		Check checkChiT("time zero mode condition",closenesses.Soln);
 	
 		// do trivial or redundant checks?
 		bool trivialChecks = false;
@@ -443,7 +444,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
 		SaveOptions so_simple;
 		so_simple.printType = SaveOptions::binary;
-		so_simple.paramsIn = ps; so_simple.paramsOut = ps;
+		so_simple.paramsIn = psu; so_simple.paramsOut = ps;
 		so_simple.vectorType = SaveOptions::simple;
 		so_simple.extras = SaveOptions::none;
 		so_simple.printMessage = false;
@@ -528,6 +529,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				eigVecOpts.printType = SaveOptions::ascii;
 				eigVecOpts.vectorType = SaveOptions::realB;
 				eigVecOpts.extras = SaveOptions::coords;
+				eigVecOpts.paramsOut = psu;
 				eigVecOpts.paramsOut = ps;
 				eigVecOpts.printMessage = false;
 				Parameters pIn = ps;
@@ -579,7 +581,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.paramsOut = ps;
 		so_tp.vectorType = SaveOptions::complex;
 		so_tp.extras = SaveOptions::coords;
-		so_tp.zeroModes = 3;
+		so_tp.zeroModes = 2;
 		so_tp.printMessage = false;
 		if (loop==0) {
 			if (fileLoop==0 && ((pFolder[0]).Suffix).compare(".dat")==0) so_tp.printType = SaveOptions::ascii;
@@ -588,10 +590,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				p.conservativeResize(2*ps.N*ps.NT+2);
 				p(2*ps.N*ps.NT+1) = 0.5;
 			}
-			if (p.size()==(2*ps.N*ps.NT+2)) { // for extra zero mode
-				p.conservativeResize(2*ps.N*ps.NT+3);
-				p(2*ps.N*ps.NT+2) = 0.5;
-			}
+			so_tp.paramsIn = ps;
 			so_tp.printType = SaveOptions::binary;
 			fprintf(cof,"%12s%30s\n","input: ",(pFolder[fileLoop]()).c_str());
 			if ((opts.printChoice).compare("gui")==0)
@@ -608,7 +607,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				lastPhi = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
 						+"_loop_"+numberToString<uint>(loop-stepper.local()+1+sigma)+"_step_1.data");
 			}
-			so_tp.paramsIn = ps;
 			load(lastPhi,so_tp,p);
 			fprintf(cof,"%12s%30s\n","input: ",(lastPhi()).c_str());
 			if ((opts.printChoice).compare("gui")==0)
@@ -625,16 +623,16 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Cp = vecComplex(p,ps);
 	
 		//defining DDS and minusDS
-		spMat DDS(2*ps.N*ps.NT+3,2*ps.N*ps.NT+3);
-		vec minusDS(2*ps.N*ps.NT+3);
+		spMat DDS(2*ps.N*ps.NT+2,2*ps.N*ps.NT+2);
+		vec minusDS(2*ps.N*ps.NT+2);
 		
 		// defining a couple of vectors to test whether the initial boundary conditions are satisfied
 		vec boundRe(ps.N);
 		vec boundIm(ps.N);
 			
 		//very early vector print
+		so_tp.paramsIn = ps;
 		if ((opts.printChoice).compare("n")!=0) {
-			so_tp.paramsIn = ps;
 			Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
 					 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.data");
 			save(earlyPrintFile,so_tp,p);
@@ -754,23 +752,22 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			chiT = chiT/normT;
 			
 			// allocating memory for DS, DDS
-			minusDS = Eigen::VectorXd::Zero(2*ps.N*ps.NT+3); //initializing to zero
+			minusDS = Eigen::VectorXd::Zero(2*ps.N*ps.NT+2); //initializing to zero
 			DDS.setZero(); //just making sure
-			Eigen::VectorXi DDS_to_reserve(2*ps.N*ps.NT+3);//number of non-zero elements per column
-			DDS_to_reserve = Eigen::VectorXi::Constant(2*ps.N*ps.NT+3,14);
+			Eigen::VectorXi DDS_to_reserve(2*ps.N*ps.NT+2);//number of non-zero elements per column
+			DDS_to_reserve = Eigen::VectorXi::Constant(2*ps.N*ps.NT+2,13);
 			if (abs(ps.theta)<2.0e-16) {
-				DDS_to_reserve(0) = ps.N+4;
-				DDS_to_reserve(1) = 12;
+				DDS_to_reserve(0) = ps.N+3;
+				DDS_to_reserve(1) = 11;
 			}
 			else {
-				DDS_to_reserve(0) = ps.N+12;
-				DDS_to_reserve(1) = ps.N+12;
+				DDS_to_reserve(0) = ps.N+11;
+				DDS_to_reserve(1) = ps.N+11;
 			}
 			DDS_to_reserve(2*ps.N*ps.NT-2) = 4;
 			DDS_to_reserve(2*ps.N*ps.NT-1) = 4;
 			DDS_to_reserve(2*ps.N*ps.NT) = ps.N*((opts.zmx).size()-2);
 			DDS_to_reserve(2*ps.N*ps.NT+1) = 2*ps.N*((opts.zmt).size()-2);
-			DDS_to_reserve(2*ps.N*ps.NT+2) = 2*ps.N*((opts.zmt).size()-2);
 			DDS.reserve(DDS_to_reserve);
 			
 			//initializing to zero
@@ -855,13 +852,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		            minusDS(2*(j+1)) 						+= -Dx*chiT(j)*p(2*ps.N*ps.NT+1);
 		            minusDS(2*j) 							+= Dx*chiT(j)*p(2*ps.N*ps.NT+1);
 		            minusDS(2*ps.N*ps.NT+1) 				+= -Dx*chiT(j)*(p(2*(j+1))-p(2*j));
-		            DDS.coeffRef(2*(j+1)+1,2*ps.N*ps.NT+2) 	+= Dx*chiT(j); //extra zero mode
-					DDS.coeffRef(2*ps.N*ps.NT+2,2*(j+1)+1) 	+= Dx*chiT(j);
-					DDS.coeffRef(2*j+1,2*ps.N*ps.NT+2) 		+= -Dx*chiT(j);
-					DDS.coeffRef(2*ps.N*ps.NT+2,2*j+1) 		+= -Dx*chiT(j);
-		            minusDS(2*(j+1)+1) 						+= -Dx*chiT(j)*p(2*ps.N*ps.NT+2);
-		            minusDS(2*j+1) 							+= Dx*chiT(j)*p(2*ps.N*ps.NT+2);
-		            minusDS(2*ps.N*ps.NT+2) 				+= -Dx*chiT(j)*(p(2*(j+1)+1)-p(2*j)+1);
 				}
 					
 				if (t<(ps.NT-1)) {
@@ -1070,14 +1060,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	    	linNumOffShell(ps.NT-1) = linNumOffShell(ps.NT-2);
 	    	
 		    if (ps.pot==3) {
-		    	action 		*= 4.0*pi;
-		    	derivErg 	*= 4.0*pi;
-		    	potErg 		*= 4.0*pi;
-		    	erg			*= 4.0*pi;
-		    	linErg		*= 4.0*pi;
-		    	linNum		*= 4.0*pi;
-		    	linNumOffShell *= 4.0*pi;
-		    	linErgOffShell *= 4.0*pi;
+		    	action 			*= 4.0*pi;
+		    	derivErg 		*= 4.0*pi;
+		    	potErg 			*= 4.0*pi;
+		    	erg				*= 4.0*pi;
+		    	linErg			*= 4.0*pi;
+		    	linNum			*= 4.0*pi;
+		    	linNumOffShell 	*= 4.0*pi;
+		    	linErgOffShell 	*= 4.0*pi;
 		    }
 		   
 		    if (abs(ps.theta)<MIN_NUMBER) {
@@ -1111,6 +1101,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- checkTrue
 		- checkLatt
 		- checkBound
+		- checkChiT
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
@@ -1255,10 +1246,15 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			checkLatt.add(momTest);
 			
 			//checking initial boundary conditions satisfied
-			double boundReTest = boundRe.norm()/(ps.N-2.0);
-			double boundImTest = boundIm.norm()/(ps.N-2.0);
+			double normP = p.norm();
+			double boundReTest = boundRe.norm()*(2*ps.N*ps.NT+2)/normP/(ps.N-2.0);
+			double boundImTest = boundIm.norm()*(2*ps.N*ps.NT+2)/normP/(ps.N-2.0);
 			checkBoundRe.add(boundReTest);
 			checkBoundIm.add(boundImTest);
+			
+			// checking chiT orthogonality satisfied
+			double chiTTest = minusDS(2*ps.N*ps.NT+1)*(2*ps.N*ps.NT+2)/normP;
+			checkChiT.add(chiTTest);
 	
 /*----------------------------------------------------------------------------------------------------------------------------
 	11. printing early 1
@@ -1328,8 +1324,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
 			//solving for delta in DDS*delta=minusDS, where p' = p + delta		
-			vec delta(2*ps.N*ps.NT+3);
-			delta = Eigen::VectorXd::Zero(2*ps.N*ps.NT+3);
+			vec delta(2*ps.N*ps.NT+2);
+			delta = Eigen::VectorXd::Zero(2*ps.N*ps.NT+2);
 			DDS.prune(MIN_NUMBER);
 			DDS.makeCompressed();
 			Eigen::SparseLU<spMat> solver;
@@ -1362,7 +1358,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 		
 			//independent check on whether calculation worked
-			vec diff(2*ps.N*ps.NT+3);
+			vec diff(2*ps.N*ps.NT+2);
 			diff = DDS*delta-minusDS;
 			double maxDiff = diff.maxCoeff();
 			maxDiff = abs(maxDiff);
@@ -1419,7 +1415,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			double maxP = p.maxCoeff();
 			double minP = p.minCoeff();
 			if (-minP>maxP) maxP = -minP;
-			double normP = p.norm();
 			double normDelta = delta.norm();
 		
 			// adding convergence checks
@@ -1428,22 +1423,27 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			checkSoln.add(normDS/normP);
 			checkSolnMax.add(maxDS/maxP);
 			checkDelta.add(normDelta/normP);
+
+			// rate of convergence
+			double convergRate = (checkDelta.size()>1? \
+				log((checkDelta.tests())[checkDelta.size()-1])/log((checkDelta.tests())[checkDelta.size()-2]):0.0);
 			
 			//printing tests to see convergence
 			if (runs_count==1) {
-				fprintf(cof,"%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","linear"\
-							,"true erg","on shell","AB","ABNE","conserv","latt");
+				fprintf(cof,"%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","converg"\
+				,"linear","true erg","on shell","AB","ABNE","conserv","latt");
 				if ((opts.printChoice).compare("gui")==0)
-					printf("%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","linear"\
-							,"true erg","on shell","AB","ABNE","conserv","latt");
+					printf("%5s%5s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s%11s\n","loop","run","sol","solM","delta","converg"\
+					,"linear","true erg","on shell","AB","ABNE","conserv","latt");
 			}
-			fprintf(cof,"%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,checkSoln.back(),\
-				checkSolnMax.back(),checkDelta.back(),checkLin.back(),checkTrue.back(),checkOS.back(),checkAB.back(),checkABNE.back(),\
+			fprintf(cof,"%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count\
+			,checkSoln.back(),checkSolnMax.back(),checkDelta.back(),convergRate,checkLin.back(),checkTrue.back()\
+			,checkOS.back(),checkAB.back(),checkABNE.back(),\
 				checkCon.back(),checkLatt.back());
 			if ((opts.printChoice).compare("gui")==0)
-				printf("%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count,checkSoln.back(),\
-					checkSolnMax.back(),checkDelta.back(),checkLin.back(),checkTrue.back(),checkOS.back(),checkAB.back(),\
-					checkABNE.back(),checkCon.back(),checkLatt.back());
+				printf("%5i%5i%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g%11.4g\n",loop,runs_count\
+				,checkSoln.back(),checkSolnMax.back(),checkDelta.back(),convergRate,checkLin.back(),checkTrue.back()\
+				,checkOS.back(),checkAB.back(),checkABNE.back(),checkCon.back(),checkLatt.back());
 			
 			if (!checkDelta.good()) {
 				checkDelta.checkMessage(ces);
@@ -1691,6 +1691,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 		fprintf(cof,"\n----------------------------------------------------------------------------------------------------------------------------\n\n");
 		fclose(cof);
+		psu = ps;
 		} //ending parameter loop
 	} //ending file loop
 

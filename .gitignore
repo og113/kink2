@@ -1,7 +1,6 @@
 objects/*
 *~
 *.o
-makefile
 data/*
 tests/data/*
 dataFiles

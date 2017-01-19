@@ -9,6 +9,7 @@ declarations of some very simple functions and classes
 #include <vector>
 #include <complex>
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include "simple.h"
 
 using namespace std;
@@ -27,6 +28,7 @@ typedef Eigen::VectorXd vec;
 typedef Eigen::VectorXcd cVec;
 typedef Eigen::MatrixXd mat;
 typedef Eigen::MatrixXcd cMat;
+typedef Eigen::SparseMatrix<double> spMat;
 
 /*-------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------

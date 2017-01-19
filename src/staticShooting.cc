@@ -95,10 +95,10 @@ int jac (double t, const double y[], double *dfdy, double dfdt[], void *params) 
 -------------------------------------------------------------------------------------------------------------------------*/
 
 struct Mass_params {
-<<<<<<< HEAD
+/*<<<<<<< HEAD -- NOT KNOWN WHICH OF THE TWO OPTIONS IS THE RIGHT ONE.
 	double Y_0;
-=======
->>>>>>> b5d63b92ddaee0fe78d781b0a3047979fcb1025e
+=======*/
+//>>>>>>> b5d63b92ddaee0fe78d781b0a3047979fcb1025e
 	double Y_1;
 	double L;
 	double minimaL;
@@ -109,12 +109,12 @@ double Mass_integrand (double x, void * parameters) {
 	struct Mass_params * params = (struct Mass_params *)parameters;
 	double Y_1 = (params->Y_1);
 	double L = (params->L);
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 	double y_R[2] = { Y_0, Y_1};
-=======
+=======*/
 	double minimaL = (params->minimaL);
 	double y_R[4] = { minimaL, Y_1, 0.0, 1.0};
->>>>>>> b5d63b92ddaee0fe78d781b0a3047979fcb1025e
+//>>>>>>> b5d63b92ddaee0fe78d781b0a3047979fcb1025e
 	int status;
 	double t = -L/2.0;
 	void_params paramsVoid;
@@ -154,7 +154,7 @@ string timenumber = "";//currentDateTime();
 // getting argv inputs
 if (argc==2) timenumber = argv[1];
 else if (argc % 2 && argc>1) {
-	for (unsigned int j=0; j<(int)(argc/2); j++) {
+	for (int j=0; j<(int)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
 		if (id.compare("loops")==0) opts.loops = stringToNumber<uint>(argv[2*j+2]);

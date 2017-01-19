@@ -21,8 +21,8 @@ then
 else
 	echo "changing mathematica output to c++ input in $1"
 	# generic changes
-	sed -i 's/\([1-9]\+\)\*/\1.0\*/g' $1
-	sed -i 's/\([1-9]\+\)\.\*/\1.0\*/g' $1
+	#sed -i 's/\([1-9]\+\)\*/\1.0\*/g' $1
+	#sed -i 's/\([1-9]\+\)\.\*/\1.0\*/g' $1
 	sed -i 's/\*\([1-9]\+\)/\*\1.0/g' $1
 	sed -i 's/\*\([1-9]\+\)\./\*\1.0/g' $1
 	sed -i 's/\/\([1-9]\+\)/\/\1.0/g' $1
@@ -37,8 +37,10 @@ else
 	sed -i 's/Sqrt(/sqrt(/g' $1
 	sed -i 's/Cos(/cos(/g' $1
 	sed -i 's/Sin(/sin(/g' $1
+	sed -i 's/Tan(/tan(/g' $1
 	sed -i 's/Cosh(/cosh(/g' $1
 	sed -i 's/Sinh(/sinh(/g' $1
+	sed -i 's/Tanh(/tanh(/g' $1
 	sed -i 's/\\\[Mu\]/mu/g' $1
 	sed -i 's/\\\[Nu\]/nu/g' $1
 	sed -i 's/\\\[Rho\]/rho/g' $1
@@ -55,11 +57,11 @@ else
 	# specific changes, for worldline n-r calculations
 	if $sflag
 	then echo "making specific changes, for n-r calculations"
-			sed -i 's/\\\[Phi\]/p/g' $1
-			sed -i 's/Rep(\([^)]\+\))/p(2*(\1))/g' $1
-			sed -i 's/Imp(\([^)]\+\))/p(2*(\1)+1)/g' $1
-			sed -i 's/-1 + \([b-v]\)/m\1/g' $1
-			sed -i 's/1 + \([b-v]\)/p\1/g' $1
-			sed -i 's/2\*(\([b-v]\+\))/2*\1/g' $1
+			sed -i 's/(-1 + \([c-v]\))/(m\1)/g' $1
+			sed -i 's/(1 + \([c-v]\))/(p\1)/g' $1
+			sed -i 's/2\*(\([c-v]\+\))/2*\1/g' $1
+			sed -i 's/a(\([c-v]\+\))/real(f(\1))/g' $1
+			sed -i 's/b(\([c-v]\+\))/imag(f(\1))/g' $1
+			sed -i 's/Complex(0,1)/ii/g' $1
 	fi
 fi
