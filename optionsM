@@ -17,9 +17,5 @@ loopMax             4
 epsiTb              0.001              
 epsiTheta           0.001              
 loops               2                 
-<<<<<<< HEAD
 printChoice         p                   
-=======
-printChoice         e                   
->>>>>>> 991aa3884da6cd26bffa4b1a5332910df010380a
 

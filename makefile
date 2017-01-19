@@ -33,7 +33,7 @@ variables :
 # some useful PHONYs
 
 .PHONY: all
-all: $(EXE) $(MPIEXE) common
+all: $(EXE) $(MPIEXE) common fns
 
 .PHONY: common
 common: $(COMMONOBJS)
@@ -97,6 +97,10 @@ staticShooting: $(ODIR)/staticShooting.o $(COMMONOBJS)
 wrapper: $(MPIODIR)/wrapper.o $(FNODIR)/main_fn.o $(COMMONOBJS)
 	$(MPICC) -o $@ $^ $(MPICFLAGS) $(INCLUDES) $(MPILIBS)
 	@echo Simple compiler named wrapper has been compiled
+	
+wrapper2: $(MPIODIR)/wrapper2.o $(FNODIR)/main_fn.o $(COMMONOBJS)
+	$(MPICC) -o $@ $^ $(MPICFLAGS) $(INCLUDES) $(MPILIBS)
+	@echo Simple compiler named wrapper2 has been compiled
 	
 #------------------------------------------------------------------------------------------------------------------------
 	
