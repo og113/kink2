@@ -19,6 +19,6 @@ set zlabel "W"
 set grid
 unset dgrid3d
 #set hidden3d
-splot "results/mainResults_constW_1.dat" using 10:11:13 with points
+splot "results/mainResults2.dat" using 10:11:13 with points
 
 pause -1
