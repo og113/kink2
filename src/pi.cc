@@ -719,7 +719,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		DDS.makeCompressed();
 		Eigen::SparseLU<spMat> solver;
 		
-		solver.analyzePattern(DDS);
+		/*solver.analyzePattern(DDS);
 		if(solver.info()!=Eigen::Success) {
 			cerr << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
 			printErrorInformation(p,"p",1);
@@ -738,6 +738,17 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			printErrorInformation(minusDS,"mds",1);
 			cout << endl;
 			printErrorInformation(DDS,"dds");
+			cout << endl;
+			return 1;
+		}*/
+		solver.compute(DDS);
+		if(solver.info()!=Eigen::Success) {
+			cerr << "Compute failed, solver.info() = "<< solver.info() << endl;
+			printErrorInformation(p,"p",2);
+			cout << endl;
+			printErrorInformation(minusDS,"mds",2);
+			cout << endl;
+			printErrorInformation(DDS,"DDS");
 			cout << endl;
 			return 1;
 		}
@@ -1064,13 +1075,13 @@ for (uint loop=0; loop<opts.loops; loop++) {
 
 	//printing results to file
 	FILE * actionfile;
-	actionfile = fopen("./data/action.dat","a");
+	actionfile = fopen("data/action.dat","a");
 	fprintf(actionfile,"%16s%8i%8i%8g%8g%8g%10.4g%10.4g%10.4g%10.4g%10.4g\n",timenumber.c_str()\
 				,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,E,imag(action)\
 				,W,checkSoln.back(),checkCon.back());
 	fclose(actionfile);
 	
-	string prefix = "./data/"+timenumber;
+	string prefix = "data/"+timenumber;
 	string suffix = "_loop_"+numberToString<uint>(loop)+".dat";
 	
 	// plot options

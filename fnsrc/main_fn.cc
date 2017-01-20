@@ -105,9 +105,9 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("ce")==0) ceFile = (string)argv[2*j+2];
 		else if (id.compare("opts")==0 || id.compare("options")==0);
 		else if (id.compare("close")==0 || id.compare("closenesses")==0);
-		else if (id.compare("amp")==0) opts.amp = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("open")==0) opts.open = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("alpha")==0) opts.alpha = stringToNumber<double>(argv[2*j+2]);
+		else if (id.compare("amp")==0) opts.amp = stn<double>(argv[2*j+2]);
+		else if (id.compare("open")==0) opts.open = stn<double>(argv[2*j+2]);
+		else if (id.compare("alpha")==0) opts.alpha = stn<double>(argv[2*j+2]);
 		else if (id.compare("zmx")==0) opts.zmx = argv[2*j+2];
 		else if (id.compare("zmt")==0) opts.zmt = argv[2*j+2];
 		else if (id.compare("bds")==0) opts.bds = argv[2*j+2];
@@ -119,11 +119,11 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("minLoopLoad")==0 || id.compare("minll")==0) opts.minLoopLoad = argv[2*j+2];
 		else if (id.compare("maxLoopLoad")==0 || id.compare("maxll")==0) opts.maxLoopLoad = argv[2*j+2];
 		else if (id.compare("loopChoice")==0) opts.loopChoice = argv[2*j+2];
-		else if (id.compare("loopMin")==0) opts.loopMin = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("loopMax")==0) opts.loopMax = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("epsiTb")==0) opts.epsiTb = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("epsiTheta")==0) opts.epsiTheta = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("loops")==0) opts.loops = stringToNumber<uint>(argv[2*j+2]);
+		else if (id.compare("loopMin")==0) opts.loopMin = stn<double>(argv[2*j+2]);
+		else if (id.compare("loopMax")==0) opts.loopMax = stn<double>(argv[2*j+2]);
+		else if (id.compare("epsiTb")==0) opts.epsiTb = stn<double>(argv[2*j+2]);
+		else if (id.compare("epsiTheta")==0) opts.epsiTheta = stn<double>(argv[2*j+2]);
+		else if (id.compare("loops")==0) opts.loops = stn<uint>(argv[2*j+2]);
 		else if (id.compare("printChoice")==0) opts.printChoice = argv[2*j+2];
 		else if (id.compare("rank")==0) rank = argv[2*j+2];
 		else {
@@ -534,8 +534,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				eigVecOpts.paramsOut = ps;
 				eigVecOpts.printMessage = false;
 				Parameters pIn = ps;
-				pIn.N = stringToNumber<uint>(N_load);
-				pIn.Nb = stringToNumber<uint>(Nb_load);
+				pIn.N = stn<uint>(N_load);
+				pIn.Nb = stn<uint>(Nb_load);
 				pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
 				load(eigVecFile,eigVecOpts,negVec);
 			}
@@ -563,10 +563,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		double ergZero = (ps.pot==3? 0.0: ps.N*ps.a*real(V(ps.minima[0])) );
 		comp action = ii*ps.action0;
 		double bound = 0.0;
-		double W;
-		double E;
-		double E_exact;
-		double Num;
+		double W = 0.0;
+		double E = 0.0;
+		double E_exact = 0.0;
+		double Num = 0.0;
 		
 		//defining some quantities used to stop the Newton-Raphson loop when action stops varying
 		comp action_last = action;
@@ -1331,7 +1331,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			DDS.makeCompressed();
 			Eigen::SparseLU<spMat> solver;
 		
-			solver.analyzePattern(DDS);
+			/*solver.analyzePattern(DDS);
 			if(solver.info()!=Eigen::Success) {
 				ces << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
 				if ((opts.printChoice).compare("gui")==0) {
@@ -1350,6 +1350,20 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				ces << "Factorization failed, solver.info() = "<< solver.info() << endl;
 				if ((opts.printChoice).compare("gui")==0) {
 					cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
+					printErrorInformation(p,"p",2);
+					cout << endl;
+					printErrorInformation(minusDS,"mds",2);
+					cout << endl;
+					printErrorInformation(DDS,"DDS");
+					cout << endl;
+				}
+				return 1;
+			}*/
+			solver.compute(DDS);
+			if(solver.info()!=Eigen::Success) {
+				ces << "Compute failed, solver.info() = "<< solver.info() << endl;
+				if ((opts.printChoice).compare("gui")==0) {
+					cerr << "Compute failed, solver.info() = "<< solver.info() << endl;
 					printErrorInformation(p,"p",2);
 					cout << endl;
 					printErrorInformation(minusDS,"mds",2);
