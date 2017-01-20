@@ -21,6 +21,7 @@ using namespace std;
 #define MIN_NUMBER 1.0e-16
 #endif
 
+typedef double number;
 typedef unsigned int uint;
 typedef unsigned long int lint;
 typedef complex<double> comp;
@@ -55,7 +56,18 @@ template <class T>
 string numberToString ( const T& Number );
 
 template <class T>
+string nts ( const T& Number );
+
+template <class T>
+string nts ( const T& Number, const uint& prec);
+
+template <class T>
 T stringToNumber ( const string& Text );
+
+template <class T>
+T stn ( const string& Text );
+
+bool isNumber( const string& Text );
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. absDiff

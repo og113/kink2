@@ -17,6 +17,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_poly.h>
 #include <gsl/gsl_roots.h>
+#include "eigen_extras.h"
 #include "main_fn.h"
 #include "main.h"
 
@@ -1333,15 +1334,29 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			solver.analyzePattern(DDS);
 			if(solver.info()!=Eigen::Success) {
 				ces << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
-				if ((opts.printChoice).compare("gui")==0)
+				if ((opts.printChoice).compare("gui")==0) {
 					cerr << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
+					printErrorInformation(p,"p",2);
+					cout << endl;
+					printErrorInformation(minusDS,"mds",2);
+					cout << endl;
+					printErrorInformation(DDS,"DDS");
+					cout << endl;
+				}
 				return 1;
 			}		
 			solver.factorize(DDS);
 			if(solver.info()!=Eigen::Success) {
 				ces << "Factorization failed, solver.info() = "<< solver.info() << endl;
-				if ((opts.printChoice).compare("gui")==0)
+				if ((opts.printChoice).compare("gui")==0) {
 					cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
+					printErrorInformation(p,"p",2);
+					cout << endl;
+					printErrorInformation(minusDS,"mds",2);
+					cout << endl;
+					printErrorInformation(DDS,"DDS");
+					cout << endl;
+				}
 				return 1;
 			}
 			delta = solver.solve(minusDS);// use the factorization to solve for the given right hand side
@@ -1353,6 +1368,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					cerr << "Solving failed, solver.info() = "<< solver.info() << endl;
 					cerr << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
 					cerr << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
+					printErrorInformation(p,"p",2);
+					cout << endl;
+					printErrorInformation(minusDS,"mds",2);
+					cout << endl;
+					printErrorInformation(delta,"delta",2);
+					cout << endl;
+					printErrorInformation(DDS,"DDS");
+					cout << endl;
 				}
 				return 1;
 			}

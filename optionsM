@@ -17,5 +17,5 @@ loopMax             4
 epsiTb              0.001              
 epsiTheta           0.001              
 loops               2                 
-printChoice         p                   
+printChoice         gui                   
 

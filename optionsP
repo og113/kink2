@@ -1,10 +1,10 @@
 alpha               0.5                 
 open                1                   
 amp                 0.5                 
-zmx                 dC2                 
+zmx                 nC2                 
 zmt                 dC2                 
 bds                 all                 
-inF                 b                   
+inF                 p                   
 minTimenumberLoad   000                 
 maxTimenumberLoad   000                 
 minfLoopLoad        0                   

@@ -102,9 +102,11 @@ vec sphaleron(N), negEig(N);
 Filename sphaleronFile = (string)("data/stable/sphaleron_L_"+numberToString<double>(r1)+".dat");
 Filename negEigFile = (string)("data/stable/eigVec_pot_3_L_"+numberToString<double>(r1)+".dat");
 SaveOptions so_simple;
+so_simple.printType = SaveOptions::ascii;
 so_simple.paramsOut = ps_run;
 so_simple.vectorType = SaveOptions::simple;
 so_simple.extras = SaveOptions::none;
+so_simple.column = 0;
 so_simple.printMessage = false;
 load(sphaleronFile,so_simple,sphaleron);
 load(negEigFile,so_simple,negEig);
@@ -138,7 +140,7 @@ for (unsigned int k=0; k<Nt; k++) {
 		phi(2*m+1) = 0.0;
 	}
 }
-	
+
 /* ---------------------------------------------------------------------------------------------
 	6. printing result
 ---------------------------------------------------------------------------------------------*/
@@ -156,9 +158,11 @@ ps_save.a = (r1-r0)/(ps_save.N-1.0);
 ps_save.b = (t1-t0)/(ps_save.Nb-1.0);
 
 SaveOptions so_p;
+so_p.printType = SaveOptions::ascii;
 so_p.printMessage = true;
 so_p.vectorType = SaveOptions::complexB;
 so_p.extras = SaveOptions::coords;
+so_p.column = 0;
 so_p.paramsIn = ps_run;
 so_p.paramsOut = ps_save;
 

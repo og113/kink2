@@ -463,9 +463,9 @@ Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p
 
 // print to shell
 void Parameters::print() const {
-	printf("%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
-	printf("%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
-			N,Na,Nb,Nc,\
+	printf("%8s%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","pot","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
+	printf("%8i%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
+			pot,N,Na,Nb,Nc,\
 			L,Ta,Tb,Tc,R,\
 			dE,theta,reg);
 	printf("\n");
@@ -473,9 +473,9 @@ void Parameters::print() const {
 
 // print File*
 void Parameters::print(FILE* stream) const {
-	fprintf(stream,"%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
-	fprintf(stream,"%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
-			N,Na,Nb,Nc,\
+	fprintf(stream,"%8s%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","pot","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
+	fprintf(stream,"%8i%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
+			pot,N,Na,Nb,Nc,\
 			L,Ta,Tb,Tc,R,\
 			dE,theta,reg);
 	fprintf(stream,"\n");

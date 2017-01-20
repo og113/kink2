@@ -21,6 +21,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_poly.h>
 #include <gsl/gsl_roots.h>
+#include "eigen_extras.h"
 #include "main.h"
 
 //#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
@@ -191,6 +192,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	mat modes(ps.N,ps.N);
 	mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
 	SaveOptions so_simple;
+	so_simple.printType = SaveOptions::ascii;
 	so_simple.paramsIn = ps; so_simple.paramsOut = ps;
 	so_simple.vectorType = SaveOptions::simple;
 	so_simple.extras = SaveOptions::none;
@@ -271,6 +273,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				}
 			}
 			SaveOptions eigVecOpts;
+			eigVecOpts.printType = SaveOptions::ascii;
 			eigVecOpts.vectorType = SaveOptions::realB;
 			eigVecOpts.extras = SaveOptions::coords;
 			eigVecOpts.paramsOut = ps;
@@ -341,6 +344,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	if ((opts.inF).compare("f")==0) {
 		Filename inputsPhiFile = (string)("data/"+opts.minTimenumberLoad+"inputsP_loop_"+\
 							opts.minLoopLoad+".dat");
+		so_p.printType = SaveOptions::ascii;
 		Parameters paramsPhiIn;
 		paramsPhiIn.load(inputsPhiFile);
 		so_p.paramsIn = paramsPhiIn;
@@ -350,6 +354,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		so_p.paramsIn = ps;
 	}
 	else if (loop>0) {
+		so_p.printType = SaveOptions::ascii;
 		Filename phiFile = (string)("data/"+opts.minTimenumberLoad+"p_loop_"+\
 							numberToString<uint>(loop-1)+".dat");
 		load(phiFile,so_p,p);
@@ -357,6 +362,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	else {
 		if (ps.pot==3) {
 			vec tempPhi, temp2Phi;
+			so_p.printType = SaveOptions::ascii;
 			Filename pi3GuessFile = (string)("data/sphaleronPi_L_"+numberToString<double>(ps.L)\
 										+"_Tb_"+numberToString<double>(ps.Tb)+".dat");
 			so_simple.column = 4;
@@ -716,11 +722,23 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		solver.analyzePattern(DDS);
 		if(solver.info()!=Eigen::Success) {
 			cerr << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
+			printErrorInformation(p,"p",1);
+			cout << endl;
+			printErrorInformation(minusDS,"mds",1);
+			cout << endl;
+			printErrorInformation(DDS,"dds");
+			cout << endl;
 			return 1;
 		}		
 		solver.factorize(DDS);
 		if(solver.info()!=Eigen::Success) {
 			cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
+			printErrorInformation(p,"p",1);
+			cout << endl;
+			printErrorInformation(minusDS,"mds",1);
+			cout << endl;
+			printErrorInformation(DDS,"dds");
+			cout << endl;
 			return 1;
 		}
 		delta = solver.solve(minusDS);// use the factorization to solve for the given right hand side
@@ -728,6 +746,14 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			cerr << "Solving failed, solver.info() = "<< solver.info() << endl;
 			cerr << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
 			cerr << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
+			printErrorInformation(p,"p",1);
+			cout << endl;
+			printErrorInformation(minusDS,"mds",1);
+			cout << endl;
+			printErrorInformation(delta,"delta",1);
+			cout << endl;
+			printErrorInformation(DDS,"dds");
+			cout << endl;
 			return 1;
 		}
 		
@@ -763,6 +789,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			Filename basic = (string)("data/"+timenumber+"basic_loop_"+numberToString<uint>(loop)\
 								+"_run_"+numberToString<uint>(runs_count)+".dat");
 			SaveOptions so_chi;
+			so_chi.printType = SaveOptions::ascii;
 			so_chi = so_p;
 			so_chi.vectorType = SaveOptions::realB;
 			so_chi.zeroModes = 0;
@@ -995,6 +1022,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		// printing tp
 		Filename tpFile = (string)(prefix+"tp"+suffix);
 		SaveOptions so_tp = so_p;
+		so_tp.printType = SaveOptions::ascii;
 		so_tp.vectorType = SaveOptions::complex;
 		so_tp.printMessage = true;
 		save(tpFile,so_tp,tp);
