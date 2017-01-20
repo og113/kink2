@@ -16,6 +16,4 @@ AB                  0.05
 ABNE                0.05                
 LR                  1e-12               
 DT                  1000                
-Profile             1e-05               
-
-
+Profile             1e-05     

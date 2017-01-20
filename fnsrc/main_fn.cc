@@ -560,10 +560,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		double ergZero = (ps.pot==3? 0.0: ps.N*ps.a*real(V(ps.minima[0])) );
 		comp action = ii*ps.action0;
 		double bound = 0.0;
-		double W;
+		double W = 0.0;
 		double E;
 		double E_exact;
-		double Num;
+		double Num = 0.0;
 		
 		//defining some quantities used to stop the Newton-Raphson loop when action stops varying
 		comp action_last = action;
@@ -1322,7 +1322,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			DDS.makeCompressed();
 			Eigen::SparseLU<spMat> solver;
 		
-			solver.analyzePattern(DDS);
+			/*solver.analyzePattern(DDS);
 			if(solver.info()!=Eigen::Success) {
 				ces << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
 				if ((opts.printChoice).compare("gui")==0)
@@ -1335,7 +1335,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				if ((opts.printChoice).compare("gui")==0)
 					cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
 				return 1;
-			}
+			}*/
+			solver.compute(DDS);
+			if(solver.info()!=Eigen::Success) {
+				ces << "DDS compute failed, solver.info() = "<< solver.info() << endl;
+				if ((opts.printChoice).compare("gui")==0)
+					cerr << "DDS compute failed, solver.info() = "<< solver.info() << endl;
+				return 1;
+			}	
 			delta = solver.solve(minusDS);// use the factorization to solve for the given right hand side
 			if(solver.info()!=Eigen::Success) {
 				ces << "Solving failed, solver.info() = "<< solver.info() << endl;
