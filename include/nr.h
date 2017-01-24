@@ -9,6 +9,7 @@
 #include "simple.h"
 #include "parameters.h"
 #include "potentials.h"
+#include "folder.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ CONTENTS
 	2 - nr scalar functions
 	3 - nr vector functions
 	4 - nr matrix functions
+	5 - filename functions
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -62,5 +64,12 @@ void ddKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameter
 
 // ddPotential_nr
 void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& ddv, const cVec& f, spMat& dds);
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	5 - filename functions
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// filenameMain
+Filename filenameMain(const Parameters&, const string& base, const string& subfolder, const string& id, const string& suffix);
 
 #endif // __NR_H_INCLUDED__

@@ -121,3 +121,24 @@ void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Po
 	dds.coeffRef(2*j+1,2*j+1) += real(f(j)*ddv(p(2*j) + ii*p(2*j + 1)));
 	
 }
+
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	5 - filename functions
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// filenameMain
+Filename filenameMain(const Parameters& pr, const string& base, const string& subfolder, const string& id, const string& suffix) {
+	Filename f = base+"data/pot_"+nts(pr.pot)+"/"+subfolder+"/"+id\
+					+"_N_"+nts(pr.N)\
+					+"_Na_"+nts(pr.Na)\
+					+"_Nb_"+nts(pr.Nb)\
+					+"_Nc_"+nts(pr.Nc)\
+					+"_LoR_"+nts(pr.LoR)\
+					+"_Tb_"+nts(pr.Tb)\
+					+"_theta_"+nts(pr.theta)\
+					+"_reg_"+nts(pr.reg)\
+					+ suffix;
+	return f;
+}
+

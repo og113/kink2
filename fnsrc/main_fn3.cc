@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------------------------------------------------------
-	main_fn
+	main_fn3
 		program to solve boundary value problem on contour ABCD
 		main used as a function, not a main process
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -17,6 +17,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_poly.h>
 #include <gsl/gsl_roots.h>
+#include "eigen_extras.h"
 #include "main_fn3.h"
 #include "main.h"
 
@@ -43,7 +44,7 @@
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int main_fn(int argc, vector<string> argv)
+int main_fn3(int argc, vector<string> argv)
 {
 /*----------------------------------------------------------------------------------------------------------------------------
 	1. loading options, argv inputs
@@ -104,9 +105,9 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("ce")==0) ceFile = (string)argv[2*j+2];
 		else if (id.compare("opts")==0 || id.compare("options")==0);
 		else if (id.compare("close")==0 || id.compare("closenesses")==0);
-		else if (id.compare("amp")==0) opts.amp = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("open")==0) opts.open = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("alpha")==0) opts.alpha = stringToNumber<double>(argv[2*j+2]);
+		else if (id.compare("amp")==0) opts.amp = stn<double>(argv[2*j+2]);
+		else if (id.compare("open")==0) opts.open = stn<double>(argv[2*j+2]);
+		else if (id.compare("alpha")==0) opts.alpha = stn<double>(argv[2*j+2]);
 		else if (id.compare("zmx")==0) opts.zmx = argv[2*j+2];
 		else if (id.compare("zmt")==0) opts.zmt = argv[2*j+2];
 		else if (id.compare("bds")==0) opts.bds = argv[2*j+2];
@@ -118,11 +119,11 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("minLoopLoad")==0 || id.compare("minll")==0) opts.minLoopLoad = argv[2*j+2];
 		else if (id.compare("maxLoopLoad")==0 || id.compare("maxll")==0) opts.maxLoopLoad = argv[2*j+2];
 		else if (id.compare("loopChoice")==0) opts.loopChoice = argv[2*j+2];
-		else if (id.compare("loopMin")==0) opts.loopMin = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("loopMax")==0) opts.loopMax = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("epsiTb")==0) opts.epsiTb = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("epsiTheta")==0) opts.epsiTheta = stringToNumber<double>(argv[2*j+2]);
-		else if (id.compare("loops")==0) opts.loops = stringToNumber<uint>(argv[2*j+2]);
+		else if (id.compare("loopMin")==0) opts.loopMin = stn<double>(argv[2*j+2]);
+		else if (id.compare("loopMax")==0) opts.loopMax = stn<double>(argv[2*j+2]);
+		else if (id.compare("epsiTb")==0) opts.epsiTb = stn<double>(argv[2*j+2]);
+		else if (id.compare("epsiTheta")==0) opts.epsiTheta = stn<double>(argv[2*j+2]);
+		else if (id.compare("loops")==0) opts.loops = stn<uint>(argv[2*j+2]);
 		else if (id.compare("printChoice")==0) opts.printChoice = argv[2*j+2];
 		else if (id.compare("rank")==0) rank = argv[2*j+2];
 		else {
@@ -278,16 +279,16 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.closeness = closenesses.Step;
 		step_opts.stepType = StepperOptions::constPlane;
 		step_opts.directed = StepperOptions::local;
-		point(psu.Tb,psu.theta);
+		point(psu.Tb,psu.Theta);
 	}
 	else {
 		if (opts.loops>1 && abs(opts.loopMax - opts.loopMin)>MIN_NUMBER) {
 			step_opts.epsi_x =  (opts.loopMax - opts.loopMin)/(opts.loops-1.0);
 			point(opts.loopMin,0.0);
 		}
-		else if ((opts.loopChoice).compare("theta")==0) {
+		else if ((opts.loopChoice).compare("Theta")==0) {
 			step_opts.epsi_x = opts.epsiTheta;
-			point(psu.theta,0.0);
+			point(psu.Theta,0.0);
 		}
 		else if ((opts.loopChoice).compare("Tb")==0) {
 			step_opts.epsi_x = opts.epsiTb;
@@ -342,7 +343,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 			else {
 				ps.changeParameters("Tb",stepper.x());
-				ps.changeParameters("theta",stepper.y());
+				ps.changeParameters("Theta",stepper.y());
 			}
 		}
 
@@ -396,25 +397,25 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 		// assigning potential functions
 		Potential<comp> V, dV, ddV;
-		if (ps.pot==1) {
+		if (ps.Pot==1) {
 			V((Potential<comp>::PotentialType)&V1<comp>,ps);
 			dV((Potential<comp>::PotentialType)&dV1<comp>,ps);
 			ddV((Potential<comp>::PotentialType)&ddV1<comp>,ps);
 		}
-		else if (ps.pot==2) {
+		else if (ps.Pot==2) {
 			V((Potential<comp>::PotentialType)&V2<comp>,ps);
 			dV((Potential<comp>::PotentialType)&dV2<comp>,ps);
 			ddV((Potential<comp>::PotentialType)&ddV2<comp>,ps);
 		}
-		else if (ps.pot==3) {
+		else if (ps.Pot==3) {
 			V((Potential<comp>::PotentialType)&V3<comp>,ps);
 			dV((Potential<comp>::PotentialType)&dV3<comp>,ps);
 			ddV((Potential<comp>::PotentialType)&ddV3<comp>,ps);
 			}
 		else {
-			ces << "pot option not available, pot = " << ps.pot << endl;
+			ces << "pot option not available, pot = " << ps.Pot << endl;
 			if ((opts.printChoice).compare("gui")==0)
-				cerr << "pot option not available, pot = " << ps.pot << endl;
+				cerr << "pot option not available, pot = " << ps.Pot << endl;
 			return 1;
 		}
 	
@@ -423,13 +424,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	
 		//lambda functions for pot_r
 		auto Vr = [&] (const comp& phi) {
-			return -ii*ps.reg*VrFn(phi,ps.minima[0],ps.minima[1]);
+			return -ii*ps.Reg*VrFn(phi,ps.minima[0],ps.minima[1]);
 		};
 		auto dVr = [&] (const comp& phi) {
-			return -ii*ps.reg*dVrFn(phi,ps.minima[0],ps.minima[1]);
+			return -ii*ps.Reg*dVrFn(phi,ps.minima[0],ps.minima[1]);
 		};
 		auto ddVr = [&] (const comp& phi) {
-			return -ii*ps.reg*ddVrFn(phi,ps.minima[0],ps.minima[1]);
+			return -ii*ps.Reg*ddVrFn(phi,ps.minima[0],ps.minima[1]);
 		};
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -450,7 +451,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_simple.printMessage = false;
 		{
 			Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
-			omegaM1F = (string)"data/00"+rank+"omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
+			omegaM1F = (string)"data/00"+rank+"omegaM1_pot_"+numberToString<uint>(ps.Pot)+"_N_"+numberToString<uint>(ps.N)\
 							+"_L_"+numberToString<double>(ps.L)+".data";
 			Folder omegaM1Folder(omegaM1F);
 			omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
@@ -491,7 +492,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		// loading negVec
 		vec negVec;
 		if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
-			if (ps.pot==3) {
+			if (ps.Pot==3) {
 				Filename eigVecFile = "data/00"+rank+"eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat";	
 				so_simple.printType = SaveOptions::ascii;
 				load(eigVecFile,so_simple,negVec); // should automatically interpolate
@@ -501,7 +502,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				Filename eigVecFile;
 				string N_load;
 				string Nb_load;
-				Filename lower = "data/00"+rank+"eigVec_pot_" + numberToString<uint>(ps.pot)\
+				Filename lower = "data/00"+rank+"eigVec_pot_" + numberToString<uint>(ps.Pot)\
 									 + "_N_100_Nb_100_L_" + numberToString<double>(ps.L) + ".dat";
 				Filename upper = lower;
 				vector<StringPair> upperExtras = lower.Extras;
@@ -533,8 +534,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				eigVecOpts.paramsOut = ps;
 				eigVecOpts.printMessage = false;
 				Parameters pIn = ps;
-				pIn.N = stringToNumber<uint>(N_load);
-				pIn.Nb = stringToNumber<uint>(Nb_load);
+				pIn.N = stn<uint>(N_load);
+				pIn.Nb = stn<uint>(Nb_load);
 				pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
 				load(eigVecFile,eigVecOpts,negVec);
 			}
@@ -559,13 +560,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		comp linNumAB, linErgAB;
 		
 		//defining the action and bound and W and zero of energy
-		double ergZero = (ps.pot==3? 0.0: ps.N*ps.a*real(V(ps.minima[0])) );
+		double ergZero = (ps.Pot==3? 0.0: ps.N*ps.a*real(V(ps.minima[0])) );
 		comp action = ii*ps.action0;
 		double bound = 0.0;
-		double W;
-		double E;
-		double E_exact;
-		double Num;
+		double W = 0.0;
+		double E = 0.0;
+		double E_exact = 0.0;
+		double Num = 0.0;
 		
 		//defining some quantities used to stop the Newton-Raphson loop when action stops varying
 		comp action_last = action;
@@ -694,8 +695,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					if (posMap.find(opts.zmt[1+l])!=posMap.end()) {
 						posT = posMap.at(opts.zmt[1+l]);
 						for (uint k=0;k<slicesT;k++) {
-							if (opts.zmt[0]=='n' && ps.pot!=3) 	chiT(posT+k) = negVec(2*(posCe+k));
-							else if (opts.zmt[0]=='n' && ps.pot==3) {
+							if (opts.zmt[0]=='n' && ps.Pot!=3) 	chiT(posT+k) = negVec(2*(posCe+k));
+							else if (opts.zmt[0]=='n' && ps.Pot==3) {
 													double r = ps.r0 + j*ps.a;
 													chiT(posT+k) = negVec(j)*r;
 							}
@@ -723,12 +724,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					if (posMap.find(opts.zmx[1+l])!=posMap.end()) {
 						posX = posMap.at(opts.zmx[1+l]);
 						for (uint k=0;k<slicesX;k++) {
-							if (opts.zmx[0]=='n' && ps.pot!=3)		chiX(posX+k) = negVec(2*(posCe+k));
-							else if (opts.zmx[0]=='n' && ps.pot==3) {
+							if (opts.zmx[0]=='n' && ps.Pot!=3)		chiX(posX+k) = negVec(2*(posCe+k));
+							else if (opts.zmx[0]=='n' && ps.Pot==3) {
 																double r = ps.r0 + j*ps.a;
 																chiX(posX+k) = negVec(j)*r;
 							}
-							else if (opts.zmx[0]=='d' && ps.pot!=3)
+							else if (opts.zmx[0]=='d' && ps.Pot!=3)
 								chiX(posX+k) = p(2*neigh(posX+k,1,1,ps))-p(2*neigh(posX+k,1,-1,ps));
 							else {
 								ces << "choice of zmx(" << opts.zmx << ") not allowed" << endl;
@@ -756,7 +757,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			DDS.setZero(); //just making sure
 			Eigen::VectorXi DDS_to_reserve(2*ps.N*ps.NT+2);//number of non-zero elements per column
 			DDS_to_reserve = Eigen::VectorXi::Constant(2*ps.N*ps.NT+2,13);
-			if (abs(ps.theta)<2.0e-16) {
+			if (abs(ps.Theta)<2.0e-16) {
 				DDS_to_reserve(0) = ps.N+3;
 				DDS_to_reserve(1) = 11;
 			}
@@ -789,7 +790,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			boundIm = Eigen::VectorXd::Zero(ps.N);
 			
 			//testing that the potential term is working for pot3
-			if (ps.pot==3 && trivialChecks) {
+			if (ps.Pot==3 && trivialChecks) {
 				comp Vtrial = 0.0, Vcontrol = 0.0;
 				for (unsigned int j=0; j<ps.N; j++) {
 					double r = ps.r0 + j*ps.a;
@@ -830,21 +831,21 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				double dx 		= dxFn(x,ps);
 				double dxm 		= (x>0? dxFn(x-1,ps): ps.a);
 				
-				if (ps.pot==3) {
+				if (ps.Pot==3) {
 					paramsV.epsi = ps.r0+x*ps.a;
 					V.setParams(paramsV);
 					dV.setParams(paramsV);
 					ddV.setParams(paramsV);
 				}
 			
-				if (abs(chiX(j))>MIN_NUMBER && ps.pot!=3) { //spatial zero mode lagrange constraint
+				if (abs(chiX(j))>MIN_NUMBER && ps.Pot!=3) { //spatial zero mode lagrange constraint
 					DDS.insert(2*j,2*ps.N*ps.NT) 		= Dx*chiX(j); 
 					DDS.insert(2*ps.N*ps.NT,2*j) 		= Dx*chiX(j);
 					minusDS(2*j) 						+= -Dx*chiX(j)*p(2*ps.N*ps.NT);
 					minusDS(2*ps.N*ps.NT) 				+= -Dx*chiX(j)*p(2*j);
 				}
 					
-				if (abs(chiT(j))>MIN_NUMBER && t<(ps.NT-1) && (ps.pot!=3 || (x>0 && x<(ps.N-1)))) {
+				if (abs(chiT(j))>MIN_NUMBER && t<(ps.NT-1) && (ps.Pot!=3 || (x>0 && x<(ps.N-1)))) {
 					DDS.coeffRef(2*(j+1),2*ps.N*ps.NT+1) 	+= Dx*chiT(j); //chiT should be 0 at t=(ps.NT-1) or this line will go wrong
 					DDS.coeffRef(2*ps.N*ps.NT+1,2*(j+1)) 	+= Dx*chiT(j);
 					DDS.coeffRef(2*j,2*ps.N*ps.NT+1) 		+= -Dx*chiT(j);
@@ -864,7 +865,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					}
 				}
 					
-				if (abs(ps.theta)>MIN_NUMBER) {
+				if (abs(ps.Theta)>MIN_NUMBER) {
 					for (uint k=0;k<ps.N;k++) {
 						lint l = k*ps.NT+t;
 						linNum(t) += 2.0*ps.Gamma*omega_1(x,k)*( (p(2*l)-ps.minima[0])*(p(2*j)-ps.minima[0])/pow(1.0+ps.Gamma,2.0)\
@@ -876,11 +877,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//boundaries
-				if (ps.pot==3 && x==(ps.N-1)) {
+				if (ps.Pot==3 && x==(ps.N-1)) {
 					DDS.insert(2*j,2*j) 	= 1.0; // p=0 at r=R
 					DDS.insert(2*j+1,2*j+1) = 1.0;
 				}
-				else if (ps.pot==3 && x==0) {
+				else if (ps.Pot==3 && x==0) {
 					kineticS 				+= 	Dt*pow(Cp(neighPosX),2.0)/dx/2.0;
 					derivErg(t) 			+= 	pow(Cp(neighPosX),2.0)/dx/2.0; //n.b. the Dt/dt difference is ignored for erg(t)
 					erg(t) 					+= 	pow(Cp(neighPosX),2.0)/dx/2.0;
@@ -919,7 +920,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					erg(t) 		+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
 					double tnt = 1.0;
 					if ((opts.bds).compare("uc")!=0)
-						tnt *= ps.theta;
+						tnt *= ps.Theta;
 					//////////////////////////////////////equation I - both///////////////////////////////////
 					for (uint k=1; k<2*2; k++) {
 				        int sign = pow(-1,k+1);
@@ -947,7 +948,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				    DDS.coeffRef(2*j+1,2*j) 	+= imag(temp0 - temp2 );
 				    DDS.coeffRef(2*j+1,2*j+1) 	+= real(temp0 - temp2 );
 					/////////////////////////////////////////////////////////////////////////////////////////
-					if (abs(ps.theta)<MIN_NUMBER) {
+					if (abs(ps.Theta)<MIN_NUMBER) {
 						//simplest boundary conditions replaced by ones continuously connected to theta!=0 ones
 						//DDS.insert(2*j+1,2*(j+1)+1) = 1.0; //zero imaginary part of time derivative
 						//DDS.insert(2*j,2*j+1) = 1.0; //zero imaginary part
@@ -1054,12 +1055,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		        }
 		    } // end of loop over j
 		    
-		    if (ps.pot==3) 		DDS.insert(2*ps.N*ps.NT,2*ps.N*ps.NT) = 1.0;
+		    if (ps.Pot==3) 		DDS.insert(2*ps.N*ps.NT,2*ps.N*ps.NT) = 1.0;
 		    action = kineticT - kineticS - potV - pot_r;
 		    linErgOffShell(ps.NT-1) = linErgOffShell(ps.NT-2);
 	    	linNumOffShell(ps.NT-1) = linNumOffShell(ps.NT-2);
 	    	
-		    if (ps.pot==3) {
+		    if (ps.Pot==3) {
 		    	action 			*= 4.0*pi;
 		    	derivErg 		*= 4.0*pi;
 		    	potErg 			*= 4.0*pi;
@@ -1070,7 +1071,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		    	linErgOffShell 	*= 4.0*pi;
 		    }
 		   
-		    if (abs(ps.theta)<MIN_NUMBER) {
+		    if (abs(ps.Theta)<MIN_NUMBER) {
 		    	linErg = linErgOffShell;
 		    	linNum = linNumOffShell;
 		    }
@@ -1084,7 +1085,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		    //defining E, Num and W
 			E = real(linErg(0));
 			Num = real(linNum(0));
-			W = - E*2.0*ps.Tb - ps.theta*Num - bound + 2.0*imag(action);
+			W = - E*2.0*ps.Tb - ps.Theta*Num - bound + 2.0*imag(action);
 			
 /*----------------------------------------------------------------------------------------------------------------------------
 	10. checks
@@ -1118,7 +1119,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 			
 			//calculating continuum approx to linErg and linNum on initial time slice - redundant
-			if (ps.pot==3 && abs(ps.theta)<MIN_NUMBER) {
+			if (ps.Pot==3 && abs(ps.Theta)<MIN_NUMBER) {
 				for (uint k=1; k<ps.N; k++) {
 					double momtm = k*pi/(ps.L-ps.r0);
 					double freqSqrd = 1.0+pow(momtm,2.0);
@@ -1330,18 +1331,46 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			DDS.makeCompressed();
 			Eigen::SparseLU<spMat> solver;
 		
-			solver.analyzePattern(DDS);
+			/*solver.analyzePattern(DDS);
 			if(solver.info()!=Eigen::Success) {
 				ces << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
-				if ((opts.printChoice).compare("gui")==0)
+				if ((opts.printChoice).compare("gui")==0) {
 					cerr << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
+					printErrorInformation(p,"p",2);
+					cout << endl;
+					printErrorInformation(minusDS,"mds",2);
+					cout << endl;
+					printErrorInformation(DDS,"DDS");
+					cout << endl;
+				}
 				return 1;
 			}		
 			solver.factorize(DDS);
 			if(solver.info()!=Eigen::Success) {
 				ces << "Factorization failed, solver.info() = "<< solver.info() << endl;
-				if ((opts.printChoice).compare("gui")==0)
+				if ((opts.printChoice).compare("gui")==0) {
 					cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
+					printErrorInformation(p,"p",2);
+					cout << endl;
+					printErrorInformation(minusDS,"mds",2);
+					cout << endl;
+					printErrorInformation(DDS,"DDS");
+					cout << endl;
+				}
+				return 1;
+			}*/
+			solver.compute(DDS);
+			if(solver.info()!=Eigen::Success) {
+				ces << "Compute failed, solver.info() = "<< solver.info() << endl;
+				if ((opts.printChoice).compare("gui")==0) {
+					cerr << "Compute failed, solver.info() = "<< solver.info() << endl;
+					printErrorInformation(p,"p",2);
+					cout << endl;
+					printErrorInformation(minusDS,"mds",2);
+					cout << endl;
+					printErrorInformation(DDS,"DDS");
+					cout << endl;
+				}
 				return 1;
 			}
 			delta = solver.solve(minusDS);// use the factorization to solve for the given right hand side
@@ -1353,6 +1382,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					cerr << "Solving failed, solver.info() = "<< solver.info() << endl;
 					cerr << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
 					cerr << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
+					printErrorInformation(p,"p",2);
+					cout << endl;
+					printErrorInformation(minusDS,"mds",2);
+					cout << endl;
+					printErrorInformation(delta,"delta",2);
+					cout << endl;
+					printErrorInformation(DDS,"DDS");
+					cout << endl;
 				}
 				return 1;
 			}
@@ -1479,7 +1516,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		checkTrue.checkMessage(ces);
 		checkOS.checkMessage(ces);
 		checkABNE.checkMessage(ces);
-		if (ps.pot==3 && abs(ps.theta)<MIN_NUMBER) checkContm.checkMessage(ces);
+		if (ps.Pot==3 && abs(ps.Theta)<MIN_NUMBER) checkContm.checkMessage(ces);
 		checkCon.checkMessage(ces);
 		checkIE.checkMessage(ces);
 		checkLatt.checkMessage(ces);
@@ -1489,7 +1526,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			checkTrue.checkMessage(cerr);
 			checkOS.checkMessage(cerr);
 			checkABNE.checkMessage(cerr);
-			if (ps.pot==3 && abs(ps.theta)<MIN_NUMBER) checkContm.checkMessage(cerr);
+			if (ps.Pot==3 && abs(ps.Theta)<MIN_NUMBER) checkContm.checkMessage(cerr);
 			checkCon.checkMessage(cerr);
 			checkIE.checkMessage(cerr);
 			checkLatt.checkMessage(cerr);
@@ -1532,7 +1569,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			string stepFile = "data/"+timenumber+"mainStep_fLoop_"+numberToString<uint>(fileLoop)+".dat";
 			stepOs = fopen(stepFile.c_str(),"a");
 			fprintf(stepOs,"%12s%5i%5i%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%8s\n",\
-						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.dE,ps.Tb,ps.theta,angleToPrint,F,keep.c_str());
+						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.DE,ps.Tb,ps.Theta,angleToPrint,F,keep.c_str());
 			fclose(stepOs);
 			//fprintf(cof,"%12s%30s\n","steps:",stepFile.c_str());
 			//if ((opts.printChoice).compare("gui")==0)
@@ -1545,14 +1582,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		fprintf(cof,"\n");
 		fprintf(cof,"%8s%8s%8s%8s%8s%8s%8s%8s%14s%14s%14s%14s\n","runs","time","ps.N","NT","L","Tb","dE","theta","Num","E","im(action)","W");
 		fprintf(cof,"%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
-				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,Num,E,imag(action),W);
+				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.DE,ps.Theta,Num,E,imag(action),W);
 		fprintf(cof,"\n");
 		if ((opts.printChoice).compare("gui")==0) {
 			printf("\n");
 			printf("%8s%8s%8s%8s%8s%8s%8s%8s%14s%14s%14s%14s\n","runs","time","ps.N","NT","L","Tb","dE",\
 				"theta","Num","E","im(action)","W");
 			printf("%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
-				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,Num,E,imag(action),W);
+				runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.DE,ps.Theta,Num,E,imag(action),W);
 			printf("\n");
 		}
 
@@ -1563,7 +1600,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			string resultsFile = "results/"+timenumber+"mainResults.dat";
 			actionfile = fopen(resultsFile.c_str(),"a");
 			fprintf(actionfile,"%12s%5i%5i%5i%5i%6g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%13.5g%8.2g%8.2g%8.2g\n",\
-						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,ps.theta,E,Num,(2.0*imag(action)-bound)\
+						timenumber.c_str(),fileLoop,loop,ps.N,ps.NT,ps.L,ps.Tb,ps.DE,ps.Theta,E,Num,(2.0*imag(action)-bound)\
 						,W,checkSoln.back(),checkLin.back(),checkTrue.back());
 			fclose(actionfile);
 			fprintf(cof,"%12s%30s\n","results:",resultsFile.c_str());
