@@ -129,15 +129,16 @@ void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Po
 
 // filenameMain
 Filename filenameMain(const Parameters& pr, const string& base, const string& subfolder, const string& id, const string& suffix) {
-	Filename f = base+"data/pot_"+nts(pr.pot)+"/"+subfolder+"/"+id\
+	Filename f = base+"data/pot_"+nts(pr.Pot)+"/"+subfolder+"/"+id\
 					+"_N_"+nts(pr.N)\
 					+"_Na_"+nts(pr.Na)\
 					+"_Nb_"+nts(pr.Nb)\
 					+"_Nc_"+nts(pr.Nc)\
 					+"_LoR_"+nts(pr.LoR)\
+					+"_DE_"+nts(pr.DE)\
 					+"_Tb_"+nts(pr.Tb)\
-					+"_theta_"+nts(pr.theta)\
-					+"_reg_"+nts(pr.reg)\
+					+"_Theta_"+nts(pr.Theta)\
+					+"_Reg_"+nts(pr.Reg)\
 					+ suffix;
 	return f;
 }

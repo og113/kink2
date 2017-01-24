@@ -1,4 +1,7 @@
-objects/*
+objs/*
+cobjs/*
+mpiobjs/*
+config.mk
 *~
 *.o
 data/*

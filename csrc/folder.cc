@@ -2,6 +2,8 @@
  	definitions for the Folder class and dependencies
  -------------------------------------------------------------------------------------------------------------------------*/
 
+#include <glob.h>
+#include <cstring>
 #include <string>
 #include <stdexcept>
 #include <fstream>
@@ -152,6 +154,33 @@ string FolderError::Add::message() const {
 		- operator<
 		- operator>
 -------------------------------------------------------------------------------------------------------------------------*/
+
+// checkExists
+bool Filename::exists() const {
+	glob_t globbuf;
+	string search = (*this)();
+	int err = glob(search.c_str(), GLOB_NOSORT, NULL, &globbuf); // GLOB_NOSORT if doing sort elsewhere, otherwise set to zero
+	if(err == 0) {	
+		if(globbuf.gl_pathc>0)
+			globfree(&globbuf);
+		return true;
+	}
+	else if (err==GLOB_NOSPACE) {
+        	cerr << "Folder search error " << err << ", running out of memory" << endl;
+		return false;
+	}
+	else if (err==GLOB_ABORTED) {
+        	cerr << "Folder search error " << err << ", GLOB_ABORTED" << endl;
+		return false;
+	}
+	else if (err==GLOB_NOMATCH) {
+		return false;
+	}
+	else {
+		cerr << "Folder search error " << err << ", unknown" << endl;
+		return false;
+	}
+}
 
 // set
 void Filename::set(const string& f) {

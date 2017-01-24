@@ -17,16 +17,16 @@ cout << "nothing tested yet" << endl;
 
 PrimaryParameters p1, P1;
 
-p1.pot = 1;
+p1.Pot = 1;
 p1.N = 130;
 p1.Na = 300;
 p1.Nb = 80;
 p1.Nc = 2;
 p1.LoR = 3.2;
-p1.dE = 0.00;
+p1.DE = 0.00;
 p1.Tb = 18.0;
-p1.theta = 0.0;
-p1.reg = 0.0;
+p1.Theta = 0.0;
+p1.Reg = 0.0;
 
 string filename = "tests/data/testParameters_p1";
 p1.save(filename);
@@ -97,6 +97,17 @@ c.Profile = 1.0e-5;
 str = "tests/data/testParameters_c";
 c.save(str);
 cout << "c: " << endl << c;
+
+string str2 = "tests/data/binaryParameters";
+ofstream os;
+os.open(str2);
+p.writeBinary(os);
+os.close();
+ifstream is;
+is.open(str2);
+p.readBinary(is);
+is.close();
+cout << endl << "p after writing and reading: " << endl << p;
 
 return 0;
 }

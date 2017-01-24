@@ -132,6 +132,7 @@ public:
 	Filename& 			operator=(const string&);
 	Filename& 			operator=(const char*);
 	string 				operator()() const;
+	bool				exists() const;
 private:
 	void 				set(const string&);
 };

@@ -27,8 +27,9 @@ CONTENTS
 	2 - PrimaryParameters
 	3 - SecondaryParameters
 	4 - Parameters
-	5 - Options
-	6 - Closenesses
+	5 - ParametersRange
+	6 - Options
+	7 - Closenesses
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -159,7 +160,7 @@ double rhoIntegrand (double x, void * parameters);
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // ParametersRange declaration
-struct ParametersRange;
+//struct ParametersRange;
 
 struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters();																// empty constructor
@@ -168,10 +169,13 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	~Parameters() {}
 	void load(const string&);													// uses PrimaryParameters::load
 	void setSecondaryParameters();												// uses setSecondaryParameters
+	PrimaryParameters::Label getLabel(const string& pName) const;
+	bool changeParameters (const PrimaryParameters::Label& pLabel, const double& pValue); 			// change all due to change in one
+	bool changeParameters (const PrimaryParameters::Label& pLabel, const uint& pValue); 			// change all due to change in one
 	bool changeParameters (const string& pName, const double& pValue); 			// change all due to change in one
-	bool changeParameters (const string& pName, const uint& pValue); 			// change all due to change in one
-	void step(const ParametersRange&, const PrimaryParameters::Label&);
-	void step(const ParametersRange&, const PrimaryParameters::Label&, const uint&);
+	bool changeParameters (const string& pName, const uint& pValue); 	
+//	void step(const ParametersRange&, const PrimaryParameters::Label&);
+//	void step(const ParametersRange&, const PrimaryParameters::Label&, const uint&);
 	void print() const;
 	void print(FILE * stream) const;
 	bool empty() const;
@@ -183,7 +187,36 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 ostream& operator<<(ostream&, const Parameters&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	5. Options
+	5. ParametersRange
+-------------------------------------------------------------------------------------------------------------------------*/
+/*
+// ParametersRange declaration
+struct ParametersRange {
+	ParametersRange();
+	ParametersRange(const Parameters& min, const Parameters& max, const vector<uint>& steps);
+	Parameters 		Min;
+	Parameters 		Max;
+	vector<uint> 	Steps;
+	uint			totalSteps() const;
+	bool			toStep(const Parameters::Label&) const;
+	Parameters		position(const uint&) const;
+	Parameters		neigh(const uint&) const;
+	void save(const string& filename) const;
+	void load(const string& filename);
+	bool empty() const;
+	ostream& writeBinary(ostream&) const;
+	istream& readBinary(istream&);
+};
+
+// operator<<
+ostream& operator<<(ostream&, const ParametersRange&);
+
+// operator==
+bool operator==(const Parameters& lhs, const ParametersRange& rhs);
+
+*/
+/*-------------------------------------------------------------------------------------------------------------------------
+	6. Options
 		- Options
 		- operator<<
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -223,7 +256,7 @@ struct Options {
 ostream& operator<<(ostream&, const Options&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	6. Closenesses
+	7. Closenesses
 		- Closenesses
 		- operator<<
 -------------------------------------------------------------------------------------------------------------------------*/
