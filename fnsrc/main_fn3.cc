@@ -27,6 +27,7 @@
 /*----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
 	CONTENTS
+		0 - enums
 		1 - argv inputs, loading options, closenesses
 		2 - ParametersRange, Stepper
 		3 - beginning file loop
@@ -45,8 +46,14 @@
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int main_fn3(int argc, vector<string> argv)
-{
+/*----------------------------------------------------------------------------------------------------------------------------
+	0. enums
+----------------------------------------------------------------------------------------------------------------------------*/
+
+struct StepperArgv {
+	enum Option { none, w, e, n};
+};
+
 /*----------------------------------------------------------------------------------------------------------------------------
 	1. loading options, argv inputs
 		- defining timenumber and files to load
@@ -55,6 +62,9 @@ int main_fn3(int argc, vector<string> argv)
 		- loading closenesses
 		- beginning cos and ces 
 ----------------------------------------------------------------------------------------------------------------------------*/
+
+int main_fn3(int argc, vector<string> argv)
+{
 
 // defining timenumber
 string timenumber = currentDateTime();
@@ -68,10 +78,16 @@ Closenesses closenesses;
 string optionsFile = "nrinputs/options0";
 string inputsFile = "nrinputs/inputs0";
 string closenessesFile = "nrinputs/closenesses0";
-string pIn = "";
+string fIn = "";
 
 // cos and cerr files
 string coFile, ceFile;
+
+// stepper stuff
+string stepperArgv = "";
+string stepperInputsFile = "step0";
+Filename stepperOutputsFile = "results/nr/stepper/step.csv";
+uint steps = 1;
 
 // getting argv inputs
 if (argc==2) timenumber = argv[1];
@@ -79,12 +95,16 @@ else if (argc % 2 && argc>1) {
 	for (uint j=0; j<(uint)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
-		if (id.compare("opts")==0 || id.compare("options")==0) 				optionsFile = argv[2*j+2];
-		else if (id.compare("inputs")==0) 									inputsFile = argv[2*j+2];
-		else if (id.compare("close")==0 || id.compare("closenesses")==0) 	closenessesFile = argv[2*j+2];
-		else if (id.compare("co")==0) 										coFile = argv[2*j+2];
-		else if (id.compare("ce")==0) 										ceFile = argv[2*j+2];
-		else if (id.compare("pIn")==0 || id.compare("pin")==0) 				pIn = argv[2*j+2];
+		if (id.compare("opts")==0 || id.compare("options")==0) 						optionsFile = argv[2*j+2];
+		else if (id.compare("inputs")==0) 											inputsFile = argv[2*j+2];
+		else if (id.compare("close")==0 || id.compare("closenesses")==0) 			closenessesFile = argv[2*j+2];
+		else if (id.compare("co")==0) 												coFile = argv[2*j+2];
+		else if (id.compare("ce")==0) 												ceFile = argv[2*j+2];
+		else if (id.compare("fIn")==0 || id.compare("fin")==0) 						fIn = argv[2*j+2];
+		else if (id.compare("stepper")==0) 											stepperArgv = argv[2*j+2];
+		else if (id.compare("steps")==0) 											steps = stn<uint>(argv[2*j+2]);
+		else if (id.compare("stepperInputs")==0 || id.compare("stepInputs")==0) 	stepperInputsFile = argv[2*j+2];
+		else if (id.compare("stepperOutputs")==0 || id.compare("stepResults")==0)	stepperOutputsFile = argv[2*j+2];
 	}
 }
 else if (argc != 1) {
@@ -112,6 +132,11 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("close")==0 || id.compare("closenesses")==0);
 		else if (id.compare("co")==0);
 		else if (id.compare("ce")==0);
+		else if (id.compare("fIn")==0 || id.compare("fin")==0);
+		else if (id.compare("stepper")==0);
+		else if (id.compare("steps")==0);
+		else if (id.compare("stepperInputs")==0 || id.compare("stepInputs")==0);
+		else if (id.compare("stepperOutputs")==0 || id.compare("stepResults")==0);
 		else if (id.compare("tn")==0 || id.compare("timenumber")==0) 			timenumber = argv[2*j+2];
 		else if (id.compare("zmx")==0) 											opts.zmx = argv[2*j+2];
 		else if (id.compare("zmt")==0) 											opts.zmt = argv[2*j+2];
@@ -140,12 +165,40 @@ cos.open(coFile.c_str(),fstream::app);
 fstream ces;
 ces.open(ceFile.c_str(),fstream::app);
 
+// stepper
+StepperArgv::Option stepargv = StepperArgv::none;
+if (!stepperArgv.empty()) {
+	if (stepperArgv.compare("W")==0) {
+		stepargv = StepperArgv::w;
+		(stepperOutputsFile.Extras).push_back(StringPair("const","W"));
+		if (verbose)
+			cout << "stepping with constant W" << endl;
+	}
+	else if (stepperArgv.compare("E")==0) {
+		stepargv = StepperArgv::e;
+		(stepperOutputsFile.Extras).push_back(StringPair("const","E"));
+		if (verbose)
+			cout << "stepping with constant E" << endl;
+	}
+	else if (stepperArgv.compare("N")==0) {
+		stepargv = StepperArgv::n;
+		(stepperOutputsFile.Extras).push_back(StringPair("const","N"));
+		if (verbose)
+			cout << "stepping with constant N" << endl;
+	}
+	else if (stepperArgv.compare("none")==0)
+		stepargv = StepperArgv::none;
+	else {
+		cerr << "stepper options not understood/available: " << stepperArgv << endl;
+		return 1;
+	}
+}
+
 /*----------------------------------------------------------------------------------------------------------------------------
 	2. ParametersRange, Stepper
-		
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-// parameters
+// ParametersRange
 ParametersRange pr;
 pr.load(inputsFile);
 Parameters p = pr.Min, pold = pr.Min;
@@ -159,58 +212,39 @@ StepperOptions stepOpts;
 stepOpts.tol = 1.0;
 Point2d point;
 if (stepargv!=StepperArgv::none) {
-	{
-		ifstream is;
-		is.open(stepperInputsFile.c_str());
-		if (is.good()) {
-			is >> stepOpts;
-			is.close();
-			(stepperOutputsFile.Extras).push_back(StringPair("tol",nts(stepOpts.tol)));
-			(stepperOutputsFile.Extras).push_back(StringPair("aim",nts(stepOpts.aim)));
-		}
-		else {
-			cerr << "Error: cannot open stepper inputs file, " << stepperInputsFile << endl;
-			return 1;
-		}
-	}
-	if (poto==PotentialOptions::thermal || disjoint) {
-		point(p.B,p.T);
-		//stepOpts.epsi_x *= (abs(p.B)>MIN_NUMBER? p.B: 1.0);
-		//stepOpts.epsi_y *= (abs(p.T)>MIN_NUMBER? p.T: 1.0);
+	ifstream is;
+	is.open(stepperInputsFile.c_str());
+	if (is.good()) {
+		is >> stepOpts;
+		is.close();
+		(stepperOutputsFile.Extras).push_back(StringPair("tol",nts(stepOpts.tol)));
+		(stepperOutputsFile.Extras).push_back(StringPair("aim",nts(stepOpts.aim)));
 	}
 	else {
-		point(p.B,p.P4);
-		//stepOpts.epsi_x *= (abs(p.B)>MIN_NUMBER? p.B: 1.0);
-		//stepOpts.epsi_y *= (abs(p.P4)>MIN_NUMBER? p.P4: 1.0);
+		cerr << "Error: cannot open stepper inputs file, " << stepperInputsFile << endl;
+		return 1;
 	}
+	point(p.Tb,p.Theta);
 }
 Stepper stepper(stepOpts,point);
 if (stepperOutputsFile.exists() && stepargv!=StepperArgv::none) {
 	stepper.load(stepperOutputsFile);
-	if (poto==PotentialOptions::thermal || disjoint) {
-		p.B = stepper.x();
-		p.T = stepper.y();
-		pold.B = (stepper.lastStep()).X;
-		pold.T = (stepper.lastStep()).Y;
-	}
-	else {
-		p.B = stepper.x();
-		p.P4 = stepper.y();
-		pold.B = (stepper.lastStep()).X;
-		pold.P4 = (stepper.lastStep()).Y;
-	}
+	p.Tb = stepper.x();
+	p.Theta = stepper.y();
+	pold.Tb = (stepper.lastStep()).X;
+	pold.Theta = (stepper.lastStep()).Y;
 }
 
 // results
-string resultsFile = (pass? "results/nr/nr7pass.csv":"results/nr/nr7.csv");
-uint idSizeResults = 3, datumSizeResults = 17;
+string resultsFile = (pass? "results/nr/nr0pass.csv":"results/nr/nr0.csv");
+uint idSizeResults = 3, datumSizeResults = 17; // THIS WILL NEED CHANGING
 vector<string> idCheck(idSizeResults);
 idCheck[idSizeResults-1] = potExtras.second;
 NewtonRaphsonData results(resultsFile,idSizeResults,datumSizeResults);
 
 // errors
-string errorsFile = "results/nr/nr7error.csv";
-uint idSizeErrors = 4, datumSizeErrors = 13;
+string errorsFile = "results/nr/nr0error.csv";
+uint idSizeErrors = 4, datumSizeErrors = 13;  // THIS WILL NEED CHANGING
 vector<string> idCheckErrors(idSizeErrors);
 idCheckErrors[idSizeErrors-1] = potExtras.second;
 NewtonRaphsonData errors(errorsFile,idSizeErrors,datumSizeErrors);
@@ -517,7 +551,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 /*----------------------------------------------------------------------------------------------------------------------------
 	7. defining quantities
 		- erg, linErg etc
-		- p, minusDS, DDS
+		- f, minusDS, DDS
 		- printing parameters
 		- print input phi
 ----------------------------------------------------------------------------------------------------------------------------*/	
@@ -547,8 +581,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		uint min_runs = 1;
 		uint max_runs = 100;
 
-		//initializing phi (=p)
-		vec p;
+		//initializing phi (=f)
+		vec f;
 		SaveOptions so_tp;
 		so_tp.printType = SaveOptions::binary;
 		so_tp.paramsIn = psu;
@@ -559,10 +593,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		so_tp.printMessage = false;
 		if (loop==0) {
 			if (fileLoop==0 && ((pFolder[0]).Suffix).compare(".dat")==0) so_tp.printType = SaveOptions::ascii;
-			load(pFolder[fileLoop],so_tp,p); //n.b there may be some problems with zero modes for binary printing
-			if (p.size()==(2*ps.N*ps.NT+1)) { // if came from pi.cc and in binary
-				p.conservativeResize(2*ps.N*ps.NT+2);
-				p(2*ps.N*ps.NT+1) = 0.5;
+			load(pFolder[fileLoop],so_tp,f); //n.b there may be some problems with zero modes for binary printing
+			if (f.size()==(2*ps.N*ps.NT+1)) { // if came from pi.cc and in binary
+				f.conservativeResize(2*ps.N*ps.NT+2);
+				f(2*ps.N*ps.NT+1) = 0.5;
 			}
 			so_tp.paramsIn = ps;
 			so_tp.printType = SaveOptions::binary;
@@ -581,7 +615,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				lastPhi = (string)("data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
 						+"_loop_"+numberToString<uint>(loop-stepper.local()+1+sigma)+"_step_1.data");
 			}
-			load(lastPhi,so_tp,p);
+			load(lastPhi,so_tp,f);
 			fprintf(cof,"%12s%30s\n","input: ",(lastPhi()).c_str());
 			if ((opts.printChoice).compare("gui")==0)
 				printf("%12s%30s\n","input: ",(lastPhi()).c_str());
@@ -592,9 +626,9 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		if ((opts.printChoice).compare("gui")==0)
 			ps.print();
 		
-		//defining complexified vector Cp
-		cVec Cp;
-		Cp = vecComplex(p,ps);
+		//defining complexified vector Cf
+		cVec Cf;
+		Cf = vecComplex(f,ps);
 	
 		//defining DDS and minusDS
 		spMat DDS(2*ps.N*ps.NT+2,2*ps.N*ps.NT+2);
@@ -609,7 +643,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		if ((opts.printChoice).compare("n")!=0) {
 			Filename earlyPrintFile = (string)("data/"+timenumber+"mainpE_fLoop_"+numberToString<uint>(fileLoop)\
 					 +"_loop_"+numberToString<uint>(loop)+"_run_" + "0.data");
-			save(earlyPrintFile,so_tp,p);
+			save(earlyPrintFile,so_tp,f);
 		}
 /*----------------------------------------------------------------------------------------------------------------------------
 	8. beginning newton-raphson loop
@@ -673,7 +707,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 													double r = ps.r0 + j*ps.a;
 													chiT(posT+k) = negVec(j)*r;
 							}
-							else if (opts.zmt[0]=='d')	chiT(posT+k) = p(2*(posT+k+1))-p(2*(posT+k));
+							else if (opts.zmt[0]=='d')	chiT(posT+k) = f(2*(posT+k+1))-f(2*(posT+k));
 							else {
 								ces << "choice of zmt(" << opts.zmt << ") not allowed" << endl;
 								if ((opts.printChoice).compare("gui")==0)
@@ -703,7 +737,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 																chiX(posX+k) = negVec(j)*r;
 							}
 							else if (opts.zmx[0]=='d' && ps.Pot!=3)
-								chiX(posX+k) = p(2*neigh(posX+k,1,1,ps))-p(2*neigh(posX+k,1,-1,ps));
+								chiX(posX+k) = f(2*neigh(posX+k,1,1,ps))-f(2*neigh(posX+k,1,-1,ps));
 							else {
 								ces << "choice of zmx(" << opts.zmx << ") not allowed" << endl;
 								if ((opts.printChoice).compare("gui")==0)
@@ -769,8 +803,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					double r = ps.r0 + j*ps.a;
 					paramsV.epsi = r;
 					V.setParams(paramsV);
-					Vcontrol += pow(p(2*j*ps.Nb),2.0)/2.0 - pow(p(2*j*ps.Nb),4.0)/4.0/pow(r,2.0);
-					Vtrial += V(p(2*j*ps.Nb));
+					Vcontrol += pow(f(2*j*ps.Nb),2.0)/2.0 - pow(f(2*j*ps.Nb),4.0)/4.0/pow(r,2.0);
+					Vtrial += V(f(2*j*ps.Nb));
 				}
 				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
 				fprintf(cof,"potTest = %8.4g\n",potTest);
@@ -814,8 +848,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				if (abs(chiX(j))>MIN_NUMBER && ps.Pot!=3) { //spatial zero mode lagrange constraint
 					DDS.insert(2*j,2*ps.N*ps.NT) 		= Dx*chiX(j); 
 					DDS.insert(2*ps.N*ps.NT,2*j) 		= Dx*chiX(j);
-					minusDS(2*j) 						+= -Dx*chiX(j)*p(2*ps.N*ps.NT);
-					minusDS(2*ps.N*ps.NT) 				+= -Dx*chiX(j)*p(2*j);
+					minusDS(2*j) 						+= -Dx*chiX(j)*f(2*ps.N*ps.NT);
+					minusDS(2*ps.N*ps.NT) 				+= -Dx*chiX(j)*f(2*j);
 				}
 					
 				if (abs(chiT(j))>MIN_NUMBER && t<(ps.NT-1) && (ps.Pot!=3 || (x>0 && x<(ps.N-1)))) {
@@ -823,74 +857,74 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					DDS.coeffRef(2*ps.N*ps.NT+1,2*(j+1)) 	+= Dx*chiT(j);
 					DDS.coeffRef(2*j,2*ps.N*ps.NT+1) 		+= -Dx*chiT(j);
 					DDS.coeffRef(2*ps.N*ps.NT+1,2*j) 		+= -Dx*chiT(j);
-		            minusDS(2*(j+1)) 						+= -Dx*chiT(j)*p(2*ps.N*ps.NT+1);
-		            minusDS(2*j) 							+= Dx*chiT(j)*p(2*ps.N*ps.NT+1);
-		            minusDS(2*ps.N*ps.NT+1) 				+= -Dx*chiT(j)*(p(2*(j+1))-p(2*j));
+		            minusDS(2*(j+1)) 						+= -Dx*chiT(j)*f(2*ps.N*ps.NT+1);
+		            minusDS(2*j) 							+= Dx*chiT(j)*f(2*ps.N*ps.NT+1);
+		            minusDS(2*ps.N*ps.NT+1) 				+= -Dx*chiT(j)*(f(2*(j+1))-f(2*j));
 				}
 					
 				if (t<(ps.NT-1)) {
 					for (uint k=0;k<ps.N;k++) {
 						lint l = k*ps.NT+t;
-						linErgOffShell(t) += 0.5*( omega_2(x,k)*( Cp(l)-ps.minima[0] )*( Cp(j)-ps.minima[0] ) \
-										+ omega_0(x,k)*( Cp(l+1)-Cp(l) )*( Cp(j+1)-Cp(j) )/pow(dt,2.0));
-						linNumOffShell(t) += 0.5*(omega_1(x,k)*( Cp(l)-ps.minima[0] )*( Cp(j)-ps.minima[0] ) \
-										+ omega_m1(x,k)*( Cp(l+1)-Cp(l) )*( Cp(j+1)-Cp(j) )/pow(dt,2.0));
+						linErgOffShell(t) += 0.5*( omega_2(x,k)*( Cf(l)-ps.minima[0] )*( Cf(j)-ps.minima[0] ) \
+										+ omega_0(x,k)*( Cf(l+1)-Cf(l) )*( Cf(j+1)-Cf(j) )/pow(dt,2.0));
+						linNumOffShell(t) += 0.5*(omega_1(x,k)*( Cf(l)-ps.minima[0] )*( Cf(j)-ps.minima[0] ) \
+										+ omega_m1(x,k)*( Cf(l+1)-Cf(l) )*( Cf(j+1)-Cf(j) )/pow(dt,2.0));
 					}
 				}
 					
 				if (abs(ps.Theta)>MIN_NUMBER) {
 					for (uint k=0;k<ps.N;k++) {
 						lint l = k*ps.NT+t;
-						linNum(t) += 2.0*ps.Gamma*omega_1(x,k)*( (p(2*l)-ps.minima[0])*(p(2*j)-ps.minima[0])/pow(1.0+ps.Gamma,2.0)\
-								 + p(2*j+1)*p(2*l+1)/pow(1.0-ps.Gamma,2.0) );
-						linErg(t) += 2.0*ps.Gamma*omega_2(x,k)*( (p(2*l)-ps.minima[0])*(p(2*j)-ps.minima[0])/pow(1.0+ps.Gamma,2.0)\
-								+ p(2*j+1)*p(2*l+1)/pow(1.0-ps.Gamma,2.0) );
+						linNum(t) += 2.0*ps.Gamma*omega_1(x,k)*( (f(2*l)-ps.minima[0])*(f(2*j)-ps.minima[0])/pow(1.0+ps.Gamma,2.0)\
+								 + f(2*j+1)*f(2*l+1)/pow(1.0-ps.Gamma,2.0) );
+						linErg(t) += 2.0*ps.Gamma*omega_2(x,k)*( (f(2*l)-ps.minima[0])*(f(2*j)-ps.minima[0])/pow(1.0+ps.Gamma,2.0)\
+								+ f(2*j+1)*f(2*l+1)/pow(1.0-ps.Gamma,2.0) );
 					}
 				}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//boundaries
 				if (ps.Pot==3 && x==(ps.N-1)) {
-					DDS.insert(2*j,2*j) 	= 1.0; // p=0 at r=R
+					DDS.insert(2*j,2*j) 	= 1.0; // f=0 at r=R
 					DDS.insert(2*j+1,2*j+1) = 1.0;
 				}
 				else if (ps.Pot==3 && x==0) {
-					kineticS 				+= 	Dt*pow(Cp(neighPosX),2.0)/dx/2.0;
-					derivErg(t) 			+= 	pow(Cp(neighPosX),2.0)/dx/2.0; //n.b. the Dt/dt difference is ignored for erg(t)
-					erg(t) 					+= 	pow(Cp(neighPosX),2.0)/dx/2.0;
+					kineticS 				+= 	Dt*pow(Cf(neighPosX),2.0)/dx/2.0;
+					derivErg(t) 			+= 	pow(Cf(neighPosX),2.0)/dx/2.0; //n.b. the Dt/dt difference is ignored for erg(t)
+					erg(t) 					+= 	pow(Cf(neighPosX),2.0)/dx/2.0;
 					
-					DDS.insert(2*j,2*j) 	= 1.0; // p=0 at r=0
+					DDS.insert(2*j,2*j) 	= 1.0; // f=0 at r=0
 					DDS.insert(2*j+1,2*j+1) = 1.0;
 				}			
 				else if (t==(ps.NT-1)) {
 					if (neighPosX!=-1) {
-						kineticS			+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
-						derivErg(t) 		+= pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
-						erg(t) 				+= pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
+						kineticS			+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+						derivErg(t) 		+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+						erg(t) 				+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					}			
-					potV 					+= Dt*Dx*V(Cp(j));
-					pot_r 					+= Dt*Dx*Vr(Cp(j));
-					erg(t) 					+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
-					potErg(t) 				+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
+					potV 					+= Dt*Dx*V(Cf(j));
+					pot_r 					+= Dt*Dx*Vr(Cf(j));
+					erg(t) 					+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
+					potErg(t) 				+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				
 					DDS.insert(2*j,2*(j-1)+1) = 1.0; //zero imaginary part of time derivative
 					DDS.insert(2*j+1,2*j+1)   = 1.0; //zero imaginary part
 				}
 				else if (t==0) {
-					kineticT 	+= Dx*pow(Cp(j+1)-Cp(j),2.0)/dt/2.0;
-					derivErg(t) += Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0;
-					erg(t) 		+= Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0;
+					kineticT 	+= Dx*pow(Cf(j+1)-Cf(j),2.0)/dt/2.0;
+					derivErg(t) += Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
+					erg(t) 		+= Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
 					
 					///////////////////////////////// including other terms in action at t=0 ///////////////////////////
 					if (neighPosX!=-1) {
-						kineticS 	+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
-						derivErg(t) += pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
-						erg(t) 		+= pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
+						kineticS 	+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+						derivErg(t) += pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+						erg(t) 		+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					}
-					potV 		+= Dt*Dx*V(Cp(j));
-					pot_r 		+= Dt*Dx*Vr(Cp(j));
-					potErg(t) 	+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
-					erg(t) 		+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
+					potV 		+= Dt*Dx*V(Cf(j));
+					pot_r 		+= Dt*Dx*Vr(Cf(j));
+					potErg(t) 	+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
+					erg(t) 		+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 					double tnt = 1.0;
 					if ((opts.bds).compare("uc")!=0)
 						tnt *= ps.Theta;
@@ -901,12 +935,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				        int neighb = neigh(j,direc,sign,ps);
 				        double dxd = (sign==1? dx: dxm);
 				        if (direc == 0) {
-				            minusDS(2*j+1) 					+= Dx*imag(Cp(j+sign)/dt);
+				            minusDS(2*j+1) 					+= Dx*imag(Cf(j+sign)/dt);
 				            DDS.coeffRef(2*j+1,2*(j+sign)) 	+= -imag(Dx/dt);
 				            DDS.coeffRef(2*j+1,2*(j+sign)+1)+= -real(Dx/dt);
 				           }
 				        else if (neighb!=-1) {
-				            minusDS(2*j+1) 					+= -imag(Dt*Cp(neighb))/dxd;
+				            minusDS(2*j+1) 					+= -imag(Dt*Cf(neighb))/dxd;
 				            DDS.coeffRef(2*j+1,2*neighb) 	+= imag(Dt)/dxd;
 				            DDS.coeffRef(2*j+1,2*neighb+1) 	+= real(Dt)/dxd;
 				        }
@@ -914,10 +948,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				    comp temp0 = Dx/dt - Dt*(1.0/dx+1.0/dxm);
 				    if (neighPosX==-1) 		temp0 += Dt/dx;
 				    else if (neighNegX==-1) temp0 += Dt/dxm;
-				    comp temp1 = Dt*Dx*( dV(Cp(j)) + dVr(Cp(j)) );//dV terms should be small
-				    comp temp2 = Dt*Dx*(ddV(Cp(j)) + ddVr(Cp(j)));
+				    comp temp1 = Dt*Dx*( dV(Cf(j)) + dVr(Cf(j)) );//dV terms should be small
+				    comp temp2 = Dt*Dx*(ddV(Cf(j)) + ddVr(Cf(j)));
 				    
-				    minusDS(2*j+1) 				+= imag(-temp0*Cp(j) + temp1 );
+				    minusDS(2*j+1) 				+= imag(-temp0*Cf(j) + temp1 );
 				    DDS.coeffRef(2*j+1,2*j) 	+= imag(temp0 - temp2 );
 				    DDS.coeffRef(2*j+1,2*j+1) 	+= real(temp0 - temp2 );
 					/////////////////////////////////////////////////////////////////////////////////////////
@@ -931,7 +965,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 							if (abs(omega_1(x,k))>MIN_NUMBER) {
 								lint m=k*ps.NT;
 								DDS.coeffRef(2*j,2*m+1) += -2.0*omega_1(x,k);
-								minusDS(2*j) 			+= 2.0*omega_1(x,k)*p(2*m+1);
+								minusDS(2*j) 			+= 2.0*omega_1(x,k)*f(2*m+1);
 							}
 						}
 						////////////////////////////////////////////////////////////////////////////////////////
@@ -942,13 +976,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 								/////////////////////equation I - theta!=0//////////////
 								lint m=k*ps.NT;
 								DDS.coeffRef(2*j+1,2*m) += (1.0-ps.Gamma)*omega_1(x,k)/(1.0+ps.Gamma);
-								minusDS(2*j+1) 			+= -(1.0-ps.Gamma)*omega_1(x,k)*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma);
+								minusDS(2*j+1) 			+= -(1.0-ps.Gamma)*omega_1(x,k)*(f(2*m)-ps.minima[0])/(1.0+ps.Gamma);
 								/////////////////////equation R - theta!=0//////////////
-								minusDS(2*j) 			+= tnt*p(2*m+1)*omega_1(x,k)*(1+ps.Gamma)/(1-ps.Gamma);
+								minusDS(2*j) 			+= tnt*f(2*m+1)*omega_1(x,k)*(1+ps.Gamma)/(1-ps.Gamma);
 								DDS.coeffRef(2*j,2*m+1)	+= -tnt*omega_1(x,k)*(1.0+ps.Gamma)/(1.0-ps.Gamma);
-								bound 				+= -(1.0-ps.Gamma)*omega_1(x,k)*(p(2*j)-ps.minima[0])\
-															*(p(2*m)-ps.minima[0])/(1.0+ps.Gamma)
-															 + (1.0+ps.Gamma)*omega_1(x,k)*p(2*j+1)*p(2*m+1)/(1.0-ps.Gamma);
+								bound 				+= -(1.0-ps.Gamma)*omega_1(x,k)*(f(2*j)-ps.minima[0])\
+															*(f(2*m)-ps.minima[0])/(1.0+ps.Gamma)
+															 + (1.0+ps.Gamma)*omega_1(x,k)*f(2*j+1)*f(2*m+1)/(1.0-ps.Gamma);
 							}
 						}
 						//////////////////////////////////////equation R - theta!=0//////////////////////////////
@@ -958,17 +992,17 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					        int neighb = neigh(j,direc,sign,ps);
 					        double dxd = (sign==1? dx: dxm);
 					        if (direc == 0) {
-					            minusDS(2*j) 					+= tnt*Dx*real(Cp(j+sign)/dt);
+					            minusDS(2*j) 					+= tnt*Dx*real(Cf(j+sign)/dt);
 				            	DDS.coeffRef(2*j,2*(j+sign)) 	+= -tnt*real(Dx/dt);
 				            	DDS.coeffRef(2*j,2*(j+sign)+1) 	+= tnt*imag(Dx/dt);
 					        }
 					        else if (neighb!=-1) {
-					            minusDS(2*j) 					+= -tnt*real(Dt*Cp(neighb))/dxd;
+					            minusDS(2*j) 					+= -tnt*real(Dt*Cf(neighb))/dxd;
 					            DDS.coeffRef(2*j,2*neighb) 		+= tnt*real(Dt)/dxd;
 				            	DDS.coeffRef(2*j,2*neighb+1) 	+= -tnt*imag(Dt)/dxd;
 					        }
 					    }
-					    minusDS(2*j) 			+= tnt*real(-temp0*Cp(j) + temp1 );
+					    minusDS(2*j) 			+= tnt*real(-temp0*Cf(j) + temp1 );
 				    	DDS.coeffRef(2*j,2*j) 	+= tnt*real(temp0 - temp2 );
 				    	DDS.coeffRef(2*j,2*j+1) += tnt*imag(-temp0 + temp2 );
 					}
@@ -978,17 +1012,17 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				//bulk
 				else {
 					if (neighPosX!=-1) {
-						kineticS 	+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
-						erg(t) 	 	+= pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
-						derivErg(t) += pow(Cp(neighPosX)-Cp(j),2.0)/dx/2.0;
+						kineticS 	+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+						erg(t) 	 	+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+						derivErg(t) += pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					}
 					
-					kineticT 	+= Dx*pow(Cp(j+1)-Cp(j),2.0)/dt/2.0;
-					potV 		+= Dt*Dx*V(Cp(j));
-					pot_r 		+= Dt*Dx*Vr(Cp(j));
-					erg(t) 		+= Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + Dx*V(Cp(j)) + Dx*Vr(Cp(j));
-					derivErg(t) += Dx*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0;
-					potErg(t) 	+= Dx*V(Cp(j)) + Dx*Vr(Cp(j));
+					kineticT 	+= Dx*pow(Cf(j+1)-Cf(j),2.0)/dt/2.0;
+					potV 		+= Dt*Dx*V(Cf(j));
+					pot_r 		+= Dt*Dx*Vr(Cf(j));
+					erg(t) 		+= Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0 + Dx*V(Cf(j)) + Dx*Vr(Cf(j));
+					derivErg(t) += Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
+					potErg(t) 	+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				
 		            for (uint k=0; k<2*2; k++) {
 		                int sign = pow(-1,k);
@@ -997,16 +1031,16 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		                comp dtd = (sign==1? dt: dtm);
 		                double dxd = (sign==1? dx: dxm);
 		                if (direc == 0) {
-		                    minusDS(2*j) 					+= real(Dx*Cp(j+sign)/dtd);
-		                    minusDS(2*j+1) 					+= imag(Dx*Cp(j+sign)/dtd);
+		                    minusDS(2*j) 					+= real(Dx*Cf(j+sign)/dtd);
+		                    minusDS(2*j+1) 					+= imag(Dx*Cf(j+sign)/dtd);
 		                    DDS.insert(2*j,2*(j+sign)) 		= -real(Dx/dtd);
 		                    DDS.insert(2*j,2*(j+sign)+1) 	= imag(Dx/dtd);
 		                    DDS.insert(2*j+1,2*(j+sign)) 	= -imag(Dx/dtd);
 		                    DDS.insert(2*j+1,2*(j+sign)+1) 	= -real(Dx/dtd);
 		                }
 		                else if (neighb!=-1) {                        
-		                    minusDS(2*j) 					+= -real(Dt*Cp(neighb)/dxd);
-		                    minusDS(2*j+1) 					+= -imag(Dt*Cp(neighb)/dxd);
+		                    minusDS(2*j) 					+= -real(Dt*Cf(neighb)/dxd);
+		                    minusDS(2*j+1) 					+= -imag(Dt*Cf(neighb)/dxd);
 		                    DDS.insert(2*j,2*neighb) 		= real(Dt/dxd);
 		                    DDS.insert(2*j,2*neighb+1) 		= -imag(Dt/dxd);
 		                    DDS.insert(2*j+1,2*neighb) 		= imag(Dt/dxd);
@@ -1016,11 +1050,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		            comp temp0 = Dx*(1.0/dt + 1.0/dtm) - Dt*(1.0/dx + 1.0/dxm);
 		            if (neighPosX==-1) 		temp0 += Dt/dx;
 		            else if (neighNegX==-1) temp0 += Dt/dxm;
-		            comp temp1 = Dt*Dx*(dV(Cp(j)) + dVr(Cp(j)));
-		            comp temp2 = Dt*Dx*(ddV(Cp(j)) + ddVr(Cp(j)));
+		            comp temp1 = Dt*Dx*(dV(Cf(j)) + dVr(Cf(j)));
+		            comp temp2 = Dt*Dx*(ddV(Cf(j)) + ddVr(Cf(j)));
 		                
-		            minusDS(2*j) 			+= real(temp1 - temp0*Cp(j));
-		            minusDS(2*j+1) 			+= imag(temp1 - temp0*Cp(j));
+		            minusDS(2*j) 			+= real(temp1 - temp0*Cf(j));
+		            minusDS(2*j+1) 			+= imag(temp1 - temp0*Cf(j));
 		            DDS.insert(2*j,2*j) 	= real(-temp2 + temp0);
 		            DDS.insert(2*j,2*j+1) 	= imag(temp2 - temp0);
 		            DDS.insert(2*j+1,2*j) 	= imag(-temp2 + temp0);
@@ -1100,8 +1134,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					for (unsigned int l=0; l<ps.N; l++) {
 						double r = ps.r0 + l*ps.a;
 						lint m = l*ps.NT;
-						integral1 += ps.a*p(2*m)*pow(2.0/ps.L,0.5)*sin(momtm*r);
-						integral2 += ps.a*(p(2*(m+1))-p(2*m))*pow(2.0/ps.L,0.5)*sin(momtm*r)/ps.b;
+						integral1 += ps.a*f(2*m)*pow(2.0/ps.L,0.5)*sin(momtm*r);
+						integral2 += ps.a*(f(2*(m+1))-f(2*m))*pow(2.0/ps.L,0.5)*sin(momtm*r)/ps.b;
 					}
 					Asqrd = pow(integral1,2.0) + pow(integral2,2.0)/freqSqrd;
 					linErgContm += 2.0*pi*Asqrd*freqSqrd;
@@ -1126,16 +1160,16 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					double sqrtDj = sqrt(4.0*pi*DxFn(j,ps));
 					if (abs(w_n)>1.0e-16 && abs(w_n_e)>1.0e-16) {
 						a_k(n) += exp(ii*w_n_e*T0)*sqrt(2.0*w_n)*modes(j,n)* \
-									sqrtDj*((Cp(m+1)-ps.minima[0])-(Cp(m)-ps.minima[0])*exp(ii*w_n_e*dt0)) \
+									sqrtDj*((Cf(m+1)-ps.minima[0])-(Cf(m)-ps.minima[0])*exp(ii*w_n_e*dt0)) \
 										/(exp(-ii*w_n_e*dt0)-exp(ii*w_n_e*dt0));
 						b_k(n) += exp(-ii*w_n_e*T0)*sqrt(2.0*w_n)*modes(j,n)* \
-									sqrtDj*((Cp(m+1)-ps.minima[0])-(Cp(m)-ps.minima[0])*exp(-ii*w_n_e*dt0)) \
+									sqrtDj*((Cf(m+1)-ps.minima[0])-(Cf(m)-ps.minima[0])*exp(-ii*w_n_e*dt0)) \
 										/(exp(ii*w_n_e*dt0)-exp(-ii*w_n_e*dt0));
 					}
 				}
 			}			
 			
-			//using a_k and b*_k to check that a_k=Gamma*b*_k and p->p_lin as t->0 and that Sum_k(a_k*b*_k)=linNum
+			//using a_k and b*_k to check that a_k=Gamma*b*_k and f->f_lin as t->0 and that Sum_k(a_k*b*_k)=linNum
 			// and that Sum_k(w_k*a_k*b*_k)=linErg
 			double ABtest = 0.0, linRepTest;
 			linNumAB = 0.0, linErgAB = 0.0;
@@ -1143,7 +1177,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			linRep = Eigen::VectorXcd::Constant(ps.N,ps.minima[0]);
 			for (uint j=0; j<ps.N; j++) {
 				ABtest += absDiff(a_k(j),conj(b_k(j))*ps.Gamma);
-				p0(j) = Cp(j*ps.NT);
+				p0(j) = Cf(j*ps.NT);
 				linNumAB += a_k(j)*b_k(j);
 				linErgAB += freqs(j)*a_k(j)*b_k(j);
 				if (trivialChecks) {
@@ -1220,7 +1254,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			checkLatt.add(momTest);
 			
 			//checking initial boundary conditions satisfied
-			double normP = p.norm();
+			double normP = f.norm();
 			double boundReTest = boundRe.norm()*(2*ps.N*ps.NT+2)/normP/(ps.N-2.0);
 			double boundImTest = boundIm.norm()*(2*ps.N*ps.NT+2)/normP/(ps.N-2.0);
 			checkBoundRe.add(boundReTest);
@@ -1293,11 +1327,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- factorising
 		- solving
 		- checking matrix inversion
-		- p' = p + delta
-		- Cp'
+		- f' = f + delta
+		- Cf'
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
-			//solving for delta in DDS*delta=minusDS, where p' = p + delta		
+			//solving for delta in DDS*delta=minusDS, where f' = f + delta		
 			vec delta(2*ps.N*ps.NT+2);
 			delta = Eigen::VectorXd::Zero(2*ps.N*ps.NT+2);
 			DDS.prune(MIN_NUMBER);
@@ -1309,7 +1343,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				ces << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
 				if ((opts.printChoice).compare("gui")==0) {
 					cerr << "DDS pattern analysis failed, solver.info() = "<< solver.info() << endl;
-					printErrorInformation(p,"p",2);
+					printErrorInformation(f,"f",2);
 					cout << endl;
 					printErrorInformation(minusDS,"mds",2);
 					cout << endl;
@@ -1323,7 +1357,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				ces << "Factorization failed, solver.info() = "<< solver.info() << endl;
 				if ((opts.printChoice).compare("gui")==0) {
 					cerr << "Factorization failed, solver.info() = "<< solver.info() << endl;
-					printErrorInformation(p,"p",2);
+					printErrorInformation(f,"f",2);
 					cout << endl;
 					printErrorInformation(minusDS,"mds",2);
 					cout << endl;
@@ -1337,7 +1371,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				ces << "Compute failed, solver.info() = "<< solver.info() << endl;
 				if ((opts.printChoice).compare("gui")==0) {
 					cerr << "Compute failed, solver.info() = "<< solver.info() << endl;
-					printErrorInformation(p,"p",2);
+					printErrorInformation(f,"f",2);
 					cout << endl;
 					printErrorInformation(minusDS,"mds",2);
 					cout << endl;
@@ -1355,7 +1389,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					cerr << "Solving failed, solver.info() = "<< solver.info() << endl;
 					cerr << "log(abs(det(DDS))) = " << solver.logAbsDeterminant() << endl;
 					cerr << "sign(det(DDS)) = " << solver.signDeterminant() << endl;
-					printErrorInformation(p,"p",2);
+					printErrorInformation(f,"f",2);
 					cout << endl;
 					printErrorInformation(minusDS,"mds",2);
 					cout << endl;
@@ -1379,10 +1413,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if (!checkInv.good()) return 1;
 
 			//assigning values to phi
-			p += delta;
+			f += delta;
 		
 			//passing changes on to complex vector
-			Cp = vecComplex(p,ps.N*ps.NT);
+			Cf = vecComplex(f,ps.N*ps.NT);
 			
 /*----------------------------------------------------------------------------------------------------------------------------
 	13. printing early 2
@@ -1396,10 +1430,10 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			so_tp.printType = SaveOptions::ascii;
 			Filename basic = (string)("data/"+timenumber+"basic_fLoop_"+numberToString<uint>(fileLoop)\
 								+"_loop_"+numberToString<uint>(loop)+"_run_"+numberToString<uint>(runs_count)+".dat");
-			if ((opts.printChoice).compare("p")==0 || (opts.printChoice).compare("e")==0) {
+			if ((opts.printChoice).compare("f")==0 || (opts.printChoice).compare("e")==0) {
 				Filename pEFile = basic;
 				pEFile.ID = "mainpE";
-				save(pEFile,so_tp,p);
+				save(pEFile,so_tp,f);
 			}
 			if ((opts.printChoice).compare("d")==0 || (opts.printChoice).compare("e")==0) {
 				Filename dEFile = basic;
@@ -1422,8 +1456,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			double maxDS = minusDS.maxCoeff();
 			double minDS = minusDS.minCoeff();
 			if (-minDS>maxDS) maxDS = -minDS;
-			double maxP = p.maxCoeff();
-			double minP = p.minCoeff();
+			double maxP = f.maxCoeff();
+			double minP = f.minCoeff();
 			if (-minP>maxP) maxP = -minP;
 			double normDelta = delta.norm();
 		
@@ -1471,7 +1505,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- printing results to terminal
 		- printing results to file
 		- printing (and plotting if vectors):
-			- p
+			- f
 			- linErg
 			- erg
 			- if printEverything:
@@ -1634,7 +1668,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			tpFile = "data/"+timenumber+"mainp_fLoop_"+numberToString<uint>(fileLoop)\
 					+"_loop_"+numberToString<uint>(loop)+"_step_0.data";
 		}
-		save(tpFile,so_tp,p);
+		save(tpFile,so_tp,f);
 		if (plotEverything)
 			plot(tpFile,po_tp);
 		
