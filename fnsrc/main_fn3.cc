@@ -65,7 +65,9 @@ string rank = "0";
 Options opts;
 Closenesses closenesses;
 string optionsFile = "optionsM";
+string inputsFile = "inputsM";
 string closenessesFile = "closenesses";
+string pIn = "";
 
 // cos and cerr files
 string coFile, ceFile;
@@ -76,8 +78,12 @@ else if (argc % 2 && argc>1) {
 	for (uint j=0; j<(uint)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
-		if (id.compare("opts")==0 || id.compare("options")==0) optionsFile = argv[2*j+2];
-		else if (id.compare("close")==0 || id.compare("closenesses")==0) closenessesFile = argv[2*j+2];
+		if (id.compare("opts")==0 || id.compare("options")==0) 				optionsFile = argv[2*j+2];
+		else if (id.compare("inputs")==0) 									inputsFile = argv[2*j+2];
+		else if (id.compare("close")==0 || id.compare("closenesses")==0) 	closenessesFile = argv[2*j+2];
+		else if (id.compare("co")==0) 										coFile = argv[2*j+2];
+		else if (id.compare("ce")==0) 										ceFile = argv[2*j+2];
+		else if (id.compare("pIn")==0 || id.compare("pin")==0) 				pIn = argv[2*j+2];
 	}
 }
 else if (argc != 1) {
@@ -100,32 +106,32 @@ else if (argc % 2 && argc>1) {
 	for (uint j=0; j<(uint)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
-		if (id.compare("tn")==0 || id.compare("timenumber")==0) timenumber = argv[2*j+2];
-		else if (id.compare("co")==0) coFile = (string)argv[2*j+2];
-		else if (id.compare("ce")==0) ceFile = (string)argv[2*j+2];
-		else if (id.compare("opts")==0 || id.compare("options")==0);
+		if (id.compare("opts")==0 || id.compare("options")==0);
 		else if (id.compare("close")==0 || id.compare("closenesses")==0);
-		else if (id.compare("amp")==0) opts.amp = stn<double>(argv[2*j+2]);
-		else if (id.compare("open")==0) opts.open = stn<double>(argv[2*j+2]);
-		else if (id.compare("alpha")==0) opts.alpha = stn<double>(argv[2*j+2]);
-		else if (id.compare("zmx")==0) opts.zmx = argv[2*j+2];
-		else if (id.compare("zmt")==0) opts.zmt = argv[2*j+2];
-		else if (id.compare("bds")==0) opts.bds = argv[2*j+2];
-		else if (id.compare("inF")==0) opts.inF = argv[2*j+2];
-		else if (id.compare("minTimenumberLoad")==0 || id.compare("mintn")==0) opts.minTimenumberLoad = argv[2*j+2];
-		else if (id.compare("maxTimenumberLoad")==0 || id.compare("maxtn")==0) opts.maxTimenumberLoad = argv[2*j+2];
-		else if (id.compare("minfLoopLoad")==0 || id.compare("minfLoopLoad")==0) opts.minfLoopLoad = argv[2*j+2];
-		else if (id.compare("maxfLoopLoad")==0 || id.compare("maxfLoopLoad")==0) opts.maxfLoopLoad = argv[2*j+2];
-		else if (id.compare("minLoopLoad")==0 || id.compare("minll")==0) opts.minLoopLoad = argv[2*j+2];
-		else if (id.compare("maxLoopLoad")==0 || id.compare("maxll")==0) opts.maxLoopLoad = argv[2*j+2];
-		else if (id.compare("loopChoice")==0) opts.loopChoice = argv[2*j+2];
-		else if (id.compare("loopMin")==0) opts.loopMin = stn<double>(argv[2*j+2]);
-		else if (id.compare("loopMax")==0) opts.loopMax = stn<double>(argv[2*j+2]);
-		else if (id.compare("epsiTb")==0) opts.epsiTb = stn<double>(argv[2*j+2]);
-		else if (id.compare("epsiTheta")==0) opts.epsiTheta = stn<double>(argv[2*j+2]);
-		else if (id.compare("loops")==0) opts.loops = stn<uint>(argv[2*j+2]);
-		else if (id.compare("printChoice")==0) opts.printChoice = argv[2*j+2];
-		else if (id.compare("rank")==0) rank = argv[2*j+2];
+		else if (id.compare("co")==0);
+		else if (id.compare("ce")==0);
+		else if (id.compare("tn")==0 || id.compare("timenumber")==0) 			timenumber = argv[2*j+2];
+		else if (id.compare("amp")==0) 											opts.amp = stn<double>(argv[2*j+2]);
+		else if (id.compare("open")==0) 										opts.open = stn<double>(argv[2*j+2]);
+		else if (id.compare("alpha")==0) 										opts.alpha = stn<double>(argv[2*j+2]);
+		else if (id.compare("zmx")==0) 											opts.zmx = argv[2*j+2];
+		else if (id.compare("zmt")==0) 											opts.zmt = argv[2*j+2];
+		else if (id.compare("bds")==0) 											opts.bds = argv[2*j+2];
+		else if (id.compare("inF")==0) 											opts.inF = argv[2*j+2];
+		else if (id.compare("minTimenumberLoad")==0 || id.compare("mintn")==0) 	opts.minTimenumberLoad = argv[2*j+2];
+		else if (id.compare("maxTimenumberLoad")==0 || id.compare("maxtn")==0) 	opts.maxTimenumberLoad = argv[2*j+2];
+		else if (id.compare("minfLoopLoad")==0 || id.compare("minfLoopLoad")==0)opts.minfLoopLoad = argv[2*j+2];
+		else if (id.compare("maxfLoopLoad")==0 || id.compare("maxfLoopLoad")==0)opts.maxfLoopLoad = argv[2*j+2];
+		else if (id.compare("minLoopLoad")==0 || id.compare("minll")==0) 		opts.minLoopLoad = argv[2*j+2];
+		else if (id.compare("maxLoopLoad")==0 || id.compare("maxll")==0) 		opts.maxLoopLoad = argv[2*j+2];
+		else if (id.compare("loopChoice")==0) 									opts.loopChoice = argv[2*j+2];
+		else if (id.compare("loopMin")==0) 										opts.loopMin = stn<double>(argv[2*j+2]);
+		else if (id.compare("loopMax")==0) 										opts.loopMax = stn<double>(argv[2*j+2]);
+		else if (id.compare("epsiTb")==0) 										opts.epsiTb = stn<double>(argv[2*j+2]);
+		else if (id.compare("epsiTheta")==0) 									opts.epsiTheta = stn<double>(argv[2*j+2]);
+		else if (id.compare("loops")==0) 										opts.loops = stn<uint>(argv[2*j+2]);
+		else if (id.compare("printChoice")==0) 									opts.printChoice = argv[2*j+2];
+		else if (id.compare("rank")==0) 										rank = argv[2*j+2];
 		else {
 			cerr << "input " << id << " unrecognized" << endl;
 			return 1;

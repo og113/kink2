@@ -66,6 +66,10 @@ main: $(ODIR)/main.o  $(FNODIR)/main_fn.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named main has been compiled
 	
+main3: $(ODIR)/main3.o  $(FNODIR)/main_fn3.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named main3 has been compiled
+	
 plot: $(ODIR)/plot.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named plot has been compiled

@@ -243,6 +243,29 @@ uint countColumns(const string & file_to_count) {
     return counter;
 }
 
+// countColumns
+uint countColumns(const string & file_to_count, const char& sep) {
+	ifstream fin;
+	fin.open(file_to_count.c_str(), ios::in);
+	if (!fin.good()) cerr << "countColumns error: " << file_to_count << " not opened properly." << endl;
+	string line;
+	unsigned int counter = 0;
+	while(!fin.eof()) {
+		getline(fin,line);
+		if(line.empty()) continue;
+		else {
+			stringstream ss(line);
+			string temp;
+			while (getline(ss,temp,sep)) {
+				counter++;
+			}
+			break;
+		}
+	}		
+	fin.close();
+    return counter;
+}
+
 // countDoubles
 uint countDoubles(const string& f) {
 	uint lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification

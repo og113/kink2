@@ -1,0 +1,25 @@
+to do:
+is DDS symmetric? if not to what degree?
+find negative eigenvales and eigenvectors of DDS in c++, probably best to use lapack or something similar
+reinstall eigen (and maybe subsiduaries too) on laptop - too many errors!
+
+
+notes from today's talk with toby and arttu:
+1) consider compactifying time
+2) consider factoring off oscillatory behaviour (especially important in compactified time)
+3) need to do x-x0=int(dp/sqrt(2*V(p))) integral for the case of degenerate minima - this is because otherwise there are oscillations which are not invertible - V has linear term so integral doesn't converge (ish)
+4) consider rewriting laplacian with higher accuracy - can massively reduce the number or required lattice points - spectral representation so that k^2 is represented exactly, rather than sin(k^2) or whatever we have now
+
+more recent notes:
+need to develop main
+-loop over input files:
+	in order to do this it would be good to have the file linked uniquely to the inputs used to generate it
+	write some code to come up with some unique numbering system - perhaps based on date and time
+	files could be linked this way - i.e. data files and inputs files
+	want a second mainInputs file which just has a couple of numbers used to define the range of files loaded
+-merge with pi.cc which has had lots of printing etc improvements - add functions to calculate erg, linErg etc.
+-need to sort out linErg - this is v important and is linked to sorting out the boundary conditions for non-zero theta
+	first, use by-hand definitions of discrete fourier transforms and see how that compares
+-should add a check that erg is not too large for the lattice spacing
+
+only later is it worth putting in all that stuff with dE->epsilon and using other potentials and finding p by integrating numerically

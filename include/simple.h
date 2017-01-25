@@ -125,6 +125,9 @@ uint countLines(const string & f);
 // count columns
 uint countColumns(const string& f);
 
+// count columns
+uint countColumns(const string& f, const char& separator);
+
 // count doubles (binary)
 uint countDoubles(const string& f);
 

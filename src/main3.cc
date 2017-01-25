@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------------------------------------------------------
-	main2
+	main3
 		program to give simple wrapper for main
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
-#include "main_fn2.h"
+#include "main_fn3.h"
 
 using namespace std;
 
@@ -33,7 +33,7 @@ for (uint j=0; j<(uint)argc; j++) {
 	2. running main_fn
 ----------------------------------------------------------------------------------------------------------------------------*/
 int returnValue;
-returnValue = main_fn2(argc,argv_main);
+returnValue = main_fn3(argc,argv_main);
 
 if (returnValue!=0) {
 	cerr << "return " << returnValue << " on running main2" << endl;
