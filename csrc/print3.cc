@@ -298,6 +298,40 @@ void loadVectorCsvAppend(const string& f,  T& v) {
 	}
 }
 
+// load mat  - binary - only works for square matrices
+void loadMatrixBinary(const string& f, Eigen::MatrixXd& m) {
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	if (!is.good()) {
+		cerr << "cannot read from " << f << endl;
+	}
+	uint pos = is.tellg();
+	int lines = -1;
+	double d;
+	while (!is.eof()) {
+		is.read(reinterpret_cast<char*>(&d),sizeof(double));
+		lines++;
+	}
+	if (lines==-1) {
+		cerr << "load error: no lines in file " << f << endl;
+		return;
+	}
+	is.clear();
+	is.seekg(pos);
+	uint rows = (uint)sqrt(lines);
+	if (abs((double)rows-sqrt(lines))>MIN_NUMBER*1.0e2) {
+		cerr << "load mat error: matrix in " << f << " not square" << endl; 
+	}
+	m = Eigen::MatrixXd::Zero(rows,rows);
+	for (uint j=0; j<rows; j++) {
+		for (uint k=0; k<rows; k++) {
+			is.read(reinterpret_cast<char*>(&d),sizeof(double));
+			m(j,k) = d;
+		}
+	}
+	is.close();
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	3. explicit instantiation
 -------------------------------------------------------------------------------------------------------------------------*/

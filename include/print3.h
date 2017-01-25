@@ -70,4 +70,7 @@ void loadVectorAsciiColumn(const string& f, T& v, const uint& col);
 template <class T>
 void loadVectorCsvAppend(const string& f,  T& v);
 
+// loadMatrixBinary
+void loadMatrixBinary(const string& f, Eigen::MatrixXd& m)
+
 #endif // __PRINT_H_INCLUDED__
