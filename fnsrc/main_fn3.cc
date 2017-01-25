@@ -17,9 +17,10 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_poly.h>
 #include <gsl/gsl_roots.h>
+#include "analysis.h"
 #include "eigen_extras.h"
-#include "main_fn3.h"
 #include "main.h"
+#include "main_fn3.h"
 
 //#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
 
@@ -27,7 +28,7 @@
 ----------------------------------------------------------------------------------------------------------------------------
 	CONTENTS
 		1 - argv inputs, loading options, closenesses
-		2 - Folders
+		2 - ParametersRange, Stepper
 		3 - beginning file loop
 		4 - beginning parameter loop
 		5 - assigning potential functions
@@ -64,9 +65,9 @@ string rank = "0";
 // options to load
 Options opts;
 Closenesses closenesses;
-string optionsFile = "optionsM";
-string inputsFile = "inputsM";
-string closenessesFile = "closenesses";
+string optionsFile = "nrinputs/options0";
+string inputsFile = "nrinputs/inputs0";
+string closenessesFile = "nrinputs/closenesses0";
 string pIn = "";
 
 // cos and cerr files
@@ -107,26 +108,15 @@ else if (argc % 2 && argc>1) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
 		if (id.compare("opts")==0 || id.compare("options")==0);
+		else if (id.compare("inputs")==0);
 		else if (id.compare("close")==0 || id.compare("closenesses")==0);
 		else if (id.compare("co")==0);
 		else if (id.compare("ce")==0);
 		else if (id.compare("tn")==0 || id.compare("timenumber")==0) 			timenumber = argv[2*j+2];
-		else if (id.compare("amp")==0) 											opts.amp = stn<double>(argv[2*j+2]);
-		else if (id.compare("open")==0) 										opts.open = stn<double>(argv[2*j+2]);
-		else if (id.compare("alpha")==0) 										opts.alpha = stn<double>(argv[2*j+2]);
 		else if (id.compare("zmx")==0) 											opts.zmx = argv[2*j+2];
 		else if (id.compare("zmt")==0) 											opts.zmt = argv[2*j+2];
 		else if (id.compare("bds")==0) 											opts.bds = argv[2*j+2];
 		else if (id.compare("inF")==0) 											opts.inF = argv[2*j+2];
-		else if (id.compare("minTimenumberLoad")==0 || id.compare("mintn")==0) 	opts.minTimenumberLoad = argv[2*j+2];
-		else if (id.compare("maxTimenumberLoad")==0 || id.compare("maxtn")==0) 	opts.maxTimenumberLoad = argv[2*j+2];
-		else if (id.compare("minfLoopLoad")==0 || id.compare("minfLoopLoad")==0)opts.minfLoopLoad = argv[2*j+2];
-		else if (id.compare("maxfLoopLoad")==0 || id.compare("maxfLoopLoad")==0)opts.maxfLoopLoad = argv[2*j+2];
-		else if (id.compare("minLoopLoad")==0 || id.compare("minll")==0) 		opts.minLoopLoad = argv[2*j+2];
-		else if (id.compare("maxLoopLoad")==0 || id.compare("maxll")==0) 		opts.maxLoopLoad = argv[2*j+2];
-		else if (id.compare("loopChoice")==0) 									opts.loopChoice = argv[2*j+2];
-		else if (id.compare("loopMin")==0) 										opts.loopMin = stn<double>(argv[2*j+2]);
-		else if (id.compare("loopMax")==0) 										opts.loopMax = stn<double>(argv[2*j+2]);
 		else if (id.compare("epsiTb")==0) 										opts.epsiTb = stn<double>(argv[2*j+2]);
 		else if (id.compare("epsiTheta")==0) 									opts.epsiTheta = stn<double>(argv[2*j+2]);
 		else if (id.compare("loops")==0) 										opts.loops = stn<uint>(argv[2*j+2]);
@@ -151,106 +141,82 @@ fstream ces;
 ces.open(ceFile.c_str(),fstream::app);
 
 /*----------------------------------------------------------------------------------------------------------------------------
-	2. Folders
-		- FilenameAttributes for defining FilenameComparator
-		- FilenameComparator
-		- pFolder
-		- inputsFolder
-		- removeUnshared
-		- printing folders
+	2. ParametersRange, Stepper
 		
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-// FilenameAttributes for defining FilenameComparator
-FilenameAttributes fa_low, fa_high;
-fa_low.Directory = "data";
-fa_high.Directory = "data";
-fa_low.Timenumber = opts.minTimenumberLoad;
-fa_high.Timenumber = opts.minTimenumberLoad;
-(fa_low.Extras).push_back(StringPair("fLoop",opts.minfLoopLoad));
-(fa_high.Extras).push_back(StringPair("fLoop",opts.maxfLoopLoad));
-(fa_low.Extras).push_back(StringPair("loop",opts.minLoopLoad));
-(fa_high.Extras).push_back(StringPair("loop",opts.maxLoopLoad));
-if ((opts.inF).size()>1 && ((opts.loopChoice).substr(0,5)).compare("const")==0) {
-	if ((opts.inF)[1]=='n') {
-		(fa_low.Extras).push_back(StringPair("step","1"));
-		(fa_high.Extras).push_back(StringPair("step","1"));
-	}
-}
-
-// FilenameComparator
-FilenameComparator fc(fa_low,fa_high);
-Folder allFiles(fc);
-
-// pFolder
-if ((opts.inF)[0]=='p') {
-	fa_low.ID = "tp";
-	fa_high.ID = "tp";
-}
-else if ((opts.inF)[0]=='m') {
-	fa_low.ID = "mainp";
-	fa_high.ID = "mainp";
-}
-else {
-	ces << "inF error: " << opts.inF << " not recognised" << endl;
-	if ((opts.printChoice).compare("gui")==0)
-		cerr << "inF error: " << opts.inF << " not recognised" << endl;
+// parameters
+ParametersRange pr;
+pr.load(inputsFile);
+Parameters p = pr.Min, pold = pr.Min;
+if (p.empty()) {
+	cerr << "Parameters empty: nothing in inputs file: " << inputsFile << endl;
 	return 1;
 }
 
-if ((opts.inF).size()>1) {
-	if ((opts.inF)[1]=='n') {
-		fa_low.Suffix = ".data";
-		fa_high.Suffix = ".data";
+// initializing stepper
+StepperOptions stepOpts;
+stepOpts.tol = 1.0;
+Point2d point;
+if (stepargv!=StepperArgv::none) {
+	{
+		ifstream is;
+		is.open(stepperInputsFile.c_str());
+		if (is.good()) {
+			is >> stepOpts;
+			is.close();
+			(stepperOutputsFile.Extras).push_back(StringPair("tol",nts(stepOpts.tol)));
+			(stepperOutputsFile.Extras).push_back(StringPair("aim",nts(stepOpts.aim)));
+		}
+		else {
+			cerr << "Error: cannot open stepper inputs file, " << stepperInputsFile << endl;
+			return 1;
+		}
+	}
+	if (poto==PotentialOptions::thermal || disjoint) {
+		point(p.B,p.T);
+		//stepOpts.epsi_x *= (abs(p.B)>MIN_NUMBER? p.B: 1.0);
+		//stepOpts.epsi_y *= (abs(p.T)>MIN_NUMBER? p.T: 1.0);
 	}
 	else {
-		fa_low.Suffix = ".dat";
-		fa_high.Suffix = ".dat";
+		point(p.B,p.P4);
+		//stepOpts.epsi_x *= (abs(p.B)>MIN_NUMBER? p.B: 1.0);
+		//stepOpts.epsi_y *= (abs(p.P4)>MIN_NUMBER? p.P4: 1.0);
 	}
 }
-else {
-	fa_low.Suffix = ".dat";
-	fa_high.Suffix = ".dat";
-}
-fc.set(fa_low,fa_high);
-Folder pFolder(fc);
-
-// inputsFolder
-if ((opts.inF)[0]=='p') {
-	fa_low.ID = "inputsP";
-	fa_high.ID = "inputsP";
-}
-else if ((opts.inF)[0]=='m') {
-	fa_low.ID = "inputsM";
-	fa_high.ID = "inputsM";
-}
-if ((opts.inF).size()>1 && ((opts.loopChoice).substr(0,5)).compare("const")==0) {
-	(fa_low.Extras).resize(fa_low.Extras.size()-1);
-	(fa_high.Extras).resize(fa_high.Extras.size()-1);
-}
-fa_low.Suffix = "";
-fa_high.Suffix = "";
-fc.set(fa_low,fa_high);
-Folder inputsFolder(fc);
-
-// removeUnshared - not quite working, should be based soley on timenumber and loop
-// removeUnshared(pFolder,inputsFolder);
-
-// printing folders
-if (pFolder.size()>0 && inputsFolder.size()>0) {
-	cos << endl << "inputs: " << endl << pFolder << inputsFolder << endl;
-	if ((opts.printChoice).compare("gui")==0)
-		cout << endl << "inputs: " << endl << pFolder << inputsFolder << endl;
-}
-else {
-	ces << endl << "not files found for options:" << endl;
-	ces << opts << endl;
-	if ((opts.printChoice).compare("gui")==0) {
-		cerr << endl << "not files found for options:" << endl;
-		cerr << opts << endl;
+Stepper stepper(stepOpts,point);
+if (stepperOutputsFile.exists() && stepargv!=StepperArgv::none) {
+	stepper.load(stepperOutputsFile);
+	if (poto==PotentialOptions::thermal || disjoint) {
+		p.B = stepper.x();
+		p.T = stepper.y();
+		pold.B = (stepper.lastStep()).X;
+		pold.T = (stepper.lastStep()).Y;
 	}
-	return 1;
+	else {
+		p.B = stepper.x();
+		p.P4 = stepper.y();
+		pold.B = (stepper.lastStep()).X;
+		pold.P4 = (stepper.lastStep()).Y;
+	}
 }
+
+// results
+string resultsFile = (pass? "results/nr/nr7pass.csv":"results/nr/nr7.csv");
+uint idSizeResults = 3, datumSizeResults = 17;
+vector<string> idCheck(idSizeResults);
+idCheck[idSizeResults-1] = potExtras.second;
+NewtonRaphsonData results(resultsFile,idSizeResults,datumSizeResults);
+
+// errors
+string errorsFile = "results/nr/nr7error.csv";
+uint idSizeErrors = 4, datumSizeErrors = 13;
+vector<string> idCheckErrors(idSizeErrors);
+idCheckErrors[idSizeErrors-1] = potExtras.second;
+NewtonRaphsonData errors(errorsFile,idSizeErrors,datumSizeErrors);
+
+// printing timenumber and pot
+cout << "timenumber: " << timenumber << ", pot: " << potExtras.second << endl;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	3. beginning file loop
@@ -332,16 +298,17 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Parameters ps = psu;
 		if (opts.loops>1) {
 			if ((opts.loopChoice)[0]=='N') {
-				bool anythingChanged = ps.changeParameters(opts.loopChoice,(uint)stepper.x());
-				if (loop==0 && anythingChanged) {
+				ps.changeParameters(opts.loopChoice,(uint)stepper.x());
+				// BEFORE WHEN WE HAD A BOOLEAN FROM CHANGE PARAMETERS WE COULD FIND OUT IF THERE WAS A CHANGE ON LOOP=0. NOW WE NO LONGER CAN.
+				if (loop==0) {
 					cos << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 					if ((opts.printChoice).compare("gui")==0)
 						cos << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
 			else if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
-				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
-				if (loop==0 && anythingChanged) {
+				ps.changeParameters(opts.loopChoice,stepper.x()); // NO LONGER A BOOLEAN, NOW GIVES VOID
+				if (loop==0) {
 					cos << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
 					if ((opts.printChoice).compare("gui")==0)
 						cos << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
