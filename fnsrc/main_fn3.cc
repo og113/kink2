@@ -774,7 +774,6 @@ for (uint pl=0; pl<Npl; pl++) {
 		}
 		double normX = chiX.norm();
 		double normT = chiT.norm();
-		normT = pow(normT,0.5);
 		if (abs(normX)<MIN_NUMBER || abs(normT)<MIN_NUMBER) {
 			ces << "norm of chiX = " << normX << ", norm of chiT = " << normT << endl;
 			if (verbose)

@@ -499,7 +499,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				so_simple.printType = SaveOptions::ascii;
 				load(eigVecFile,so_simple,negVec); // should automatically interpolate
 				so_simple.printType = SaveOptions::binary;
-				
+				if (negVec.size()!=ps.N)
+					negVec = interpolate1d(negVec,ps.N);
 				// ##############################################################################################################################################
 				/*Filename toNewFileEigVec = filenameMain(ps,"","eigenvector","negVec",".data");
 				saveVectorBinary(toNewFileEigVec,negVec);
@@ -757,7 +758,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 			double normX = chiX.norm();
 			double normT = chiT.norm();
-			normT = pow(normT,0.5);
 			if (abs(normX)<MIN_NUMBER || abs(normT)<MIN_NUMBER) {
 				ces << "norm of chiX = " << normX << ", norm of chiT = " << normT << endl;
 				if ((opts.printChoice).compare("gui")==0)
