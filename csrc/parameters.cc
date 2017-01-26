@@ -255,6 +255,27 @@ istream& PrimaryParameters::readBinary(istream& is) {
 	return is;
 }
 
+// copying
+void PrimaryParameters::copy(const PrimaryParameters& rhs) {
+	Pot = rhs.Pot;
+	N = rhs.N;
+	Na = rhs.Na;
+	Nb = rhs.Nb;
+	Nc = rhs.Nc;
+	Na = rhs.Na;
+	LoR = rhs.LoR;
+	DE = rhs.DE;
+	Tb = rhs.Tb;
+	Theta = rhs.Theta;
+	Reg = rhs.Reg;
+}
+
+// copying
+PrimaryParameters& PrimaryParameters::operator=(const PrimaryParameters& rhs) {
+	copy(rhs);
+	return *this;
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	3.SecondaryParameters member functions
 		- wrapped functions
@@ -477,7 +498,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 			R = S1/pp.DE;									////////// R
 		else
 			R = 10.0;										////////// R
-		action0 = -pi*epsilon*pow(R,2)/2.0 + pi*R*S1;		////////// action0
+		action0 = -PI*epsilon*pow(R,2)/2.0 + PI*R*S1;		////////// action0
 		L = pp.LoR*R;										////////// L
 		if (pp.Tb<R) {
 			double angle = asin(pp.Tb/R);
@@ -490,7 +511,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		minima[0] = 0.0; minima[1] = 0.0; 					////////// minima
 		minima0 = minima;									////////// minima0
 		R = 1.0;											////////// R
-		action0 = 8.0*pow(pi,2.0)/3.0;						////////// action0
+		action0 = 8.0*pow(PI,2.0)/3.0;						////////// action0
 		L = pp.LoR*R;										////////// L
 	}
 	
@@ -793,6 +814,18 @@ istream& Parameters::readBinary(istream& is) {
 	return is;
 }
 
+// copying
+void Parameters::copy(const Parameters& rhs) {
+	PrimaryParameters::copy(static_cast<const PrimaryParameters&>(rhs));
+	setSecondaryParameters();
+}
+
+// copying
+Parameters& Parameters::operator=(const Parameters& rhs) {
+	copy(rhs);
+	return *this;
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	5. ParametersRange
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -897,6 +930,8 @@ void ParametersRange::load(const string& filename) {
 	is >> dross >> dross >> Min.Theta >> dross >> Max.Theta >> dross >> Steps[8] >> dross;
 	is >> dross >> dross >> Min.Reg >> dross >> Max.Reg >> dross >> Steps[9] >> dross;
 	is.close();
+		Min.setSecondaryParameters();
+	Max.setSecondaryParameters();
 }
 
 // empty
@@ -916,6 +951,8 @@ ostream& ParametersRange::writeBinary(ostream& os) const {
 istream& ParametersRange::readBinary(istream& is) {
 	Min.readBinary(is);
 	Max.readBinary(is);
+	Min.setSecondaryParameters();
+	Max.setSecondaryParameters();
 	is.read(reinterpret_cast<char*>(&Steps[0]),Size*sizeof(uint));
 	return is;
 }

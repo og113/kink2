@@ -81,7 +81,7 @@ Closenesses tols;
 string optionsFile = "nrinputs/options0";
 string inputsFile = "nrinputs/inputs0";
 string tolsFile = "nrinputs/tols0";
-string fIn = "";
+string fIn;
 
 // cos and cerr files
 string coFile, ceFile;
@@ -120,9 +120,11 @@ else if (argc != 1) {
 // loading opts
 opts.load(optionsFile);
 //opts.print();
+cout << "options: " << optionsFile << endl;
 
 // loading tols
 tols.load(tolsFile);
+cout << "tols: " << tolsFile << endl;
 
 // other possible inputs
 bool trivialChecks = false;
@@ -178,10 +180,10 @@ if (coFile.empty()) coFile = "data/coe/"+timenumber+"co.txt";
 if (ceFile.empty()) ceFile = "data/coe/"+timenumber+"ce.txt";
 
 // beginning cos and ces streams
-fstream cos;
+ofstream cos;
 cos.open(coFile.c_str(),fstream::app);
 
-fstream ces;
+ofstream ces;
 ces.open(ceFile.c_str(),fstream::app);
 
 // stepper
@@ -226,6 +228,7 @@ if (!stepperArgv.empty()) {
 // ParametersRange
 ParametersRange pr;
 pr.load(inputsFile);
+cout << "inputsFile: " << inputsFile << endl;
 Parameters p = pr.Min, pold = pr.Min;
 if (p.empty()) {
 	ces << "Parameters empty: nothing in inputs file: " << inputsFile << endl;
@@ -468,30 +471,33 @@ for (uint pl=0; pl<Npl; pl++) {
 			loadMatrixBinary(modesF,modes);
 			loadVectorBinary(freqsF,freqs);
 			loadVectorBinary(freqsExpF,freqs_exp);
+	}
+	else {
+		bool approxOmega = true;
+		if (!approxOmega) {
+			numericalModes(modes,freqs,freqs_exp,p);
 		}
 		else {
-			bool approxOmega = true;
-			if (!approxOmega) {
-				numericalModes(modes,freqs,freqs_exp,p);
-			}
-			else {
-				analyticModes(modes,freqs,freqs_exp,p);
-			}
-			omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,p);
-			saveMatrixBinary(omegaM1F,omega_m1);
-			saveMatrixBinary(omega0F,omega_0);
-			saveMatrixBinary(omega1F,omega_1);
-			saveMatrixBinary(omega2F,omega_2);
-			saveMatrixBinary(modesF,modes);
-			saveVectorBinary(freqsF,freqs);
-			saveVectorBinary(freqsExpF,freqs_exp);
+			analyticModes(modes,freqs,freqs_exp,p);
 		}
+		omegasFn(approxOmega,modes,freqs,omega_m1,omega_0,omega_1,omega_2,p);
+		saveMatrixBinary(omegaM1F,omega_m1);
+		saveMatrixBinary(omega0F,omega_0);
+		saveMatrixBinary(omega1F,omega_1);
+		saveMatrixBinary(omega2F,omega_2);
+		saveMatrixBinary(modesF,modes);
+		saveVectorBinary(freqsF,freqs);
+		saveVectorBinary(freqsExpF,freqs_exp);
+	}
 		
 	// loading negVec
 	vec negVec;
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
-		Filename negVecFile = filenameSpatial(p,baseFolder,"eigenvector","negVec",".dat");
-		loadVectorAscii(negVecFile,negVec);
+		Filename negVecFile = filenameSpatial(p,baseFolder,"eigenvector","negVec",suffix);
+		fprintf(cof,"%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
+		if (verbose)
+			printf("%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
+		loadVectorBinary(negVecFile,negVec);
 		if (negVec.size()!=p.N)
 			negVec = interpolate1d(negVec,p.N);
 		// THERE WAS A BUNCH MORE STUFF HERE FOR POT!=3 WHICH I HAVE REMOVED, SEE MAIN_FN.CC
@@ -539,14 +545,14 @@ for (uint pl=0; pl<Npl; pl++) {
 		if (!fIn.empty())
 			loadFile = fIn;
 		else if (opts.inF[0]=='m')
-			filenameMain(p,baseFolder,"field","fMain",suffix);
+			loadFile = filenameMain(p,baseFolder,"field","fMain",suffix);
 		else if (opts.inF[0]=='p')
-			filenameMain(p,baseFolder,"field","fpi",suffix);
+			loadFile = filenameMain(p,baseFolder,"field","fpi",suffix);
 	}
 	else 
 		loadFile = stepFile;
 	
-	if (loadFile.exists()) {
+	if (!loadFile.exists()) {
 		ces << "nrmain error: " << loadFile << " doesn't exist on pl = " << pl << ", moving to next parameter loop" << endl;
 		cerr << "nrmain error: " << loadFile << " doesn't exist on pl = " << pl << ", moving to next parameter loop" << endl;
 		continue; ///////// CONTINUE STATEMENT IF FILE DOESN'T EXIST
@@ -598,11 +604,6 @@ for (uint pl=0; pl<Npl; pl++) {
 		saveVectorAscii(earlyPrintFile,f);
 	}
 	
-	//############################################################ RETURN 0 ############################################################################
-	cerr << "ENDING EARLY IN TEST PHASE" << endl;
-	cerr << "########################################################################################################################" << endl;
-	return 0;
-	
 /*----------------------------------------------------------------------------------------------------------------------------
 8. beginning newton-raphson loop
 	- beginning newton-raphson loop	
@@ -611,8 +612,6 @@ for (uint pl=0; pl<Npl; pl++) {
 	- crude test of potential (to remove once done)
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-	//############################################################ CURRENT STATE ############################################################################
-	
 	bool passThrough = false;
 	//beginning newton-raphson loop	
 	while ((!checkSol.good() || !checkSolMax.good() || runsCount<min_runs) && !passThrough) {
@@ -1264,18 +1263,18 @@ for (uint pl=0; pl<Npl; pl++) {
 		if ((opts.printChoice).compare("l")==0 || (opts.printChoice).compare("e")==0) {
 			Filename earlyPrintFile = filenameMain(p,baseFolder,"ascii","linErgMainEarly",".dat");
 			(earlyPrintFile.Extras).push_back(StringPair("run",nts(runsCount)));
-			saveVectorAscii(earlyPrintFile,linErg);
+			saveComplexVectorAscii(earlyPrintFile,linErg);
 			earlyPrintFile = filenameMain(p,baseFolder,"ascii","ergMainEarly",".dat");
 			(earlyPrintFile.Extras).push_back(StringPair("run",nts(runsCount)));
-			saveVectorAscii(earlyPrintFile,erg);
+			saveComplexVectorAscii(earlyPrintFile,erg);
 		}
 		if ((opts.printChoice).compare("ab")==0 || (opts.printChoice).compare("e")==0) {
 			Filename earlyPrintFile = filenameMain(p,baseFolder,"ascii","bkMainEarly",".dat");
 			(earlyPrintFile.Extras).push_back(StringPair("run",nts(runsCount)));
-			saveVectorAscii(earlyPrintFile,a_k);
+			saveComplexVectorAscii(earlyPrintFile,a_k);
 			earlyPrintFile = filenameMain(p,baseFolder,"ascii","akMainEarly",".dat");
 			(earlyPrintFile.Extras).push_back(StringPair("run",nts(runsCount)));
-			saveVectorAscii(earlyPrintFile,b_k);
+			saveComplexVectorAscii(earlyPrintFile,b_k);
 		}
 	}
 	
@@ -1614,10 +1613,10 @@ for (uint pl=0; pl<Npl; pl++) {
 		// printing f to file
 		Filename fRes = filenameMain(p,baseFolder,"field","fMain",suffix);
 		saveVectorBinary(fRes,f);
-		Filename ergRes = filenameMain(p,baseFolder,"field","ergMain",suffix);
-		saveVectorBinary(fRes,erg);
-		Filename linErgRes = filenameMain(p,baseFolder,"field","linErgMain",suffix);
-		saveVectorBinary(fRes,linErg);
+		Filename ergRes = filenameMain(p,baseFolder,"energy","ergMain",suffix);
+		saveComplexVectorBinary(fRes,erg);
+		Filename linErgRes = filenameMain(p,baseFolder,"energy","linErgMain",suffix);
+		saveComplexVectorBinary(fRes,linErg);
 		
 		fprintf(cof,"%12s%50s\n","f     :",((string)fRes).c_str());
 		fprintf(cof,"%12s%50s\n","erg   :",((string)ergRes).c_str());

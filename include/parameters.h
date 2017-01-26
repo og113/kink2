@@ -91,6 +91,9 @@ struct PrimaryParameters {
 	bool empty() const;
 	ostream& writeBinary(ostream&) const;
 	istream& readBinary(istream&);
+	// copying
+	void copy(const PrimaryParameters&);
+	PrimaryParameters& operator=(const PrimaryParameters&);
 };
 
 // operator<<
@@ -188,6 +191,9 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	bool empty() const;
 	ostream& writeBinary(ostream&) const;
 	istream& readBinary(istream&);
+	// copying
+	void copy(const Parameters&);
+	Parameters& operator=(const Parameters&);
 };
 
 // operator<<

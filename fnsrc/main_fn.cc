@@ -20,6 +20,8 @@
 #include "eigen_extras.h"
 #include "main_fn.h"
 #include "main.h"
+#include "nr.h"
+#include "print3.h"
 
 //#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
 
@@ -276,7 +278,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.epsi_x = opts.epsiTb;
 		step_opts.epsi_y = opts.epsiTheta;
 		step_opts.angle0 = PI/2.0;
-		step_opts.closeness = closenesses.Step;
+		step_opts.tol = closenesses.Step;
 		step_opts.stepType = StepperOptions::constPlane;
 		step_opts.directed = StepperOptions::local;
 		point(psu.Tb,psu.Theta);
@@ -310,7 +312,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.angle0 = 0.0;
 		step_opts.stepType = StepperOptions::straight;
 		step_opts.directed = StepperOptions::undirected;
-		step_opts.closeness = closenesses.Step; // irrelevant here
+		step_opts.tol = closenesses.Step; // irrelevant here
 	}
 	Stepper stepper(step_opts,point);
 	
@@ -326,16 +328,16 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Parameters ps = psu;
 		if (opts.loops>1) {
 			if ((opts.loopChoice)[0]=='N') {
-				bool anythingChanged = ps.changeParameters(opts.loopChoice,(uint)stepper.x());
-				if (loop==0 && anythingChanged) {
+				ps.changeParameters(opts.loopChoice,(uint)stepper.x());
+				if (loop==0) {
 					cos << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 					if ((opts.printChoice).compare("gui")==0)
 						cos << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
 			else if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
-				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
-				if (loop==0 && anythingChanged) {
+				ps.changeParameters(opts.loopChoice,stepper.x());
+				if (loop==0) {
 					cos << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
 					if ((opts.printChoice).compare("gui")==0)
 						cos << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
@@ -488,7 +490,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				save(freqsExpF,so_simple,freqs_exp);
 			}
 		}
-
+		
 		// loading negVec
 		vec negVec;
 		if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
@@ -497,6 +499,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				so_simple.printType = SaveOptions::ascii;
 				load(eigVecFile,so_simple,negVec); // should automatically interpolate
 				so_simple.printType = SaveOptions::binary;
+				
+				// ##############################################################################################################################################
+				/*Filename toNewFileEigVec = filenameMain(ps,"","eigenvector","negVec",".data");
+				saveVectorBinary(toNewFileEigVec,negVec);
+				cout << "printing " << toNewFileEigVec << endl;*/
+				// ##############################################################################################################################################
 			}
 			else {
 				Filename eigVecFile;
@@ -613,6 +621,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if ((opts.printChoice).compare("gui")==0)
 				printf("%12s%30s\n","input: ",(lastPhi()).c_str());
 		}
+		
+		// ##############################################################################################################################################
+		/*Filename toNewFile = filenameMain(ps,"","field","fMain",".data");
+		saveVectorBinary(toNewFile,p);
+		cout << "printing " << toNewFile << endl;*/
+		// ##############################################################################################################################################
 		
 		// printing parameters
 		ps.print(cof);
@@ -1554,7 +1568,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				return 1;
 			}
 			double angleToPrint = (loop==0? 0.0: stepper.stepAngle());
-			if (absDiff(opts.loopMin,F)<stepper.closeness() && loop==0)
+			if (absDiff(opts.loopMin,F)<stepper.tol() && loop==0)
 				stepper.addResult(opts.loopMin);
 			else if (loop==0) {
 				opts.loopMin = F;

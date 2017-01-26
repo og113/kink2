@@ -29,6 +29,10 @@ n.b. for these functions to work, as templates, the class T be a vector of numbe
 template <class T>
 void saveVectorAscii(const string& f,  const T& v);
 
+// save - saveComplexVectorAscii
+template <class T>
+void saveComplexVectorAscii(const string& f,  const T& v);
+
 // save - saveVectorAsciiAppend
 template <class T>
 void saveVectorAsciiAppend(const string& f,  const T& v);
@@ -40,6 +44,9 @@ void saveVectorCsvAppend(const string& f,  const T& v);
 // save - saveVectorBinary
 template <class T>
 void saveVectorBinary(const string& f,  const T& v);
+
+// save - saveComplexVectorBinary
+void saveComplexVectorBinary(const string& f,  const Eigen::VectorXcd& v);
 
 // save - saveVectorBinaryAppend
 template <class T>
@@ -65,9 +72,16 @@ void saveSparseMatrixAscii(const string& f, const Eigen::SparseMatrix<double>& m
 template <class T>
 void loadVectorBinary(const string& f, T& v);
 
+// loadComplexVectorBinary
+void loadComplexVectorBinary(const string& f, Eigen::VectorXcd& v);
+
 // loadVectorAscii
 template <class T>
 void loadVectorAscii(const string& f, T& v);
+
+// loadComplexVectorAscii
+template <class T>
+void loadComplexVectorAscii(const string& f, T& v);
 
 // loadVectorAsciiColumn
 template <class T>

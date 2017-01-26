@@ -47,6 +47,26 @@ void saveVectorAscii(const string& f,  const T& v) {
 	}
 }
 
+
+// save - saveComplexVectorAscii
+template <class T>
+void saveComplexVectorAscii(const string& f,  const T& v) {
+	ofstream os;
+	os.open(f.c_str());
+	if (os.good()) {
+		os << left << setprecision(16);
+		for (uint j=0; j<v.size(); j++) {
+			os << setw(25) << real(v[j]) << setw(25) << imag(v[j]) << endl;
+		}
+		os.close();
+	}
+	else {
+		cerr << "saveComplexVectorAscii error: cannot write to " << f << endl;
+		os.close();
+		return;
+	}
+}
+
 // save - saveVectorAsciiAppend, appends as column
 template <class T>
 void saveVectorAsciiAppend(const string& f,  const T& v) {
@@ -124,6 +144,23 @@ void saveVectorBinary(const string& f,  const T& v) {
 		cerr << "saveVectorBinary error: cannot write to " << f << endl;
 		os.close();
 		return;
+	}
+}
+
+// save - saveComplexVectorBinary
+void saveComplexVectorBinary(const string& f,  const Eigen::VectorXcd& v) {
+	ofstream os;
+	os.open(f.c_str(),ios::binary);
+	const complex<double>* c;
+	if (os.good()) {
+		for (uint j=0; j<v.size(); j++) {
+			c = &v[j];
+			os.write(reinterpret_cast<const char*>(c),sizeof(complex<double>));
+		}
+		os.close();
+	}
+	else {
+		cerr << "saveComplexVectorBinary error: cannot write to " << f << endl;
 	}
 }
 
@@ -251,6 +288,28 @@ void loadVectorAscii(const string& f, T& v) {
 	}
 }
 
+// loadComplexVectorAscii
+template <class T>
+void loadComplexVectorAscii(const string& f, T& v) {
+	uint lines = countLines(f);
+	v.resize(lines);
+	ifstream is;
+	is.open(f.c_str());
+	double re, im;
+	if (is.good()) {
+		for (uint j=0; j<lines; j++) {
+			is >> re >> im;
+			v[j] = complex<double>(re,im);
+		}
+		is.close();
+	}
+	else {
+		cerr << "loadVectorAscii error: cannot read from " << f << endl;
+		is.close();
+		return;
+	}
+}
+
 // loadVectorBinary
 template <class T>
 void loadVectorBinary(const string& f, T& v) {
@@ -271,6 +330,28 @@ void loadVectorBinary(const string& f, T& v) {
 		is.close();
 		return;
 	}
+}
+
+// loadComplexVectorBinary
+void loadComplexVectorBinary(const string& f, Eigen::VectorXcd& v) {
+	complex<double> t;
+	uint lines = countComp(f);
+	v.resize(lines);
+	ifstream is;
+	is.open(f.c_str(),ios::binary);
+	if (is.good()) {
+		for (uint j=0; j<lines; j++) {
+			is.read(reinterpret_cast<char*>(&t),sizeof(complex<double>));
+			v[j] = t;
+		}
+		is.close();
+	}
+	else {
+		cerr << "loadComplexVectorBinary error: cannot read from " << f << endl;
+		is.close();
+		return;
+	}
+	is.close();
 }
 
 // loadVectorAsciiColumn
@@ -481,20 +562,24 @@ void loadSparseMatrixAscii(const string& f, Eigen::SparseMatrix<double>& m) {
 template void saveVectorBinary< vector<number> >(const string& f, const vector<number>& v);
 template void saveVectorBinaryAppend< vector<number> >(const string& f, const vector<number>& v);
 template void saveVectorAscii< vector<number> >(const string& f, const vector<number>& v);
+template void saveComplexVectorAscii< vector< complex<number> > >(const string& f, const vector< complex<number> >& v);
 template void saveVectorAsciiAppend< vector<number> >(const string& f, const vector<number>& v);
 template void saveVectorCsvAppend< vector<number> >(const string& f, const vector<number>& v);
 template void saveVectorCsvAppend< vector<string> >(const string& f, const vector<string>& v);
 template void saveVectorBinary< Eigen::VectorXd >(const string& f, const Eigen::VectorXd& v);
 template void saveVectorBinaryAppend< Eigen::VectorXd >(const string& f, const Eigen::VectorXd& v);
 template void saveVectorAscii< Eigen::VectorXd >(const string& f, const Eigen::VectorXd& v);
+template void saveComplexVectorAscii< Eigen::VectorXcd >(const string& f, const Eigen::VectorXcd& v);
 template void saveVectorAsciiAppend< Eigen::VectorXd >(const string& f, const Eigen::VectorXd& v);
 template void saveVectorCsvAppend< Eigen::VectorXd >(const string& f, const Eigen::VectorXd& v);
 
 // load
 template void loadVectorBinary< vector<number> >(const string& f, vector<number>& v);
 template void loadVectorAscii< vector<number> >(const string& f, vector<number>& v);
+template void loadComplexVectorAscii< vector< complex<number> > >(const string& f, vector< complex <number> >& v);
 template void loadVectorAsciiColumn< vector<number> >(const string& f, vector<number>& v, const uint& col);
 template void loadVectorBinary< Eigen::VectorXd >(const string& f, Eigen::VectorXd& v);
 template void loadVectorAscii< Eigen::VectorXd >(const string& f, Eigen::VectorXd& v);
+template void loadComplexVectorAscii< Eigen::VectorXcd >(const string& f, Eigen::VectorXcd& v);
 template void loadVectorAsciiColumn< Eigen::VectorXd >(const string& f, Eigen::VectorXd& v, const uint& col);
 template void loadVectorCsvAppend< vector<string> >(const string& f, vector<string>& v);
