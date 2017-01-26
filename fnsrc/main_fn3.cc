@@ -120,11 +120,12 @@ else if (argc != 1) {
 // loading opts
 opts.load(optionsFile);
 //opts.print();
-cout << "options: " << optionsFile << endl;
+cout << "main3" << endl << "====================================================================================================================" << endl;
+cout << endl << "options   : " << optionsFile << endl;
 
 // loading tols
 tols.load(tolsFile);
-cout << "tols: " << tolsFile << endl;
+cout << "tols      : " << tolsFile << endl;
 
 // other possible inputs
 bool trivialChecks = false;
@@ -283,8 +284,10 @@ NewtonRaphsonData errors(errorsFile,idSizeErrors,datumSizeErrors);
 string suffix = ((opts.inF).back()=='n'? ".data": ".dat");
 
 // printing timenumber and pot
-cos << "timenumber: " << timenumber << ", pot: " << p.Pot << endl;
-cout << "timenumber: " << timenumber << ", pot: " << p.Pot << endl;
+cos << "timenumber: " << timenumber << endl;
+cos << "pot       : " << p.Pot << endl;
+cout << "timenumber: " << timenumber << endl;
+cout << "pot       : " << p.Pot << endl;
 
 /*----------------------------------------------------------------------------------------------------------------------------
 	3. beginning parameter loop
@@ -297,13 +300,17 @@ cout << "timenumber: " << timenumber << ", pot: " << p.Pot << endl;
 
 // number of loops
 uint Npl = (stepargv==StepperArgv::none? pr.totalSteps(): steps);
-cos << "looping over " << Npl << " steps" << endl;
+cos << "steps     : " << Npl << " steps" << endl << endl;
 if (verbose)
-	cout << "looping over " << Npl << " steps" << endl;
+	cout << "steps     : " << Npl << " steps" << endl << endl;
 
 // starting loop
 for (uint pl=0; pl<Npl; pl++) {
-//defining a time and starting the clock
+	cos << "--------------------------------------------------------------------------------------------------------------------" << endl;
+	if (verbose)
+		cout << "--------------------------------------------------------------------------------------------------------------------" << endl;
+
+	//defining a time and starting the clock
 	clock_t time;
 	time = clock();
 	
@@ -558,9 +565,9 @@ for (uint pl=0; pl<Npl; pl++) {
 		continue; ///////// CONTINUE STATEMENT IF FILE DOESN'T EXIST
 	}
 	
-	fprintf(cof,"%12s%30s\n","loadFile: ",((string)loadFile).c_str());
+	fprintf(cof,"%12s%30s\n\n","loadFile: ",((string)loadFile).c_str());
 	if (verbose)
-		printf("%12s%30s\n","loadFile: ",((string)loadFile).c_str());
+		printf("%12s%30s\n\n","loadFile: ",((string)loadFile).c_str());
 		
 	//initializing phi (=f)
 	vec f;
@@ -1637,6 +1644,7 @@ for (uint pl=0; pl<Npl; pl++) {
 	fclose(cof);
 	} //ending parameter loop
 ces.close();
+cout << endl << "====================================================================================================================" << endl;
 
 return 0;
 }
