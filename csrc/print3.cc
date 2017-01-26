@@ -184,6 +184,48 @@ void saveMatrixAscii(const string& f, const Eigen::MatrixXd& m) {
 	F.close();
 }
 
+// saveSparseMatrixBinary
+/*void saveSparseMatrixBinary(const string& f, const Eigen::SparseMatrix<double>& m) {
+	ofstream os;
+	os.open(f.c_str(),ios::binary);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
+	const uint* row, col;
+	const double* d;
+	for (int l=0; l<m.outerSize(); ++l) {
+		for (Eigen::SparseMatrix<double>::InnerIterator it(m,l); it; ++it) {
+			row = &(it.row());
+			col = &(it.col());
+			d = &m(j,k);
+			os.write(reinterpret_cast<const char*>(row),sizeof(uint));
+			os.write(reinterpret_cast<const char*>(col),sizeof(uint));
+			os.write(reinterpret_cast<const char*>(d),sizeof(double));
+		}
+	}
+	os.close();
+}*/
+
+// saveSparseMatrixAscii
+void saveSparseMatrixAscii(const string& f, const Eigen::SparseMatrix<double>& m) {
+	ofstream os;
+	os.open(f.c_str(), ios::out);
+	if (!os.good()) {
+		cerr << "save error: stream not good for " << f << endl;
+		return;
+	}
+	os << left;
+	os.precision(16);
+	for (int l=0; l<m.outerSize(); ++l) {
+		for (Eigen::SparseMatrix<double>::InnerIterator it(m,l); it; ++it) {
+			os << setw(25) << it.row() << setw(25) << it.col(); // USED TO HAVE +1 ON it.row() AND it.col()
+			os << setw(25) << it.value() << endl;
+		}
+	}
+	os.close();
+}
+
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. load
@@ -298,6 +340,55 @@ void loadVectorCsvAppend(const string& f,  T& v) {
 	}
 }
 
+// loadMatrixAsci - only works for square matrices
+void loadMatrixAscii(const string& f, Eigen::MatrixXd& m) {
+
+	uint rowsF = countLines(f), rows;
+	uint columnsF = countColumns(f), columns;
+	
+	if (columnsF==1) {
+		rows = (uint)sqrt(rowsF);
+		columns = (uint)sqrt(rowsF);
+	}
+	else {
+		rows = rowsF;
+		columns = columnsF;
+	}
+	m = Eigen::MatrixXd::Zero(rows,columns);
+	
+	fstream is;
+	is.open(f.c_str(), ios::in);
+	string line;
+	uint j = 0, k = 0;
+	double v;
+	while (getline(is, line)) {
+		if (!line.empty()) {
+			istringstream ss(line);
+			if (columnsF==1) {
+				ss >> v;
+				m(j,k) = v;
+				k++;
+				if (k==columns) {
+					k = 0;
+					j++;
+				}
+			}
+			else {
+				while (ss >> v) {
+					m(j,k) = v;
+					k++;
+					if (k==columns) {
+						k = 0;
+						j++;
+					}
+				}
+			}
+		}
+	}
+	is.close();
+
+}
+
 // load mat  - binary - only works for square matrices
 void loadMatrixBinary(const string& f, Eigen::MatrixXd& m) {
 	ifstream is;
@@ -330,6 +421,56 @@ void loadMatrixBinary(const string& f, Eigen::MatrixXd& m) {
 		}
 	}
 	is.close();
+}
+
+// loadSparseMatrixBinary
+//void loadSparseMatrixBinary(const string& f, const Eigen::SparseMatrix<double>& m);
+// PROBABLY AUGHT TO SAVE AND LOAD FROM TRIPLETS SO THE sizeof(...) BIT WORKS
+
+// loadSparseMatrixAscii
+void loadSparseMatrixAscii(const string& f, Eigen::SparseMatrix<double>& m) {
+	uint fileLength = countLines(f);
+	Eigen::VectorXi to_reserve(fileLength); //an overestimate
+	to_reserve.setZero(fileLength);
+	fstream F;
+	F.open(f.c_str(), ios::in);
+	string line;
+	unsigned int nnz = 0, length = 0, count = 0, row, column;
+	double value;	
+	Eigen::VectorXi rowVec(fileLength), columnVec(fileLength);
+	vec valueVec(fileLength);
+	while (getline(F, line)) {
+		if (!line.empty()) {
+			istringstream ss(line);
+			ss >> row >> column >> value;
+			if (abs(value)>MIN_NUMBER) {
+				rowVec(count) = row;
+				columnVec(count) = column;
+				valueVec(count) = value;
+				to_reserve(row) = to_reserve(row) + 1;
+				nnz++;
+				count++;
+				if (row>length) {
+					length = row;
+				}
+			}
+		}
+	}
+	if (nnz==0) {
+		cerr << "loadSpMat failed, no data in file: " << f << endl;
+	}
+	to_reserve.conservativeResize(length);
+	rowVec.conservativeResize(count);
+	columnVec.conservativeResize(count);
+	valueVec.conservativeResize(count);
+	spMat M(length,length);
+	M.setZero(); //just making sure
+	M.reserve(to_reserve);
+	for (unsigned int l=0;l<count;l++) {
+		M.insert(rowVec(l),columnVec(l)) = valueVec(l);
+	}
+	M.makeCompressed();
+	m = M;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------

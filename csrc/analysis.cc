@@ -8,11 +8,9 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <gsl/gsl_sf_log.h>
-#include "analysis.h"
 #include "folder.h"
-#include "print.h"
-#include "simple.h"
+#include "print3.h"
+#include "analysis.h"
 
 /*-------------------------------------------------------------------------------------------------------------------------
 CONTENTS

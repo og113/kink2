@@ -170,6 +170,7 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2);		// constructor using primary and secondary parameters
 	~Parameters() {}
 	void load(const string&);													// uses PrimaryParameters::load
+	void load(const vector<string>& vv);										// uses PrimaryParameters::load
 	void setSecondaryParameters();												// uses setSecondaryParameters
 	PrimaryParameters::Label getLabel(const string& pName) const;
 	void getParameter(const PrimaryParameters::Label& pLabel, uint& pValue) const;

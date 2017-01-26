@@ -120,7 +120,9 @@ cVec interpolateReal(cVec vec_old, const Parameters& p_old, const Parameters& p_
 
 // interpolate1d	
 vec interpolate1d(vec vec_old, const unsigned int & N_old, const unsigned int & N_new);
+vec interpolate1d(vec vec_old, const unsigned int & N_new);
 cVec interpolate1d(cVec vec_old, const unsigned int & N_old, const unsigned int & N_new);
+cVec interpolate1d(cVec vec_old, const unsigned int & N_new);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. vecComplex etc

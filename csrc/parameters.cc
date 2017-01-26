@@ -611,6 +611,12 @@ void Parameters::setSecondaryParameters () {
 }
 
 // load
+void Parameters::load(const vector<string>& vv) {
+	PrimaryParameters::load(vv);
+	setSecondaryParameters();
+}	
+
+// load
 void Parameters::load(const string& f) {
 	PrimaryParameters::load(f);
 	setSecondaryParameters();

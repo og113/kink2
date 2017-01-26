@@ -9,7 +9,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <gsl/gsl_rng.h> 	// random number generators
 #include "simple.h"
 #include "parameters.h"
 

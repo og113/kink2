@@ -2,11 +2,12 @@
  	declarations for functions to save, load and plot
  -------------------------------------------------------------------------------------------------------------------------*/
   
-#ifndef __PRINT_H_INCLUDED__
-#define __PRINT_H_INCLUDED__
+#ifndef __PRINT3_H_INCLUDED__
+#define __PRINT3_H_INCLUDED__
 
 #include "simple.h"
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
 
 using namespace std;
 
@@ -50,6 +51,12 @@ void saveMatrixBinary(const string& f, const Eigen::MatrixXd& m);
 // saveMatrixAscii
 void saveMatrixAscii(const string& f, const Eigen::MatrixXd& m);
 
+// saveSparseMatrixBinary
+//void saveSparseMatrixAscii(const string& f, const Eigen::SparseMatrix<double>& m);
+
+// saveSparseMatrixAscii
+void saveSparseMatrixAscii(const string& f, const Eigen::SparseMatrix<double>& m);
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. load
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -70,7 +77,16 @@ void loadVectorAsciiColumn(const string& f, T& v, const uint& col);
 template <class T>
 void loadVectorCsvAppend(const string& f,  T& v);
 
-// loadMatrixBinary
-void loadMatrixBinary(const string& f, Eigen::MatrixXd& m)
+// loadMatrixAscii
+void loadMatrixAscii(const string& f, Eigen::MatrixXd& m);
 
-#endif // __PRINT_H_INCLUDED__
+// loadMatrixBinary
+void loadMatrixBinary(const string& f, Eigen::MatrixXd& m);
+
+// loadSparseMatrixBinary
+//void loadSparseMatrixAscii(const string& f, Eigen::SparseMatrix<double>& m);
+
+// loadSparseMatrixAscii
+void loadSparseMatrixAscii(const string& f, Eigen::SparseMatrix<double>& m);
+
+#endif // __PRINT3_H_INCLUDED__
