@@ -148,7 +148,8 @@ Filename filenameSpatial(const Parameters& pr, const string& base, const string&
 	Filename f = base+"data/pot_"+nts(pr.Pot)+"/"+subfolder+"/"+id\
 					+"_N_"+nts(pr.N)\
 					+"_LoR_"+nts(pr.LoR)\
-					+"_reg_"+nts(pr.Reg)\
+					+"_DE_"+nts(pr.DE)\
+					+"_Reg_"+nts(pr.Reg)\
 					+ suffix;
 	return f;
 }
@@ -159,8 +160,9 @@ Filename filenamePeriodic(const Parameters& pr, const string& base, const string
 					+"_N_"+nts(pr.N)\
 					+"_Nb_"+nts(pr.Nb)\
 					+"_LoR_"+nts(pr.LoR)\
+					+"_DE_"+nts(pr.DE)\
 					+"_Tb_"+nts(pr.Tb)\
-					+"_reg_"+nts(pr.Reg)\
+					+"_Reg_"+nts(pr.Reg)\
 					+ suffix;
 	return f;
 }

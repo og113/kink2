@@ -10,6 +10,7 @@
 #include <utility> //for pair
 #include <iostream>
 #include "error.h"
+#include "simple.h"
 
 using namespace std;
 
