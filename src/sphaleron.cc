@@ -67,6 +67,8 @@ unsigned int runsCount = 0;
 /* -------------------------------------------------------------------------------------------------------------------------
 	2. getting argv inputs
 -------------------------------------------------------------------------------------------------------------------------*/
+bool allIWantIsD1AndD2 = true;
+
 if (argc>2 && argc%2) {
 	for (int j=0; j<(int)(argc/2); j++) {
 		string temp1 = argv[2*j+1];
@@ -75,6 +77,7 @@ if (argc>2 && argc%2) {
 		if (temp1.compare("r1")==0) r1 = stringToNumber<double>(temp2);
 		else if (temp1.compare("r0")==0) r0 = stringToNumber<double>(temp2);
 		else if (temp1.compare("N")==0) N = stringToNumber<unsigned int>(temp2);
+		else if (temp1.compare("allIWantIsD1AndD2")==0) allIWantIsD1AndD2 = (stn<uint>(temp2)!=0);
 		else {
 			cerr << "input " << temp1 << " not understood" << endl;
 			return 1;
@@ -163,12 +166,15 @@ while (abs(F-aim)>closeness) {
 }
 
 // printing solution
-string filename = "./data/stable/sphaleron_L_"+numberToString<double>(r1)+".dat";
-string picname = "./pics/sphaleron_L_"+numberToString<double>(r1)+".png";
+string filename = "data/stable/sphaleron_L_"+numberToString<double>(r1)+".dat";
+string picname = "pics/sphaleron_L_"+numberToString<double>(r1)+".png";
 SaveOptions so_simple;
+so_simple.printType = SaveOptions::ascii;
 so_simple.printMessage = true;
 so_simple.vectorType = SaveOptions::simple;
 so_simple.extras = SaveOptions::none;
+so_simple.column = 0;
+so_simple.zeroModes = 0;
 PlotOptions po_simple;
 po_simple.column = 1;
 po_simple.style = "linespoints";
@@ -244,7 +250,6 @@ if (printD1AndD2) {
 printf("From Matlab: D1 gives omega^2_- = -15.31,\n");
 printf("             D2 gives omega^2_- = -15.34\n\n");
 
-bool allIWantIsD1AndD2 = true;
 if (allIWantIsD1AndD2 && printD1AndD2) return 0;
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -504,9 +509,12 @@ ps.Tb = T;
 ps.L = r1;
 
 SaveOptions so_p;
+so_p.printType = SaveOptions::ascii;
 so_p.printMessage = true;
 so_p.vectorType = SaveOptions::realB;
 so_p.extras = SaveOptions::coords;
+so_p.column = 0;
+so_p.zeroModes = 0;
 so_p.paramsIn = ps;
 so_p.paramsOut = ps_print;
 

@@ -1,11 +1,10 @@
-pot                 2                   
-N                   200                 
+pot                 3                   
+N                   130                 
 Na                  300                 
-Nb                  200                  
+Nb                  80                  
 Nc                  2                   
-LoR                 3.2                 
-dE                  0.20                   
-Tb                  20.0                 
+LoR                 5.0                 
+dE                  0.0                
+Tb                  0.79                  
 theta               0                   
 reg                 0                   
-

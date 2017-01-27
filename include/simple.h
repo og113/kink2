@@ -9,17 +9,19 @@ declarations of some very simple functions and classes
 #include <vector>
 #include <complex>
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include "simple.h"
 
 using namespace std;
 
-#ifndef pi
-#define pi 3.14159265359
+#ifndef PI
+#define PI 3.14159265359
 #endif
 #ifndef MIN_NUMBER
 #define MIN_NUMBER 1.0e-16
 #endif
 
+typedef double number;
 typedef unsigned int uint;
 typedef unsigned long int lint;
 typedef complex<double> comp;
@@ -27,6 +29,7 @@ typedef Eigen::VectorXd vec;
 typedef Eigen::VectorXcd cVec;
 typedef Eigen::MatrixXd mat;
 typedef Eigen::MatrixXcd cMat;
+typedef Eigen::SparseMatrix<double> spMat;
 
 /*-------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------
@@ -53,7 +56,18 @@ template <class T>
 string numberToString ( const T& Number );
 
 template <class T>
+string nts ( const T& Number );
+
+template <class T>
+string nts ( const T& Number, const uint& prec);
+
+template <class T>
 T stringToNumber ( const string& Text );
+
+template <class T>
+T stn ( const string& Text );
+
+bool isNumber( const string& Text );
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. absDiff
@@ -110,6 +124,9 @@ uint countLines(const string & f);
 
 // count columns
 uint countColumns(const string& f);
+
+// count columns
+uint countColumns(const string& f, const char& separator);
 
 // count doubles (binary)
 uint countDoubles(const string& f);

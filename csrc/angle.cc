@@ -113,9 +113,9 @@ bool Angle::isBetween(const Angle& a, const Angle& b) const {
 	double h = ((double)a<(double)b? b: a);
 	double l = ((double)a<(double)b? a: b);
 	double difference = h-l;
-	if (difference<=pi && Value<h && Value>l)
+	if (difference<=PI && Value<h && Value>l)
 		return true;
-	else if (difference<=pi && Value>h && Value<l)
+	else if (difference<=PI && Value>h && Value<l)
 		return true;
 	else
 		return false;

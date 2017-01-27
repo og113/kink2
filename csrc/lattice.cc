@@ -263,7 +263,7 @@ vec interpolate(vec vec_old, const Parameters& p_old, const Parameters& p_new) {
 		neigh_x = neigh(pos,1,1,Nt_old,N_old,p_old.pot);
 		neigh_tx = neigh(neigh_t,1,1,Nt_old,N_old,p_old.pot);
 		if  (t_old<(Nt_old-1) ) {
-			if (neigh_t!=-1 && neigh_x) {
+			if (neigh_t!=-1 && neigh_x!=-1) {
 				vec_new(2*l) = (1.0-rem_t_old)*(1.0-rem_x_old)*vec_old(2*pos) \
 							+ (1.0-rem_t_old)*rem_x_old*vec_old(2*neigh_x) \
 							+ rem_t_old*(1.0-rem_x_old)*vec_old(2*neigh_t) \
@@ -446,6 +446,10 @@ vec interpolate1d(vec vec_old, const unsigned int & N_old, const unsigned int & 
 	return vec_new;
 }
 
+vec interpolate1d(vec vec_old, const unsigned int & N_new) {
+	return interpolate1d(vec_old, vec_old.size(), N_new);
+}
+
 // interpolate1d	
 cVec interpolate1d(cVec vec_old, const unsigned int & N_old, const unsigned int & N_new) {
 	if (N_old == N_new) return vec_old;
@@ -464,6 +468,11 @@ cVec interpolate1d(cVec vec_old, const unsigned int & N_old, const unsigned int 
 		else vec_new[l] = vec_old[x_old];
 	}
 	return vec_new;
+}
+
+
+cVec interpolate1d(cVec vec_old, const unsigned int & N_new) {
+	return interpolate1d(vec_old, vec_old.size(), N_new);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -485,16 +494,16 @@ cVec vecComplex(vec realVec, const uint & tDim) {
 }
 
 //complexify a real vector - parameters
-cVec vecComplex(vec realVec, const Parameters& p) {
-	cVec complexVec(p.N*p.NT);
-	if (realVec.size() >= (2*p.N*p.NT)) {
-		for (uint l=0; l<p.N*p.NT; l++) {
+cVec vecComplex(vec realVec, const Parameters& ps) {
+	cVec complexVec(ps.N*ps.NT);
+	if (realVec.size() >= (2*ps.N*ps.NT)) {
+		for (uint l=0; l<ps.N*ps.NT; l++) {
 			complexVec(l) = realVec(2*l) + comp(0.0,1.0)*realVec(2*l+1);
 		}
 	}
-	else if (realVec.size() >= (2*p.N*p.Nb)) {
-		complexVec.resize(p.N*p.Nb);
-		for (uint l=0; l<p.N*p.Nb; l++) {
+	else if (realVec.size() >= (2*ps.N*ps.Nb)) {
+		complexVec.resize(ps.N*ps.Nb);
+		for (uint l=0; l<ps.N*ps.Nb; l++) {
 			complexVec(l) = realVec(2*l) + comp(0.0,1.0)*realVec(2*l+1);
 		}
 	}

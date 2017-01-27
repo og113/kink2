@@ -16,6 +16,6 @@ set title "T vs theta"
 set xlabel "T"
 set ylabel "theta"
 set grid
-plot "results/mainResults_constW_1.dat" using 7:9 with points
+plot "results/mainResults_constW_2.dat" using 7:9 with points
 
 pause -1

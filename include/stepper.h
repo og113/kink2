@@ -54,6 +54,9 @@ private:
 // operator<<
 ostream& operator<<(ostream&,const Point2d&);
 
+// operator>>
+istream& operator>>(istream&,Point2d&);
+
 // operator +
 Point2d operator+(const Point2d&, const Point2d&);
 
@@ -79,17 +82,28 @@ typedef pair<Point2d,double> FxyPair;
 // <<
 ostream& operator<<(ostream&, const FxyPair&);
 
+// >>
+istream& operator>>(istream&, FxyPair&);
+
 // StepperOptions
 struct StepperOptions{
-	enum			stepTypeList {straight=1, constTaylor=2, constPlane=3, constLagrange=4};
+	enum			stepTypeList {straight=1, constPlane=2};//, constTaylor=3, constLagrange=4};
 	enum			directedList {undirected=1, global=2, local=3};
 	double 			epsi_x;
 	double			epsi_y;
 	double 			angle0;
-	double			closeness;
+	double			tol;
+	double			aim;
+	bool			fixedAim;
 	stepTypeList 	stepType;
 	directedList	directed;
 };
+
+// <<
+ostream& operator<<(ostream&, const StepperOptions&);
+
+// >>
+istream& operator>>(istream&, StepperOptions&);
 
 // Stepper
 class Stepper {
@@ -105,15 +119,21 @@ public:
 	void 		step();
 	void 		addResult(const double& f);
 	void		addResult(const double& f, const double& e, const double& n);
+	void		save(const string&) const;
+	void		load(const string&);
 	Point2d 	point() const;
+	Point2d 	point(const uint&) const;
+	Point2d 	lastStep() const;
 	double		x() const;
 	double		y() const;
 	double		result() const;
+	double		result(const uint&) const;
+	double		aim() const;
 	uint		local() const;
 	uint		steps() const;
 	bool		keep() const;
 	double		stepAngle() const;
-	double		closeness() const;
+	double		tol() const;
 	
 	//friend ostream& operator<<(ostream&, const Stepper&);
 private:

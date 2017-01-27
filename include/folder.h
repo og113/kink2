@@ -10,6 +10,7 @@
 #include <utility> //for pair
 #include <iostream>
 #include "error.h"
+#include "simple.h"
 
 using namespace std;
 
@@ -132,6 +133,7 @@ public:
 	Filename& 			operator=(const string&);
 	Filename& 			operator=(const char*);
 	string 				operator()() const;
+	bool				exists() const;
 private:
 	void 				set(const string&);
 };

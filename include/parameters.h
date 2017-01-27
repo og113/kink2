@@ -9,6 +9,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <string>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_poly.h>
@@ -26,8 +27,9 @@ CONTENTS
 	2 - PrimaryParameters
 	3 - SecondaryParameters
 	4 - Parameters
-	5 - Options
-	6 - Closenesses
+	5 - ParametersRange
+	6 - Options
+	7 - Closenesses
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -67,21 +69,31 @@ public:
 
 // PrimaryParameters
 struct PrimaryParameters {
-	uint pot;							// potential
+	enum Label { pot=1, n=2, na=3, nb=4, nc=5, lor=6, de=7, tb=8, theta=9, reg=10};
+	static const uint Size;
+	uint Pot;							// Potential
 	uint N;
 	uint Na;
 	uint Nb;
 	uint Nc;
 	double LoR; 						// L/R
-	double dE;
+	double DE;
 	double Tb;  						// BC section includes both corner points
-	double theta;
-	double reg;
+	double Theta;
+	double Reg;
+	void getParameter(const PrimaryParameters::Label& pLabel, uint& pValue) const;
+	void getParameter(const PrimaryParameters::Label& pLabel, double& pValue) const;
+	vector<string> nameVector() const;
+	vector<string> valueVector() const;
 	void save(const string& filename) const;
+	void load(const vector<string>& vv);
 	void load(const string& filename);
 	bool empty() const;
 	ostream& writeBinary(ostream&) const;
 	istream& readBinary(istream&);
+	// copying
+	void copy(const PrimaryParameters&);
+	PrimaryParameters& operator=(const PrimaryParameters&);
 };
 
 // operator<<
@@ -97,7 +109,7 @@ bool operator==(const PrimaryParameters& lhs, const PrimaryParameters& rhs);
 		- VdV
 		- dVddV
 		- struct ec_params
-		- ec (energy change: V(minima[1])-V(minima[0])-dE)
+		- ec (energy change: V(minima[1])-V(minima[0])-DE)
 		- S1 integrand
 		- rho integrand
 		- epsilonFn
@@ -106,21 +118,21 @@ bool operator==(const PrimaryParameters& lhs, const PrimaryParameters& rhs);
 // SecondaryParameters
 struct SecondaryParameters {
 	uint NT;
-	double epsilon;						// determined by dE
+	double epsilon;						// determined by DE
 	double R; 							// size of bubble
-	double Gamma; 						// equals exp(-theta)
+	double Gamma; 						// equals exp(-Theta)
 	double r0;							// minumum r (or x)
 	double L;
 	double a; 							// step sizes in each spatial dimension
 	double b; 							// step sizes in time
 	double Ta;
 	double Tc;
-	double A;							// mostly relevant for pot=3
+	double A;							// mostly relevant for Pot=3
 	vector<double> minima;				// minima of V
 	double mass2; 						// as derived from V''
 	double action0;						// action normalisation
-	double epsilon0;					// value of epsilon at dE=0
-	vector<double> minima0;				// positions of minima of V at dE=0
+	double epsilon0;					// value of epsilon at DE=0
+	vector<double> minima0;				// positions of minima of V at DE=0
 	void setSecondaryParameters (const struct PrimaryParameters&);				// sets secondary parameters using primary ones
 };
 
@@ -136,7 +148,7 @@ ostream& operator<<(ostream&, const SecondaryParameters&);
 //energy change parameter struct
 //struct ec_params {double aa; double minima0; double minima1; double de; };
 
-//energy change F gsl function : V(minima[1])-V(minima[0])-dE
+//energy change F gsl function : V(minima[1])-V(minima[0])-DE
 //double ec (double epsi, void * parameters);
 	
 //S1 integrand
@@ -145,12 +157,15 @@ ostream& operator<<(ostream&, const SecondaryParameters&);
 //rho integrand
 double rhoIntegrand (double x, void * parameters);
 
-//program to find epsilon given gsls function df and dE
-//void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE, double * xEpsilon, vector<double>* xMinima);
+//program to find epsilon given gsls function df and DE
+//void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xDE, double * xEpsilon, vector<double>* xMinima);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. Parameters
 -------------------------------------------------------------------------------------------------------------------------*/
+
+// ParametersRange declaration
+struct ParametersRange;
 
 struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters();																// empty constructor
@@ -158,21 +173,64 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2);		// constructor using primary and secondary parameters
 	~Parameters() {}
 	void load(const string&);													// uses PrimaryParameters::load
+	void load(const vector<string>& vv);										// uses PrimaryParameters::load
 	void setSecondaryParameters();												// uses setSecondaryParameters
-	bool changeParameters (const string& pName, const double& pValue); 			// change all due to change in one
-	bool changeParameters (const string& pName, const uint& pValue); 			// change all due to change in one
+	PrimaryParameters::Label getLabel(const string& pName) const;
+	void getParameter(const PrimaryParameters::Label& pLabel, uint& pValue) const;
+	void getParameter(const PrimaryParameters::Label& pLabel, double& pValue) const;
+	vector<string> nameVector() const;
+	vector<string> valueVector() const;
+	void changeParameters (const PrimaryParameters::Label& pLabel, const double& pValue); 			// change all due to change in one
+	void changeParameters (const PrimaryParameters::Label& pLabel, const uint& pValue); 			// change all due to change in one
+	void changeParameters (const string& pName, const double& pValue); 			// change all due to change in one
+	void changeParameters (const string& pName, const uint& pValue); 	
+	void step(const ParametersRange&, const PrimaryParameters::Label&);
+	void step(const ParametersRange&, const PrimaryParameters::Label&, const uint&);
 	void print() const;
 	void print(FILE * stream) const;
 	bool empty() const;
 	ostream& writeBinary(ostream&) const;
 	istream& readBinary(istream&);
+	// copying
+	void copy(const Parameters&);
+	Parameters& operator=(const Parameters&);
 };
 
 // operator<<
 ostream& operator<<(ostream&, const Parameters&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	5. Options
+	5. ParametersRange
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// ParametersRange declaration
+struct ParametersRange {
+	static const uint Size;
+	ParametersRange();
+	ParametersRange(const Parameters& min, const Parameters& max, const vector<uint>& steps);
+	Parameters 		Min;
+	Parameters 		Max;
+	vector<uint> 	Steps;
+	uint			totalSteps() const;
+	bool			toStep(const Parameters::Label&) const;
+	Parameters		position(const uint&) const;
+	Parameters		neigh(const uint&) const;
+	void save(const string& filename) const;
+	void load(const string& filename);
+	bool empty() const;
+	ostream& writeBinary(ostream&) const;
+	istream& readBinary(istream&);
+};
+
+// operator<<
+ostream& operator<<(ostream&, const ParametersRange&);
+
+// operator==
+bool operator==(const Parameters& lhs, const ParametersRange& rhs);
+
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	6. Options
 		- Options
 		- operator<<
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -212,7 +270,7 @@ struct Options {
 ostream& operator<<(ostream&, const Options&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	6. Closenesses
+	7. Closenesses
 		- Closenesses
 		- operator<<
 -------------------------------------------------------------------------------------------------------------------------*/

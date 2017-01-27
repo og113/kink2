@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include "simple.h"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ public:
 	void			checkMessage(ostream&) const;	// print message to given stream
 	double 			back() const;					// gives result of last test
 	vector<double> 	tests() const;					// gives Tests
+	uint			size() const;					// gives size of Tests
 	double 			closeness() const;				// gives closeness
 private:
 	string 			Message;

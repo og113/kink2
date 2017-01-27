@@ -2,16 +2,19 @@
 definitions of some very simple functions and classes
 -------------------------------------------------------------------------------------------------------------------------*/
 
+#include <cstring>
 #include <cstdlib> //for rand, srand
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <cmath>
 #include <vector>
 #include <complex>
 #include <sys/time.h>
 #include <Eigen/Dense>
+#include <glob.h>
 #include "simple.h"
 
 using namespace std;
@@ -40,21 +43,48 @@ CONTENTS
 
 //to convert number to string, usage is string str = NumberToString<number type>(x);
 template <class T>
-string numberToString ( const T& Number )
-	{
+string numberToString ( const T& Number ) {
 	stringstream ss;
 	ss << Number;
 	return ss.str();
-	}
+}
+	
+//shorthand version;
+template <class T>
+string nts ( const T& Number ) {
+	stringstream ss;
+	ss << Number;
+	return ss.str();
+}
+
+//shorthand version;
+template <class T>
+string nts ( const T& Number, const uint& prec) {
+	stringstream ss;
+	ss << fixed << setprecision(prec) << Number;
+	return ss.str();
+}
 
 //to convert string to number, usage is (number type) x = StringToNumber<number type>(str);
 template <class T>
-T stringToNumber ( const string& Text )
-	{
+T stringToNumber ( const string& Text ) {
 	stringstream ss(Text);
 	T result;
 	return ss >> result ? result : 0;
-	}
+}
+	
+//shorthand version;
+template <class T>
+T stn ( const string& Text ) {
+	stringstream ss(Text);
+	T result;
+	return ss >> result ? result : 0;
+}
+
+// is number?
+bool isNumber( const string& Text ) {
+	return( strspn( Text.c_str(), "0123456789" ) == Text.size() );
+}
 	
 /*-------------------------------------------------------------------------------------------------------------------------
 	2. absDiff
@@ -213,6 +243,29 @@ uint countColumns(const string & file_to_count) {
     return counter;
 }
 
+// countColumns
+uint countColumns(const string & file_to_count, const char& sep) {
+	ifstream fin;
+	fin.open(file_to_count.c_str(), ios::in);
+	if (!fin.good()) cerr << "countColumns error: " << file_to_count << " not opened properly." << endl;
+	string line;
+	unsigned int counter = 0;
+	while(!fin.eof()) {
+		getline(fin,line);
+		if(line.empty()) continue;
+		else {
+			stringstream ss(line);
+			string temp;
+			while (getline(ss,temp,sep)) {
+				counter++;
+			}
+			break;
+		}
+	}		
+	fin.close();
+    return counter;
+}
+
 // countDoubles
 uint countDoubles(const string& f) {
 	uint lines = -1; // for some reason we should start on -1 not 0, see testBinaryPrint for verification
@@ -324,12 +377,21 @@ double mod(const double& x, const double& min, const double& max) {
 		- countType
 -------------------------------------------------------------------------------------------------------------------------*/
 
+
 template string numberToString<int>(const int&);
 template string numberToString<uint>(const uint&);
 template string numberToString<lint>(const lint&);
 template string numberToString<long long unsigned>(const long long unsigned&);
 template string numberToString<double>(const double&);
 template string numberToString<comp>(const comp&);
+
+template string nts<int>(const int&);
+template string nts<uint>(const uint&);
+template string nts<lint>(const lint&);
+template string nts<long long unsigned>(const long long unsigned&);
+template string nts<double>(const double&);
+template string nts<double>(const double&, const uint&);
+template string nts<comp>(const comp&);
 
 template int stringToNumber<int>(const string&);
 template uint stringToNumber<uint>(const string&);
@@ -338,12 +400,19 @@ template long long unsigned stringToNumber<long long unsigned>(const string&);
 template double stringToNumber<double>(const string&);
 template comp stringToNumber<comp>(const string&);
 
+template int stn<int>(const string&);
+template uint stn<uint>(const string&);
+template lint stn<lint>(const string&);
+template long long unsigned stn<long long unsigned>(const string&);
+template double stn<double>(const string&);
+template comp stn<comp>(const string&);
+
 template uint smallestLoc<int>(const vector<int>&);
 template uint smallestLoc<double>(const vector<double>&);
 template uint smallestLoc<comp>(const vector<comp>&);
 
-template uint countType(const string&,const int&);
-template uint countType(const string&,const uint&);
-template uint countType(const string&,const double&);
-template uint countType(const string&,const comp&);
+template uint countType<int>(const string&,const int&);
+template uint countType<uint>(const string&,const uint&);
+template uint countType<double>(const string&,const double&);
+template uint countType<comp>(const string&,const comp&);
 

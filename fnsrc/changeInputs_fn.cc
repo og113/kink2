@@ -36,7 +36,7 @@ string fi = "inputsP", fo;
 
 // getting argv inputs
 if (argc % 2 && argc>1) {
-	for (unsigned int j=0; j<(int)(argc/2); j++) {
+	for (int j=0; j<(int)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
 		if (id.compare("f")==0 || id.compare("fi")==0 || id.compare("fileIn")==0) fi = (string)(argv[2*j+2]);

@@ -62,7 +62,7 @@ string timenumber = "";//currentDateTime();
 // getting argv inputs
 if (argc==2) timenumber = argv[1];
 else if (argc % 2 && argc>1) {
-	for (unsigned int j=0; j<(int)(argc/2); j++) {
+	for (int j=0; j<(int)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
 		if (id.compare("loops")==0) opts.loops = stringToNumber<uint>(argv[2*j+2]);

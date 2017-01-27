@@ -27,8 +27,9 @@ CONTENTS
 	2 - PrimaryParameters
 	3 - SecondaryParameters
 	4 - Parameters
-	5 - options
-	6 - closenesses
+	5 - ParametersRange
+	6 - options
+	7 - closenesses
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -57,19 +58,98 @@ string ParameterError::Load::message() const{
 		- operator==
 -------------------------------------------------------------------------------------------------------------------------*/
 
+// Size
+const uint PrimaryParameters::Size = 10;
+const uint ParametersRange::Size = 10;
+
+// nameVector()
+vector<string> PrimaryParameters::nameVector() const {
+	vector<string> v(Size);
+	v[0] = "Pot";
+	v[1] =  "N";
+	v[2] =  "Na";
+	v[3] =  "Nb";
+	v[4] =  "Nc";
+	v[5] =  "LoR";
+	v[6] =  "DE";
+	v[7] =  "Tb";
+	v[8] =  "Theta";
+	v[9] =  "Reg";
+	return v;
+}
+
+// getParameter
+void PrimaryParameters::getParameter(const PrimaryParameters::Label& pLabel, uint& pValue) const {
+	switch (pLabel) {
+		case pot:
+			pValue = Pot;
+			break;
+		case n:
+			pValue = N;
+			break;
+		case na:
+			pValue = Na;
+			break;
+		case nb:
+			pValue = Nb;
+			break;
+		case nc:
+			pValue = Nc;
+			break;
+		default:
+			cerr << "Parameters::getParameter (uint) error: " << pLabel << " not found" << endl;
+			break;
+		}
+}
+
+// getParameter
+void PrimaryParameters::getParameter(const PrimaryParameters::Label& pLabel, double& pValue) const {
+	switch (pLabel) {
+		case lor:
+			pValue = LoR;
+			break;
+		case de:
+			pValue = DE;
+			break;
+		case tb:
+			pValue = Tb;
+			break;
+		case theta:
+			pValue = Theta;
+			break;
+		case reg:
+			pValue = Reg;
+			break;
+		default:
+			cerr << "Parameters::getParameter (double) error: " << pLabel << " not found" << endl;
+			break;
+		}
+}
+
+// valueVector()
+vector<string> PrimaryParameters::valueVector() const {
+	vector<string> v(Size);
+	v[0] = nts(Pot);
+	v[1] =  nts(N);
+	v[2] =  nts(Na);
+	v[3] =  nts(Nb);
+	v[4] =  nts(Nc);
+	v[5] =  nts(LoR,16);
+	v[6] =  nts(DE,16);
+	v[7] =  nts(Tb,16);
+	v[8] =  nts(Theta,16);
+	v[9] =  nts(Reg,16);
+	return v;
+}
+
 // operator<<
 ostream& operator<<(ostream& os, const PrimaryParameters& p1) {
 	os << left;
-	os << setw(20) << "pot" << setw(20) << p1.pot << endl;
-	os << setw(20) << "N" << setw(20) << p1.N << endl;
-	os << setw(20) << "Na" << setw(20) << p1.Na << endl;
-	os << setw(20) << "Nb" << setw(20) << p1.Nb << endl;
-	os << setw(20) << "Nc" << setw(20) << p1.Nc << endl;
-	os << setw(20) << "LoR" << setw(20) << p1.LoR << endl;
-	os << setw(20) << "dE" << setw(20) << p1.dE << endl;
-	os << setw(20) << "Tb" << setw(20) << p1.Tb << endl;
-	os << setw(20) << "theta" << setw(20) << p1.theta << endl;
-	os << setw(20) << "reg" << setw(20) << p1.reg << endl;
+	vector<string> nv = p1.nameVector();
+	vector<string> vv = p1.valueVector();
+	for (uint j=0; j<p1.Size; j++) {
+		os << setw(20) << nv[j] << setw(20) << vv[j] << endl;
+	}
 	return os;
 }
 
@@ -93,6 +173,23 @@ void PrimaryParameters::save(const string& filename) const {
 	}
 }
 
+// load
+void PrimaryParameters::load(const vector<string>& v) {
+	if (v.size()!=Size) {
+		cerr << "PrimaryParameters::load error: vector of size " << v.size() << "!=" << Size << endl;
+	}
+	Pot = stn<uint>(v[0]);
+	N = stn<uint>(v[1]);
+	Na = stn<uint>(v[2]);
+	Nb = stn<uint>(v[3]);
+	Nc = stn<uint>(v[4]);
+	LoR = stn<number>(v[5]);
+	DE = stn<number>(v[6]);
+	Tb = stn<number>(v[7]);
+	Theta = stn<number>(v[8]);
+	Reg = stn<number>(v[9]);
+}
+
 //load
 void PrimaryParameters::load(const string& filename) {
 	try {
@@ -103,17 +200,11 @@ void PrimaryParameters::load(const string& filename) {
 		throw e;
 	}
 	string dross;
-	is >> dross >> pot;
-	is >> dross >> N;
-	is >> dross >> Na;
-	is >> dross >> Nb;
-	is >> dross >> Nc;
-	is >> dross >> LoR;
-	is >> dross >> dE;
-	is >> dross >> Tb;
-	is >> dross >> theta;
-	is >> dross >> reg;
+	vector<string> v(Size);
+	for (uint j=0; j<Size; j++)
+		is >> dross >> v[j];
 	is.close();
+	load(v);
 	}
 	catch (FileError::StreamNotGood& e) {
 		cerr << "PrimaryParameters::load error:" << endl;
@@ -124,44 +215,65 @@ void PrimaryParameters::load(const string& filename) {
 
 // empty
 bool PrimaryParameters::empty() const {
-	return (pot==0 && N==0 && Na==0 && Nb==0 && Nc==0 && abs(LoR)<MIN_NUMBER && abs(dE)<MIN_NUMBER \
-				&& abs(Tb)<MIN_NUMBER && abs(theta)<MIN_NUMBER && abs(reg)<MIN_NUMBER);
+	return (Pot==0 && N==0 && Na==0 && Nb==0 && Nc==0 && abs(LoR)<MIN_NUMBER && abs(DE)<MIN_NUMBER \
+				&& abs(Tb)<MIN_NUMBER && abs(Theta)<MIN_NUMBER && abs(Reg)<MIN_NUMBER);
 }
 
 // operator==
 bool operator==(const PrimaryParameters& l, const PrimaryParameters& r){
-	return (l.pot==r.pot && l.N==r.N && l.Na==r.Na && l.Nb==r.Nb && l.Nc==r.Nc && abs(l.LoR-r.LoR)<MIN_NUMBER && \
-				abs(l.dE-r.dE)<MIN_NUMBER && abs(l.Tb-r.Tb)<MIN_NUMBER && abs(l.theta-r.theta)<MIN_NUMBER && abs(l.reg-r.reg)<MIN_NUMBER);
+	return (l.Pot==r.Pot && l.N==r.N && l.Na==r.Na && l.Nb==r.Nb && l.Nc==r.Nc && abs(l.LoR-r.LoR)<MIN_NUMBER && \
+				abs(l.DE-r.DE)<MIN_NUMBER && abs(l.Tb-r.Tb)<MIN_NUMBER && abs(l.Theta-r.Theta)<MIN_NUMBER && abs(l.Reg-r.Reg)<MIN_NUMBER);
 }
 
 // writeBinary
 ostream& PrimaryParameters::writeBinary(ostream& os) const {
-	os.write(reinterpret_cast<const char*>(&pot),sizeof(uint));
+	os.write(reinterpret_cast<const char*>(&Pot),sizeof(uint));
 	os.write(reinterpret_cast<const char*>(&N),sizeof(uint));
 	os.write(reinterpret_cast<const char*>(&Na),sizeof(uint));
 	os.write(reinterpret_cast<const char*>(&Nb),sizeof(uint));
 	os.write(reinterpret_cast<const char*>(&Nc),sizeof(uint));
 	os.write(reinterpret_cast<const char*>(&LoR),sizeof(double));
-	os.write(reinterpret_cast<const char*>(&dE),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&DE),sizeof(double));
 	os.write(reinterpret_cast<const char*>(&Tb),sizeof(double));
-	os.write(reinterpret_cast<const char*>(&theta),sizeof(double));
-	os.write(reinterpret_cast<const char*>(&reg),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&Theta),sizeof(double));
+	os.write(reinterpret_cast<const char*>(&Reg),sizeof(double));
 	return os;
 }
 
 // readBinary
 istream& PrimaryParameters::readBinary(istream& is) {
-	is.read(reinterpret_cast<char*>(&pot),sizeof(uint));
+	is.read(reinterpret_cast<char*>(&Pot),sizeof(uint));
 	is.read(reinterpret_cast<char*>(&N),sizeof(uint));
 	is.read(reinterpret_cast<char*>(&Na),sizeof(uint));
 	is.read(reinterpret_cast<char*>(&Nb),sizeof(uint));
 	is.read(reinterpret_cast<char*>(&Nc),sizeof(uint));
 	is.read(reinterpret_cast<char*>(&LoR),sizeof(double));
-	is.read(reinterpret_cast<char*>(&dE),sizeof(double));
+	is.read(reinterpret_cast<char*>(&DE),sizeof(double));
 	is.read(reinterpret_cast<char*>(&Tb),sizeof(double));
-	is.read(reinterpret_cast<char*>(&theta),sizeof(double));
-	is.read(reinterpret_cast<char*>(&reg),sizeof(double));
+	is.read(reinterpret_cast<char*>(&Theta),sizeof(double));
+	is.read(reinterpret_cast<char*>(&Reg),sizeof(double));
 	return is;
+}
+
+// copying
+void PrimaryParameters::copy(const PrimaryParameters& rhs) {
+	Pot = rhs.Pot;
+	N = rhs.N;
+	Na = rhs.Na;
+	Nb = rhs.Nb;
+	Nc = rhs.Nc;
+	Na = rhs.Na;
+	LoR = rhs.LoR;
+	DE = rhs.DE;
+	Tb = rhs.Tb;
+	Theta = rhs.Theta;
+	Reg = rhs.Reg;
+}
+
+// copying
+PrimaryParameters& PrimaryParameters::operator=(const PrimaryParameters& rhs) {
+	copy(rhs);
+	return *this;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -170,7 +282,7 @@ istream& PrimaryParameters::readBinary(istream& is) {
 		- VdV
 		- dVddV
 		- struct ec_params
-		- ec (energy change: V(minima[1])-V(minima[0])-dE)
+		- ec (energy change: V(minima[1])-V(minima[0])-DE)
 		- S1 integrand
 		- rho integrand
 		- set SecondaryParameters from PrimaryParameters
@@ -212,7 +324,7 @@ static void dVddV (double x, void * parameters, double * f, double* df)
 //energy change parameter struct
 struct ec_params {double aa; double minima0; double minima1; double de; };
 
-//energy change gsl function : V(minima[1])-V(minima[0])-dE
+//energy change gsl function : V(minima[1])-V(minima[0])-DE
 static double ec (double epsi, void * parameters) {
 	struct ec_params * paramsIn = (struct ec_params *)parameters;
 	struct params_for_V paramsOut;
@@ -236,17 +348,17 @@ double rhoIntegrand (double x, void * parameters) {
 	return pow(2.0*Vd_local(x,*params),-0.5);
 }
 
-//program to find epsilon given gsl functions df and dE
-static void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE, double * xEpsilon, vector<double>* xMinima)
+//program to find epsilon given gsl functions df and DE
+static void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xDE, double * xEpsilon, vector<double>* xMinima)
 	{
-	double closenessdE = 1.0e-14;
-	vector<double> dE_test(1);	dE_test[0] = 1.0;
-	double newdE = *xdE;
+	double closenessDE = 1.0e-14;
+	vector<double> DE_test(1);	DE_test[0] = 1.0;
+	double newDE = *xDE;
 	struct params_for_V * Fparameters = (struct params_for_V *) (*xF).params;
 	struct ec_params * ECparameters = (struct ec_params *) (*xEC).params;
 	unsigned int counter = 0;
 	unsigned int maxCounter = 1e4;
-	while (dE_test.back()>closenessdE)
+	while (DE_test.back()>closenessDE)
 		{
 		//find roots of ec(epsilon)=0
 		*xEpsilon = brentRootFinder(xEC,*xEpsilon,*xEpsilon/2.0,*xEpsilon*2.0);
@@ -260,46 +372,46 @@ static void epsilonFn (gsl_function * xF, gsl_function * xEC, const double * xdE
 		(*ECparameters).minima0 = (*xMinima)[0];
 		(*ECparameters).minima1 = (*xMinima)[1];
 		(*xEC).params = ECparameters;
-		//evaluating new dE
-		newdE = (*(*xEC).function)(*xEpsilon,ECparameters) + *xdE;
+		//evaluating new DE
+		newDE = (*(*xEC).function)(*xEpsilon,ECparameters) + *xDE;
 		//evaluating test
-		if (abs(*xdE)>MIN_NUMBER) dE_test.push_back(abs((newdE-(*xdE))/(*xdE)));
-		else 						dE_test.push_back(abs(newdE-(*xdE)));
+		if (abs(*xDE)>MIN_NUMBER) DE_test.push_back(abs((newDE-(*xDE))/(*xDE)));
+		else 						DE_test.push_back(abs(newDE-(*xDE)));
 		counter++;
 		//test if too many runs
 		if (counter>maxCounter)
 			{
-			cout << "epsilonFn error, more that " << maxCounter << " loops, consider reducing closenessdE" << endl;
-			cout << "dE_test.back() = " << dE_test.back() << " , closenessdE = " << closenessdE << endl;
-			cout << "dE = " << *xdE << " , minima[0] = " << (*xMinima)[0] << " , minima[1] = " << (*xMinima)[1];
+			cout << "epsilonFn error, more that " << maxCounter << " loops, consider reducing closenessDE" << endl;
+			cout << "DE_test.back() = " << DE_test.back() << " , closenessDE = " << closenessDE << endl;
+			cout << "DE = " << *xDE << " , minima[0] = " << (*xMinima)[0] << " , minima[1] = " << (*xMinima)[1];
 			cout << " , epsilon = " << *xEpsilon << endl << endl;
 			break;
 			}
 		}
 	delete Fparameters;
 	delete ECparameters;
-	//*xdE = newdE;
+	//*xDE = newDE;
 	}
 
 // set secondary parameters
 void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters& pp) {
 	NT = pp.Na + pp.Nb + pp.Nc; 							////////// NT
 	A = 0.4;												////////// A
-	Gamma = exp(-pp.theta);									////////// Gamma
+	Gamma = exp(-pp.Theta);									////////// Gamma
 	
 	params_for_V paramsV, paramsV0;
 	minima = vector<double>(2,0.0);
 	minima0 = vector<double>(2,0.0);
-	//potential functions
-	if (pp.pot==1) {
+	//Potential functions
+	if (pp.Pot==1) {
 		Vd_local = &V1;
 		dVd_local = &dV1;
 		ddVd_local = &ddV1;
 		epsilon0 = 0.0;										////////// epsilon0
-		epsilon = pp.dE;
+		epsilon = pp.DE;
 		r0 = 0.0;											////////// r0
 	}
-	else if (pp.pot==2) {
+	else if (pp.Pot==2) {
 		Vd_local = &V2;
 		dVd_local = &dV2;
 		ddVd_local = &ddV2;
@@ -307,7 +419,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		epsilon = 0.75;
 		r0 = 0.0;											////////// r0
 	}
-	else if (pp.pot==3) {
+	else if (pp.Pot==3) {
 		Vd_local = &V3;
 		dVd_local = &dV3;
 		ddVd_local = &ddV3;
@@ -315,21 +427,23 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		epsilon = 0.0;
 		r0 = MIN_NUMBER;									////////// r0
 	}
-	else
-		cerr << "pot option not available, pot = " << pp.pot << endl;
+	else {
+		cerr << "Pot option not available, Pot = " << pp.Pot << endl;
+		cerr << pp.Pot << endl;
+	}
 	paramsV.epsi = epsilon;
 	paramsV.aa = A;
 	paramsV0.epsi = epsilon0;
 	paramsV0.aa = A;
 	
 	// epsilon, minima, mass2, action0
-	if (pp.pot!=3) {
+	if (pp.Pot!=3) {
 	
 		//finding root0 of dV0(phi)=0;
-		if (pp.pot==1) {
+		if (pp.Pot==1) {
 			minima0[0] = -1.0; minima0[1] = 1.0;				////////// minima0
 		}
-		else if (pp.pot==2) {
+		else if (pp.Pot==2) {
 			gsl_function V0;
 			V0.function = Vd_local_wrapped;
 			V0.params = &paramsV0;	
@@ -339,11 +453,11 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 			gsl_function EC0;
 			EC0.function = &ec;
 			EC0.params = &ec0_params;
-			double dE0 = 0.0;
-			epsilonFn(&V0,&EC0,&dE0,&epsilon0,&minima0);		////////// epsilon0, minima0
+			double DE0 = 0.0;
+			epsilonFn(&V0,&EC0,&DE0,&epsilon0,&minima0);		////////// epsilon0, minima0
 		}
 	
-		if (abs(pp.dE)>MIN_NUMBER) {
+		if (abs(pp.DE)>MIN_NUMBER) {
 			//gsl function for V(phi)
 			gsl_function F;
 			F.function = Vd_local_wrapped;
@@ -353,14 +467,14 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 			minima[0] = brentMinimum(&F, -1.0, -3.0, 0.0);		////////// minima
 			minima[1] = brentMinimum(&F, 1.2, 0.5, 3.0);		////////// minima
 
-			//gsl function for V(root2)-V(root1)-dE
-			struct ec_params ec_params = { A, minima[0], minima[1], pp.dE};
+			//gsl function for V(root2)-V(root1)-DE
+			struct ec_params ec_params = { A, minima[0], minima[1], pp.DE};
 			gsl_function EC;
 			EC.function = &ec;
 			EC.params = &ec_params;
 
 			//evaluating epsilon, new root
-			epsilonFn(&F,&EC,&pp.dE,&epsilon,&minima);
+			epsilonFn(&F,&EC,&pp.DE,&epsilon,&minima);
 		}
 		else {
 			minima = minima0;
@@ -380,11 +494,11 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		gsl_integration_workspace_free(w);
 		if (S1error>1.0e-8) cerr << "S1 error = " << S1error << endl;
 		
-		if (abs(pp.dE)>MIN_NUMBER)
-			R = S1/pp.dE;									////////// R
+		if (abs(pp.DE)>MIN_NUMBER)
+			R = S1/pp.DE;									////////// R
 		else
 			R = 10.0;										////////// R
-		action0 = -pi*epsilon*pow(R,2)/2.0 + pi*R*S1;		////////// action0
+		action0 = -PI*epsilon*pow(R,2)/2.0 + PI*R*S1;		////////// action0
 		L = pp.LoR*R;										////////// L
 		if (pp.Tb<R) {
 			double angle = asin(pp.Tb/R);
@@ -392,12 +506,12 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 			if (Ltemp<L) L=Ltemp; //making sure to use the smaller of the two possible Ls
 		}
 	}
-	else if (pp.pot==3) {
+	else if (pp.Pot==3) {
 		mass2 = 1.0;										////////// mass2
 		minima[0] = 0.0; minima[1] = 0.0; 					////////// minima
 		minima0 = minima;									////////// minima0
-		R = 10.0;											////////// R
-		action0 = 8.0*pow(pi,2.0)/3.0;						////////// action0
+		R = 1.0;											////////// R
+		action0 = 8.0*pow(PI,2.0)/3.0;						////////// action0
 		L = pp.LoR*R;										////////// L
 	}
 	
@@ -463,39 +577,65 @@ Parameters::Parameters(const PrimaryParameters& p1, const SecondaryParameters& p
 
 // print to shell
 void Parameters::print() const {
-	printf("%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
-	printf("%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
-			N,Na,Nb,Nc,\
+	printf("%8s%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","Pot","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","DE","Theta","Reg");
+	printf("%8i%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
+			Pot,N,Na,Nb,Nc,\
 			L,Ta,Tb,Tc,R,\
-			dE,theta,reg);
+			DE,Theta,Reg);
 	printf("\n");
 }
 
 // print File*
 void Parameters::print(FILE* stream) const {
-	fprintf(stream,"%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","dE","theta","reg");
-	fprintf(stream,"%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
-			N,Na,Nb,Nc,\
+	fprintf(stream,"%8s%8s%8s%8s%8s%12s%12s%12s%12s%12s%12s%12s%12s\n","Pot","N","Na","Nb","Nc","L","Ta","Tb","Tc","R","DE","Theta","Reg");
+	fprintf(stream,"%8i%8i%8i%8i%8i%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g%12.5g\n",\
+			Pot,N,Na,Nb,Nc,\
 			L,Ta,Tb,Tc,R,\
-			dE,theta,reg);
+			DE,Theta,Reg);
 	fprintf(stream,"\n");
+}
+
+// getParameter, inherited
+void Parameters::getParameter(const PrimaryParameters::Label& pLabel, uint& pValue) const {
+	PrimaryParameters::getParameter(pLabel,pValue);
+}
+
+// getParameter, inherited
+void Parameters::getParameter(const PrimaryParameters::Label& pLabel, double& pValue) const {
+	PrimaryParameters::getParameter(pLabel,pValue);
+}
+
+// nameVector, inherited
+vector<string> Parameters::nameVector() const {
+	return PrimaryParameters::nameVector();
+}
+
+// valueVector, inherited
+vector<string> Parameters::valueVector() const {
+	return PrimaryParameters::valueVector();
 }
 
 // set parameters from PrimaryParameters
 void Parameters::setSecondaryParameters () {
 	PrimaryParameters p1;
-	p1.pot = pot;
+	p1.Pot = Pot;
 	p1.N = N;
 	p1.Na = Na;
 	p1.Nb = Nb;
 	p1.Nc = Nc;
 	p1.LoR = LoR;
-	p1.dE = dE;
+	p1.DE = DE;
 	p1.Tb = Tb;
-	p1.theta = theta;
-	p1.reg = reg;
+	p1.Theta = Theta;
+	p1.Reg = Reg;
 	SecondaryParameters::setSecondaryParameters(p1);
 }
+
+// load
+void Parameters::load(const vector<string>& vv) {
+	PrimaryParameters::load(vv);
+	setSecondaryParameters();
+}	
 
 // load
 void Parameters::load(const string& f) {
@@ -503,122 +643,162 @@ void Parameters::load(const string& f) {
 	setSecondaryParameters();
 }	
 
-// empty
+// empty, inherited
 bool Parameters::empty() const {
 	return PrimaryParameters::empty();
 }
 
+// getLabel
+PrimaryParameters::Label Parameters::getLabel(const string& pName) const {
+	PrimaryParameters::Label label = static_cast<Parameters::Label>(0);
+	if (pName.compare("Pot")==0 || pName.compare("pot")==0)
+		label = PrimaryParameters::pot;
+	else if (pName.compare("N")==0)
+		label = PrimaryParameters::n;
+	else if (pName.compare("Na")==0)
+		label = PrimaryParameters::na;
+	else if (pName.compare("Nb")==0)
+		label = PrimaryParameters::nb;
+	else if (pName.compare("Nc")==0)
+		label = PrimaryParameters::nc;
+	else if (pName.compare("LoR")==0)
+		label = PrimaryParameters::lor;
+	else if (pName.compare("DE")==0 || pName.compare("dE")==0)
+		label = PrimaryParameters::de;
+	else if (pName.compare("Tb")==0 )
+		label = PrimaryParameters::tb;
+	else if (pName.compare("Theta")==0 || pName.compare("theta")==0)
+		label = PrimaryParameters::theta;
+	else if (pName.compare("Reg")==0 || pName.compare("reg")==0)
+		label = PrimaryParameters::reg;
+	else {
+		cerr << "PrimaryParameters error: label " << pName << " not understood" << endl;
+	}
+	return label;
+}
+
 // change all parameters due to change in one, uint
-bool Parameters::changeParameters (const string& pName, const uint& pValue) {
-	bool anythingChanged = false;
-	if ( pName.compare("N")==0) {
-			if (N!=pValue) anythingChanged = true;
+void Parameters::changeParameters (const PrimaryParameters::Label& label, const uint& pValue) {
+	switch (label) {
+		case pot:
+			Pot = pValue;
+			break;
+		case n:
 			N = pValue;
 			a = L/(N-1);
-		}
-		else if ( pName.compare("Na")==0) {
-			if (Na!=pValue) anythingChanged = true;
+			break;
+		case na:
 			Na = pValue;
 			NT = Na + Nb + Nc;
 			Ta = b*(double)Na;
-			}
-		else if ( pName.compare("Nb")==0) {
-			if (Nb!=pValue) anythingChanged = true;
+			break;
+		case nb:
 			Nb = pValue;
 			NT = Na + Nb + Nc;
 			b = Tb/(Nb-1.0);
 			Ta = b*(double)Na;
 			Tc = b*(double)Nc;
-		}
-		else if ( pName.compare("Nc")==0) {
-			if (Nc!=pValue) anythingChanged = true;
+			break;
+		case nc:
 			Nc = pValue;
-			NT = Nc + Nb + Nc;
+			NT = Na + Nb + Nc;
 			Tc = b*(double)Nc;
-		}
-		else if ( pName.compare("pot")==0) { // would not recommend change pot this way
-			if (pot!=pValue) anythingChanged = true;
-			pot = pValue;
-		}
-		else {
-			cerr << "Parameters::changeParameters error: " << pName << " not changed" << endl;
-		}
-	return anythingChanged;	
+			break;
+		default:
+			cerr << "Parameters::changeParameters error: " << label << " not changed" << endl;
+			break;
+	}
+}
+
+// change all parameters due to change in one, uint
+void Parameters::changeParameters (const string& pName, const uint& pValue) {
+	PrimaryParameters::Label label = getLabel(pName);
+	return changeParameters(label,pValue);
 }
 
 // change all parameters due to change in one, double
-bool Parameters::changeParameters (const string& pName, const double& pValue) {
-	bool anythingChanged = false;
-	if ( pName.compare("L")==0) { //this does not changes the physics but simply the size of the box in space
-		if (abs(L-pValue)>MIN_NUMBER) anythingChanged = true;
-		L = pValue;
-		LoR = L/R;
-		a = L/(N-1);
-	}
-	if ( pName.compare("LoR")==0) { //this changes L, as above
-		if (abs(LoR-pValue)>MIN_NUMBER) anythingChanged = true;
-		LoR = pValue;
-		L = LoR*R;
-		a = L/(N-1);
-	}
-	else if ( pName.compare("Tb")==0) { //this paramter changes the physics for the periodic instanton,											//as Tb/R changes where R = R(epsilon)
-		if (abs(Tb-pValue)>MIN_NUMBER) anythingChanged = true;
-		b = b*pValue/Tb;
-		Ta = Ta*pValue/Tb;
-		Tc = Tc*pValue/Tb;
-		Tb = pValue;
-		if (Tb<R && pot!=3){
-			double angle = asin(Tb/R);
-			if (2.0*(1.5*Tb*tan(angle))<L) L=2.0*(1.5*Tb*tan(angle));
-			a = L/(N-1.0);
+void Parameters::changeParameters (const PrimaryParameters::Label& label, const double& pValue) {
+	switch (label) {
+		case lor:
+			LoR = pValue;
+			L = LoR*R;
+			a = L/(N-1);
+			break;
+		case de:
+			//this parameter changes the physics of the Potential
+			//but it does not change Tb/R, where R(epsilon)
+			R = R*DE/pValue; //R scales with 1/DE and the other length scales scale with R
+			L = L*DE/pValue;
+			a = a*DE/pValue;
+			b = b*DE/pValue;
+			Ta = Ta*DE/pValue;
+			Tb = Tb*DE/pValue;
+			Tc = Tc*DE/pValue;
+			epsilon = epsilon*pValue/DE;
+			DE = pValue;
+			break;
+		case tb:
+			//this paramter changes the physics for the periodic instanton,	
+			//as Tb/R changes where R = R(epsilon)
+			b = b*pValue/Tb;
+			Ta = Ta*pValue/Tb;
+			Tc = Tc*pValue/Tb;
+			Tb = pValue;
+			if (Tb<R && Pot!=3){
+				double angle = asin(Tb/R);
+				if (2.0*(1.5*Tb*tan(angle))<L) L=2.0*(1.5*Tb*tan(angle));
+				a = L/(N-1.0);
 			}
+			break;
+		case theta:
+			Theta = pValue;
+			Gamma = exp(-Theta);
+			break;
+		case reg:
+			Reg = pValue;
+			break;
+		default:
+			cerr << "Parameters::changeParameters error: " << label << " not changed" << endl;
+			break;
 	}
-	else if ( pName.compare("R")==0) { //this parameter changes the initial guess
-		L = L*pValue/R; //all length scales scale with R
-		a = a*pValue/R;
-		b = b*pValue/R;
-		Ta = Ta*pValue/R;
-		Tb = Tb*pValue/R;
-		Tc = Tc*pValue/R;
-		R = pValue;
-	}
-	else if ( pName.compare("dE")==0) { //this parameter changes the physics of the potential
-													//but it does not change Tb/R, where R(epsilon)
-		if (abs(dE-pValue)>MIN_NUMBER) anythingChanged = true;
-		R = R*dE/pValue; //R scales with 1/dE and the other length scales scale with R
-		L = L*dE/pValue;
-		a = a*dE/pValue;
-		b = b*dE/pValue;
-		Ta = Ta*dE/pValue;
-		Tb = Tb*dE/pValue;
-		Tc = Tc*dE/pValue;
-		epsilon = epsilon*pValue/dE;
-		dE = pValue;
-	}
-	else if ( pName.compare("theta")==0) {
-		if (abs(theta-pValue)>MIN_NUMBER) anythingChanged = true;
-		theta = pValue;
-		Gamma = exp(-theta);
+}
+
+
+// change all parameters due to change in one, double
+// n.b. i have removed the option to change secondary parameters such as L and R
+void Parameters::changeParameters (const string& pName, const double& pValue) {
+	PrimaryParameters::Label label = getLabel(pName);
+	return changeParameters(label,pValue);
+}
+
+// change all parameters due to change in one, uint
+void Parameters::step (const ParametersRange& pr, const PrimaryParameters::Label& label, const uint& j) {
+	if ((uint)label<6) { // THIS IS HIGHLY IMPLEMENTATION DEPENDENT!
+		uint current = 0, max = 0, min = 0;
+		getParameter(label,current);
+		(pr.Max).getParameter(label,max);
+		(pr.Min).getParameter(label,min);
+		uint pValue = current+j*(max-min)/((pr.Steps)[label-1]-1.0);
+		changeParameters(label,pValue);
 	}
 	else {
-			cerr << "Parameters::changeParameters error: " << pName << " not changed" << endl;
-		}
-	return anythingChanged;
+		double current = 0.0, max = 0.0, min = 0.0;
+		getParameter(label,current);
+		(pr.Max).getParameter(label,max);
+		(pr.Min).getParameter(label,min);
+		double pValue = current+j*(max-min)/((pr.Steps)[label-1]-1.0);
+		changeParameters(label,pValue);
+	}
+}
+
+// step
+void Parameters::step(const ParametersRange& pr, const Parameters::Label& label) {
+	step(pr,label,1);
 }
 
 // operator<< - just prints primary parameters
 ostream& operator<<(ostream& os, const Parameters& p1) {
-	os << left;
-	os << setw(20) << "pot" << setw(20) << p1.pot << endl;
-	os << setw(20) << "N" << setw(20) << p1.N << endl;
-	os << setw(20) << "Na" << setw(20) << p1.Na << endl;
-	os << setw(20) << "Nb" << setw(20) << p1.Nb << endl;
-	os << setw(20) << "Nc" << setw(20) << p1.Nc << endl;
-	os << setw(20) << "LoR" << setw(20) << p1.LoR << endl;
-	os << setw(20) << "dE" << setw(20) << p1.dE << endl;
-	os << setw(20) << "Tb" << setw(20) << p1.Tb << endl;
-	os << setw(20) << "theta" << setw(20) << p1.theta << endl;
-	os << setw(20) << "reg" << setw(20) << p1.reg << endl;
+	os << static_cast<const PrimaryParameters&>(p1);
 	return os;
 }
 
@@ -634,8 +814,168 @@ istream& Parameters::readBinary(istream& is) {
 	return is;
 }
 
+// copying
+void Parameters::copy(const Parameters& rhs) {
+	PrimaryParameters::copy(static_cast<const PrimaryParameters&>(rhs));
+	setSecondaryParameters();
+}
+
+// copying
+Parameters& Parameters::operator=(const Parameters& rhs) {
+	copy(rhs);
+	return *this;
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
-	5. Options
+	5. ParametersRange
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// ParametersRange empty constructor
+ParametersRange::ParametersRange(): Min(), Max() {
+	Steps = vector<uint>(Size,0);
+}
+
+// ParametersRange constructor
+ParametersRange::ParametersRange(const Parameters& min, const Parameters& max, const vector<uint>& steps): \
+									Min(min), Max(max) {
+	if (steps.size()==Size)
+		Steps = steps;
+	else {
+		Steps = vector<uint>(Size,0);
+		cerr << "ParametersRange Error: Initialization not possible as input steps.size() = " << steps.size() << " not " << Size << endl;
+	} 							
+}
+
+// toStep
+bool ParametersRange::toStep(const Parameters::Label& stepNum) const {
+	return (Steps[stepNum-1]>0);
+}
+
+// totalSteps
+uint ParametersRange::totalSteps() const {
+	uint N = 1;
+	for (uint j=0; j<ParametersRange::Size; j++)
+		N *= (Steps[j]>0? Steps[j]: 1);
+	return N;
+}
+
+// position
+Parameters ParametersRange::position(const uint& pos) const {
+	Parameters p =  Min;
+	uint n, Nratio, local;
+	Nratio = totalSteps();
+	local = pos;
+	for (uint j=0; j<ParametersRange::Size; j++) {
+		if (Steps[ParametersRange::Size-j-1]>0) {
+			Nratio /= Steps[ParametersRange::Size-j-1];
+			n = local/Nratio;
+			local -= n*Nratio;
+			p.step(*this,static_cast<Parameters::Label>(ParametersRange::Size-j),n);
+		}
+	}
+	return p;
+}
+
+// neigh
+Parameters ParametersRange::neigh(const uint& pos) const {
+	if (pos==0) {
+		cerr << "ParametersRange::neigh error: position 0 has no neighbour" << endl;
+		return Min;
+	}
+	uint N = 1, k=0, npos = pos;
+	while (k<ParametersRange::Size && npos==pos) {
+		if (Steps[k]>0) {
+			if (pos%(N*Steps[k])!=0)
+				npos -= N;
+			N *= Steps[k];
+		}
+		k++;
+	}
+	return position(npos);
+}
+
+// save
+void ParametersRange::save(const string& filename) const {
+	ofstream os;
+	os.open(filename.c_str());
+	if (!os.good()) {
+		cerr << "ParametersRange::save error:" << endl;
+		cerr << "stream for " << filename << " not good." << endl;
+		return;
+	}
+	os << *this;
+	os << endl;
+	os.close();
+}
+
+// load
+void ParametersRange::load(const string& filename) {
+	ifstream is;
+	is.open(filename.c_str());
+	if (!is.good()) {
+		cerr << "ParametersRange::load error:" << endl;
+		cerr << "stream for " << filename << " not good" << endl;
+		return;
+	}
+	string dross;
+	// THIS NEEDS REDOING SO THAT THERE AREN'T MISTAKES WHEN SPACES DISAPPEAR
+	is >> dross >> dross >> Min.Pot >> dross >> Max.Pot >> dross >> Steps[0] >> dross;
+	is >> dross >> dross >> Min.N >> dross >> Max.N >> dross >> Steps[1] >> dross;
+	is >> dross >> dross >> Min.Na >> dross >> Max.Na >> dross >> Steps[2] >> dross;
+	is >> dross >> dross >> Min.Nb >> dross >> Max.Nb >> dross >> Steps[3] >> dross;
+	is >> dross >> dross >> Min.Nc >> dross >> Max.Nc >> dross >> Steps[4] >> dross;
+	is >> dross >> dross >> Min.LoR >> dross >> Max.LoR >> dross >> Steps[5] >> dross;
+	is >> dross >> dross >> Min.DE >> dross >> Max.DE >> dross >> Steps[6] >> dross;
+	is >> dross >> dross >> Min.Tb >> dross >> Max.Tb >> dross >> Steps[7] >> dross;
+	is >> dross >> dross >> Min.Theta >> dross >> Max.Theta >> dross >> Steps[8] >> dross;
+	is >> dross >> dross >> Min.Reg >> dross >> Max.Reg >> dross >> Steps[9] >> dross;
+	is.close();
+		Min.setSecondaryParameters();
+	Max.setSecondaryParameters();
+}
+
+// empty
+bool ParametersRange::empty() const {
+	return (Min.empty() && Max.empty() && Steps.empty());
+}
+
+// writeBinary
+ostream& ParametersRange::writeBinary(ostream& os) const {
+	Min.writeBinary(os);
+	Max.writeBinary(os);
+	os.write(reinterpret_cast<const char*>(&Steps[0]),Size*sizeof(uint));
+	return os;
+}
+
+// readBinary
+istream& ParametersRange::readBinary(istream& is) {
+	Min.readBinary(is);
+	Max.readBinary(is);
+	Min.setSecondaryParameters();
+	Max.setSecondaryParameters();
+	is.read(reinterpret_cast<char*>(&Steps[0]),Size*sizeof(uint));
+	return is;
+}
+
+// operator<<
+ostream& operator<<(ostream& os, const ParametersRange& pr) {
+	os << left;
+	vector<string> nv = (pr.Min).nameVector();
+	vector<string> vvMin = (pr.Min).valueVector();
+	vector<string> vvMax = (pr.Max).valueVector();
+	for (uint j=0; j<pr.Size; j++)
+		os << setw(20) << nv[j] << "[ " << setw(12) << vvMin[j] << " , " \
+						<< setw(12) << vvMax[j] << " , " << setw(12) << (pr.Steps)[j] << " ]" << endl;
+	return os;
+}
+
+// operator==
+bool operator==(const ParametersRange& l, const ParametersRange& r) {
+	return (l.Min==r.Min && l.Max==r.Max && l.Steps==r.Steps);
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	6. Options
 		- changeOptions
 		- operator<<
 		- save
@@ -841,7 +1181,7 @@ void Options::print(FILE* stream) const {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	5. Closenesses
+	7. Closenesses
 		- operator<<
 		- save
 		- load
