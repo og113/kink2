@@ -716,12 +716,6 @@ void Parameters::changeParameters (const string& pName, const uint& pValue) {
 	return changeParameters(label,pValue);
 }
 
-// change all parameters due to change in one, uint
-bool Parameters::changeParameters (const string& pName, const uint& pValue) {
-	PrimaryParameters::Label label = getLabel(pName);
-	return changeParameters(label,pValue);
-}
-
 // change all parameters due to change in one, double
 void Parameters::changeParameters (const PrimaryParameters::Label& label, const double& pValue) {
 	switch (label) {
@@ -936,7 +930,7 @@ void ParametersRange::load(const string& filename) {
 	is >> dross >> dross >> Min.Theta >> dross >> Max.Theta >> dross >> Steps[8] >> dross;
 	is >> dross >> dross >> Min.Reg >> dross >> Max.Reg >> dross >> Steps[9] >> dross;
 	is.close();
-		Min.setSecondaryParameters();
+	Min.setSecondaryParameters();
 	Max.setSecondaryParameters();
 }
 

@@ -165,7 +165,7 @@ double rhoIntegrand (double x, void * parameters);
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // ParametersRange declaration
-//struct ParametersRange;
+struct ParametersRange;
 
 struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters();																// empty constructor
