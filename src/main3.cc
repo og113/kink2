@@ -36,7 +36,7 @@ int returnValue;
 returnValue = main_fn3(argc,argv_main);
 
 if (returnValue!=0) {
-	cerr << "return " << returnValue << " on running main2" << endl;
+	cerr << "return " << returnValue << " on running main3" << endl;
 }
 
 return 0;

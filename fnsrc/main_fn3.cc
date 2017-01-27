@@ -1620,9 +1620,9 @@ for (uint pl=0; pl<Npl; pl++) {
 		Filename fRes = filenameMain(p,baseFolder,"field","fMain",suffix);
 		saveVectorBinary(fRes,f);
 		Filename ergRes = filenameMain(p,baseFolder,"energy","ergMain",suffix);
-		saveComplexVectorBinary(fRes,erg);
+		saveComplexVectorBinary(ergRes,erg);
 		Filename linErgRes = filenameMain(p,baseFolder,"energy","linErgMain",suffix);
-		saveComplexVectorBinary(fRes,linErg);
+		saveComplexVectorBinary(linErgRes,linErg);
 		
 		fprintf(cof,"%12s%50s\n","f     :",((string)fRes).c_str());
 		fprintf(cof,"%12s%50s\n","erg   :",((string)ergRes).c_str());
