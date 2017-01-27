@@ -81,6 +81,8 @@ struct PrimaryParameters {
 	double Tb;  						// BC section includes both corner points
 	double Theta;
 	double Reg;
+	void getParameter(const PrimaryParameters::Label& pLabel, uint& pValue) const;
+	void getParameter(const PrimaryParameters::Label& pLabel, double& pValue) const;
 	vector<string> nameVector() const;
 	vector<string> valueVector() const;
 	void save(const string& filename) const;
@@ -89,6 +91,9 @@ struct PrimaryParameters {
 	bool empty() const;
 	ostream& writeBinary(ostream&) const;
 	istream& readBinary(istream&);
+	// copying
+	void copy(const PrimaryParameters&);
+	PrimaryParameters& operator=(const PrimaryParameters&);
 };
 
 // operator<<
@@ -168,19 +173,27 @@ struct Parameters: PrimaryParameters, SecondaryParameters {
 	Parameters(const PrimaryParameters& p1, const SecondaryParameters& p2);		// constructor using primary and secondary parameters
 	~Parameters() {}
 	void load(const string&);													// uses PrimaryParameters::load
+	void load(const vector<string>& vv);										// uses PrimaryParameters::load
 	void setSecondaryParameters();												// uses setSecondaryParameters
 	PrimaryParameters::Label getLabel(const string& pName) const;
-	bool changeParameters (const PrimaryParameters::Label& pLabel, const double& pValue); 			// change all due to change in one
-	bool changeParameters (const PrimaryParameters::Label& pLabel, const uint& pValue); 			// change all due to change in one
-	bool changeParameters (const string& pName, const double& pValue); 			// change all due to change in one
-	bool changeParameters (const string& pName, const uint& pValue); 	
-//	void step(const ParametersRange&, const PrimaryParameters::Label&);
-//	void step(const ParametersRange&, const PrimaryParameters::Label&, const uint&);
+	void getParameter(const PrimaryParameters::Label& pLabel, uint& pValue) const;
+	void getParameter(const PrimaryParameters::Label& pLabel, double& pValue) const;
+	vector<string> nameVector() const;
+	vector<string> valueVector() const;
+	void changeParameters (const PrimaryParameters::Label& pLabel, const double& pValue); 			// change all due to change in one
+	void changeParameters (const PrimaryParameters::Label& pLabel, const uint& pValue); 			// change all due to change in one
+	void changeParameters (const string& pName, const double& pValue); 			// change all due to change in one
+	void changeParameters (const string& pName, const uint& pValue); 	
+	void step(const ParametersRange&, const PrimaryParameters::Label&);
+	void step(const ParametersRange&, const PrimaryParameters::Label&, const uint&);
 	void print() const;
 	void print(FILE * stream) const;
 	bool empty() const;
 	ostream& writeBinary(ostream&) const;
 	istream& readBinary(istream&);
+	// copying
+	void copy(const Parameters&);
+	Parameters& operator=(const Parameters&);
 };
 
 // operator<<
@@ -189,9 +202,10 @@ ostream& operator<<(ostream&, const Parameters&);
 /*-------------------------------------------------------------------------------------------------------------------------
 	5. ParametersRange
 -------------------------------------------------------------------------------------------------------------------------*/
-/*
+
 // ParametersRange declaration
 struct ParametersRange {
+	static const uint Size;
 	ParametersRange();
 	ParametersRange(const Parameters& min, const Parameters& max, const vector<uint>& steps);
 	Parameters 		Min;
@@ -214,7 +228,6 @@ ostream& operator<<(ostream&, const ParametersRange&);
 // operator==
 bool operator==(const Parameters& lhs, const ParametersRange& rhs);
 
-*/
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. Options
 		- Options

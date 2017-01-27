@@ -27,8 +27,9 @@ CONTENTS
 	2 - PrimaryParameters
 	3 - SecondaryParameters
 	4 - Parameters
-	5 - options
-	6 - closenesses
+	5 - ParametersRange
+	6 - options
+	7 - closenesses
 -------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------*/
 
@@ -59,6 +60,7 @@ string ParameterError::Load::message() const{
 
 // Size
 const uint PrimaryParameters::Size = 10;
+const uint ParametersRange::Size = 10;
 
 // nameVector()
 vector<string> PrimaryParameters::nameVector() const {
@@ -74,6 +76,54 @@ vector<string> PrimaryParameters::nameVector() const {
 	v[8] =  "Theta";
 	v[9] =  "Reg";
 	return v;
+}
+
+// getParameter
+void PrimaryParameters::getParameter(const PrimaryParameters::Label& pLabel, uint& pValue) const {
+	switch (pLabel) {
+		case pot:
+			pValue = Pot;
+			break;
+		case n:
+			pValue = N;
+			break;
+		case na:
+			pValue = Na;
+			break;
+		case nb:
+			pValue = Nb;
+			break;
+		case nc:
+			pValue = Nc;
+			break;
+		default:
+			cerr << "Parameters::getParameter (uint) error: " << pLabel << " not found" << endl;
+			break;
+		}
+}
+
+// getParameter
+void PrimaryParameters::getParameter(const PrimaryParameters::Label& pLabel, double& pValue) const {
+	switch (pLabel) {
+		case lor:
+			pValue = LoR;
+			break;
+		case de:
+			pValue = DE;
+			break;
+		case tb:
+			pValue = Tb;
+			break;
+		case theta:
+			pValue = Theta;
+			break;
+		case reg:
+			pValue = Reg;
+			break;
+		default:
+			cerr << "Parameters::getParameter (double) error: " << pLabel << " not found" << endl;
+			break;
+		}
 }
 
 // valueVector()
@@ -203,6 +253,27 @@ istream& PrimaryParameters::readBinary(istream& is) {
 	is.read(reinterpret_cast<char*>(&Theta),sizeof(double));
 	is.read(reinterpret_cast<char*>(&Reg),sizeof(double));
 	return is;
+}
+
+// copying
+void PrimaryParameters::copy(const PrimaryParameters& rhs) {
+	Pot = rhs.Pot;
+	N = rhs.N;
+	Na = rhs.Na;
+	Nb = rhs.Nb;
+	Nc = rhs.Nc;
+	Na = rhs.Na;
+	LoR = rhs.LoR;
+	DE = rhs.DE;
+	Tb = rhs.Tb;
+	Theta = rhs.Theta;
+	Reg = rhs.Reg;
+}
+
+// copying
+PrimaryParameters& PrimaryParameters::operator=(const PrimaryParameters& rhs) {
+	copy(rhs);
+	return *this;
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -427,7 +498,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 			R = S1/pp.DE;									////////// R
 		else
 			R = 10.0;										////////// R
-		action0 = -pi*epsilon*pow(R,2)/2.0 + pi*R*S1;		////////// action0
+		action0 = -PI*epsilon*pow(R,2)/2.0 + PI*R*S1;		////////// action0
 		L = pp.LoR*R;										////////// L
 		if (pp.Tb<R) {
 			double angle = asin(pp.Tb/R);
@@ -440,7 +511,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		minima[0] = 0.0; minima[1] = 0.0; 					////////// minima
 		minima0 = minima;									////////// minima0
 		R = 1.0;											////////// R
-		action0 = 8.0*pow(pi,2.0)/3.0;						////////// action0
+		action0 = 8.0*pow(PI,2.0)/3.0;						////////// action0
 		L = pp.LoR*R;										////////// L
 	}
 	
@@ -524,6 +595,26 @@ void Parameters::print(FILE* stream) const {
 	fprintf(stream,"\n");
 }
 
+// getParameter, inherited
+void Parameters::getParameter(const PrimaryParameters::Label& pLabel, uint& pValue) const {
+	PrimaryParameters::getParameter(pLabel,pValue);
+}
+
+// getParameter, inherited
+void Parameters::getParameter(const PrimaryParameters::Label& pLabel, double& pValue) const {
+	PrimaryParameters::getParameter(pLabel,pValue);
+}
+
+// nameVector, inherited
+vector<string> Parameters::nameVector() const {
+	return PrimaryParameters::nameVector();
+}
+
+// valueVector, inherited
+vector<string> Parameters::valueVector() const {
+	return PrimaryParameters::valueVector();
+}
+
 // set parameters from PrimaryParameters
 void Parameters::setSecondaryParameters () {
 	PrimaryParameters p1;
@@ -541,12 +632,18 @@ void Parameters::setSecondaryParameters () {
 }
 
 // load
+void Parameters::load(const vector<string>& vv) {
+	PrimaryParameters::load(vv);
+	setSecondaryParameters();
+}	
+
+// load
 void Parameters::load(const string& f) {
 	PrimaryParameters::load(f);
 	setSecondaryParameters();
 }	
 
-// empty
+// empty, inherited
 bool Parameters::empty() const {
 	return PrimaryParameters::empty();
 }
@@ -580,32 +677,22 @@ PrimaryParameters::Label Parameters::getLabel(const string& pName) const {
 	return label;
 }
 
-
 // change all parameters due to change in one, uint
-bool Parameters::changeParameters (const PrimaryParameters::Label& label, const uint& pValue) {
-	bool anythingChanged = false;
+void Parameters::changeParameters (const PrimaryParameters::Label& label, const uint& pValue) {
 	switch (label) {
 		case pot:
-			if (Pot!=pValue)
-				anythingChanged = true; // would not recommend changing Pot this way
 			Pot = pValue;
 			break;
 		case n:
-			if (N!=pValue)
-				anythingChanged = true;
 			N = pValue;
 			a = L/(N-1);
 			break;
 		case na:
-			if (Na!=pValue)
-				anythingChanged = true;
 			Na = pValue;
 			NT = Na + Nb + Nc;
 			Ta = b*(double)Na;
 			break;
 		case nb:
-			if (Nb!=pValue)
-				anythingChanged = true;
 			Nb = pValue;
 			NT = Na + Nb + Nc;
 			b = Tb/(Nb-1.0);
@@ -613,8 +700,6 @@ bool Parameters::changeParameters (const PrimaryParameters::Label& label, const 
 			Tc = b*(double)Nc;
 			break;
 		case nc:
-			if (Nc!=pValue)
-				anythingChanged = true;
 			Nc = pValue;
 			NT = Na + Nb + Nc;
 			Tc = b*(double)Nc;
@@ -623,7 +708,12 @@ bool Parameters::changeParameters (const PrimaryParameters::Label& label, const 
 			cerr << "Parameters::changeParameters error: " << label << " not changed" << endl;
 			break;
 	}
-	return anythingChanged;	
+}
+
+// change all parameters due to change in one, uint
+void Parameters::changeParameters (const string& pName, const uint& pValue) {
+	PrimaryParameters::Label label = getLabel(pName);
+	return changeParameters(label,pValue);
 }
 
 // change all parameters due to change in one, uint
@@ -633,12 +723,9 @@ bool Parameters::changeParameters (const string& pName, const uint& pValue) {
 }
 
 // change all parameters due to change in one, double
-bool Parameters::changeParameters (const PrimaryParameters::Label& label, const double& pValue) {
-	bool anythingChanged = false;
+void Parameters::changeParameters (const PrimaryParameters::Label& label, const double& pValue) {
 	switch (label) {
 		case lor:
-			if (abs(LoR-pValue)>MIN_NUMBER)
-				anythingChanged = true;
 			LoR = pValue;
 			L = LoR*R;
 			a = L/(N-1);
@@ -646,8 +733,6 @@ bool Parameters::changeParameters (const PrimaryParameters::Label& label, const 
 		case de:
 			//this parameter changes the physics of the Potential
 			//but it does not change Tb/R, where R(epsilon)
-			if (abs(DE-pValue)>MIN_NUMBER)
-				anythingChanged = true;
 			R = R*DE/pValue; //R scales with 1/DE and the other length scales scale with R
 			L = L*DE/pValue;
 			a = a*DE/pValue;
@@ -661,8 +746,6 @@ bool Parameters::changeParameters (const PrimaryParameters::Label& label, const 
 		case tb:
 			//this paramter changes the physics for the periodic instanton,	
 			//as Tb/R changes where R = R(epsilon)
-			if (abs(Tb-pValue)>MIN_NUMBER)
-				anythingChanged = true;
 			b = b*pValue/Tb;
 			Ta = Ta*pValue/Tb;
 			Tc = Tc*pValue/Tb;
@@ -674,29 +757,49 @@ bool Parameters::changeParameters (const PrimaryParameters::Label& label, const 
 			}
 			break;
 		case theta:
-			if (abs(Theta-pValue)>MIN_NUMBER)
-				anythingChanged = true;
 			Theta = pValue;
 			Gamma = exp(-Theta);
 			break;
 		case reg:
-			if (abs(Reg-pValue)>MIN_NUMBER)
-				anythingChanged = true;
 			Reg = pValue;
 			break;
 		default:
 			cerr << "Parameters::changeParameters error: " << label << " not changed" << endl;
 			break;
 	}
-	return anythingChanged;	
 }
 
 
 // change all parameters due to change in one, double
 // n.b. i have removed the option to change secondary parameters such as L and R
-bool Parameters::changeParameters (const string& pName, const double& pValue) {
+void Parameters::changeParameters (const string& pName, const double& pValue) {
 	PrimaryParameters::Label label = getLabel(pName);
 	return changeParameters(label,pValue);
+}
+
+// change all parameters due to change in one, uint
+void Parameters::step (const ParametersRange& pr, const PrimaryParameters::Label& label, const uint& j) {
+	if ((uint)label<6) { // THIS IS HIGHLY IMPLEMENTATION DEPENDENT!
+		uint current = 0, max = 0, min = 0;
+		getParameter(label,current);
+		(pr.Max).getParameter(label,max);
+		(pr.Min).getParameter(label,min);
+		uint pValue = current+j*(max-min)/((pr.Steps)[label-1]-1.0);
+		changeParameters(label,pValue);
+	}
+	else {
+		double current = 0.0, max = 0.0, min = 0.0;
+		getParameter(label,current);
+		(pr.Max).getParameter(label,max);
+		(pr.Min).getParameter(label,min);
+		double pValue = current+j*(max-min)/((pr.Steps)[label-1]-1.0);
+		changeParameters(label,pValue);
+	}
+}
+
+// step
+void Parameters::step(const ParametersRange& pr, const Parameters::Label& label) {
+	step(pr,label,1);
 }
 
 // operator<< - just prints primary parameters
@@ -717,8 +820,168 @@ istream& Parameters::readBinary(istream& is) {
 	return is;
 }
 
+// copying
+void Parameters::copy(const Parameters& rhs) {
+	PrimaryParameters::copy(static_cast<const PrimaryParameters&>(rhs));
+	setSecondaryParameters();
+}
+
+// copying
+Parameters& Parameters::operator=(const Parameters& rhs) {
+	copy(rhs);
+	return *this;
+}
+
 /*-------------------------------------------------------------------------------------------------------------------------
-	5. Options
+	5. ParametersRange
+-------------------------------------------------------------------------------------------------------------------------*/
+
+// ParametersRange empty constructor
+ParametersRange::ParametersRange(): Min(), Max() {
+	Steps = vector<uint>(Size,0);
+}
+
+// ParametersRange constructor
+ParametersRange::ParametersRange(const Parameters& min, const Parameters& max, const vector<uint>& steps): \
+									Min(min), Max(max) {
+	if (steps.size()==Size)
+		Steps = steps;
+	else {
+		Steps = vector<uint>(Size,0);
+		cerr << "ParametersRange Error: Initialization not possible as input steps.size() = " << steps.size() << " not " << Size << endl;
+	} 							
+}
+
+// toStep
+bool ParametersRange::toStep(const Parameters::Label& stepNum) const {
+	return (Steps[stepNum-1]>0);
+}
+
+// totalSteps
+uint ParametersRange::totalSteps() const {
+	uint N = 1;
+	for (uint j=0; j<ParametersRange::Size; j++)
+		N *= (Steps[j]>0? Steps[j]: 1);
+	return N;
+}
+
+// position
+Parameters ParametersRange::position(const uint& pos) const {
+	Parameters p =  Min;
+	uint n, Nratio, local;
+	Nratio = totalSteps();
+	local = pos;
+	for (uint j=0; j<ParametersRange::Size; j++) {
+		if (Steps[ParametersRange::Size-j-1]>0) {
+			Nratio /= Steps[ParametersRange::Size-j-1];
+			n = local/Nratio;
+			local -= n*Nratio;
+			p.step(*this,static_cast<Parameters::Label>(ParametersRange::Size-j),n);
+		}
+	}
+	return p;
+}
+
+// neigh
+Parameters ParametersRange::neigh(const uint& pos) const {
+	if (pos==0) {
+		cerr << "ParametersRange::neigh error: position 0 has no neighbour" << endl;
+		return Min;
+	}
+	uint N = 1, k=0, npos = pos;
+	while (k<ParametersRange::Size && npos==pos) {
+		if (Steps[k]>0) {
+			if (pos%(N*Steps[k])!=0)
+				npos -= N;
+			N *= Steps[k];
+		}
+		k++;
+	}
+	return position(npos);
+}
+
+// save
+void ParametersRange::save(const string& filename) const {
+	ofstream os;
+	os.open(filename.c_str());
+	if (!os.good()) {
+		cerr << "ParametersRange::save error:" << endl;
+		cerr << "stream for " << filename << " not good." << endl;
+		return;
+	}
+	os << *this;
+	os << endl;
+	os.close();
+}
+
+// load
+void ParametersRange::load(const string& filename) {
+	ifstream is;
+	is.open(filename.c_str());
+	if (!is.good()) {
+		cerr << "ParametersRange::load error:" << endl;
+		cerr << "stream for " << filename << " not good" << endl;
+		return;
+	}
+	string dross;
+	// THIS NEEDS REDOING SO THAT THERE AREN'T MISTAKES WHEN SPACES DISAPPEAR
+	is >> dross >> dross >> Min.Pot >> dross >> Max.Pot >> dross >> Steps[0] >> dross;
+	is >> dross >> dross >> Min.N >> dross >> Max.N >> dross >> Steps[1] >> dross;
+	is >> dross >> dross >> Min.Na >> dross >> Max.Na >> dross >> Steps[2] >> dross;
+	is >> dross >> dross >> Min.Nb >> dross >> Max.Nb >> dross >> Steps[3] >> dross;
+	is >> dross >> dross >> Min.Nc >> dross >> Max.Nc >> dross >> Steps[4] >> dross;
+	is >> dross >> dross >> Min.LoR >> dross >> Max.LoR >> dross >> Steps[5] >> dross;
+	is >> dross >> dross >> Min.DE >> dross >> Max.DE >> dross >> Steps[6] >> dross;
+	is >> dross >> dross >> Min.Tb >> dross >> Max.Tb >> dross >> Steps[7] >> dross;
+	is >> dross >> dross >> Min.Theta >> dross >> Max.Theta >> dross >> Steps[8] >> dross;
+	is >> dross >> dross >> Min.Reg >> dross >> Max.Reg >> dross >> Steps[9] >> dross;
+	is.close();
+		Min.setSecondaryParameters();
+	Max.setSecondaryParameters();
+}
+
+// empty
+bool ParametersRange::empty() const {
+	return (Min.empty() && Max.empty() && Steps.empty());
+}
+
+// writeBinary
+ostream& ParametersRange::writeBinary(ostream& os) const {
+	Min.writeBinary(os);
+	Max.writeBinary(os);
+	os.write(reinterpret_cast<const char*>(&Steps[0]),Size*sizeof(uint));
+	return os;
+}
+
+// readBinary
+istream& ParametersRange::readBinary(istream& is) {
+	Min.readBinary(is);
+	Max.readBinary(is);
+	Min.setSecondaryParameters();
+	Max.setSecondaryParameters();
+	is.read(reinterpret_cast<char*>(&Steps[0]),Size*sizeof(uint));
+	return is;
+}
+
+// operator<<
+ostream& operator<<(ostream& os, const ParametersRange& pr) {
+	os << left;
+	vector<string> nv = (pr.Min).nameVector();
+	vector<string> vvMin = (pr.Min).valueVector();
+	vector<string> vvMax = (pr.Max).valueVector();
+	for (uint j=0; j<pr.Size; j++)
+		os << setw(20) << nv[j] << "[ " << setw(12) << vvMin[j] << " , " \
+						<< setw(12) << vvMax[j] << " , " << setw(12) << (pr.Steps)[j] << " ]" << endl;
+	return os;
+}
+
+// operator==
+bool operator==(const ParametersRange& l, const ParametersRange& r) {
+	return (l.Min==r.Min && l.Max==r.Max && l.Steps==r.Steps);
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	6. Options
 		- changeOptions
 		- operator<<
 		- save
@@ -924,7 +1187,7 @@ void Options::print(FILE* stream) const {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	5. Closenesses
+	7. Closenesses
 		- operator<<
 		- save
 		- load

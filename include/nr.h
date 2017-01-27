@@ -72,4 +72,10 @@ void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Po
 // filenameMain
 Filename filenameMain(const Parameters&, const string& base, const string& subfolder, const string& id, const string& suffix);
 
+// filenameSpatial
+Filename filenameSpatial(const Parameters&, const string& base, const string& subfolder, const string& id, const string& suffix);
+
+// filenamePeriodic
+Filename filenamePeriodic(const Parameters&, const string& base, const string& subfolder, const string& id, const string& suffix);
+
 #endif // __NR_H_INCLUDED__

@@ -1,0 +1,14 @@
+to do at work:
+-try nonzero theta
+-get results from main for periodic instantons, plot lines of E vs Num, plot F(E) for the periodic instantons
+-get results from main for a range of epsilon
+-consider dE*F vs E and F vs E in the limit dE->zero
+
+to do at work, or in cam:
+-relate dE to epsilon, properly
+-translate matlab code for arbitrary V to c++
+-put in V from dl, integrate as arttu recommended
+
+-if E*a/pi/Num is too large (which it seems to be), can try toby's idea of factor off known dependences
+-should sort out eigen/blas/lapack/superlu etc for cosmos
+-parallelize code

@@ -20,6 +20,8 @@
 #include "eigen_extras.h"
 #include "main_fn.h"
 #include "main.h"
+#include "nr.h"
+#include "print3.h"
 
 //#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
 
@@ -279,8 +281,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	if (((opts.loopChoice).substr(0,5)).compare("const")==0) {
 		step_opts.epsi_x = opts.epsiTb;
 		step_opts.epsi_y = opts.epsiTheta;
-		step_opts.angle0 = pi/2.0;
-		step_opts.closeness = closenesses.Step;
+		step_opts.angle0 = PI/2.0;
+		step_opts.tol = closenesses.Step;
 		step_opts.stepType = StepperOptions::constPlane;
 		step_opts.directed = StepperOptions::local;
 		point(psu.Tb,psu.Theta);
@@ -314,7 +316,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		step_opts.angle0 = 0.0;
 		step_opts.stepType = StepperOptions::straight;
 		step_opts.directed = StepperOptions::undirected;
-		step_opts.closeness = closenesses.Step; // irrelevant here
+		step_opts.tol = closenesses.Step; // irrelevant here
 	}
 	Stepper stepper(step_opts,point);
 	
@@ -330,16 +332,16 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		Parameters ps = psu;
 		if (opts.loops>1) {
 			if ((opts.loopChoice)[0]=='N') {
-				bool anythingChanged = ps.changeParameters(opts.loopChoice,(uint)stepper.x());
-				if (loop==0 && anythingChanged) {
+				ps.changeParameters(opts.loopChoice,(uint)stepper.x());
+				if (loop==0) {
 					cos << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 					if ((opts.printChoice).compare("gui")==0)
 						cos << opts.loopChoice << " changed to " << (uint)stepper.x() << " on input" << endl;
 				}
 			}
 			else if (((opts.loopChoice).substr(0,5)).compare("const")!=0) {
-				bool anythingChanged = ps.changeParameters(opts.loopChoice,stepper.x());
-				if (loop==0 && anythingChanged) {
+				ps.changeParameters(opts.loopChoice,stepper.x());
+				if (loop==0) {
 					cos << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
 					if ((opts.printChoice).compare("gui")==0)
 						cos << opts.loopChoice << " changed to " << stepper.x() << " on input" << endl;
@@ -363,7 +365,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		fprintf(cof,"%12s%12s\n","timenumber: ",timenumber.c_str());
 		cout << "timenumber: " << timenumber << endl;
 		if (((opts.loopChoice).substr(0,5)).compare("const")==0 && loop>0) {
-			double angleModTwoPi = mod(stepper.stepAngle(),-pi,pi);		
+			double angleModTwoPi = mod(stepper.stepAngle(),-PI,PI);		
 			fprintf(cof,"%12s%12.3g\n","step angle: ",angleModTwoPi);
 			if ((opts.printChoice).compare("gui")==0)
 				printf("%12s%12.3g\n","step angle: ",angleModTwoPi);
@@ -495,7 +497,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				save(freqsExpF,so_simple,freqs_exp);
 			}
 		}
-
+		
 		// loading negVec
 		vec negVec;
 		if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
@@ -504,6 +506,13 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				so_simple.printType = SaveOptions::ascii;
 				load(eigVecFile,so_simple,negVec); // should automatically interpolate
 				so_simple.printType = SaveOptions::binary;
+				if (negVec.size()!=ps.N)
+					negVec = interpolate1d(negVec,ps.N);
+				// ##############################################################################################################################################
+				/*Filename toNewFileEigVec = filenameMain(ps,"","eigenvector","negVec",".data");
+				saveVectorBinary(toNewFileEigVec,negVec);
+				cout << "printing " << toNewFileEigVec << endl;*/
+				// ##############################################################################################################################################
 			}
 			else {
 				Filename eigVecFile;
@@ -620,6 +629,12 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			if ((opts.printChoice).compare("gui")==0)
 				printf("%12s%30s\n","input: ",(lastPhi()).c_str());
 		}
+		
+		// ##############################################################################################################################################
+		/*Filename toNewFile = filenameMain(ps,"","field","fMain",".data");
+		saveVectorBinary(toNewFile,p);
+		cout << "printing " << toNewFile << endl;*/
+		// ##############################################################################################################################################
 		
 		// printing parameters
 		ps.print(cof);
@@ -750,7 +765,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 			double normX = chiX.norm();
 			double normT = chiT.norm();
-			normT = pow(normT,0.5);
 			if (abs(normX)<MIN_NUMBER || abs(normT)<MIN_NUMBER) {
 				ces << "norm of chiX = " << normX << ", norm of chiT = " << normT << endl;
 				if ((opts.printChoice).compare("gui")==0)
@@ -820,7 +834,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 		- t=(NT-1)
 		- t=0
 		- bulk
-		- extras (*4.0*pi, etc)
+		- extras (*4.0*PI, etc)
 		- E, N, bound, W
 ----------------------------------------------------------------------------------------------------------------------------*/
 			
@@ -1068,14 +1082,14 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 	    	linNumOffShell(ps.NT-1) = linNumOffShell(ps.NT-2);
 	    	
 		    if (ps.Pot==3) {
-		    	action 			*= 4.0*pi;
-		    	derivErg 		*= 4.0*pi;
-		    	potErg 			*= 4.0*pi;
-		    	erg				*= 4.0*pi;
-		    	linErg			*= 4.0*pi;
-		    	linNum			*= 4.0*pi;
-		    	linNumOffShell 	*= 4.0*pi;
-		    	linErgOffShell 	*= 4.0*pi;
+		    	action 			*= 4.0*PI;
+		    	derivErg 		*= 4.0*PI;
+		    	potErg 			*= 4.0*PI;
+		    	erg				*= 4.0*PI;
+		    	linErg			*= 4.0*PI;
+		    	linNum			*= 4.0*PI;
+		    	linNumOffShell 	*= 4.0*PI;
+		    	linErgOffShell 	*= 4.0*PI;
 		    }
 		   
 		    if (abs(ps.Theta)<MIN_NUMBER) {
@@ -1128,7 +1142,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			//calculating continuum approx to linErg and linNum on initial time slice - redundant
 			if (ps.Pot==3 && abs(ps.Theta)<MIN_NUMBER) {
 				for (uint k=1; k<ps.N; k++) {
-					double momtm = k*pi/(ps.L-ps.r0);
+					double momtm = k*PI/(ps.L-ps.r0);
 					double freqSqrd = 1.0+pow(momtm,2.0);
 					double Asqrd, integral1 = 0.0, integral2 = 0.0;
 					for (unsigned int l=0; l<ps.N; l++) {
@@ -1138,8 +1152,8 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 						integral2 += ps.a*(p(2*(m+1))-p(2*m))*pow(2.0/ps.L,0.5)*sin(momtm*r)/ps.b;
 					}
 					Asqrd = pow(integral1,2.0) + pow(integral2,2.0)/freqSqrd;
-					linErgContm += 2.0*pi*Asqrd*freqSqrd;
-					linNumContm += 2.0*pi*Asqrd*pow(freqSqrd,0.5);
+					linErgContm += 2.0*PI*Asqrd*freqSqrd;
+					linNumContm += 2.0*PI*Asqrd*pow(freqSqrd,0.5);
 				}
 			}
 			double contmErgTest = absDiff(E,linErgContm);
@@ -1157,7 +1171,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				double w_n_e = freqs_exp(n);
 				for (uint j=0; j<ps.N; j++) {
 					lint m=j*ps.NT;
-					double sqrtDj = sqrt(4.0*pi*DxFn(j,ps));
+					double sqrtDj = sqrt(4.0*PI*DxFn(j,ps));
 					if (abs(w_n)>1.0e-16 && abs(w_n_e)>1.0e-16) {
 						a_k(n) += exp(ii*w_n_e*T0)*sqrt(2.0*w_n)*modes(j,n)* \
 									sqrtDj*((Cp(m+1)-ps.minima[0])-(Cp(m)-ps.minima[0])*exp(ii*w_n_e*dt0)) \
@@ -1184,7 +1198,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 					for (uint n=0; n<ps.N; n++) {
 						double w_n = freqs(n);
 						double w_n_e = freqs_exp(n);
-						double sqrtDj = sqrt(4.0*pi*DxFn(j,ps));
+						double sqrtDj = sqrt(4.0*PI*DxFn(j,ps));
 						if (abs(w_n)>1.0e-16) {
 							linRep(j) += modes(j,n)*(a_k(n)*exp(-ii*w_n_e*T0)+b_k(n)*exp(ii*w_n_e*T0)) \
 											/sqrt(2.0*w_n)/sqrtDj;
@@ -1250,7 +1264,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 			
 			//checking lattice small enough for E, should have parameter for this
-			double momTest = E*ps.b/Num/pi; //perhaps should have a not b here
+			double momTest = E*ps.b/Num/PI; //perhaps should have a not b here
 			checkLatt.add(momTest);
 			
 			//checking initial boundary conditions satisfied
@@ -1561,7 +1575,7 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				return 1;
 			}
 			double angleToPrint = (loop==0? 0.0: stepper.stepAngle());
-			if (absDiff(opts.loopMin,F)<stepper.closeness() && loop==0)
+			if (absDiff(opts.loopMin,F)<stepper.tol() && loop==0)
 				stepper.addResult(opts.loopMin);
 			else if (loop==0) {
 				opts.loopMin = F;

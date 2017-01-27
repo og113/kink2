@@ -143,3 +143,24 @@ Filename filenameMain(const Parameters& pr, const string& base, const string& su
 	return f;
 }
 
+// filenameSpatial
+Filename filenameSpatial(const Parameters& pr, const string& base, const string& subfolder, const string& id, const string& suffix) {
+	Filename f = base+"data/pot_"+nts(pr.Pot)+"/"+subfolder+"/"+id\
+					+"_N_"+nts(pr.N)\
+					+"_LoR_"+nts(pr.LoR)\
+					+"_reg_"+nts(pr.Reg)\
+					+ suffix;
+	return f;
+}
+
+// filenamePeriodic
+Filename filenamePeriodic(const Parameters& pr, const string& base, const string& subfolder, const string& id, const string& suffix) {
+	Filename f = base+"data/pot_"+nts(pr.Pot)+"/"+subfolder+"/"+id\
+					+"_N_"+nts(pr.N)\
+					+"_Nb_"+nts(pr.Nb)\
+					+"_LoR_"+nts(pr.LoR)\
+					+"_Tb_"+nts(pr.Tb)\
+					+"_reg_"+nts(pr.Reg)\
+					+ suffix;
+	return f;
+}

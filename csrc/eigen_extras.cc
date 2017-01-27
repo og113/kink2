@@ -25,7 +25,11 @@ CONTENTS
 void printErrorInformation(const vec& v, const string& name) {
 	uint minCoeff1 = 0, maxCoeff1 = 0, largeCounter = 0;
 	number max = v.maxCoeff(&maxCoeff1);
+<<<<<<< HEAD
 	number min = v.minCoeff(&maxCoeff1);
+=======
+	number min = v.minCoeff(&minCoeff1);
+>>>>>>> 0e49d8046b835f27d461ba8917ba472e6150864b
 	number absMax = (-min>max? -min: max);
 	for (uint j=0; j<v.size(); j++) {
 		if (abs(v(j))>absMax/2.0)
@@ -33,6 +37,10 @@ void printErrorInformation(const vec& v, const string& name) {
 	}
 	
 	cout << name << " information:" << endl;
+<<<<<<< HEAD
+=======
+	cout << name <<".size()    :         " << v.size() << endl;
+>>>>>>> 0e49d8046b835f27d461ba8917ba472e6150864b
 	cout << name <<".norm()    :         " << v.norm() << endl;
 	cout << name <<".mean()    :         " << v.mean() << endl;
 	cout << name <<".minCoeff():         " << min  << endl;
@@ -64,6 +72,8 @@ void printErrorInformation(const mat& m, const string& name) {
 	}
 
 	cout << name << " information:" << endl;
+	cout << name <<".rows()    :         " << m.rows() << endl;
+	cout << name <<".cols()    :         " << m.cols() << endl;
 	cout << name <<".norm()    :         " << m.norm() << endl;
 	cout << name <<".minCoeff():         " << min << endl;
 	cout << name <<".maxCoeff():         " << max << endl;

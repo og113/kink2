@@ -446,6 +446,10 @@ vec interpolate1d(vec vec_old, const unsigned int & N_old, const unsigned int & 
 	return vec_new;
 }
 
+vec interpolate1d(vec vec_old, const unsigned int & N_new) {
+	return interpolate1d(vec_old, vec_old.size(), N_new);
+}
+
 // interpolate1d	
 cVec interpolate1d(cVec vec_old, const unsigned int & N_old, const unsigned int & N_new) {
 	if (N_old == N_new) return vec_old;
@@ -464,6 +468,11 @@ cVec interpolate1d(cVec vec_old, const unsigned int & N_old, const unsigned int 
 		else vec_new[l] = vec_old[x_old];
 	}
 	return vec_new;
+}
+
+
+cVec interpolate1d(cVec vec_old, const unsigned int & N_new) {
+	return interpolate1d(vec_old, vec_old.size(), N_new);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------

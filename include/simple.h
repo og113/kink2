@@ -14,8 +14,8 @@ declarations of some very simple functions and classes
 
 using namespace std;
 
-#ifndef pi
-#define pi 3.14159265359
+#ifndef PI
+#define PI 3.14159265359
 #endif
 #ifndef MIN_NUMBER
 #define MIN_NUMBER 1.0e-16
@@ -124,6 +124,9 @@ uint countLines(const string & f);
 
 // count columns
 uint countColumns(const string& f);
+
+// count columns
+uint countColumns(const string& f, const char& separator);
 
 // count doubles (binary)
 uint countDoubles(const string& f);

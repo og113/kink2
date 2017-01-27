@@ -66,7 +66,11 @@ main: $(ODIR)/main.o $(FNODIR)/main_fn.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named main has been compiled
 	
+<<<<<<< HEAD
 main3: $(ODIR)/main3.o $(FNODIR)/main_fn3.o $(COMMONOBJS)
+=======
+main3: $(ODIR)/main3.o  $(FNODIR)/main_fn3.o $(COMMONOBJS)
+>>>>>>> 0e49d8046b835f27d461ba8917ba472e6150864b
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named main3 has been compiled
 	
