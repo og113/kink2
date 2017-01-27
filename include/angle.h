@@ -46,7 +46,7 @@ private:
 	void 			copy(const Angle&);
 };
 
-double Angle::Max = pi;
-double Angle::Min = -pi;
+double Angle::Max = PI;
+double Angle::Min = -PI;
 
 #endif // __ANGLE_H_INCLUDED__

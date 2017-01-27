@@ -480,7 +480,7 @@ for (uint pl=0; pl<Npl; pl++) {
 			loadVectorBinary(freqsExpF,freqs_exp);
 	}
 	else {
-		bool approxOmega = true;
+		bool approxOmega = false;
 		if (!approxOmega) {
 			numericalModes(modes,freqs,freqs_exp,p);
 		}
