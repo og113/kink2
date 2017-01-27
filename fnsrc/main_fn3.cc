@@ -504,7 +504,13 @@ for (uint pl=0; pl<Npl; pl++) {
 		fprintf(cof,"%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
 		if (verbose)
 			printf("%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
-		loadVectorBinary(negVecFile,negVec);
+		if (negVecFile.exists())
+			loadVectorBinary(negVecFile,negVec);
+		else {
+			ces << "Error: negVecFile doesn't exist." << endl;
+			if (verbose)
+				cerr << "Error: negVecFile doesn't exist." << endl;
+		}
 		if (negVec.size()!=p.N)
 			negVec = interpolate1d(negVec,p.N);
 		// THERE WAS A BUNCH MORE STUFF HERE FOR POT!=3 WHICH I HAVE REMOVED, SEE MAIN_FN.CC
@@ -767,23 +773,33 @@ for (uint pl=0; pl<Npl; pl++) {
 		chiT = chiT/normT;
 		
 /*----------------------------------------------------------------------------------------------------------------------------
-9.1 extra checks
+9.1 some extra checks, mostly trivial
 ----------------------------------------------------------------------------------------------------------------------------*/
 		
-		//testing that the potential term is working for pot3
-		if (p.Pot==3 && extraChecks) {
-			comp Vtrial = 0.0, Vcontrol = 0.0;
-			for (unsigned int j=0; j<p.N; j++) {
-				double r = p.r0 + j*p.a;
-				paramsV.epsi = r;
-				V.setParams(paramsV);
-				Vcontrol += pow(f(2*j*p.Nb),2.0)/2.0 - pow(f(2*j*p.Nb),4.0)/4.0/pow(r,2.0);
-				Vtrial += V(f(2*j*p.Nb));
+		if (extraChecks) {
+			//testing that the potential term is working for pot3
+			if (p.Pot==3) {
+				comp Vtrial = 0.0, Vcontrol = 0.0;
+				for (unsigned int j=0; j<p.N; j++) {
+					double r = p.r0 + j*p.a;
+					paramsV.epsi = r;
+					V.setParams(paramsV);
+					Vcontrol += pow(f(2*j*p.Nb),2.0)/2.0 - pow(f(2*j*p.Nb),4.0)/4.0/pow(r,2.0);
+					Vtrial += V(f(2*j*p.Nb));
+				}
+				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
+				fprintf(cof,"potTest     = %30.16g\n",potTest);
+				if (verbose)
+					printf("potTest     = %30.16g\n",potTest);
 			}
-			double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
-			fprintf(cof,"potTest = %8.4g\n",potTest);
-			if (verbose)
-				printf("potTest = %8.4g\n",potTest);
+			fprintf(cof,"f.norm()    = %30.16g\n",f.norm());
+			fprintf(cof,"chiT.norm() = %30.16g\n",normX);
+			fprintf(cof,"chiX.norm() = %30.16g\n",normT);
+			if (verbose) {
+				printf("f.norm()    = %30.16g\n",f.norm());
+				printf("chiT.norm() = %30.16g\n",normX);
+				printf("chiX.norm() = %30.16g\n",normT);
+			}
 		}
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -1237,6 +1253,22 @@ for (uint pl=0; pl<Npl; pl++) {
 		// checking chiT orthogonality satisfied
 		double chiTTest = mds(2*p.N*p.NT+1)*(Len)/normP;
 		checkChiT.add(chiTTest);
+		
+/*----------------------------------------------------------------------------------------------------------------------------
+11.1 some extra checks, mostly trivial
+----------------------------------------------------------------------------------------------------------------------------*/		
+		
+		// some extra checks, mostly trivial
+		if (extraChecks) {
+			fprintf(cof,"f.norm()    = %30.16g\n",f.norm());
+			fprintf(cof,"mds.norm()  = %30.16g\n",mds.norm());
+			fprintf(cof,"dds.norm()  = %30.16g\n",dds.norm());
+			if (verbose) {
+				printf("f.norm()    = %30.16g\n",f.norm());
+				printf("mds.norm()  = %30.16g\n",mds.norm());
+				printf("dds.norm()  = %30.16g\n",dds.norm());
+			}
+		}
 
 /*----------------------------------------------------------------------------------------------------------------------------
 12. printing early 1
@@ -1360,6 +1392,18 @@ for (uint pl=0; pl<Npl; pl++) {
 	
 			//passing changes on to complex vector
 			Cf = vecComplex(f,p.N*p.NT);
+		}
+		
+/*----------------------------------------------------------------------------------------------------------------------------
+13.1 some extra checks, mostly trivial
+----------------------------------------------------------------------------------------------------------------------------*/		
+		
+		// some extra checks, mostly trivial
+		if (extraChecks) {
+			fprintf(cof,"delta.norm()= %30.16g\n",delta.norm());
+			if (verbose) {
+				printf("delta.norm()= %30.16g\n",delta.norm());
+			}
 		}
 		
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -1624,9 +1668,9 @@ for (uint pl=0; pl<Npl; pl++) {
 		Filename fRes = filenameMain(p,baseFolder,"field","fMain",suffix);
 		saveVectorBinary(fRes,f);
 		Filename ergRes = filenameMain(p,baseFolder,"energy","ergMain",suffix);
-		saveComplexVectorBinary(fRes,erg);
+		saveComplexVectorBinary(ergRes,erg);
 		Filename linErgRes = filenameMain(p,baseFolder,"energy","linErgMain",suffix);
-		saveComplexVectorBinary(fRes,linErg);
+		saveComplexVectorBinary(linErgRes,linErg);
 		
 		fprintf(cof,"%12s%50s\n","f     :",((string)fRes).c_str());
 		fprintf(cof,"%12s%50s\n","erg   :",((string)ergRes).c_str());
