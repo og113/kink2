@@ -128,7 +128,7 @@ tols.load(tolsFile);
 cout << "tols      : " << tolsFile << endl;
 
 // other possible inputs
-bool trivialChecks = false;
+bool extraChecks = false;
 bool verbose = true;
 bool redo = true;
 bool redoErrors = true;
@@ -163,7 +163,7 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("printChoice")==0) 										opts.printChoice = argv[2*j+2];
 		else if (id.compare("rank")==0) 											rank = argv[2*j+2];
 		else if (id.compare("verbose")==0) 											verbose = (stn<uint>(argv[2*j+2])!=0);
-		else if (id.compare("trivialChecks")==0) 									trivialChecks = (stn<uint>(argv[2*j+2])!=0);
+		else if (id.compare("extraChecks")==0) 									extraChecks = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("redo")==0) 											redo = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("redoErrors")==0) 										redoErrors = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("step")==0) 											step = (stn<uint>(argv[2*j+2])!=0);
@@ -671,22 +671,6 @@ for (uint pl=0; pl<Npl; pl++) {
 		boundRe = Eigen::VectorXd::Zero(p.N);
 		boundIm = Eigen::VectorXd::Zero(p.N);
 		
-		//testing that the potential term is working for pot3
-		if (p.Pot==3 && trivialChecks) {
-			comp Vtrial = 0.0, Vcontrol = 0.0;
-			for (unsigned int j=0; j<p.N; j++) {
-				double r = p.r0 + j*p.a;
-				paramsV.epsi = r;
-				V.setParams(paramsV);
-				Vcontrol += pow(f(2*j*p.Nb),2.0)/2.0 - pow(f(2*j*p.Nb),4.0)/4.0/pow(r,2.0);
-				Vtrial += V(f(2*j*p.Nb));
-			}
-			double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
-			fprintf(cof,"potTest = %8.4g\n",potTest);
-			if (verbose)
-				printf("potTest = %8.4g\n",potTest);
-		}
-		
 /*----------------------------------------------------------------------------------------------------------------------------
 9. chiT, chiX
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -781,6 +765,39 @@ for (uint pl=0; pl<Npl; pl++) {
 		}
 		chiX = chiX/normX;
 		chiT = chiT/normT;
+		
+/*----------------------------------------------------------------------------------------------------------------------------
+9.1 some extra checks, mostly trivial
+----------------------------------------------------------------------------------------------------------------------------*/
+       
+        if (extraChecks) {
+            //testing that the potential term is working for pot3
+            if (p.Pot==3) {
+                comp Vtrial = 0.0, Vcontrol = 0.0;
+                for (unsigned int j=0; j<p.N; j++) {
+                    double r = p.r0 + j*p.a;
+                    paramsV.epsi = r;
+                    V.setParams(paramsV);
+                    Vcontrol += pow(f(2*j*p.Nb),2.0)/2.0 -
+pow(f(2*j*p.Nb),4.0)/4.0/pow(r,2.0);
+                    Vtrial += V(f(2*j*p.Nb));
+                }
+                double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) +
+pow(imag(Vcontrol-Vtrial),2.0),0.5);
+                fprintf(cof,"potTest     = %30.16g\n",potTest);
+                if (verbose)
+                    printf("potTest     = %30.16g\n",potTest);
+            }
+            fprintf(cof,"f.norm()    = %30.16g\n",f.norm());
+            fprintf(cof,"chiT.norm() = %30.16g\n",normX);
+            fprintf(cof,"chiX.norm() = %30.16g\n",normT);
+            if (verbose) {
+                printf("f.norm()    = %30.16g\n",f.norm());
+                printf("chiT.norm() = %30.16g\n",normX);
+                printf("chiX.norm() = %30.16g\n",normT);
+            }
+        }
+
 
 /*----------------------------------------------------------------------------------------------------------------------------
 10. assigning mds, dds etc
@@ -1084,7 +1101,7 @@ for (uint pl=0; pl<Npl; pl++) {
 ----------------------------------------------------------------------------------------------------------------------------*/
 		
 		//trivial test that erg=potErg+derivErg
-		if (trivialChecks) {
+		if (extraChecks) {
 			for (uint j=0; j<p.NT; j++) {
 				double diff = absDiff(erg(j),potErg(j)+derivErg(j));
 				if (diff>1.0e-14) {
@@ -1150,7 +1167,7 @@ for (uint pl=0; pl<Npl; pl++) {
 			p0(j) = Cf(j*p.NT);
 			linNumAB += a_k(j)*b_k(j);
 			linErgAB += freqs(j)*a_k(j)*b_k(j);
-			if (trivialChecks) {
+			if (extraChecks) {
 				for (uint n=0; n<p.N; n++) {
 					double w_n = freqs(n);
 					double w_n_e = freqs_exp(n);
@@ -1162,7 +1179,7 @@ for (uint pl=0; pl<Npl; pl++) {
 				}
 			}
 		}
-		if (trivialChecks) {
+		if (extraChecks) {
 			linRepTest = absDiff(p0,linRep);
 			checkLR.add(linRepTest);
 		}
@@ -1233,6 +1250,25 @@ for (uint pl=0; pl<Npl; pl++) {
 		// checking chiT orthogonality satisfied
 		double chiTTest = mds(2*p.N*p.NT+1)*(Len)/normP;
 		checkChiT.add(chiTTest);
+		
+/*----------------------------------------------------------------------------------------------------------------------------
+11.1 some extra checks, mostly trivial
+----------------------------------------------------------------------------------------------------------------------------*/   
+   
+       
+        // some extra checks, mostly trivial
+        if (extraChecks) {
+            fprintf(cof,"f.norm()    = %30.16g\n",f.norm());
+            fprintf(cof,"mds.norm()  = %30.16g\n",mds.norm());
+            fprintf(cof,"dds.norm()  = %30.16g\n",dds.norm());
+            if (verbose) {
+                printf("f.norm()    = %30.16g\n",f.norm());
+                printf("mds.norm()  = %30.16g\n",mds.norm());
+                printf("dds.norm()  = %30.16g\n",dds.norm());
+            }
+        }
+
+
 
 /*----------------------------------------------------------------------------------------------------------------------------
 12. printing early 1
@@ -1357,6 +1393,20 @@ for (uint pl=0; pl<Npl; pl++) {
 			//passing changes on to complex vector
 			Cf = vecComplex(f,p.N*p.NT);
 		}
+		
+/*----------------------------------------------------------------------------------------------------------------------------
+13.1 some extra checks, mostly trivial
+----------------------------------------------------------------------------------------------------------------------------*/   
+   
+       
+        // some extra checks, mostly trivial
+        if (extraChecks) {
+            fprintf(cof,"delta.norm()= %30.16g\n",delta.norm());
+            if (verbose) {
+                printf("delta.norm()= %30.16g\n",delta.norm());
+            }
+        }
+
 		
 /*----------------------------------------------------------------------------------------------------------------------------
 14. printing early 2
@@ -1620,9 +1670,9 @@ for (uint pl=0; pl<Npl; pl++) {
 		Filename fRes = filenameMain(p,baseFolder,"field","fMain",suffix);
 		saveVectorBinary(fRes,f);
 		Filename ergRes = filenameMain(p,baseFolder,"energy","ergMain",suffix);
-		saveComplexVectorBinary(fRes,erg);
+		saveComplexVectorBinary(ergRes,erg);
 		Filename linErgRes = filenameMain(p,baseFolder,"energy","linErgMain",suffix);
-		saveComplexVectorBinary(fRes,linErg);
+		saveComplexVectorBinary(linErgRes,linErg);
 		
 		fprintf(cof,"%12s%50s\n","f     :",((string)fRes).c_str());
 		fprintf(cof,"%12s%50s\n","erg   :",((string)ergRes).c_str());
