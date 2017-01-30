@@ -13,16 +13,16 @@ cout << "test nr: " << endl;
 
 // parameters
 PrimaryParameters pr1;
-pr1.pot=3;
+pr1.Pot=3;
 pr1.N = 4;
 pr1.Na = 0;
 pr1.Nb = 4;
 pr1.Nc = 0;
 pr1.LoR = 1.0;
-pr1.dE = 0.01;
+pr1.DE = 0.01;
 pr1.Tb = 1.0;
-pr1.theta = 0.0;
-pr1.reg = 0.01;
+pr1.Theta = 0.0;
+pr1.Reg = 0.01;
 Parameters pr(pr1);
 
 // scalars
@@ -70,7 +70,7 @@ for (uint j=0; j<length; j++) {
 	else if (t==0) {
 		// initial conditions - PROBABLY WANT TO REJIGG ALL OF THIS
 				
-		if (abs(pr.theta)<MIN_NUMBER) {
+		if (abs(pr.Theta)<MIN_NUMBER) {
 			dds.insert(2*j+1,2*(j+1)+1) = 1.0; //zero imaginary part of time derivative
 			dds.insert(2*j,2*j+1) = 1.0; //zero imaginary part
 		}

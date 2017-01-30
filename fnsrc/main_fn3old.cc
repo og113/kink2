@@ -20,7 +20,7 @@
 #include "analysis.h"
 #include "eigen_extras.h"
 #include "main.h"
-#include "main_fn3.h"
+#include "main_fn3old.h"
 #include "nr.h"
 #include "print3.h"
 
@@ -66,7 +66,7 @@ struct StepperArgv {
 		- beginning cos and ces 
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int main_fn3(int argc, vector<string> argv)
+int main_fn3old(int argc, vector<string> argv)
 {
 
 // defining timenumber
@@ -817,21 +817,8 @@ for (uint pl=0; pl<Npl; pl++) {
 	- E, N, bound, W
 ----------------------------------------------------------------------------------------------------------------------------*/
 		
-		// coefficient vectors
-		cVec coeff_kineticT(p.N*p.NT);
-		cVec coeff_kineticS(p.N*p.NT);
-		cVec coeff_pot(p.N*p.NT);
-		// preparatory loop over lattice points
-		for (lint j = 0; j < p.N*p.NT; j++) {
-			uint t 				= intCoord(j,0,p); //coordinates
-			uint x 				= intCoord(j,1,p);
-			coeff_kineticT[j] 	= DxFn(x,p)/dtFn(t,p);
-			coeff_kineticS[j] 	= -DtFn(t,p)/dxFn(x,p);
-			coeff_pot[j]	 	= -DtFn(t,p)*DxFn(x,p);
-		}
-		
 		// beginning loop over lattice points
-		for (lint j = 0; j < p.N*p.NT; j++) {
+		for (lint j = 0; j < p.N*p.NT; j++) {		
 			uint t 					= intCoord(j,0,p); //coordinates
 			uint x 					= intCoord(j,1,p);
 			int neighPosX 			= neigh(j,1,1,p);
@@ -895,11 +882,7 @@ for (uint pl=0; pl<Npl; pl++) {
 				dds.insert(2*j+1,2*j+1) = 1.0;
 			}
 			else if (p.Pot==3 && x==0) {
-				//###########################################################################################
-				// new stuff
-				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
-				//###########################################################################################
-				//kineticS 				+= 	Dt*pow(Cf(neighPosX),2.0)/dx/2.0;
+				kineticS 				+= 	Dt*pow(Cf(neighPosX),2.0)/dx/2.0;
 				derivErg(t) 			+= 	pow(Cf(neighPosX),2.0)/dx/2.0; //n.b. the Dt/dt difference is ignored for erg(t)
 				erg(t) 					+= 	pow(Cf(neighPosX),2.0)/dx/2.0;
 				
@@ -907,17 +890,12 @@ for (uint pl=0; pl<Npl; pl++) {
 				dds.insert(2*j+1,2*j+1) = 1.0;
 			}			
 			else if (t==(p.NT-1)) {
-				//###########################################################################################
-				// new stuff
-				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
-				Potential_nr (j, f, p, V, coeff_pot, potV);
-				//###########################################################################################
 				if (neighPosX!=-1) {
-					//kineticS			+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+					kineticS			+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					derivErg(t) 		+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					erg(t) 				+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 				}			
-				//potV 					+= Dt*Dx*V(Cf(j));
+				potV 					+= Dt*Dx*V(Cf(j));
 				pot_r 					+= Dt*Dx*Vr(Cf(j));
 				erg(t) 					+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				potErg(t) 				+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
@@ -926,33 +904,17 @@ for (uint pl=0; pl<Npl; pl++) {
 				dds.insert(2*j+1,2*j+1)   = 1.0; //zero imaginary part
 			}
 			else if (t==0) {
-			
-				//###########################################################################################
-				// new stuff
-				Kinetic_nr (j, 0, f, p, coeff_kineticT, kineticT);
-				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
-				Potential_nr (j, f, p, V, coeff_pot, potV);
-				
-				//mdKinetic_nr (j, 0, f, p, coeff_kineticT, mds);
-				//mdKinetic_nr (j, 1, f, p, coeff_kineticS, mds);
-				//mdPotential_nr (j, f, p, dV, coeff_pot, mds);
-				
-				//ddKinetic_nr (j, 0, f, p, coeff_kineticT, dds);
-				//ddKinetic_nr (j, 1, f, p, coeff_kineticS, dds);
-				//ddPotential_nr (j, f, p, ddV, coeff_pot, dds);
-				//###########################################################################################
-				
-				//kineticT 	+= Dx*pow(Cf(j+1)-Cf(j),2.0)/dt/2.0;
+				kineticT 	+= Dx*pow(Cf(j+1)-Cf(j),2.0)/dt/2.0;
 				derivErg(t) += Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
 				erg(t) 		+= Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
 				
 				///////////////////////////////// including other terms in action at t=0 ///////////////////////////
 				if (neighPosX!=-1) {
-					//kineticS 	+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+					kineticS 	+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					derivErg(t) += pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					erg(t) 		+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 				}
-				//potV 		+= Dt*Dx*V(Cf(j));
+				potV 		+= Dt*Dx*V(Cf(j));
 				pot_r 		+= Dt*Dx*Vr(Cf(j));
 				potErg(t) 	+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				erg(t) 		+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
@@ -1041,46 +1003,59 @@ for (uint pl=0; pl<Npl; pl++) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//bulk
 			else {
-				//###########################################################################################
-				// new stuff
-				Kinetic_nr (j, 0, f, p, coeff_kineticT, kineticT);
-				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
-				Potential_nr (j, f, p, V, coeff_pot, potV);
-				
-				mdKinetic_nr (j, 0, f, p, coeff_kineticT, mds);
-				mdKinetic_nr (j, 1, f, p, coeff_kineticS, mds);
-				mdPotential_nr (j, f, p, dV, coeff_pot, mds);
-				
-				ddKinetic_nr (j, 0, f, p, coeff_kineticT, dds);
-				ddKinetic_nr (j, 1, f, p, coeff_kineticS, dds);
-				ddPotential_nr (j, f, p, ddV, coeff_pot, dds);
-				//###########################################################################################
-				
 				if (neighPosX!=-1) {
+					kineticS 	+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					erg(t) 	 	+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					derivErg(t) += pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 				}
 				
+				kineticT 	+= Dx*pow(Cf(j+1)-Cf(j),2.0)/dt/2.0;
+				potV 		+= Dt*Dx*V(Cf(j));
 				pot_r 		+= Dt*Dx*Vr(Cf(j));
 				erg(t) 		+= Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0 + Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				derivErg(t) += Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
 				potErg(t) 	+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 			
-            	
-	            comp temp1 = Dt*Dx*(dVr(Cf(j)));
-	            comp temp2 = Dt*Dx*(ddVr(Cf(j)));
+	            for (uint k=0; k<2*2; k++) {
+	                int sign = pow(-1,k);
+	                uint direc = (uint)(k/2.0);
+	                int neighb = neigh(j,direc,sign,p);
+	                comp dtd = (sign==1? dt: dtm);
+	                double dxd = (sign==1? dx: dxm);
+	                if (direc == 0) {
+	                    mds(2*j) 					+= real(Dx*Cf(j+sign)/dtd);
+	                    mds(2*j+1) 					+= imag(Dx*Cf(j+sign)/dtd);
+	                    dds.insert(2*j,2*(j+sign)) 		= -real(Dx/dtd);
+	                    dds.insert(2*j,2*(j+sign)+1) 	= imag(Dx/dtd);
+	                    dds.insert(2*j+1,2*(j+sign)) 	= -imag(Dx/dtd);
+	                    dds.insert(2*j+1,2*(j+sign)+1) 	= -real(Dx/dtd);
+	                }
+	                else if (neighb!=-1) {                        
+	                    mds(2*j) 					+= -real(Dt*Cf(neighb)/dxd);
+	                    mds(2*j+1) 					+= -imag(Dt*Cf(neighb)/dxd);
+	                    dds.insert(2*j,2*neighb) 		= real(Dt/dxd);
+	                    dds.insert(2*j,2*neighb+1) 		= -imag(Dt/dxd);
+	                    dds.insert(2*j+1,2*neighb) 		= imag(Dt/dxd);
+	                    dds.insert(2*j+1,2*neighb+1) 	= real(Dt/dxd);
+	                }
+            	}
+	            comp temp0 = Dx*(1.0/dt + 1.0/dtm) - Dt*(1.0/dx + 1.0/dxm);
+	            if (neighPosX==-1) 		temp0 += Dt/dx;
+	            else if (neighNegX==-1) temp0 += Dt/dxm;
+	            comp temp1 = Dt*Dx*(dV(Cf(j)) + dVr(Cf(j)));
+	            comp temp2 = Dt*Dx*(ddV(Cf(j)) + ddVr(Cf(j)));
 	                
-	            mds(2*j) 			+= real(temp1);
-	            mds(2*j+1) 			+= imag(temp1);
-	            dds.coeffRef(2*j,2*j) 	= real(-temp2);
-	            dds.coeffRef(2*j,2*j+1) 	= imag(temp2);
-	            dds.coeffRef(2*j+1,2*j) 	= imag(-temp2);
-	            dds.coeffRef(2*j+1,2*j+1) = real(-temp2);
+	            mds(2*j) 			+= real(temp1 - temp0*Cf(j));
+	            mds(2*j+1) 			+= imag(temp1 - temp0*Cf(j));
+	            dds.insert(2*j,2*j) 	= real(-temp2 + temp0);
+	            dds.insert(2*j,2*j+1) 	= imag(temp2 - temp0);
+	            dds.insert(2*j+1,2*j) 	= imag(-temp2 + temp0);
+	            dds.insert(2*j+1,2*j+1) = real(-temp2 + temp0);
 	        }
 	    } // end of loop over j
 	    
 	    if (p.Pot==3) 		dds.insert(2*p.N*p.NT,2*p.N*p.NT) = 1.0;
-	    action = kineticT + kineticS + potV + pot_r;
+	    action = kineticT - kineticS - potV - pot_r;
 	    linErgOffShell(p.NT-1) = linErgOffShell(p.NT-2);
     	linNumOffShell(p.NT-1) = linNumOffShell(p.NT-2);
     	
