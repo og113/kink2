@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------------------------------------------------------
-	main_fn3
+	main_fn3old
 		program to solve boundary value problem on contour ABCD
 		main used as a function, not a main process
 ----------------------------------------------------------------------------------------------------------------------------*/
@@ -20,7 +20,7 @@
 #include "analysis.h"
 #include "eigen_extras.h"
 #include "main.h"
-#include "main_fn3.h"
+#include "main_fn3old.h"
 #include "nr.h"
 #include "print3.h"
 
@@ -66,7 +66,7 @@ struct StepperArgv {
 		- beginning cos and ces 
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int main_fn3(int argc, vector<string> argv)
+int main_fn3old(int argc, vector<string> argv)
 {
 
 // defining timenumber
@@ -791,17 +791,17 @@ for (uint pl=0; pl<Npl; pl++) {
 					Vtrial += V(f(2*j*p.Nb));
 				}
 				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
-				fprintf(cof,"potTest     = %30.16g\n",potTest);
+				fprintf(cof,"potTest       = %30.16g\n",potTest);
 				if (verbose)
-					printf("potTest     = %30.16g\n",potTest);
+					printf("potTest       = %30.16g\n",potTest);
 			}
-			fprintf(cof,"f.norm()    = %30.16g\n",f.norm());
-			fprintf(cof,"chiT.norm() = %30.16g\n",normX);
-			fprintf(cof,"chiX.norm() = %30.16g\n",normT);
+			fprintf(cof,"f.norm()      = %30.16g\n",f.norm());
+			fprintf(cof,"chiT.norm()  = %30.16g\n",normX);
+			fprintf(cof,"chiX.norm()   = %30.16g\n",normT);
 			if (verbose) {
-				printf("f.norm()    = %30.16g\n",f.norm());
-				printf("chiT.norm() = %30.16g\n",normX);
-				printf("chiX.norm() = %30.16g\n",normT);
+				printf("f.norm()      = %30.16g\n",f.norm());
+				printf("chiT.norm()   = %30.16g\n",normX);
+				printf("chiX.norm()   = %30.16g\n",normT);
 			}
 		}
 
@@ -1000,7 +1000,6 @@ for (uint pl=0; pl<Npl; pl++) {
 			    	dds.coeffRef(2*j,2*j+1) += tnt*imag(-temp0 + temp2 );
 				}
 			}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//bulk
 			else {
@@ -1263,13 +1262,27 @@ for (uint pl=0; pl<Npl; pl++) {
 		
 		// some extra checks, mostly trivial
 		if (extraChecks) {
-			fprintf(cof,"f.norm()    = %30.16g\n",f.norm());
-			fprintf(cof,"mds.norm()  = %30.16g\n",mds.norm());
-			fprintf(cof,"dds.norm()  = %30.16g\n",dds.norm());
+	    	fprintf(cof,"imag(action)  = %30.16g\n",imag(action));
+			fprintf(cof,"imag(kineticT)= %30.16g\n",imag(kineticT));
+			fprintf(cof,"imag(kineticS)= %30.16g\n",imag(kineticS));
+			fprintf(cof,"imag(potV)    = %30.16g\n",imag(potV));
+			fprintf(cof,"imag(pot_r)   = %30.16g\n",imag(pot_r));
+			fprintf(cof,"E             = %30.16g\n",E);
+			fprintf(cof,"Num           = %30.16g\n",Num);			
+			fprintf(cof,"f.norm()      = %30.16g\n",f.norm());
+			fprintf(cof,"mds.norm()    = %30.16g\n",mds.norm());
+			fprintf(cof,"dds.norm()    = %30.16g\n",dds.norm());
 			if (verbose) {
-				printf("f.norm()    = %30.16g\n",f.norm());
-				printf("mds.norm()  = %30.16g\n",mds.norm());
-				printf("dds.norm()  = %30.16g\n",dds.norm());
+				printf("imag(action)  = %30.16g\n",imag(action));
+				printf("imag(kineticT)= %30.16g\n",imag(kineticT));
+				printf("imag(kineticS)= %30.16g\n",imag(kineticS));
+				printf("imag(potV)    = %30.16g\n",imag(potV));
+				printf("imag(pot_r)   = %30.16g\n",imag(pot_r));
+				printf("E             = %30.16g\n",E);
+				printf("Num           = %30.16g\n",Num);	
+				printf("f.norm()      = %30.16g\n",f.norm());
+				printf("mds.norm()    = %30.16g\n",mds.norm());
+				printf("dds.norm()    = %30.16g\n",dds.norm());
 			}
 		}
 
@@ -1403,9 +1416,9 @@ for (uint pl=0; pl<Npl; pl++) {
 		
 		// some extra checks, mostly trivial
 		if (extraChecks) {
-			fprintf(cof,"delta.norm()= %30.16g\n",delta.norm());
+			fprintf(cof,"delta.norm()  = %30.16g\n",delta.norm());
 			if (verbose) {
-				printf("delta.norm()= %30.16g\n",delta.norm());
+				printf("delta.norm()  = %30.16g\n",delta.norm());
 			}
 		}
 		
