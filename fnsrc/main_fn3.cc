@@ -163,7 +163,7 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("printChoice")==0) 										opts.printChoice = argv[2*j+2];
 		else if (id.compare("rank")==0) 											rank = argv[2*j+2];
 		else if (id.compare("verbose")==0) 											verbose = (stn<uint>(argv[2*j+2])!=0);
-		else if (id.compare("extraChecks")==0) 									extraChecks = (stn<uint>(argv[2*j+2])!=0);
+		else if (id.compare("extraChecks")==0 || "extraTests"==0) 					extraChecks = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("redo")==0) 											redo = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("redoErrors")==0) 										redoErrors = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("step")==0) 											step = (stn<uint>(argv[2*j+2])!=0);
@@ -865,7 +865,7 @@ for (uint pl=0; pl<Npl; pl++) {
 				dds.coeffRef(2*p.N*p.NT+1,2*j) 		+= -Dx*chiT(j);
 	            mds(2*(j+1)) 						+= -Dx*chiT(j)*f(2*p.N*p.NT+1);
 	            mds(2*j) 							+= Dx*chiT(j)*f(2*p.N*p.NT+1);
-	            mds(2*p.N*p.NT+1) 				+= -Dx*chiT(j)*(f(2*(j+1))-f(2*j));
+	            mds(2*p.N*p.NT+1) 					+= -Dx*chiT(j)*(f(2*(j+1))-f(2*j));
 			}
 				
 			if (t<(p.NT-1)) {
@@ -918,7 +918,7 @@ for (uint pl=0; pl<Npl; pl++) {
 					erg(t) 				+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 				}			
 				//potV 					+= Dt*Dx*V(Cf(j));
-				pot_r 					+= Dt*Dx*Vr(Cf(j));
+				pot_r 					+= -Dt*Dx*Vr(Cf(j));
 				erg(t) 					+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				potErg(t) 				+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 			
@@ -953,7 +953,7 @@ for (uint pl=0; pl<Npl; pl++) {
 					erg(t) 		+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 				}
 				//potV 		+= Dt*Dx*V(Cf(j));
-				pot_r 		+= Dt*Dx*Vr(Cf(j));
+				pot_r 		+= -Dt*Dx*Vr(Cf(j));
 				potErg(t) 	+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				erg(t) 		+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				double tnt = 1.0;
@@ -996,7 +996,7 @@ for (uint pl=0; pl<Npl; pl++) {
 						if (abs(omega_1(x,k))>MIN_NUMBER) {
 							lint m=k*p.NT;
 							dds.coeffRef(2*j,2*m+1) += -2.0*omega_1(x,k);
-							mds(2*j) 			+= 2.0*omega_1(x,k)*f(2*m+1);
+							mds(2*j) 				+= 2.0*omega_1(x,k)*f(2*m+1);
 						}
 					}
 					////////////////////////////////////////////////////////////////////////////////////////
@@ -1061,7 +1061,7 @@ for (uint pl=0; pl<Npl; pl++) {
 					derivErg(t) += pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 				}
 				
-				pot_r 		+= Dt*Dx*Vr(Cf(j));
+				pot_r 		+= -Dt*Dx*Vr(Cf(j));
 				erg(t) 		+= Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0 + Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				derivErg(t) += Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
 				potErg(t) 	+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));

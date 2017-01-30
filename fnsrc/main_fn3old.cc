@@ -163,7 +163,7 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("printChoice")==0) 										opts.printChoice = argv[2*j+2];
 		else if (id.compare("rank")==0) 											rank = argv[2*j+2];
 		else if (id.compare("verbose")==0) 											verbose = (stn<uint>(argv[2*j+2])!=0);
-		else if (id.compare("extraChecks")==0) 									extraChecks = (stn<uint>(argv[2*j+2])!=0);
+		else if (id.compare("extraChecks")==0 || "extraTests"==0)) 				extraChecks = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("redo")==0) 											redo = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("redoErrors")==0) 										redoErrors = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("step")==0) 											step = (stn<uint>(argv[2*j+2])!=0);
