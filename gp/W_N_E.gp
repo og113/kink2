@@ -19,6 +19,7 @@ set zlabel "W"
 set grid
 unset dgrid3d
 #set hidden3d
+
 splot "results/mainResults_constT_2.dat" using 10:11:13 with points
 
 pause -1
