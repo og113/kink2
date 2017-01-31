@@ -1266,9 +1266,11 @@ for (uint pl=0; pl<Npl; pl++) {
 			fprintf(cof,"imag(kineticT)= %30.16g\n",imag(kineticT));
 			fprintf(cof,"imag(kineticS)= %30.16g\n",imag(kineticS));
 			fprintf(cof,"imag(potV)    = %30.16g\n",imag(potV));
-			fprintf(cof,"imag(pot_r)   = %30.16g\n",imag(pot_r));
+			fprintf(cof,"imag(potr)   = %30.16g\n",imag(pot_r));
 			fprintf(cof,"E             = %30.16g\n",E);
-			fprintf(cof,"Num           = %30.16g\n",Num);			
+			fprintf(cof,"Num           = %30.16g\n",Num);
+			fprintf(cof,"derivErg.norm()= %30.16g\n",derivErg.norm());
+			fprintf(cof,"potErg.norm() = %30.16g\n",potErg.norm());
 			fprintf(cof,"f.norm()      = %30.16g\n",f.norm());
 			fprintf(cof,"mds.norm()    = %30.16g\n",mds.norm());
 			fprintf(cof,"dds.norm()    = %30.16g\n",dds.norm());
@@ -1277,14 +1279,17 @@ for (uint pl=0; pl<Npl; pl++) {
 				printf("imag(kineticT)= %30.16g\n",imag(kineticT));
 				printf("imag(kineticS)= %30.16g\n",imag(kineticS));
 				printf("imag(potV)    = %30.16g\n",imag(potV));
-				printf("imag(pot_r)   = %30.16g\n",imag(pot_r));
+				printf("imag(potr)   = %30.16g\n",imag(pot_r));
 				printf("E             = %30.16g\n",E);
-				printf("Num           = %30.16g\n",Num);	
+				printf("Num           = %30.16g\n",Num);
+				printf("derivErg.norm()= %30.16g\n",derivErg.norm());
+				printf("potErg.norm() = %30.16g\n",potErg.norm());	
 				printf("f.norm()      = %30.16g\n",f.norm());
 				printf("mds.norm()    = %30.16g\n",mds.norm());
 				printf("dds.norm()    = %30.16g\n",dds.norm());
 			}
 		}
+
 
 /*----------------------------------------------------------------------------------------------------------------------------
 12. printing early 1
