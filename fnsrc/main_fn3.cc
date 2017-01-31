@@ -926,34 +926,18 @@ for (uint pl=0; pl<Npl; pl++) {
 				dds.insert(2*j+1,2*j+1)   = 1.0; //zero imaginary part
 			}
 			else if (t==0) {
-			
-				//###########################################################################################
-				// new stuff
-				Kinetic_nr (j, 0, f, p, coeff_kineticT, kineticT);
-				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
-				Potential_nr (j, f, p, V, coeff_pot, potV);
-				
-				//mdKinetic_nr (j, 0, f, p, coeff_kineticT, mds);
-				//mdKinetic_nr (j, 1, f, p, coeff_kineticS, mds);
-				//mdPotential_nr (j, f, p, dV, coeff_pot, mds);
-				
-				//ddKinetic_nr (j, 0, f, p, coeff_kineticT, dds);
-				//ddKinetic_nr (j, 1, f, p, coeff_kineticS, dds);
-				//ddPotential_nr (j, f, p, ddV, coeff_pot, dds);
-				//###########################################################################################
-				
-				//kineticT 	+= Dx*pow(Cf(j+1)-Cf(j),2.0)/dt/2.0;
+				kineticT 	+= Dx*pow(Cf(j+1)-Cf(j),2.0)/dt/2.0;
 				derivErg(t) += Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
 				erg(t) 		+= Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
 				
 				///////////////////////////////// including other terms in action at t=0 ///////////////////////////
 				if (neighPosX!=-1) {
-					//kineticS 	+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+					kineticS 	+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					derivErg(t) += pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 					erg(t) 		+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
 				}
-				//potV 		+= Dt*Dx*V(Cf(j));
-				pot_r 		+= -Dt*Dx*Vr(Cf(j));
+				potV 		+= Dt*Dx*V(Cf(j));
+				pot_r 		+= Dt*Dx*Vr(Cf(j));
 				potErg(t) 	+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				erg(t) 		+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 				double tnt = 1.0;
@@ -996,7 +980,7 @@ for (uint pl=0; pl<Npl; pl++) {
 						if (abs(omega_1(x,k))>MIN_NUMBER) {
 							lint m=k*p.NT;
 							dds.coeffRef(2*j,2*m+1) += -2.0*omega_1(x,k);
-							mds(2*j) 				+= 2.0*omega_1(x,k)*f(2*m+1);
+							mds(2*j) 			+= 2.0*omega_1(x,k)*f(2*m+1);
 						}
 					}
 					////////////////////////////////////////////////////////////////////////////////////////
@@ -1736,4 +1720,5 @@ cout << endl << "===============================================================
 
 return 0;
 }
+
 

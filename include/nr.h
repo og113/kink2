@@ -31,6 +31,10 @@ CONTENTS
 
 // most typedefs in simple.h
 
+struct Complex_nr {
+	enum Option { real, imaginary, both};
+};
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	1 - accessory functions
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -50,20 +54,24 @@ void Potential_nr (const uint& j, const vec& p, const Parameters& pr, const Pote
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // mdKinetic_nr
-void mdKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, vec& mds);
+void mdKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, vec& mds\
+					, const Complex_nr::Option& opt=Complex_nr::both);
 
 // mdPotential_nr
-void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& dv, const cVec& f, vec& mds);
+void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& dv, const cVec& f, vec& mds\
+					, const Complex_nr::Option& opt=Complex_nr::both);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4 - nr matrix functions
 -------------------------------------------------------------------------------------------------------------------------*/
 
 // ddKinetic_nr
-void ddKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, spMat& dds);
+void ddKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, spMat& dds\
+					, const Complex_nr::Option& opt=Complex_nr::both);
 
 // ddPotential_nr
-void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& ddv, const cVec& f, spMat& dds);
+void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& ddv, const cVec& f, spMat& dds\
+					, const Complex_nr::Option& opt=Complex_nr::both);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	5 - filename functions
