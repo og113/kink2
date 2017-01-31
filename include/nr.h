@@ -49,6 +49,18 @@ void Kinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters&
 // Potential_nr
 void Potential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, comp& result);
 
+// Boundary_nr
+void Boundary_nr (const uint& j, const vec& p, const Parameters& pr, const Eigen::MatrixXd& omega_1, comp& result);
+
+// Kinetic_nr
+void Kinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameters& pr, const cVec& f, cVec& result, const uint& pos);
+
+// Potential_nr
+void Potential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& v, const cVec& f, cVec& result, const uint& pos);
+
+// Boundary_nr
+void Boundary_nr (const uint& j, const vec& p, const Parameters& pr, const Eigen::MatrixXd& omega_1, cVec& result, const uint& pos);
+
 /*-------------------------------------------------------------------------------------------------------------------------
 	3 - nr vector functions
 -------------------------------------------------------------------------------------------------------------------------*/
@@ -60,6 +72,10 @@ void mdKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameter
 // mdPotential_nr
 void mdPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& dv, const cVec& f, vec& mds\
 					, const Complex_nr::Option& opt=Complex_nr::both);
+					
+// mdBoundary_nr
+void mdBoundary_nr (const uint& j, const vec& p, const Parameters& pr, const Eigen::MatrixXd& omega_1\
+					, vec& mds, const Complex_nr::Option& opt=Complex_nr::both);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4 - nr matrix functions
@@ -72,6 +88,10 @@ void ddKinetic_nr (const uint& j, const uint& dir, const vec& p, const Parameter
 // ddPotential_nr
 void ddPotential_nr (const uint& j, const vec& p, const Parameters& pr, const Potential<comp>& ddv, const cVec& f, spMat& dds\
 					, const Complex_nr::Option& opt=Complex_nr::both);
+					
+// ddBoundary_nr
+void ddBoundary_nr (const uint& j, const vec& p, const Parameters& pr, const Eigen::MatrixXd& omega_1\
+					, spMat& dds, const Complex_nr::Option& opt=Complex_nr::both);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	5 - filename functions

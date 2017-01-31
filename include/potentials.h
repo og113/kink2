@@ -88,8 +88,11 @@ template <class T> T V2 (const T&, const struct params_for_V&);
 //V3
 template <class T> T V3 (const T&, const struct params_for_V&);
 
-//Vr	
+//VrFn	
 comp VrFn (const comp & phi, const double & minimaL, const double & minimaR);
+
+//Vreg
+template <class T> T Vreg (const T&, const struct params_for_V&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. first derivatives of potential functions
@@ -114,6 +117,9 @@ template <class T> T dV3 (const T&, const struct params_for_V&);
 	
 //dVr
 comp dVrFn (const comp & phi, const double & minimaL, const double & minimaR);
+
+//dVreg
+template <class T> T dVreg (const T&, const struct params_for_V&);
 	
 /*-------------------------------------------------------------------------------------------------------------------------
 	5. second derivatives of potential functions
@@ -139,6 +145,9 @@ template <class T> T ddV3 (const T&, const struct params_for_V&);
 
 //ddVr	
 comp ddVrFn (const comp & phi, const double & minimaL, const double & minimaR);
+
+//ddVreg
+template <class T> T ddVreg (const T&, const struct params_for_V&);
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. third derivatives of potential functions
