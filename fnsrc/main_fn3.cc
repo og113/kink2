@@ -907,7 +907,6 @@ for (uint pl=0; pl<Npl; pl++) {
 				}
 			}
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//boundaries
 			if (p.Pot==3 && x==(p.N-1)) {
 				dds.insert(2*j,2*j) 	= 1.0; // f=0 at r=R
@@ -922,8 +921,8 @@ for (uint pl=0; pl<Npl; pl++) {
 			}			
 			else if (t==(p.NT-1)) {		
 				Kinetic_nr (j, 1, f, p, coeff_kineticS_erg, derivErg, t);	//####
-				Potential_nr (j, f, p, V, coeff_pot_erg, derivErg, t);	//####
-				Potential_nr (j, f, p, Vr, coeff_potr_erg, derivErg, t);	//####
+				Potential_nr (j, f, p, V, coeff_pot_erg, potErg, t);	//####
+				Potential_nr (j, f, p, Vr, coeff_potr_erg, potErg, t);	//####
 				
 				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
 				Potential_nr (j, f, p, V, coeff_pot, potV);
@@ -935,8 +934,8 @@ for (uint pl=0; pl<Npl; pl++) {
 			else if (t==0) {
 				Kinetic_nr (j, 0, f, p, coeff_kineticT_erg, derivErg, t);	//####
 				Kinetic_nr (j, 1, f, p, coeff_kineticS_erg, derivErg, t);	//####
-				Potential_nr (j, f, p, V, coeff_pot_erg, derivErg, t);	//####
-				Potential_nr (j, f, p, Vr, coeff_potr_erg, derivErg, t);	//####
+				Potential_nr (j, f, p, V, coeff_pot_erg, potErg, t);		//####
+				Potential_nr (j, f, p, Vr, coeff_potr_erg, potErg, t);	//####
 				
 				Kinetic_nr (j, 0, f, p, coeff_kineticT, kineticT);
 				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
@@ -975,13 +974,12 @@ for (uint pl=0; pl<Npl; pl++) {
 					ddPotential_nr (j, f, p, ddVr, coeff_potr_tnt, dds, Complex_nr::real);
 				}
 			}
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//bulk
 			else {
 				Kinetic_nr (j, 0, f, p, coeff_kineticT_erg, derivErg, t);	//####
 				Kinetic_nr (j, 1, f, p, coeff_kineticS_erg, derivErg, t);	//####
-				Potential_nr (j, f, p, V, coeff_pot_erg, derivErg, t);	//####
-				Potential_nr (j, f, p, Vr, coeff_potr_erg, derivErg, t);	//####
+				Potential_nr (j, f, p, V, coeff_pot_erg, potErg, t);	//####
+				Potential_nr (j, f, p, Vr, coeff_potr_erg, potErg, t);	//####
             	
 				Kinetic_nr (j, 0, f, p, coeff_kineticT, kineticT);
 				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
