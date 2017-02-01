@@ -97,43 +97,69 @@ os << left << setprecision(16) << endl;
 
 if (p.Na==0 && p.Nb==0 && p.Nc==0 && p.N>0 && p.LoR>0) {
 	// printing spatial vector
-	double r;
-	for (uint j=0; j<p.N; j++) {
-		r = p.r0+j*p.a;
-		os << setw(25) << r << setw(25) << v[j] << endl;
+	if (v.size()>=p.N) {
+		double r;
+		for (uint j=0; j<p.N; j++) {
+			r = p.r0+j*p.a;
+			os << setw(25) << r << setw(25) << v[j] << endl;
+		}
+	}
+	else {
+		for (uint j=0; j<v.size(); j++) {
+			os << setw(25) << v[j] << endl;
+		}
 	}
 }
 else if (p.Na==0 && p.Nc==0 && p.Nb>0 && p.N>0&& p.LoR>0 && p.Tb>0) {
 	// printing euclidean time vector
-	uint x;
-	uint x0 = intCoord(0,1,p.Nb);
-	for (uint j=0; j<p.N*p.Nb; j++) {
-		x = intCoord(j,1,p.Nb);
-		if (x!=x0) { //this is put in for gnuplot
-			os << endl;
-			x0 = x;
+	if (v.size()>=p.N*p.Nb) {
+		uint x;
+		uint x0 = intCoord(0,1,p.Nb);
+		for (uint j=0; j<p.N*p.Nb; j++) {
+			x = intCoord(j,1,p.Nb);
+			if (x!=x0) { //this is put in for gnuplot
+				os << endl;
+				x0 = x;
+			}
+			os << setw(25) << real(coordB(j,0,p));
+			os << setw(25) << imag(coordB(j,0,p));
+			os << setw(25) << real(coordB(j,1,p));
+			os << setw(25) << v[2*j] << setw(25) << v[2*j+1]  << endl;
 		}
-		os << setw(25) << real(coordB(j,0,p));
-		os << setw(25) << imag(coordB(j,0,p));
-		os << setw(25) << real(coordB(j,1,p));
-		os << setw(25) << v[2*j] << setw(25) << v[2*j+1]  << endl;
 	}
-
+	else {
+		for (uint j=0; j<v.size(); j++) {
+			os << setw(25) << v[j] << endl;
+		}
+	}
 }
 else if (p.Na>0 && p.Nb>0 && p.Nc>0 && p.N>0 && p.LoR>0 && p.Tb>0) {
 	// printing vector over full contour
-	uint x;
-	uint x0 = intCoord(0,1,p.NT);
-	for (uint j=0; j<p.N*p.NT; j++) {
-		x = intCoord(j,1,p.NT);
-		if (x!=x0) { //this is put in for gnuplot
-			os << endl;
-			x0 = x;
+	if (v.size()>=p.N*p.NT) {
+		uint x;
+		uint x0 = intCoord(0,1,p.NT);
+		for (uint j=0; j<p.N*p.NT; j++) {
+			x = intCoord(j,1,p.NT);
+			if (x!=x0) { //this is put in for gnuplot
+				os << endl;
+				x0 = x;
+			}
+			os << setw(25) << real(coord(j,0,p));
+			os << setw(25) << imag(coord(j,0,p));
+			os << setw(25) << real(coord(j,1,p));
+			os << setw(25) << v[2*j] << setw(25) << v[2*j+1]  << endl;
 		}
-		os << setw(25) << real(coord(j,0,p));
-		os << setw(25) << imag(coord(j,0,p));
-		os << setw(25) << real(coord(j,1,p));
-		os << setw(25) << v[2*j] << setw(25) << v[2*j+1]  << endl;
+	}
+	else if (v.size()>=2*p.NT) {
+		for (uint j=0; j<p.NT; j++) {
+			os << setw(25) << v[2*j];
+			os << setw(25) << v[2*j+1] << endl;
+		}
+	}
+	else {
+		for (uint j=0; j<v.size(); j++) {
+			os << setw(25) << v[j] << endl;
+		}
 	}
 }
 else {
