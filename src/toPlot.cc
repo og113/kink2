@@ -96,8 +96,8 @@ os.open(((string)fo).c_str());
 os << left << setprecision(16) << endl;
 
 if (p.Na==0 && p.Nb==0 && p.Nc==0 && p.N>0 && p.LoR>0) {
-	// printing spatial vector
 	if (v.size()>=p.N) {
+		// printing spatial vector
 		double r;
 		for (uint j=0; j<p.N; j++) {
 			r = p.r0+j*p.a;
@@ -111,8 +111,8 @@ if (p.Na==0 && p.Nb==0 && p.Nc==0 && p.N>0 && p.LoR>0) {
 	}
 }
 else if (p.Na==0 && p.Nc==0 && p.Nb>0 && p.N>0&& p.LoR>0 && p.Tb>0) {
-	// printing euclidean time vector
 	if (v.size()>=p.N*p.Nb) {
+		// printing euclidean time vector
 		uint x;
 		uint x0 = intCoord(0,1,p.Nb);
 		for (uint j=0; j<p.N*p.Nb; j++) {
@@ -134,8 +134,8 @@ else if (p.Na==0 && p.Nc==0 && p.Nb>0 && p.N>0&& p.LoR>0 && p.Tb>0) {
 	}
 }
 else if (p.Na>0 && p.Nb>0 && p.Nc>0 && p.N>0 && p.LoR>0 && p.Tb>0) {
-	// printing vector over full contour
 	if (v.size()>=p.N*p.NT) {
+		// printing vector over full contour
 		uint x;
 		uint x0 = intCoord(0,1,p.NT);
 		for (uint j=0; j<p.N*p.NT; j++) {
@@ -151,6 +151,7 @@ else if (p.Na>0 && p.Nb>0 && p.Nc>0 && p.N>0 && p.LoR>0 && p.Tb>0) {
 		}
 	}
 	else if (v.size()>=2*p.NT) {
+		// energy plot
 		for (uint j=0; j<p.NT; j++) {
 			os << setw(25) << v[2*j];
 			os << setw(25) << v[2*j+1] << endl;

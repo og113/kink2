@@ -586,7 +586,7 @@ for (uint pl=0; pl<Npl; pl++) {
 	if ((pold.NT!=p.NT || pold.N!=p.N) && loadFile==stepFile) {
 		f = interpolate(f, pold, p);
 	}
-	if (f.size()<Len || pl==0) {
+	if (f.size()<Len) {
 		f.conservativeResize(Len);
 		for (uint mu=0; mu<2*zm; mu++)
 			f[2*p.N*p.NT+mu] = 1.0e-4;
