@@ -821,7 +821,7 @@ for (uint pl=0; pl<Npl; pl++) {
 		cVec coeff_pot_erg(p.N*p.NT);
 		cVec coeff_potr_erg(p.N*p.NT);
 		double tnt = 1.0;
-		//if ((opts.bds).compare("uc")!=0) // removed this requirement because it is built into the boundary functions in nr.cc
+		//if ((opts.bds).compare("uc")!=0) // removed this requirement because multiplication by Theta is built into the boundary functions in nr.cc
 		tnt *= p.Theta;
 				
 		// preparatory loop over lattice points

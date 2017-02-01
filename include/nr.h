@@ -106,4 +106,7 @@ Filename filenameSpatial(const Parameters&, const string& base, const string& su
 // filenamePeriodic
 Filename filenamePeriodic(const Parameters&, const string& base, const string& subfolder, const string& id, const string& suffix);
 
+// filenameToParameters
+Parameters filenameToParameters(const Filename& f);
+
 #endif // __NR_H_INCLUDED__

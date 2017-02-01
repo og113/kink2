@@ -280,3 +280,33 @@ Filename filenamePeriodic(const Parameters& pr, const string& base, const string
 					+ suffix;
 	return f;
 }
+
+// filenameToParameters
+Parameters filenameToParameters(const Filename& f) {
+	Parameters p;
+	string pName;
+	vector<string> nameVector = p.nameVector();
+	vector<string> valueVector = p.valueVector();
+	
+	string dir = f.Directory, PotDefault = "3";
+	size_t found = dir.find("pot_");
+  	if (found==std::string::npos) {
+  		valueVector[0] = PotDefault; // a fudge factor
+  		cerr << "filenameToParameters error: unable to find Pot. Setting to default, " << PotDefault << endl;
+  	}
+  	else {
+  		string shortDir = dir.substr(found);
+  		found = shortDir.find_first_of("/");
+  		valueVector[0] = shortDir.substr(4,found-4);
+  	}
+	
+	for (uint j=0; j<(f.Extras).size(); j++) {
+		pName = (f.Extras[j]).first;
+		for (uint k=0; k<p.Size; k++) {
+			if (pName.compare(nameVector[k])==0)
+				valueVector[k] = (f.Extras[j]).second;
+		}
+	}
+	p.load(valueVector);
+	return p;
+}
