@@ -168,7 +168,7 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("redoErrors")==0) 										redoErrors = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("step")==0) 											step = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("pass")==0) 											pass = (stn<uint>(argv[2*j+2])!=0);
-		else if (id.compare("baseFolder")==0) 										baseFolder = argv[2*j+2];
+		else if (id.compare("baseFolder")==0 || id.compare("base")==0) 								baseFolder = argv[2*j+2];
 		else {
 			cerr << "input " << id << " unrecognized" << endl;
 			return 1;
@@ -177,8 +177,8 @@ else if (argc % 2 && argc>1) {
 }
 
 // filling empty co and ce filenames
-if (coFile.empty()) coFile = "data/coe/"+timenumber+"co.txt";
-if (ceFile.empty()) ceFile = "data/coe/"+timenumber+"ce.txt";
+if (coFile.empty()) coFile = baseFolder+"data/coe/"+timenumber+"co.txt";
+if (ceFile.empty()) ceFile = baseFolder+"data/coe/"+timenumber+"ce.txt";
 
 // beginning cos and ces streams
 ofstream cos;
@@ -500,12 +500,15 @@ for (uint pl=0; pl<Npl; pl++) {
 	// loading negVec
 	vec negVec;
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
-		Filename negVecFile = filenameSpatial(p,baseFolder,"eigenvector","negVec",suffix);
+		Filename negVecFile = baseFolder+"data/00"+rank+"eigVec_pot_3_L_"+nts(p.L)+".dat";
+		//Filename negVecFile = filenameSpatial(p,baseFolder,"eigenvector","negVec",suffix);
 		fprintf(cof,"%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
 		if (verbose)
 			printf("%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
-		if (negVecFile.exists())
-			loadVectorBinary(negVecFile,negVec);
+		if (negVecFile.exists()) {
+			//loadVectorBinary(negVecFile,negVec);
+			loadVectorAscii(negVecFile,negVec);
+		}
 		else {
 			ces << "Error: negVecFile doesn't exist." << endl;
 			if (verbose)
