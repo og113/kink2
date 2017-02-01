@@ -73,13 +73,15 @@ void Potential_nr (const uint& j, const vec& p, const Parameters& pr, const Pote
 
 // Boundary_nr
 void Boundary_nr (const uint& j, const vec& p, const Parameters& pr, const Eigen::MatrixXd& omega_1, cVec& result, const uint& pos) {
-	uint x 	= intCoord(j,1,pr);
-	for (uint k=0;k<pr.N;k++) {
-		if (abs(omega_1(x,k))>MIN_NUMBER) {
-			long unsigned int m=k*pr.NT;
-			result[pos]	+= -(1.0-pr.Gamma)*omega_1(x,k)*(p(2*j)-pr.minima[0])\
-						*(p(2*m)-pr.minima[0])/(1.0+pr.Gamma)\
-						 + (1.0+pr.Gamma)*omega_1(x,k)*p(2*j+1)*p(2*m+1)/(1.0-pr.Gamma);
+	if (abs(pr.Theta)>MIN_NUMBER) {
+		uint x 	= intCoord(j,1,pr);
+		for (uint k=0;k<pr.N;k++) {
+			if (abs(omega_1(x,k))>MIN_NUMBER) {
+				long unsigned int m=k*pr.NT;
+				result[pos]	+= -(1.0-pr.Gamma)*omega_1(x,k)*(p(2*j)-pr.minima[0])\
+							*(p(2*m)-pr.minima[0])/(1.0+pr.Gamma)\
+							 + (1.0+pr.Gamma)*omega_1(x,k)*p(2*j+1)*p(2*m+1)/(1.0-pr.Gamma);
+			}
 		}
 	}
 }

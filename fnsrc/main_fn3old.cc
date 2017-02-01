@@ -120,7 +120,7 @@ else if (argc != 1) {
 // loading opts
 opts.load(optionsFile);
 //opts.print();
-cout << "main3" << endl << "====================================================================================================================" << endl;
+cout << "main3old" << endl << "====================================================================================================================" << endl;
 cout << endl << "options   : " << optionsFile << endl;
 
 // loading tols
@@ -163,7 +163,7 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("printChoice")==0) 										opts.printChoice = argv[2*j+2];
 		else if (id.compare("rank")==0) 											rank = argv[2*j+2];
 		else if (id.compare("verbose")==0) 											verbose = (stn<uint>(argv[2*j+2])!=0);
-		else if (id.compare("extraChecks")==0 || "extraTests"==0) 				extraChecks = (stn<uint>(argv[2*j+2])!=0);
+		else if (id.compare("extraChecks")==0 || id.compare("extraTests")==0) 		extraChecks = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("redo")==0) 											redo = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("redoErrors")==0) 										redoErrors = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("step")==0) 											step = (stn<uint>(argv[2*j+2])!=0);
@@ -791,17 +791,17 @@ for (uint pl=0; pl<Npl; pl++) {
 					Vtrial += V(f(2*j*p.Nb));
 				}
 				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
-				fprintf(cof,"potTest       = %30.16g\n",potTest);
+				fprintf(cof,"potTest         = %40.20g\n",potTest);
 				if (verbose)
-					printf("potTest       = %30.16g\n",potTest);
+					printf("potTest         = %40.20g\n",potTest);
 			}
-			fprintf(cof,"f.norm()      = %30.16g\n",f.norm());
-			fprintf(cof,"chiT.norm()  = %30.16g\n",normX);
-			fprintf(cof,"chiX.norm()   = %30.16g\n",normT);
+			fprintf(cof,"f.norm()        = %40.20g\n",f.norm());
+			fprintf(cof,"chiT.norm()    = %40.20g\n",normX);
+			fprintf(cof,"chiX.norm()     = %40.20g\n",normT);
 			if (verbose) {
-				printf("f.norm()      = %30.16g\n",f.norm());
-				printf("chiT.norm()   = %30.16g\n",normX);
-				printf("chiX.norm()   = %30.16g\n",normT);
+				printf("f.norm()        = %40.20g\n",f.norm());
+				printf("chiT.norm()     = %40.20g\n",normX);
+				printf("chiX.norm()     = %40.20g\n",normT);
 			}
 		}
 
@@ -1262,31 +1262,31 @@ for (uint pl=0; pl<Npl; pl++) {
 		
 		// some extra checks, mostly trivial
 		if (extraChecks) {
-	    	fprintf(cof,"imag(action)  = %30.16g\n",imag(action));
-			fprintf(cof,"imag(kineticT)= %30.16g\n",imag(kineticT));
-			fprintf(cof,"imag(kineticS)= %30.16g\n",imag(kineticS));
-			fprintf(cof,"imag(potV)    = %30.16g\n",imag(potV));
-			fprintf(cof,"imag(potr)   = %30.16g\n",imag(pot_r));
-			fprintf(cof,"E             = %30.16g\n",E);
-			fprintf(cof,"Num           = %30.16g\n",Num);
-			fprintf(cof,"derivErg.norm()= %30.16g\n",derivErg.norm());
-			fprintf(cof,"potErg.norm() = %30.16g\n",potErg.norm());
-			fprintf(cof,"f.norm()      = %30.16g\n",f.norm());
-			fprintf(cof,"mds.norm()    = %30.16g\n",mds.norm());
-			fprintf(cof,"dds.norm()    = %30.16g\n",dds.norm());
+	    	fprintf(cof,"imag(action)    = %40.20g\n",imag(action));
+			fprintf(cof,"imag(kineticT)  = %40.20g\n",imag(kineticT));
+			fprintf(cof,"imag(kineticS)  = %40.20g\n",imag(kineticS));
+			fprintf(cof,"imag(potV)      = %40.20g\n",imag(potV));
+			fprintf(cof,"imag(potr)      = %40.20g\n",imag(potr));
+			fprintf(cof,"E               = %40.20g\n",E);
+			fprintf(cof,"Num             = %40.20g\n",Num);
+			fprintf(cof,"derivErg.norm() = %40.20g\n",derivErg.norm());
+			fprintf(cof,"potErg.norm()   = %40.20g\n",potErg.norm());
+			fprintf(cof,"f.norm()        = %40.20g\n",f.norm());
+			fprintf(cof,"mds.norm()      = %40.20g\n",mds.norm());
+			fprintf(cof,"dds.norm()      = %40.20g\n",dds.norm());
 			if (verbose) {
-				printf("imag(action)  = %30.16g\n",imag(action));
-				printf("imag(kineticT)= %30.16g\n",imag(kineticT));
-				printf("imag(kineticS)= %30.16g\n",imag(kineticS));
-				printf("imag(potV)    = %30.16g\n",imag(potV));
-				printf("imag(potr)   = %30.16g\n",imag(pot_r));
-				printf("E             = %30.16g\n",E);
-				printf("Num           = %30.16g\n",Num);
-				printf("derivErg.norm()= %30.16g\n",derivErg.norm());
-				printf("potErg.norm() = %30.16g\n",potErg.norm());	
-				printf("f.norm()      = %30.16g\n",f.norm());
-				printf("mds.norm()    = %30.16g\n",mds.norm());
-				printf("dds.norm()    = %30.16g\n",dds.norm());
+				printf("imag(action)    = %40.20g\n",imag(action));
+				printf("imag(kineticT)  = %40.20g\n",imag(kineticT));
+				printf("imag(kineticS)  = %40.20g\n",imag(kineticS));
+				printf("imag(potV)      = %40.20g\n",imag(potV));
+				printf("imag(potr)      = %40.20g\n",imag(potr));
+				printf("E               = %40.20g\n",E);
+				printf("Num             = %40.20g\n",Num);
+				printf("derivErg.norm() = %40.20g\n",derivErg.norm());
+				printf("potErg.norm()   = %40.20g\n",potErg.norm());	
+				printf("f.norm()        = %40.20g\n",f.norm());
+				printf("mds.norm()      = %40.20g\n",mds.norm());
+				printf("dds.norm()      = %40.20g\n",dds.norm());
 			}
 		}
 
@@ -1421,9 +1421,9 @@ for (uint pl=0; pl<Npl; pl++) {
 		
 		// some extra checks, mostly trivial
 		if (extraChecks) {
-			fprintf(cof,"delta.norm()  = %30.16g\n",delta.norm());
+			fprintf(cof,"delta.norm()    = %40.20g\n",delta.norm());
 			if (verbose) {
-				printf("delta.norm()  = %30.16g\n",delta.norm());
+				printf("delta.norm()    = %40.20g\n",delta.norm());
 			}
 		}
 		

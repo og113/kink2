@@ -89,7 +89,7 @@ string coFile, ceFile;
 // stepper stuff
 string stepperArgv = "";
 string stepperInputsFile = "step0";
-Filename stepperOutputsFile = "results/nr/stepper/step.csv";
+Filename stepperOutputsFile = "results/nr/step1.csv";
 uint steps = 1;
 
 // getting argv inputs
@@ -269,13 +269,13 @@ if (stepperOutputsFile.exists() && stepargv!=StepperArgv::none) {
 //stepOpts.closeness = tols.Step; // NOT USING THIS
 
 // results
-string resultsFile = (pass? "results/nr/nr0pass.csv":"results/nr/nr0.csv");
+string resultsFile = (pass? "results/nr/nr1pass.csv":"results/nr/nr1.csv");
 uint idSizeResults = 2, datumSizeResults = 20;
 vector<string> idCheck(idSizeResults);
 NewtonRaphsonData results(resultsFile,idSizeResults,datumSizeResults);
 
 // errors
-string errorsFile = "results/nr/nr0error.csv";
+string errorsFile = "results/nr/nr1error.csv";
 uint idSizeErrors = 3, datumSizeErrors = 29;
 vector<string> idCheckErrors(idSizeErrors);
 NewtonRaphsonData errors(errorsFile,idSizeErrors,datumSizeErrors);
@@ -789,17 +789,17 @@ for (uint pl=0; pl<Npl; pl++) {
 					Vtrial += V(f(2*j*p.Nb));
 				}
 				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
-				fprintf(cof,"potTest       = %30.16g\n",potTest);
+				fprintf(cof,"potTest         = %40.20g\n",potTest);
 				if (verbose)
-					printf("potTest       = %30.16g\n",potTest);
+					printf("potTest         = %40.20g\n",potTest);
 			}
-			fprintf(cof,"f.norm()      = %30.16g\n",f.norm());
-			fprintf(cof,"chiT.norm()  = %30.16g\n",normX);
-			fprintf(cof,"chiX.norm()   = %30.16g\n",normT);
+			fprintf(cof,"f.norm()        = %40.20g\n",f.norm());
+			fprintf(cof,"chiT.norm()    = %40.20g\n",normX);
+			fprintf(cof,"chiX.norm()     = %40.20g\n",normT);
 			if (verbose) {
-				printf("f.norm()      = %30.16g\n",f.norm());
-				printf("chiT.norm()   = %30.16g\n",normX);
-				printf("chiX.norm()   = %30.16g\n",normT);
+				printf("f.norm()        = %40.20g\n",f.norm());
+				printf("chiT.norm()     = %40.20g\n",normX);
+				printf("chiX.norm()     = %40.20g\n",normT);
 			}
 		}
 
@@ -828,18 +828,26 @@ for (uint pl=0; pl<Npl; pl++) {
 		for (lint j = 0; j < p.N*p.NT; j++) {
 			uint t 					= intCoord(j,0,p); //coordinates
 			uint x 					= intCoord(j,1,p);
+			
+			// coefficients in action
 			coeff_kineticT[j] 		= DxFn(x,p)/dtFn(t,p);
 			coeff_kineticS[j] 		= -DtFn(t,p)/dxFn(x,p);
 			coeff_pot[j]	 		= -DtFn(t,p)*DxFn(x,p);
-			coeff_potr[j]	 		= (ii*p.Reg)*(-DtFn(t,p)*DxFn(x,p)); // not at all sure about the sign on this term
+			coeff_potr[j]	 		= (ii*p.Reg)*DtFn(t,p)*DxFn(x,p);
+			
+			// with Theta multiplying the real equation
 			coeff_kineticT_tnt[j] 	= comp(tnt*real(coeff_kineticT[j]),imag(coeff_kineticT[j]));
 			coeff_kineticS_tnt[j] 	= comp(tnt*real(coeff_kineticS[j]),imag(coeff_kineticS[j]));
 			coeff_pot_tnt[j]	 	= comp(tnt*real(coeff_pot[j]),imag(coeff_pot[j]));
-			coeff_potr_tnt[j]	 	= comp(tnt*real(coeff_potr[j]),imag(coeff_potr[j])); // not at all sure about the sign on this term
-			coeff_kineticT_erg[j] 	= DxFn(x,p)/pow(dtFn(t,p),2.0); // the distinction between Dt and dt is dropped here, should it be?
-			coeff_kineticS_erg[j] 	= 1.0/dxFn(x,p); // the distinction between Dx and dx is dropped here, should it be?
-			coeff_pot_erg[j]	 	= DxFn(x,p); // the distinction between Dt and dt is dropped here, should it be?
-			coeff_potr_erg[j]	 	= (-ii*p.Reg)*DxFn(x,p); // the distinction between Dt and dt is dropped here, should it be?
+			coeff_potr_tnt[j]	 	= comp(tnt*real(coeff_potr[j]),imag(coeff_potr[j]));
+			
+			// for the energy
+			// the following 4 expressions are discretisations of continuum expressions (can we do better than this?)
+			// We could just derive the energy as a Noether charge.
+			coeff_kineticT_erg[j] 	= DxFn(x,p)/pow(dtFn(t,p),2.0);
+			coeff_kineticS_erg[j] 	= 1.0/dxFn(x,p);
+			coeff_pot_erg[j]	 	= DxFn(x,p);
+			coeff_potr_erg[j]	 	= -ii*p.Reg*DxFn(x,p);
 		}
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -941,33 +949,26 @@ for (uint pl=0; pl<Npl; pl++) {
 				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
 				Potential_nr (j, f, p, V, coeff_pot, potV);
 				Potential_nr (j, f, p, Vr, coeff_potr, potr);
+				Boundary_nr (j, f, p, omega_1, bound);
 				
 				mdKinetic_nr (j, 0, f, p, coeff_kineticT, mds, Complex_nr::imaginary);
 				mdKinetic_nr (j, 1, f, p, coeff_kineticS, mds, Complex_nr::imaginary);
 				mdPotential_nr (j, f, p, dV, coeff_pot, mds, Complex_nr::imaginary);
 				mdPotential_nr (j, f, p, dVr, coeff_potr, mds, Complex_nr::imaginary);
+				mdBoundary_nr (j, f, p, omega_1, mds, Complex_nr::both);
 				
 				ddKinetic_nr (j, 0, f, p, coeff_kineticT, dds, Complex_nr::imaginary);
 				ddKinetic_nr (j, 1, f, p, coeff_kineticS, dds, Complex_nr::imaginary);
 				ddPotential_nr (j, f, p, ddV, coeff_pot, dds, Complex_nr::imaginary);
 				ddPotential_nr (j, f, p, ddVr, coeff_potr, dds, Complex_nr::imaginary);
+				ddBoundary_nr (j, f, p, omega_1, dds, Complex_nr::real);
 				
-				
-				// Question: does the boundary term contribute to the energy?
-				// Question: can we please sort out what is going on with Dt/dt and Dx/dx in the energy?! We can just derive the energy as a Noether charge.
-				if (abs(p.Theta)<MIN_NUMBER) {
-					ddBoundary_nr (j, f, p, omega_1, dds, Complex_nr::real);
-				}
-				else {
-					Boundary_nr (j, f, p, omega_1, bound);
-					
-					mdBoundary_nr (j, f, p, omega_1, mds, Complex_nr::both);
+				if (abs(p.Theta)>MIN_NUMBER) {
 					mdKinetic_nr (j, 0, f, p, coeff_kineticT_tnt, mds, Complex_nr::real);
 					mdKinetic_nr (j, 1, f, p, coeff_kineticS_tnt, mds, Complex_nr::real);
 					mdPotential_nr (j, f, p, dV, coeff_pot_tnt, mds, Complex_nr::real);
 					mdPotential_nr (j, f, p, dVr, coeff_potr_tnt, mds, Complex_nr::real);
 					
-					ddBoundary_nr (j, f, p, omega_1, dds, Complex_nr::both);
 					ddKinetic_nr (j, 0, f, p, coeff_kineticT_tnt, dds, Complex_nr::real);
 					ddKinetic_nr (j, 1, f, p, coeff_kineticS_tnt, dds, Complex_nr::real);
 					ddPotential_nr (j, f, p, ddV, coeff_pot_tnt, dds, Complex_nr::real);
@@ -1211,31 +1212,31 @@ for (uint pl=0; pl<Npl; pl++) {
 		
 		// some extra checks, mostly trivial
 		if (extraChecks) {
-	    	fprintf(cof,"imag(action)  = %30.16g\n",imag(action));
-			fprintf(cof,"imag(kineticT)= %30.16g\n",imag(kineticT));
-			fprintf(cof,"imag(kineticS)= %30.16g\n",imag(kineticS));
-			fprintf(cof,"imag(potV)    = %30.16g\n",imag(potV));
-			fprintf(cof,"imag(potr)   = %30.16g\n",imag(potr));
-			fprintf(cof,"E             = %30.16g\n",E);
-			fprintf(cof,"Num           = %30.16g\n",Num);
-			fprintf(cof,"derivErg.norm()= %30.16g\n",derivErg.norm());
-			fprintf(cof,"potErg.norm() = %30.16g\n",potErg.norm());
-			fprintf(cof,"f.norm()      = %30.16g\n",f.norm());
-			fprintf(cof,"mds.norm()    = %30.16g\n",mds.norm());
-			fprintf(cof,"dds.norm()    = %30.16g\n",dds.norm());
+	    	fprintf(cof,"imag(action)    = %40.20g\n",imag(action));
+			fprintf(cof,"imag(kineticT)  = %40.20g\n",imag(kineticT));
+			fprintf(cof,"imag(kineticS)  = %40.20g\n",imag(kineticS));
+			fprintf(cof,"imag(potV)      = %40.20g\n",imag(potV));
+			fprintf(cof,"imag(potr)      = %40.20g\n",imag(potr));
+			fprintf(cof,"E               = %40.20g\n",E);
+			fprintf(cof,"Num             = %40.20g\n",Num);
+			fprintf(cof,"derivErg.norm() = %40.20g\n",derivErg.norm());
+			fprintf(cof,"potErg.norm()   = %40.20g\n",potErg.norm());
+			fprintf(cof,"f.norm()        = %40.20g\n",f.norm());
+			fprintf(cof,"mds.norm()      = %40.20g\n",mds.norm());
+			fprintf(cof,"dds.norm()      = %40.20g\n",dds.norm());
 			if (verbose) {
-				printf("imag(action)  = %30.16g\n",imag(action));
-				printf("imag(kineticT)= %30.16g\n",imag(kineticT));
-				printf("imag(kineticS)= %30.16g\n",imag(kineticS));
-				printf("imag(potV)    = %30.16g\n",imag(potV));
-				printf("imag(potr)   = %30.16g\n",imag(potr));
-				printf("E             = %30.16g\n",E);
-				printf("Num           = %30.16g\n",Num);
-				printf("derivErg.norm()= %30.16g\n",derivErg.norm());
-				printf("potErg.norm() = %30.16g\n",potErg.norm());	
-				printf("f.norm()      = %30.16g\n",f.norm());
-				printf("mds.norm()    = %30.16g\n",mds.norm());
-				printf("dds.norm()    = %30.16g\n",dds.norm());
+				printf("imag(action)    = %40.20g\n",imag(action));
+				printf("imag(kineticT)  = %40.20g\n",imag(kineticT));
+				printf("imag(kineticS)  = %40.20g\n",imag(kineticS));
+				printf("imag(potV)      = %40.20g\n",imag(potV));
+				printf("imag(potr)      = %40.20g\n",imag(potr));
+				printf("E               = %40.20g\n",E);
+				printf("Num             = %40.20g\n",Num);
+				printf("derivErg.norm() = %40.20g\n",derivErg.norm());
+				printf("potErg.norm()   = %40.20g\n",potErg.norm());	
+				printf("f.norm()        = %40.20g\n",f.norm());
+				printf("mds.norm()      = %40.20g\n",mds.norm());
+				printf("dds.norm()      = %40.20g\n",dds.norm());
 			}
 		}
 
@@ -1369,9 +1370,9 @@ for (uint pl=0; pl<Npl; pl++) {
 		
 		// some extra checks, mostly trivial
 		if (extraChecks) {
-			fprintf(cof,"delta.norm()  = %30.16g\n",delta.norm());
+			fprintf(cof,"delta.norm()    = %40.20g\n",delta.norm());
 			if (verbose) {
-				printf("delta.norm()  = %30.16g\n",delta.norm());
+				printf("delta.norm()    = %40.20g\n",delta.norm());
 			}
 		}
 		
@@ -1389,7 +1390,7 @@ for (uint pl=0; pl<Npl; pl++) {
 			(earlyPrintFile.Extras).push_back(StringPair("run",nts(runsCount)));
 			saveVectorAscii(earlyPrintFile,f);
 		}
-		if ((opts.printChoice).compare("f")==0 || (opts.printChoice).compare("e")==0) {
+		if ((opts.printChoice).compare("d")==0 || (opts.printChoice).compare("e")==0) {
 			Filename earlyPrintFile = filenameMain(p,baseFolder,"ascii","deltaMainEarly",".dat");
 			(earlyPrintFile.Extras).push_back(StringPair("run",nts(runsCount)));
 			saveVectorAscii(earlyPrintFile,delta);
