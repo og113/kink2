@@ -20,7 +20,7 @@
 #include "analysis.h"
 #include "eigen_extras.h"
 #include "main.h"
-#include "main_fn3.h"
+#include "main_fn3old.h"
 #include "nr.h"
 #include "print3.h"
 
@@ -66,7 +66,7 @@ struct StepperArgv {
 		- beginning cos and ces 
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-int main_fn3(int argc, vector<string> argv)
+int main_fn3old(int argc, vector<string> argv)
 {
 
 // defining timenumber
@@ -89,7 +89,7 @@ string coFile, ceFile;
 // stepper stuff
 string stepperArgv = "";
 string stepperInputsFile = "step0";
-Filename stepperOutputsFile = "results/nr/step1.csv";
+Filename stepperOutputsFile = "results/nr/stepper/step.csv";
 uint steps = 1;
 
 // getting argv inputs
@@ -120,7 +120,7 @@ else if (argc != 1) {
 // loading opts
 opts.load(optionsFile);
 //opts.print();
-cout << "main3" << endl << "====================================================================================================================" << endl;
+cout << "main3old" << endl << "====================================================================================================================" << endl;
 cout << endl << "options   : " << optionsFile << endl;
 
 // loading tols
@@ -168,7 +168,7 @@ else if (argc % 2 && argc>1) {
 		else if (id.compare("redoErrors")==0) 										redoErrors = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("step")==0) 											step = (stn<uint>(argv[2*j+2])!=0);
 		else if (id.compare("pass")==0) 											pass = (stn<uint>(argv[2*j+2])!=0);
-		else if (id.compare("baseFolder")==0 || id.compare("base")==0) 								baseFolder = argv[2*j+2];
+		else if (id.compare("baseFolder")==0) 										baseFolder = argv[2*j+2];
 		else {
 			cerr << "input " << id << " unrecognized" << endl;
 			return 1;
@@ -177,8 +177,8 @@ else if (argc % 2 && argc>1) {
 }
 
 // filling empty co and ce filenames
-if (coFile.empty()) coFile = baseFolder+"data/coe/"+timenumber+"co.txt";
-if (ceFile.empty()) ceFile = baseFolder+"data/coe/"+timenumber+"ce.txt";
+if (coFile.empty()) coFile = "data/coe/"+timenumber+"co.txt";
+if (ceFile.empty()) ceFile = "data/coe/"+timenumber+"ce.txt";
 
 // beginning cos and ces streams
 ofstream cos;
@@ -269,13 +269,13 @@ if (stepperOutputsFile.exists() && stepargv!=StepperArgv::none) {
 //stepOpts.closeness = tols.Step; // NOT USING THIS
 
 // results
-string resultsFile = (pass? "results/nr/nr1pass.csv":"results/nr/nr1.csv");
+string resultsFile = (pass? "results/nr/nr0pass.csv":"results/nr/nr0.csv");
 uint idSizeResults = 2, datumSizeResults = 20;
 vector<string> idCheck(idSizeResults);
 NewtonRaphsonData results(resultsFile,idSizeResults,datumSizeResults);
 
 // errors
-string errorsFile = "results/nr/nr1error.csv";
+string errorsFile = "results/nr/nr0error.csv";
 uint idSizeErrors = 3, datumSizeErrors = 29;
 vector<string> idCheckErrors(idSizeErrors);
 NewtonRaphsonData errors(errorsFile,idSizeErrors,datumSizeErrors);
@@ -404,7 +404,7 @@ for (uint pl=0; pl<Npl; pl++) {
 	
 	// some derived quantities
 	uint zm = (p.Pot<3? 2: 1); // number of zero modes
-	uint Len = 2*(p.N*p.NT+zm); // not sure about this. do i impose a real or a complex equation to fix the zero mode?
+	uint Len = 2*(p.N*p.NT+zm);
 
 /*----------------------------------------------------------------------------------------------------------------------------
 5. assigning potential functions
@@ -428,7 +428,7 @@ for (uint pl=0; pl<Npl; pl++) {
 		V((Potential<comp>::PotentialType)&V3<comp>,p);
 		dV((Potential<comp>::PotentialType)&dV3<comp>,p);
 		ddV((Potential<comp>::PotentialType)&ddV3<comp>,p);
-	}
+		}
 	else {
 		ces << "pot option not available, pot = " << p.Pot << endl;
 		if (verbose)
@@ -436,17 +436,19 @@ for (uint pl=0; pl<Npl; pl++) {
 		return 1;
 	}
 
-	//Vr
-	Potential<comp> Vr, dVr, ddVr;
-	Vr((Potential<comp>::PotentialType)&Vreg<comp>,p);
-	dVr((Potential<comp>::PotentialType)&dVreg<comp>,p);
-	ddVr((Potential<comp>::PotentialType)&ddVreg<comp>,p);
-	
 	// assigning preliminary parameter structs
 	params_for_V paramsV  = {p.epsilon, p.A};
-	params_for_V paramsVr  = {p.minima[0], p.minima[1]};
-	V.setParams(paramsV);
-	Vr.setParams(paramsVr);
+
+	//lambda functions for pot_r
+	auto Vr = [&] (const comp& phi) {
+		return -ii*p.Reg*VrFn(phi,p.minima[0],p.minima[1]);
+	};
+	auto dVr = [&] (const comp& phi) {
+		return -ii*p.Reg*dVrFn(phi,p.minima[0],p.minima[1]);
+	};
+	auto ddVr = [&] (const comp& phi) {
+		return -ii*p.Reg*ddVrFn(phi,p.minima[0],p.minima[1]);
+	};
 
 /*----------------------------------------------------------------------------------------------------------------------------
 6. omega and negVec
@@ -500,9 +502,9 @@ for (uint pl=0; pl<Npl; pl++) {
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 		Filename negVecFile = baseFolder+"data/00"+rank+"eigVec_pot_3_L_"+nts(p.L)+".dat";
 		//Filename negVecFile = filenameSpatial(p,baseFolder,"eigenvector","negVec",suffix);
-		fprintf(cof,"%12s%28s\n","negVecFile: ",((string)negVecFile).c_str());
+		fprintf(cof,"%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
 		if (verbose)
-			printf("%12s%28s\n","negVecFile: ",((string)negVecFile).c_str());
+			printf("%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
 		if (negVecFile.exists()) {
 			//loadVectorBinary(negVecFile,negVec);
 			loadVectorAscii(negVecFile,negVec);
@@ -542,8 +544,8 @@ for (uint pl=0; pl<Npl; pl++) {
 	comp kineticS = 0.0;
 	comp kineticT = 0.0;
 	comp potV = 0.0;
-	comp potr = 0.0;
-	comp bound = 0.0;
+	comp pot_r = 0.0;
+	double bound = 0.0;
 	double W = 0.0;
 	double E = 0.0;
 	double E_exact = 0.0;
@@ -674,7 +676,7 @@ for (uint pl=0; pl<Npl; pl++) {
 		kineticS = 0.0;
 		kineticT = 0.0;
 		potV = 0.0;
-		potr = 0.0;
+		pot_r = 0.0;
 		boundRe = Eigen::VectorXd::Zero(p.N);
 		boundIm = Eigen::VectorXd::Zero(p.N);
 		
@@ -804,53 +806,6 @@ for (uint pl=0; pl<Npl; pl++) {
 		}
 
 /*----------------------------------------------------------------------------------------------------------------------------
-10.0 coefficients for assigning mds, dds etc
-----------------------------------------------------------------------------------------------------------------------------*/
-
-		// coefficient vectors
-		cVec coeff_kineticT(p.N*p.NT);
-		cVec coeff_kineticS(p.N*p.NT);
-		cVec coeff_pot(p.N*p.NT);
-		cVec coeff_potr(p.N*p.NT);
-		cVec coeff_kineticT_tnt(p.N*p.NT);
-		cVec coeff_kineticS_tnt(p.N*p.NT);
-		cVec coeff_pot_tnt(p.N*p.NT);
-		cVec coeff_potr_tnt(p.N*p.NT);
-		cVec coeff_kineticT_erg(p.N*p.NT);
-		cVec coeff_kineticS_erg(p.N*p.NT);
-		cVec coeff_pot_erg(p.N*p.NT);
-		cVec coeff_potr_erg(p.N*p.NT);
-		double tnt = 1.0;
-		//if ((opts.bds).compare("uc")!=0) // removed this requirement because multiplication by Theta is built into the boundary functions in nr.cc
-		tnt *= p.Theta;
-				
-		// preparatory loop over lattice points
-		for (lint j = 0; j < p.N*p.NT; j++) {
-			uint t 					= intCoord(j,0,p); //coordinates
-			uint x 					= intCoord(j,1,p);
-			
-			// coefficients in action
-			coeff_kineticT[j] 		= DxFn(x,p)/dtFn(t,p);
-			coeff_kineticS[j] 		= -DtFn(t,p)/dxFn(x,p);
-			coeff_pot[j]	 		= -DtFn(t,p)*DxFn(x,p);
-			coeff_potr[j]	 		= (ii*p.Reg)*DtFn(t,p)*DxFn(x,p);
-			
-			// with Theta multiplying the real equation
-			coeff_kineticT_tnt[j] 	= comp(tnt*real(coeff_kineticT[j]),imag(coeff_kineticT[j]));
-			coeff_kineticS_tnt[j] 	= comp(tnt*real(coeff_kineticS[j]),imag(coeff_kineticS[j]));
-			coeff_pot_tnt[j]	 	= comp(tnt*real(coeff_pot[j]),imag(coeff_pot[j]));
-			coeff_potr_tnt[j]	 	= comp(tnt*real(coeff_potr[j]),imag(coeff_potr[j]));
-			
-			// for the energy
-			// the following 4 expressions are discretisations of continuum expressions (can we do better than this?)
-			// We could just derive the energy as a Noether charge.
-			coeff_kineticT_erg[j] 	= DxFn(x,p)/pow(dtFn(t,p),2.0);
-			coeff_kineticS_erg[j] 	= 1.0/dxFn(x,p);
-			coeff_pot_erg[j]	 	= DxFn(x,p);
-			coeff_potr_erg[j]	 	= -ii*p.Reg*DxFn(x,p);
-		}
-
-/*----------------------------------------------------------------------------------------------------------------------------
 10. assigning mds, dds etc
 	- beginning loop over lattice points
 	- fixing zero modes
@@ -863,28 +818,33 @@ for (uint pl=0; pl<Npl; pl++) {
 ----------------------------------------------------------------------------------------------------------------------------*/
 		
 		// beginning loop over lattice points
-		for (lint j = 0; j < p.N*p.NT; j++) {
-			//coordinates
-			uint t 					= intCoord(j,0,p); 
+		for (lint j = 0; j < p.N*p.NT; j++) {		
+			uint t 					= intCoord(j,0,p); //coordinates
 			uint x 					= intCoord(j,1,p);
-			comp dt 		= dtFn(t,p);
-			double Dx 		= DxFn(x,p);
+			int neighPosX 			= neigh(j,1,1,p);
+			int neighNegX  			= neigh(j,1,-1,p);
 			
-			// assigning parameters
+			comp Dt 		= DtFn(t,p);
+			comp dt 		= dtFn(t,p);
+			comp dtm 		= (t>0? dtFn(t-1,p): p.b);
+			double Dx 		= DxFn(x,p);
+			double dx 		= dxFn(x,p);
+			double dxm 		= (x>0? dxFn(x-1,p): p.a);
+			
 			if (p.Pot==3) {
 				paramsV.epsi = p.r0+x*p.a;
 				V.setParams(paramsV);
 				dV.setParams(paramsV);
 				ddV.setParams(paramsV);
 			}
-			
-			// lagrange multiplier terms
+		
 			if (abs(chiX(j))>MIN_NUMBER && p.Pot!=3) { //spatial zero mode lagrange constraint
 				dds.insert(2*j,2*p.N*p.NT) 		= Dx*chiX(j); 
 				dds.insert(2*p.N*p.NT,2*j) 		= Dx*chiX(j);
 				mds(2*j) 						+= -Dx*chiX(j)*f(2*p.N*p.NT);
 				mds(2*p.N*p.NT) 				+= -Dx*chiX(j)*f(2*j);
 			}
+				
 			if (abs(chiT(j))>MIN_NUMBER && t<(p.NT-1) && (p.Pot!=3 || (x>0 && x<(p.N-1)))) {
 				dds.coeffRef(2*(j+1),2*p.N*p.NT+1) 	+= Dx*chiT(j); //chiT should be 0 at t=(p.NT-1) or this line will go wrong
 				dds.coeffRef(2*p.N*p.NT+1,2*(j+1)) 	+= Dx*chiT(j);
@@ -892,19 +852,19 @@ for (uint pl=0; pl<Npl; pl++) {
 				dds.coeffRef(2*p.N*p.NT+1,2*j) 		+= -Dx*chiT(j);
 	            mds(2*(j+1)) 						+= -Dx*chiT(j)*f(2*p.N*p.NT+1);
 	            mds(2*j) 							+= Dx*chiT(j)*f(2*p.N*p.NT+1);
-	            mds(2*p.N*p.NT+1) 					+= -Dx*chiT(j)*(f(2*(j+1))-f(2*j));
+	            mds(2*p.N*p.NT+1) 				+= -Dx*chiT(j)*(f(2*(j+1))-f(2*j));
 			}
 				
-			// linear energy and particle number
 			if (t<(p.NT-1)) {
 				for (uint k=0;k<p.N;k++) {
 					lint l = k*p.NT+t;
 					linErgOffShell(t) += 0.5*( omega_2(x,k)*( Cf(l)-p.minima[0] )*( Cf(j)-p.minima[0] ) \
-									+ omega_0(x,k)*( Cf(l+1)-Cf(l) )*( Cf(j+1)-Cf(j) )/pow(dt,2.0)); // Are we sure about the 1/dt^2? Are there any factors of Dt?
+									+ omega_0(x,k)*( Cf(l+1)-Cf(l) )*( Cf(j+1)-Cf(j) )/pow(dt,2.0));
 					linNumOffShell(t) += 0.5*(omega_1(x,k)*( Cf(l)-p.minima[0] )*( Cf(j)-p.minima[0] ) \
 									+ omega_m1(x,k)*( Cf(l+1)-Cf(l) )*( Cf(j+1)-Cf(j) )/pow(dt,2.0));
 				}
 			}
+				
 			if (abs(p.Theta)>MIN_NUMBER) {
 				for (uint k=0;k<p.N;k++) {
 					lint l = k*p.NT+t;
@@ -915,99 +875,189 @@ for (uint pl=0; pl<Npl; pl++) {
 				}
 			}
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//boundaries
 			if (p.Pot==3 && x==(p.N-1)) {
 				dds.insert(2*j,2*j) 	= 1.0; // f=0 at r=R
 				dds.insert(2*j+1,2*j+1) = 1.0;
 			}
 			else if (p.Pot==3 && x==0) {
-				Kinetic_nr (j, 1, f, p, coeff_kineticS_erg, derivErg, t); //#### The hashes signify that this term is new and untested.
+				kineticS 				+= 	Dt*pow(Cf(neighPosX),2.0)/dx/2.0;
+				derivErg(t) 			+= 	pow(Cf(neighPosX),2.0)/dx/2.0; //n.b. the Dt/dt difference is ignored for erg(t)
+				erg(t) 					+= 	pow(Cf(neighPosX),2.0)/dx/2.0;
 				
-				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
 				dds.insert(2*j,2*j) 	= 1.0; // f=0 at r=0
 				dds.insert(2*j+1,2*j+1) = 1.0;
 			}			
-			else if (t==(p.NT-1)) {		
-				Kinetic_nr (j, 1, f, p, coeff_kineticS_erg, derivErg, t);	//####
-				Potential_nr (j, f, p, V, coeff_pot_erg, potErg, t);	//####
-				Potential_nr (j, f, p, Vr, coeff_potr_erg, potErg, t);	//####
-				
-				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
-				Potential_nr (j, f, p, V, coeff_pot, potV);
-				Potential_nr (j, f, p, Vr, coeff_potr, potr);
+			else if (t==(p.NT-1)) {
+				if (neighPosX!=-1) {
+					kineticS			+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+					derivErg(t) 		+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+					erg(t) 				+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+				}			
+				potV 					+= Dt*Dx*V(Cf(j));
+				pot_r 					+= Dt*Dx*Vr(Cf(j));
+				erg(t) 					+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
+				potErg(t) 				+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
 			
 				dds.insert(2*j,2*(j-1)+1) = 1.0; //zero imaginary part of time derivative
 				dds.insert(2*j+1,2*j+1)   = 1.0; //zero imaginary part
 			}
 			else if (t==0) {
-				Kinetic_nr (j, 0, f, p, coeff_kineticT_erg, derivErg, t);	//####
-				Kinetic_nr (j, 1, f, p, coeff_kineticS_erg, derivErg, t);	//####
-				Potential_nr (j, f, p, V, coeff_pot_erg, potErg, t);		//####
-				Potential_nr (j, f, p, Vr, coeff_potr_erg, potErg, t);	//####
+				kineticT 	+= Dx*pow(Cf(j+1)-Cf(j),2.0)/dt/2.0;
+				derivErg(t) += Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
+				erg(t) 		+= Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
 				
-				Kinetic_nr (j, 0, f, p, coeff_kineticT, kineticT);
-				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
-				Potential_nr (j, f, p, V, coeff_pot, potV);
-				Potential_nr (j, f, p, Vr, coeff_potr, potr);
-				Boundary_nr (j, f, p, omega_1, bound);
+				///////////////////////////////// including other terms in action at t=0 ///////////////////////////
+				if (neighPosX!=-1) {
+					kineticS 	+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+					derivErg(t) += pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+					erg(t) 		+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+				}
+				potV 		+= Dt*Dx*V(Cf(j));
+				pot_r 		+= Dt*Dx*Vr(Cf(j));
+				potErg(t) 	+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
+				erg(t) 		+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
+				double tnt = 1.0;
+				if ((opts.bds).compare("uc")!=0)
+					tnt *= p.Theta;
+				//////////////////////////////////////equation I - both///////////////////////////////////
+				for (uint k=1; k<2*2; k++) {
+			        int sign = pow(-1,k+1);
+			        uint direc = (uint)(k/2.0);
+			        int neighb = neigh(j,direc,sign,p);
+			        double dxd = (sign==1? dx: dxm);
+			        if (direc == 0) {
+			            mds(2*j+1) 					+= Dx*imag(Cf(j+sign)/dt);
+			            dds.coeffRef(2*j+1,2*(j+sign)) 	+= -imag(Dx/dt);
+			            dds.coeffRef(2*j+1,2*(j+sign)+1)+= -real(Dx/dt);
+			           }
+			        else if (neighb!=-1) {
+			            mds(2*j+1) 					+= -imag(Dt*Cf(neighb))/dxd;
+			            dds.coeffRef(2*j+1,2*neighb) 	+= imag(Dt)/dxd;
+			            dds.coeffRef(2*j+1,2*neighb+1) 	+= real(Dt)/dxd;
+			        }
+			    }
+			    comp temp0 = Dx/dt - Dt*(1.0/dx+1.0/dxm);
+			    if (neighPosX==-1) 		temp0 += Dt/dx;
+			    else if (neighNegX==-1) temp0 += Dt/dxm;
+			    comp temp1 = Dt*Dx*( dV(Cf(j)) + dVr(Cf(j)) );//dV terms should be small
+			    comp temp2 = Dt*Dx*(ddV(Cf(j)) + ddVr(Cf(j)));
+			    
+			    mds(2*j+1) 				+= imag(-temp0*Cf(j) + temp1 );
+			    dds.coeffRef(2*j+1,2*j) 	+= imag(temp0 - temp2 );
+			    dds.coeffRef(2*j+1,2*j+1) 	+= real(temp0 - temp2 );
+				/////////////////////////////////////////////////////////////////////////////////////////
+				if (abs(p.Theta)<MIN_NUMBER) {
+					//simplest boundary conditions replaced by ones continuously connected to theta!=0 ones
+					//dds.insert(2*j+1,2*(j+1)+1) = 1.0; //zero imaginary part of time derivative
+					dds.insert(2*j,2*j+1) = 1.0; //zero imaginary part
 				
-				mdKinetic_nr (j, 0, f, p, coeff_kineticT, mds, Complex_nr::imaginary);
-				mdKinetic_nr (j, 1, f, p, coeff_kineticS, mds, Complex_nr::imaginary);
-				mdPotential_nr (j, f, p, dV, coeff_pot, mds, Complex_nr::imaginary);
-				mdPotential_nr (j, f, p, dVr, coeff_potr, mds, Complex_nr::imaginary);
-				mdBoundary_nr (j, f, p, omega_1, mds, Complex_nr::both);
-				
-				ddKinetic_nr (j, 0, f, p, coeff_kineticT, dds, Complex_nr::imaginary);
-				ddKinetic_nr (j, 1, f, p, coeff_kineticS, dds, Complex_nr::imaginary);
-				ddPotential_nr (j, f, p, ddV, coeff_pot, dds, Complex_nr::imaginary);
-				ddPotential_nr (j, f, p, ddVr, coeff_potr, dds, Complex_nr::imaginary);
-				ddBoundary_nr (j, f, p, omega_1, dds, Complex_nr::real);
-				
-				if (abs(p.Theta)>MIN_NUMBER) {
-					mdKinetic_nr (j, 0, f, p, coeff_kineticT_tnt, mds, Complex_nr::real);
-					mdKinetic_nr (j, 1, f, p, coeff_kineticS_tnt, mds, Complex_nr::real);
-					mdPotential_nr (j, f, p, dV, coeff_pot_tnt, mds, Complex_nr::real);
-					mdPotential_nr (j, f, p, dVr, coeff_potr_tnt, mds, Complex_nr::real);
-					
-					ddKinetic_nr (j, 0, f, p, coeff_kineticT_tnt, dds, Complex_nr::real);
-					ddKinetic_nr (j, 1, f, p, coeff_kineticS_tnt, dds, Complex_nr::real);
-					ddPotential_nr (j, f, p, ddV, coeff_pot_tnt, dds, Complex_nr::real);
-					ddPotential_nr (j, f, p, ddVr, coeff_potr_tnt, dds, Complex_nr::real);
+					/////////////////////////////////////equation R - theta=0//////////////////////////////////////
+					/*for (uint k=0;k<p.N;k++) {
+						if (abs(omega_1(x,k))>MIN_NUMBER) {
+							lint m=k*p.NT;
+							dds.coeffRef(2*j,2*m+1) += -2.0*omega_1(x,k);
+							mds(2*j) 			+= 2.0*omega_1(x,k)*f(2*m+1);
+						}
+					}*/
+					////////////////////////////////////////////////////////////////////////////////////////
+				}
+				else {
+					for (uint k=0;k<p.N;k++) {
+						if (abs(omega_1(x,k))>MIN_NUMBER) {
+							/////////////////////equation I - theta!=0//////////////
+							lint m=k*p.NT;
+							dds.coeffRef(2*j+1,2*m) += (1.0-p.Gamma)*omega_1(x,k)/(1.0+p.Gamma);
+							mds(2*j+1) 			+= -(1.0-p.Gamma)*omega_1(x,k)*(f(2*m)-p.minima[0])/(1.0+p.Gamma);
+							/////////////////////equation R - theta!=0//////////////
+							mds(2*j) 			+= tnt*f(2*m+1)*omega_1(x,k)*(1+p.Gamma)/(1-p.Gamma);
+							dds.coeffRef(2*j,2*m+1)	+= -tnt*omega_1(x,k)*(1.0+p.Gamma)/(1.0-p.Gamma);
+							bound 				+= -(1.0-p.Gamma)*omega_1(x,k)*(f(2*j)-p.minima[0])\
+														*(f(2*m)-p.minima[0])/(1.0+p.Gamma)
+														 + (1.0+p.Gamma)*omega_1(x,k)*f(2*j+1)*f(2*m+1)/(1.0-p.Gamma);
+						}
+					}
+					//////////////////////////////////////equation R - theta!=0//////////////////////////////
+					for (uint k=1; k<2*2; k++){
+				        int sign = pow(-1,k+1);
+				        uint direc = (uint)(k/2.0);
+				        int neighb = neigh(j,direc,sign,p);
+				        double dxd = (sign==1? dx: dxm);
+				        if (direc == 0) {
+				            mds(2*j) 					+= tnt*Dx*real(Cf(j+sign)/dt);
+			            	dds.coeffRef(2*j,2*(j+sign)) 	+= -tnt*real(Dx/dt);
+			            	dds.coeffRef(2*j,2*(j+sign)+1) 	+= tnt*imag(Dx/dt);
+				        }
+				        else if (neighb!=-1) {
+				            mds(2*j) 					+= -tnt*real(Dt*Cf(neighb))/dxd;
+				            dds.coeffRef(2*j,2*neighb) 		+= tnt*real(Dt)/dxd;
+			            	dds.coeffRef(2*j,2*neighb+1) 	+= -tnt*imag(Dt)/dxd;
+				        }
+				    }
+				    mds(2*j) 			+= tnt*real(-temp0*Cf(j) + temp1 );
+			    	dds.coeffRef(2*j,2*j) 	+= tnt*real(temp0 - temp2 );
+			    	dds.coeffRef(2*j,2*j+1) += tnt*imag(-temp0 + temp2 );
 				}
 			}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//bulk
 			else {
-				Kinetic_nr (j, 0, f, p, coeff_kineticT_erg, derivErg, t);	//####
-				Kinetic_nr (j, 1, f, p, coeff_kineticS_erg, derivErg, t);	//####
-				Potential_nr (j, f, p, V, coeff_pot_erg, potErg, t);	//####
-				Potential_nr (j, f, p, Vr, coeff_potr_erg, potErg, t);	//####
-            	
-				Kinetic_nr (j, 0, f, p, coeff_kineticT, kineticT);
-				Kinetic_nr (j, 1, f, p, coeff_kineticS, kineticS);
-				Potential_nr (j, f, p, V, coeff_pot, potV);
-				Potential_nr (j, f, p, Vr, coeff_potr, potr);
+				if (neighPosX!=-1) {
+					kineticS 	+= Dt*pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+					erg(t) 	 	+= pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+					derivErg(t) += pow(Cf(neighPosX)-Cf(j),2.0)/dx/2.0;
+				}
 				
-				mdKinetic_nr (j, 0, f, p, coeff_kineticT, mds);
-				mdKinetic_nr (j, 1, f, p, coeff_kineticS, mds);
-				mdPotential_nr (j, f, p, dV, coeff_pot, mds);
-				mdPotential_nr (j, f, p, dVr, coeff_potr, mds);
-				
-				ddKinetic_nr (j, 0, f, p, coeff_kineticT, dds);
-				ddKinetic_nr (j, 1, f, p, coeff_kineticS, dds);
-				ddPotential_nr (j, f, p, ddV, coeff_pot, dds);
-				ddPotential_nr (j, f, p, ddVr, coeff_potr, dds);
+				kineticT 	+= Dx*pow(Cf(j+1)-Cf(j),2.0)/dt/2.0;
+				potV 		+= Dt*Dx*V(Cf(j));
+				pot_r 		+= Dt*Dx*Vr(Cf(j));
+				erg(t) 		+= Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0 + Dx*V(Cf(j)) + Dx*Vr(Cf(j));
+				derivErg(t) += Dx*pow(Cf(j+1)-Cf(j),2.0)/pow(dt,2.0)/2.0;
+				potErg(t) 	+= Dx*V(Cf(j)) + Dx*Vr(Cf(j));
+			
+	            for (uint k=0; k<2*2; k++) {
+	                int sign = pow(-1,k);
+	                uint direc = (uint)(k/2.0);
+	                int neighb = neigh(j,direc,sign,p);
+	                comp dtd = (sign==1? dt: dtm);
+	                double dxd = (sign==1? dx: dxm);
+	                if (direc == 0) {
+	                    mds(2*j) 					+= real(Dx*Cf(j+sign)/dtd);
+	                    mds(2*j+1) 					+= imag(Dx*Cf(j+sign)/dtd);
+	                    dds.insert(2*j,2*(j+sign)) 		= -real(Dx/dtd);
+	                    dds.insert(2*j,2*(j+sign)+1) 	= imag(Dx/dtd);
+	                    dds.insert(2*j+1,2*(j+sign)) 	= -imag(Dx/dtd);
+	                    dds.insert(2*j+1,2*(j+sign)+1) 	= -real(Dx/dtd);
+	                }
+	                else if (neighb!=-1) {                        
+	                    mds(2*j) 					+= -real(Dt*Cf(neighb)/dxd);
+	                    mds(2*j+1) 					+= -imag(Dt*Cf(neighb)/dxd);
+	                    dds.insert(2*j,2*neighb) 		= real(Dt/dxd);
+	                    dds.insert(2*j,2*neighb+1) 		= -imag(Dt/dxd);
+	                    dds.insert(2*j+1,2*neighb) 		= imag(Dt/dxd);
+	                    dds.insert(2*j+1,2*neighb+1) 	= real(Dt/dxd);
+	                }
+            	}
+	            comp temp0 = Dx*(1.0/dt + 1.0/dtm) - Dt*(1.0/dx + 1.0/dxm);
+	            if (neighPosX==-1) 		temp0 += Dt/dx;
+	            else if (neighNegX==-1) temp0 += Dt/dxm;
+	            comp temp1 = Dt*Dx*(dV(Cf(j)) + dVr(Cf(j)));
+	            comp temp2 = Dt*Dx*(ddV(Cf(j)) + ddVr(Cf(j)));
+	                
+	            mds(2*j) 			+= real(temp1 - temp0*Cf(j));
+	            mds(2*j+1) 			+= imag(temp1 - temp0*Cf(j));
+	            dds.insert(2*j,2*j) 	= real(-temp2 + temp0);
+	            dds.insert(2*j,2*j+1) 	= imag(temp2 - temp0);
+	            dds.insert(2*j+1,2*j) 	= imag(-temp2 + temp0);
+	            dds.insert(2*j+1,2*j+1) = real(-temp2 + temp0);
 	        }
 	    } // end of loop over j
 	    
-	    if (p.Pot==3)
-	    	dds.insert(2*p.N*p.NT,2*p.N*p.NT) = 1.0;
-	    
-	    action = kineticT + kineticS + potV + potr;
+	    if (p.Pot==3) 		dds.insert(2*p.N*p.NT,2*p.N*p.NT) = 1.0;
+	    action = kineticT - kineticS - potV - pot_r;
 	    linErgOffShell(p.NT-1) = linErgOffShell(p.NT-2);
     	linNumOffShell(p.NT-1) = linNumOffShell(p.NT-2);
-    	
-    	// assigning energy
-		erg = derivErg + potErg;
     	
 	    if (p.Pot==3) {
 	    	action 			*= 4.0*PI;
@@ -1034,7 +1084,7 @@ for (uint pl=0; pl<Npl; pl++) {
 	    //defining E, Num and W
 		E = real(linErg(0));
 		Num = real(linNum(0));
-		W = - E*2.0*p.Tb - p.Theta*Num - imag(bound) + 2.0*imag(action);
+		W = - E*2.0*p.Tb - p.Theta*Num - bound + 2.0*imag(action);
 		
 /*----------------------------------------------------------------------------------------------------------------------------
 11. checks
@@ -1144,8 +1194,8 @@ for (uint pl=0; pl<Npl; pl++) {
 		double ABEtest = absDiff(linErgAB,linErg(0));
 		ABNtest>ABEtest? checkABNE.add(ABNtest): checkABNE.add(ABEtest);
 		
-		//checking potr is much smaller than the other potential terms
-		checkReg.add(abs(potr/potV));
+		//checking pot_r is much smaller than the other potential terms
+		checkReg.add(abs(pot_r/potV));
 		checkReg.checkMessage(ces);
 		if (verbose)
 			checkReg.checkMessage(cerr);
@@ -1216,7 +1266,7 @@ for (uint pl=0; pl<Npl; pl++) {
 			fprintf(cof,"imag(kineticT)  = %40.20g\n",imag(kineticT));
 			fprintf(cof,"imag(kineticS)  = %40.20g\n",imag(kineticS));
 			fprintf(cof,"imag(potV)      = %40.20g\n",imag(potV));
-			fprintf(cof,"imag(potr)      = %40.20g\n",imag(potr));
+			fprintf(cof,"imag(pot_r)      = %40.20g\n",imag(pot_r));
 			fprintf(cof,"E               = %40.20g\n",E);
 			fprintf(cof,"Num             = %40.20g\n",Num);
 			fprintf(cof,"derivErg.norm() = %40.20g\n",derivErg.norm());
@@ -1229,7 +1279,7 @@ for (uint pl=0; pl<Npl; pl++) {
 				printf("imag(kineticT)  = %40.20g\n",imag(kineticT));
 				printf("imag(kineticS)  = %40.20g\n",imag(kineticS));
 				printf("imag(potV)      = %40.20g\n",imag(potV));
-				printf("imag(potr)      = %40.20g\n",imag(potr));
+				printf("imag(pot_r)      = %40.20g\n",imag(pot_r));
 				printf("E               = %40.20g\n",E);
 				printf("Num             = %40.20g\n",Num);
 				printf("derivErg.norm() = %40.20g\n",derivErg.norm());
@@ -1239,6 +1289,7 @@ for (uint pl=0; pl<Npl; pl++) {
 				printf("dds.norm()      = %40.20g\n",dds.norm());
 			}
 		}
+
 
 /*----------------------------------------------------------------------------------------------------------------------------
 12. printing early 1
@@ -1390,7 +1441,7 @@ for (uint pl=0; pl<Npl; pl++) {
 			(earlyPrintFile.Extras).push_back(StringPair("run",nts(runsCount)));
 			saveVectorAscii(earlyPrintFile,f);
 		}
-		if ((opts.printChoice).compare("d")==0 || (opts.printChoice).compare("e")==0) {
+		if ((opts.printChoice).compare("f")==0 || (opts.printChoice).compare("e")==0) {
 			Filename earlyPrintFile = filenameMain(p,baseFolder,"ascii","deltaMainEarly",".dat");
 			(earlyPrintFile.Extras).push_back(StringPair("run",nts(runsCount)));
 			saveVectorAscii(earlyPrintFile,delta);
@@ -1562,8 +1613,8 @@ for (uint pl=0; pl<Npl; pl++) {
 		datumResult[4] = imag(kineticT);
 		datumResult[5] = imag(kineticS);
 		datumResult[6] = imag(potV);
-		datumResult[7] = imag(potr);
-		datumResult[8] = imag(bound);
+		datumResult[7] = imag(pot_r);
+		datumResult[8] = bound;
 		datumResult[9] = checkSol.back();
 		datumResult[10] = checkSolMax.back();
 		datumResult[11] = checkLatt.back();
@@ -1601,8 +1652,8 @@ for (uint pl=0; pl<Npl; pl++) {
 		datumError[4] = imag(kineticT);
 		datumError[5] = imag(kineticS);
 		datumError[6] = imag(potV);
-		datumError[7] = imag(potr);
-		datumError[8] = imag(bound);
+		datumError[7] = imag(pot_r);
+		datumError[8] = bound;
 		datumError[9] = checkSol.back();
 		datumError[10] = checkSolMax.back();
 		datumError[11] = checkLatt.back();
@@ -1665,5 +1716,4 @@ cout << endl << "===============================================================
 
 return 0;
 }
-
 

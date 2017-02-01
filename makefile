@@ -62,13 +62,17 @@ common: $(COMMONOBJS)
 fns: $(FNOBJS)
 	@echo made common objects $(FNOBJS)
 	
-main: $(ODIR)/main.o  $(FNODIR)/main_fn.o $(COMMONOBJS)
+main: $(ODIR)/main.o $(FNODIR)/main_fn.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named main has been compiled
 	
-main3: $(ODIR)/main3.o  $(FNODIR)/main_fn3.o $(COMMONOBJS)
+main3: $(ODIR)/main3.o $(FNODIR)/main_fn3.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named main3 has been compiled
+	
+main3old: $(ODIR)/main3old.o  $(FNODIR)/main_fn3old.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named main3old has been compiled
 	
 plot: $(ODIR)/plot.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)

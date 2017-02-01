@@ -116,10 +116,18 @@ template <class T> T V3 (const T& phi, const struct params_for_V& params) {
 	return pow(phi,2.0)/2.0 - pow(phi,4.0)/4.0/pow(params.epsi,2.0); //epsi here takes the role of r
 }
 
-//Vr	
+//VrFn	
 comp VrFn (const comp & phi, const double & minimaL, const double & minimaR) {
 	return pow(phi-minimaL,4.0)*pow(phi-minimaR,4.0)/4.0;
 }
+
+//Vreg
+template <class T> T Vreg (const T& phi, const struct params_for_V& params) {
+	double minimaL = params.aa;
+	double minimaR = params.epsi;
+	return pow(phi-minimaL,4.0)*pow(phi-minimaR,4.0)/4.0;
+}
+
 
 /*-------------------------------------------------------------------------------------------------------------------------
 	4. first derivatives of potential functions
@@ -155,8 +163,15 @@ template <class T> T dV3 (const T& phi, const struct params_for_V& params) {
 	return phi - pow(phi,3.0)/pow(epsi,2.0);
 }
 	
-//dVr
+//dVrFn
 comp dVrFn (const comp & phi, const double & minimaL, const double & minimaR) {
+	return pow(phi-minimaL,3.0)*pow(phi-minimaR,4.0) + pow(phi-minimaL,4.0)*pow(phi-minimaR,3.0);
+}
+
+//dVreg
+template <class T> T dVreg (const T& phi, const struct params_for_V& params) {
+	double minimaL = params.aa;
+	double minimaR = params.epsi;
 	return pow(phi-minimaL,3.0)*pow(phi-minimaR,4.0) + pow(phi-minimaL,4.0)*pow(phi-minimaR,3.0);
 }
 	
@@ -194,8 +209,16 @@ template <class T> T ddV3 (const T& phi, const struct params_for_V& params) {
 	return 1.0 - 3.0*pow(phi,2.0)/pow(params.epsi,2.0);
 }
 
-//ddVr	
+//ddVrFn	
 comp ddVrFn (const comp & phi, const double & minimaL, const double & minimaR) {
+	return 3.0*pow(phi-minimaL,2.0)*pow(phi-minimaR,4.0) + 8.0*pow(phi-minimaL,3.0)*pow(phi-minimaR,3.0)\
+				+ 3.0*pow(phi-minimaL,4.0)*pow(phi-minimaR,2.0);
+}
+
+//ddVreg
+template <class T> T ddVreg (const T& phi, const struct params_for_V& params) {
+	double minimaL = params.aa;
+	double minimaR = params.epsi;
 	return 3.0*pow(phi-minimaL,2.0)*pow(phi-minimaR,4.0) + 8.0*pow(phi-minimaL,3.0)*pow(phi-minimaR,3.0)\
 				+ 3.0*pow(phi-minimaL,4.0)*pow(phi-minimaR,2.0);
 }
@@ -253,14 +276,17 @@ template comp V1<comp>(const comp&, const struct params_for_V&);
 template comp Z<comp>(const comp&);
 template comp V2<comp>(const comp&, const struct params_for_V&);
 template comp V3<comp>(const comp&, const struct params_for_V&);
+template comp Vreg<comp>(const comp&, const struct params_for_V&);
 template comp dV1<comp>(const comp&, const struct params_for_V&);
 template comp dZ<comp>(const comp&);
 template comp dV2<comp>(const comp&, const struct params_for_V&);
 template comp dV3<comp>(const comp&, const struct params_for_V&);
+template comp dVreg<comp>(const comp&, const struct params_for_V&);
 template comp ddV1<comp>(const comp&, const struct params_for_V&);
 template comp ddZ<comp>(const comp&);
 template comp ddV2<comp>(const comp&, const struct params_for_V&);
 template comp ddV3<comp>(const comp&, const struct params_for_V&);
+template comp ddVreg<comp>(const comp&, const struct params_for_V&);
 template comp dddV1<comp>(const comp&, const struct params_for_V&);
 template comp dddZ<comp>(const comp&);
 template comp dddV2<comp>(const comp&, const struct params_for_V&);

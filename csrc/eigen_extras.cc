@@ -85,10 +85,11 @@ void printErrorInformation(const mat& m, const string& name) {
 void printErrorInformation(const spMat& m, const string& name) {
 
 	cout << name << " information:" << endl;
-	cout << name <<".rows()    :         " << m.rows() << endl;
-	cout << name <<".cols()    :         " << m.cols() << endl;
-	cout << name <<".nonZeros():         " << m.nonZeros() << endl;
-	cout << name <<".norm()    :         " << m.norm() << endl;
-	cout << name <<".blueNorm():         " << m.blueNorm() << endl;
-	cout << name <<".sum()     :         " << m.sum() << endl;
+	cout << name <<".rows()        :     " << m.rows() << endl;
+	cout << name <<".cols()        :     " << m.cols() << endl;
+	cout << name <<".nonZeros()    :     " << m.nonZeros() << endl;
+	cout << name <<".norm()        :     " << m.norm() << endl;
+	cout << name <<".blueNorm()    :     " << m.blueNorm() << endl;
+	cout << name <<".isCompressed():     " << m.isCompressed() << endl;
+
 }

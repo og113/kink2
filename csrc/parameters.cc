@@ -930,7 +930,7 @@ void ParametersRange::load(const string& filename) {
 	is >> dross >> dross >> Min.Theta >> dross >> Max.Theta >> dross >> Steps[8] >> dross;
 	is >> dross >> dross >> Min.Reg >> dross >> Max.Reg >> dross >> Steps[9] >> dross;
 	is.close();
-		Min.setSecondaryParameters();
+	Min.setSecondaryParameters();
 	Max.setSecondaryParameters();
 }
 

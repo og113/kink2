@@ -78,7 +78,7 @@ ostream& operator<<(ostream& os, const SaveOptions& opts){
 ostream& SaveOptions::writeBinary(ostream& os) const {
 	os.write(reinterpret_cast<const char*>(&printType),sizeof(SaveOptions::printTypeList));
 	os.write(reinterpret_cast<const char*>(&vectorType),sizeof(SaveOptions::vectorTypeList));
-	os.write(reinterpret_cast<const char*>(&extras),sizeof(SaveOptions::extrasList));
+	os.write(reinterpret_cast<const char*>(&extras),sizeof(SaveOptions::extrasList)); // THIS IS POSSIBLY WHERE THE HORRIBLE ERRORS COME IN
 	os.write(reinterpret_cast<const char*>(&column),sizeof(uint));
 	os.write(reinterpret_cast<const char*>(&zeroModes),sizeof(uint));
 	paramsIn.writeBinary(os);
@@ -91,7 +91,7 @@ ostream& SaveOptions::writeBinary(ostream& os) const {
 istream& SaveOptions::readBinary(istream& is) {
 	is.read(reinterpret_cast<char*>(&printType),sizeof(SaveOptions::printTypeList));
 	is.read(reinterpret_cast<char*>(&vectorType),sizeof(SaveOptions::vectorTypeList));
-	is.read(reinterpret_cast<char*>(&extras),sizeof(SaveOptions::extrasList));
+	is.read(reinterpret_cast<char*>(&extras),sizeof(SaveOptions::extrasList));  // THIS IS POSSIBLY WHERE THE HORRIBLE ERRORS COME IN, OR BECAUSE THE SIZE OF PARAMETERS HAS INCREASED BY AN UNSIGNED INT?
 	is.read(reinterpret_cast<char*>(&column),sizeof(uint));
 	is.read(reinterpret_cast<char*>(&zeroModes),sizeof(uint));
 	paramsIn.readBinary(is);

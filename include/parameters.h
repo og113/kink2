@@ -228,7 +228,6 @@ ostream& operator<<(ostream&, const ParametersRange&);
 // operator==
 bool operator==(const Parameters& lhs, const ParametersRange& rhs);
 
-
 /*-------------------------------------------------------------------------------------------------------------------------
 	6. Options
 		- Options

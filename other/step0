@@ -1,8 +1,0 @@
-epsi_x          0.02
-epsi_y          0.01
-angle0          1.57079632679
-tol             0.0001
-aim             2.93589
-fixedAim        1
-stepType        2
-directed        2

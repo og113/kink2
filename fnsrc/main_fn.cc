@@ -241,9 +241,13 @@ if (pFolder.size()>0 && inputsFolder.size()>0) {
 else {
 	ces << endl << "not files found for options:" << endl;
 	ces << opts << endl;
+	ces << "pFolder.size() = " << pFolder.size() << endl;
+	ces << "inputsFolder.size() = " << inputsFolder.size() << endl;
 	if ((opts.printChoice).compare("gui")==0) {
 		cerr << endl << "not files found for options:" << endl;
 		cerr << opts << endl;
+		cerr << "pFolder.size() = " << pFolder.size() << endl;
+		cerr << "inputsFolder.size() = " << inputsFolder.size() << endl;
 	}
 	return 1;
 }
@@ -416,8 +420,11 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 			}
 		else {
 			ces << "pot option not available, pot = " << ps.Pot << endl;
-			if ((opts.printChoice).compare("gui")==0)
+			ces << ps << endl;
+			if ((opts.printChoice).compare("gui")==0) {
 				cerr << "pot option not available, pot = " << ps.Pot << endl;
+				cerr << ps << endl;
+			}
 			return 1;
 		}
 	
@@ -1014,7 +1021,6 @@ for (uint fileLoop=0; fileLoop<pFolder.size(); fileLoop++) {
 				    	DDS.coeffRef(2*j,2*j+1) += tnt*imag(-temp0 + temp2 );
 					}
 				}
-
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				//bulk
 				else {
