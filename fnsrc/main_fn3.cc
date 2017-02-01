@@ -583,11 +583,18 @@ for (uint pl=0; pl<Npl; pl++) {
 	loadVectorBinary(loadFile,f);
 	if ((pold.NT!=p.NT || pold.N!=p.N) && loadFile==stepFile) {
 		f = interpolate(f, pold, p);
+		fprintf(cof,"interpolating\n");
+		if (verbose)
+			printf("interpolating\n");
 	}
-	if (f.size()<Len || pl==0) {
+	if (f.size()<Len) {
+		uint oldLen = f.size();
 		f.conservativeResize(Len);
 		for (uint mu=0; mu<2*zm; mu++)
 			f[2*p.N*p.NT+mu] = 1.0e-4;
+		fprintf(cof,"resizing from %u to %u\n",oldLen,Len);
+		if (verbose)
+			printf("resizing from %u to %u\n",oldLen,Len);
 	}
 	else if (f.size()>Len)
 		f.conservativeResize(Len);
