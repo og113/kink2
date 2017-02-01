@@ -404,7 +404,7 @@ for (uint pl=0; pl<Npl; pl++) {
 	
 	// some derived quantities
 	uint zm = (p.Pot<3? 2: 1); // number of zero modes
-	uint Len = 2*(p.N*p.NT+zm);
+	uint Len = 2*(p.N*p.NT+zm); // not sure about this. do i impose a real or a complex equation to fix the zero mode?
 
 /*----------------------------------------------------------------------------------------------------------------------------
 5. assigning potential functions
@@ -500,9 +500,9 @@ for (uint pl=0; pl<Npl; pl++) {
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
 		Filename negVecFile = baseFolder+"data/00"+rank+"eigVec_pot_3_L_"+nts(p.L)+".dat";
 		//Filename negVecFile = filenameSpatial(p,baseFolder,"eigenvector","negVec",suffix);
-		fprintf(cof,"%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
+		fprintf(cof,"%12s%28s\n","negVecFile: ",((string)negVecFile).c_str());
 		if (verbose)
-			printf("%12s%30s\n","negVecFile: ",((string)negVecFile).c_str());
+			printf("%12s%28s\n","negVecFile: ",((string)negVecFile).c_str());
 		if (negVecFile.exists()) {
 			//loadVectorBinary(negVecFile,negVec);
 			loadVectorAscii(negVecFile,negVec);
@@ -821,8 +821,8 @@ for (uint pl=0; pl<Npl; pl++) {
 		cVec coeff_pot_erg(p.N*p.NT);
 		cVec coeff_potr_erg(p.N*p.NT);
 		double tnt = 1.0;
-		if ((opts.bds).compare("uc")!=0)
-			tnt *= p.Theta;
+		//if ((opts.bds).compare("uc")!=0) // removed this requirement because it is built into the boundary functions in nr.cc
+		tnt *= p.Theta;
 				
 		// preparatory loop over lattice points
 		for (lint j = 0; j < p.N*p.NT; j++) {
