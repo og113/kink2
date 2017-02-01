@@ -371,7 +371,62 @@ double mod(const double& x, const double& min, const double& max) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
-	10. explicit instantiation
+	10. delta
+-------------------------------------------------------------------------------------------------------------------------*/
+
+double delta(const uint& i, const uint& j) {
+	return (i==j? 1.0: 0.0);
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	11. sigFig
+-------------------------------------------------------------------------------------------------------------------------*/
+
+double sigFig(double num, double N) {
+    double d = log10(num);
+    double power;
+    if (num > 0) {
+        d = ceil(d);
+        power = -(d-N);
+    }
+    else {
+        d = floor(d); 
+        power = -(d-N);
+    }
+
+    return (int)(num * pow(10.0, power) + 0.5) * pow(10.0, -power);
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	12. sign
+-------------------------------------------------------------------------------------------------------------------------*/
+
+double sign(double num) {
+	return (num>0.0? 1.0: -1.0);
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	13. splitString
+-------------------------------------------------------------------------------------------------------------------------*/
+
+vector<string> splitString(const string & str, const string & delimiters) {
+    vector<string> v;
+    size_t start = 0;
+    size_t pos = str.find_first_of(delimiters, start);
+    while(pos != string::npos) {
+        if(pos != start) // ignore empty tokens
+            v.push_back(str.substr(start, pos - start));
+        start = pos + 1;
+        pos = str.find_first_of(delimiters, start);
+    }
+    if(start < str.length()) // ignore trailing delimiter
+        v.push_back(str.substr(start,str.length() - start)); // add what's left of the string
+    return v;
+}
+
+
+/*-------------------------------------------------------------------------------------------------------------------------
+	14. explicit instantiation
 		- numberToString, stringToNumber
 		- smallestLoc
 		- countType

@@ -70,6 +70,10 @@ main3: $(ODIR)/main3.o $(FNODIR)/main_fn3.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named main3 has been compiled
 	
+main3mpi: $(MPIODIR)/main3mpi.o $(FNODIR)/main_fn3.o $(COMMONOBJS)
+	$(MPICC) -o $@ $^ $(MPICFLAGS) $(INCLUDES) $(MPILIBS)
+	@echo Simple compiler named main3mpi has been compiled
+	
 main3old: $(ODIR)/main3old.o  $(FNODIR)/main_fn3old.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named main3old has been compiled
