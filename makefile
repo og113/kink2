@@ -102,6 +102,10 @@ staticShooting: $(ODIR)/staticShooting.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named staticShooting has been compiled
 	
+toPlot: $(ODIR)/toPlot.o $(COMMONOBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
+	@echo Simple compiler named toPlot has been compiled
+	
 wrapper: $(MPIODIR)/wrapper.o $(FNODIR)/main_fn.o $(COMMONOBJS)
 	$(MPICC) -o $@ $^ $(MPICFLAGS) $(INCLUDES) $(MPILIBS)
 	@echo Simple compiler named wrapper has been compiled
