@@ -850,7 +850,7 @@ for (uint pl=0; pl<Npl; pl++) {
 			// for the energy
 			// the following 4 expressions are discretisations of continuum expressions (can we do better than this?)
 			// We could just derive the energy as a Noether charge.
-			coeff_kineticT_erg[j] 		= (t<(p.NT-1)? DxFn(x,p)/pow(dtFn(t,p),2.0): 0.0);
+			coeff_kineticT_erg[j] 		= (t<(p.NT-1)? DxFn(x,p)/pow(dtFn(t,p),2): 0.0);
 			coeff_kineticS_erg[j] 		= (x<(p.N-1)? 1.0/dxFn(x,p): 0.0);
 			coeff_pot_erg[j]	 	= DxFn(x,p);
 			coeff_potr_erg[j]	 	= -ii*p.Reg*DxFn(x,p);
@@ -868,10 +868,10 @@ for (uint pl=0; pl<Npl; pl++) {
 					double r = p.r0 + j*p.a;
 					paramsV.epsi = r;
 					V.setParams(paramsV);
-					Vcontrol += pow(f(2*j*p.Nb),2.0)/2.0 - pow(f(2*j*p.Nb),4.0)/4.0/pow(r,2.0);
+					Vcontrol += pow(f(2*j*p.Nb),2)/2.0 - pow(f(2*j*p.Nb),4)/4.0/pow(r,2);
 					Vtrial += V(f(2*j*p.Nb));
 				}
-				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
+				double potTest = sqrt(pow(real(Vcontrol-Vtrial),2) + pow(imag(Vcontrol-Vtrial),2));
 				fprintf(cof,"potTest         = %40.20g\n",potTest);
 				if (verbose)
 					printf("potTest         = %40.20g\n",potTest);
@@ -932,9 +932,9 @@ for (uint pl=0; pl<Npl; pl++) {
 				cerr << "Vr(comp(f(2*(j-1)),f(2*(j-1)+1))) = " << Vr(comp(f[2*(j-1)],f[2*(j-1)+1])) << endl;
 				cerr << "coeff_pot[j-1] = " << coeff_pot[j-1] << endl;
 				cerr << "coeff_potr[j-1] = " << coeff_potr[j-1] << endl;
-				cerr << "pow(comp(f(2*(j-1)),f(2*(j-1)+1)),2.0) = " << pow(comp(f(2*(j-1)),f(2*(j-1)+1)),2.0) << endl;
-				cerr << "pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4.0) = " << pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4.0) << endl;
-				cerr << "pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4.0) = " << pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4.0) << endl;
+				cerr << "pow(comp(f(2*(j-1)),f(2*(j-1)+1)),2) = " << pow(comp(f(2*(j-1)),f(2*(j-1)+1)),2) << endl;
+				cerr << "pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4) = " << pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4) << endl;
+				cerr << "pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4) = " << pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4) << endl;
 				cerr << "paramsV.epsi = " << paramsV.epsi << endl;
 				checknan = false;
 			}
@@ -969,18 +969,18 @@ for (uint pl=0; pl<Npl; pl++) {
 				for (uint k=0;k<p.N;k++) {
 					lint l = k*p.NT+t;
 					linErgOffShell(t) += 0.5*( omega_2(x,k)*( Cf(l)-p.minima[0] )*( Cf(j)-p.minima[0] ) \
-									+ omega_0(x,k)*( Cf(l+1)-Cf(l) )*( Cf(j+1)-Cf(j) )/pow(dt,2.0)); // Are we sure about the 1/dt^2? Are there any factors of Dt?
+									+ omega_0(x,k)*( Cf(l+1)-Cf(l) )*( Cf(j+1)-Cf(j) )/pow(dt,2)); // Are we sure about the 1/dt^2? Are there any factors of Dt?
 					linNumOffShell(t) += 0.5*(omega_1(x,k)*( Cf(l)-p.minima[0] )*( Cf(j)-p.minima[0] ) \
-									+ omega_m1(x,k)*( Cf(l+1)-Cf(l) )*( Cf(j+1)-Cf(j) )/pow(dt,2.0));
+									+ omega_m1(x,k)*( Cf(l+1)-Cf(l) )*( Cf(j+1)-Cf(j) )/pow(dt,2));
 				}
 			}
 			if (abs(p.Theta)>MIN_NUMBER) {
 				for (uint k=0;k<p.N;k++) {
 					lint l = k*p.NT+t;
-					linNum(t) += 2.0*p.Gamma*omega_1(x,k)*( (f(2*l)-p.minima[0])*(f(2*j)-p.minima[0])/pow(1.0+p.Gamma,2.0)\
-							 + f(2*j+1)*f(2*l+1)/pow(1.0-p.Gamma,2.0) );
-					linErg(t) += 2.0*p.Gamma*omega_2(x,k)*( (f(2*l)-p.minima[0])*(f(2*j)-p.minima[0])/pow(1.0+p.Gamma,2.0)\
-							+ f(2*j+1)*f(2*l+1)/pow(1.0-p.Gamma,2.0) );
+					linNum(t) += 2.0*p.Gamma*omega_1(x,k)*( (f(2*l)-p.minima[0])*(f(2*j)-p.minima[0])/pow(1.0+p.Gamma,2)\
+							 + f(2*j+1)*f(2*l+1)/pow(1.0-p.Gamma,2) );
+					linErg(t) += 2.0*p.Gamma*omega_2(x,k)*( (f(2*l)-p.minima[0])*(f(2*j)-p.minima[0])/pow(1.0+p.Gamma,2)\
+							+ f(2*j+1)*f(2*l+1)/pow(1.0-p.Gamma,2) );
 				}
 			}
 
@@ -1140,17 +1140,17 @@ for (uint pl=0; pl<Npl; pl++) {
 		if (p.Pot==3 && abs(p.Theta)<MIN_NUMBER) {
 			for (uint k=1; k<p.N; k++) {
 				double momtm = k*PI/(p.L-p.r0);
-				double freqSqrd = 1.0+pow(momtm,2.0);
+				double freqSqrd = 1.0+pow(momtm,2);
 				double Asqrd, integral1 = 0.0, integral2 = 0.0;
 				for (unsigned int l=0; l<p.N; l++) {
 					double r = p.r0 + l*p.a;
 					lint m = l*p.NT;
-					integral1 += p.a*f(2*m)*pow(2.0/p.L,0.5)*sin(momtm*r);
-					integral2 += p.a*(f(2*(m+1))-f(2*m))*pow(2.0/p.L,0.5)*sin(momtm*r)/p.b;
+					integral1 += p.a*f(2*m)*sqrt(2.0/p.L)*sin(momtm*r);
+					integral2 += p.a*(f(2*(m+1))-f(2*m))*sqrt(2.0/p.L)*sin(momtm*r)/p.b;
 				}
-				Asqrd = pow(integral1,2.0) + pow(integral2,2.0)/freqSqrd;
+				Asqrd = pow(integral1,2) + pow(integral2,2)/freqSqrd;
 				linErgContm += 2.0*PI*Asqrd*freqSqrd;
-				linNumContm += 2.0*PI*Asqrd*pow(freqSqrd,0.5);
+				linNumContm += 2.0*PI*Asqrd*sqrt(freqSqrd);
 			}
 		}
 		double contmErgTest = absDiff(E,linErgContm);
