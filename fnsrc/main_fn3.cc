@@ -371,6 +371,20 @@ for (uint pl=0; pl<Npl; pl++) {
 	FILE* cof;
 	cof = fopen(coFile.c_str(),"a");
 	
+	// printing parameters if extraChecks
+	if (extraChecks) {
+		fprintf(cof,"pold:\n");
+		pold.print(cof);
+		fprintf(cof,"p:\n");
+		p.print(cof);
+		if (verbose) {
+			printf("pold:\n");
+			pold.print();
+			printf("p:\n");
+			p.print();
+		}
+	}
+	
 	//printing angle
 	if (stepargv!=StepperArgv::none) {
 		double angleModTwoPi = mod(stepper.stepAngle(),-PI,PI);		
@@ -600,8 +614,13 @@ for (uint pl=0; pl<Npl; pl++) {
 		if (verbose)
 			printf("resizing from %u to %u\n",oldLen,Len);
 	}
-	else if (f.size()>Len)
+	else if (f.size()>Len) {
+		uint oldLen = f.size();
 		f.conservativeResize(Len);
+		fprintf(cof,"resizing from %u to %u\n",oldLen,Len);
+		if (verbose)
+			printf("resizing from %u to %u\n",oldLen,Len);
+	}
 	// MAY BE WORTH INTRODUCING A STRETCHING HERE IF Tb OR LoR IS BEING CHANGED
 	
 	// printing parameters
@@ -672,7 +691,6 @@ for (uint pl=0; pl<Npl; pl++) {
 		dds.reserve(dds_to_reserve);
 		
 		//initializing to zero
-		bound = 0.0;
 		erg = Eigen::VectorXcd::Constant(p.NT,-ergZero);
 		linErg = Eigen::VectorXcd::Zero(p.NT);
 		linErgOffShell = Eigen::VectorXcd::Zero(p.NT);
@@ -686,6 +704,7 @@ for (uint pl=0; pl<Npl; pl++) {
 		kineticT = 0.0;
 		potV = 0.0;
 		potr = 0.0;
+		bound = 0.0;
 		boundRe = Eigen::VectorXd::Zero(p.N);
 		boundIm = Eigen::VectorXd::Zero(p.N);
 		
