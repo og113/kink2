@@ -873,6 +873,7 @@ Parameters ParametersRange::position(const uint& pos) const {
 			p.step(*this,static_cast<Parameters::Label>(ParametersRange::Size-j),n);
 		}
 	}
+	p.setSecondaryParameters();
 	return p;
 }
 

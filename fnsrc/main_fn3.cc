@@ -264,6 +264,8 @@ if (stepperOutputsFile.exists() && stepargv!=StepperArgv::none) {
 	p.Theta = stepper.y();
 	pold.Tb = (stepper.lastStep()).X;
 	pold.Theta = (stepper.lastStep()).Y;
+	p.setSecondaryParameters();
+	pold.setSecondaryParameters();
 }
 
 //stepOpts.closeness = tols.Step; // NOT USING THIS
@@ -329,6 +331,8 @@ for (uint pl=0; pl<Npl; pl++) {
 			p.Theta = stepper.y();
 			pold.Tb = (stepper.lastStep()).X;
 			pold.Theta = (stepper.lastStep()).Y;
+			p.setSecondaryParameters();
+			pold.setSecondaryParameters();
 		}
 	}
 	

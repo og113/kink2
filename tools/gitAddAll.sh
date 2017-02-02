@@ -27,5 +27,5 @@ git add --all notes/*.txt
 git add --all gp/*.gp
 
 # adding results
-#git add --all results/*.csv
+git add --all results/nr/*.csv
 
