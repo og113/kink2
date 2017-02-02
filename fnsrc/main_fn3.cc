@@ -379,9 +379,11 @@ for (uint pl=0; pl<Npl; pl++) {
 		p.print(cof);
 		if (verbose) {
 			printf("pold:\n");
-			pold.print();
+			//pold.print();
+			cout << pold << endl;
 			printf("p:\n");
-			p.print();
+			//p.print();
+			cout << p << endl;
 		}
 	}
 	

@@ -796,9 +796,10 @@ void Parameters::step(const ParametersRange& pr, const Parameters::Label& label)
 	step(pr,label,1);
 }
 
-// operator<< - just prints primary parameters
+// operator<<
 ostream& operator<<(ostream& os, const Parameters& p1) {
 	os << static_cast<const PrimaryParameters&>(p1);
+	os << static_cast<const SecondaryParameters&>(p1);
 	return os;
 }
 
