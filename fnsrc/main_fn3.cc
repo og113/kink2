@@ -466,7 +466,11 @@ for (uint pl=0; pl<Npl; pl++) {
 	params_for_V paramsV  = {p.epsilon, p.A};
 	params_for_V paramsVr  = {p.minima[0], p.minima[1]};
 	V.setParams(paramsV);
+	dV.setParams(paramsV);
+	ddV.setParams(paramsV);
 	Vr.setParams(paramsVr);
+	dVr.setParams(paramsVr);
+	ddVr.setParams(paramsVr);
 
 /*----------------------------------------------------------------------------------------------------------------------------
 6. omega and negVec
@@ -806,36 +810,6 @@ for (uint pl=0; pl<Npl; pl++) {
 		chiT = chiT/normT;
 		
 /*----------------------------------------------------------------------------------------------------------------------------
-9.1 some extra checks, mostly trivial
-----------------------------------------------------------------------------------------------------------------------------*/
-		
-		if (extraChecks) {
-			//testing that the potential term is working for pot3
-			if (p.Pot==3) {
-				comp Vtrial = 0.0, Vcontrol = 0.0;
-				for (unsigned int j=0; j<p.N; j++) {
-					double r = p.r0 + j*p.a;
-					paramsV.epsi = r;
-					V.setParams(paramsV);
-					Vcontrol += pow(f(2*j*p.Nb),2.0)/2.0 - pow(f(2*j*p.Nb),4.0)/4.0/pow(r,2.0);
-					Vtrial += V(f(2*j*p.Nb));
-				}
-				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
-				fprintf(cof,"potTest         = %40.20g\n",potTest);
-				if (verbose)
-					printf("potTest         = %40.20g\n",potTest);
-			}
-			fprintf(cof,"f.norm()        = %40.20g\n",f.norm());
-			fprintf(cof,"chiT.norm()    = %40.20g\n",normX);
-			fprintf(cof,"chiX.norm()     = %40.20g\n",normT);
-			if (verbose) {
-				printf("f.norm()        = %40.20g\n",f.norm());
-				printf("chiT.norm()     = %40.20g\n",normX);
-				printf("chiX.norm()     = %40.20g\n",normT);
-			}
-		}
-
-/*----------------------------------------------------------------------------------------------------------------------------
 10.0 coefficients for assigning mds, dds etc
 ----------------------------------------------------------------------------------------------------------------------------*/
 
@@ -858,28 +832,74 @@ for (uint pl=0; pl<Npl; pl++) {
 				
 		// preparatory loop over lattice points
 		for (lint j = 0; j < p.N*p.NT; j++) {
-			uint t 					= intCoord(j,0,p); //coordinates
-			uint x 					= intCoord(j,1,p);
+			uint t 				= intCoord(j,0,p); //coordinates
+			uint x 				= intCoord(j,1,p);
 			
 			// coefficients in action
-			coeff_kineticT[j] 		= DxFn(x,p)/dtFn(t,p);
-			coeff_kineticS[j] 		= -DtFn(t,p)/dxFn(x,p);
+			coeff_kineticT[j] 		= (t<(p.NT-1)? DxFn(x,p)/dtFn(t,p): 0.0);
+			coeff_kineticS[j] 		= (x<(p.N-1)? -DtFn(t,p)/dxFn(x,p): 0.0);
 			coeff_pot[j]	 		= -DtFn(t,p)*DxFn(x,p);
 			coeff_potr[j]	 		= (ii*p.Reg)*DtFn(t,p)*DxFn(x,p);
 			
 			// with Theta multiplying the real equation
-			coeff_kineticT_tnt[j] 	= comp(tnt*real(coeff_kineticT[j]),imag(coeff_kineticT[j]));
-			coeff_kineticS_tnt[j] 	= comp(tnt*real(coeff_kineticS[j]),imag(coeff_kineticS[j]));
+			coeff_kineticT_tnt[j] 		= comp(tnt*real(coeff_kineticT[j]),imag(coeff_kineticT[j]));
+			coeff_kineticS_tnt[j] 		= comp(tnt*real(coeff_kineticS[j]),imag(coeff_kineticS[j]));
 			coeff_pot_tnt[j]	 	= comp(tnt*real(coeff_pot[j]),imag(coeff_pot[j]));
 			coeff_potr_tnt[j]	 	= comp(tnt*real(coeff_potr[j]),imag(coeff_potr[j]));
 			
 			// for the energy
 			// the following 4 expressions are discretisations of continuum expressions (can we do better than this?)
 			// We could just derive the energy as a Noether charge.
-			coeff_kineticT_erg[j] 	= DxFn(x,p)/pow(dtFn(t,p),2.0);
-			coeff_kineticS_erg[j] 	= 1.0/dxFn(x,p);
+			coeff_kineticT_erg[j] 		= (t<(p.NT-1)? DxFn(x,p)/pow(dtFn(t,p),2.0): 0.0);
+			coeff_kineticS_erg[j] 		= (x<(p.N-1)? 1.0/dxFn(x,p): 0.0);
 			coeff_pot_erg[j]	 	= DxFn(x,p);
 			coeff_potr_erg[j]	 	= -ii*p.Reg*DxFn(x,p);
+		}
+
+/*----------------------------------------------------------------------------------------------------------------------------
+10.01 some extra checks, mostly trivial
+----------------------------------------------------------------------------------------------------------------------------*/
+		
+		if (extraChecks) {
+			//testing that the potential term is working for pot3
+			if (p.Pot==3) {
+				comp Vtrial = 0.0, Vcontrol = 0.0;
+				for (unsigned int j=0; j<p.N; j++) {
+					double r = p.r0 + j*p.a;
+					paramsV.epsi = r;
+					V.setParams(paramsV);
+					Vcontrol += pow(f(2*j*p.Nb),2.0)/2.0 - pow(f(2*j*p.Nb),4.0)/4.0/pow(r,2.0);
+					Vtrial += V(f(2*j*p.Nb));
+				}
+				double potTest = pow(pow(real(Vcontrol-Vtrial),2.0) + pow(imag(Vcontrol-Vtrial),2.0),0.5);
+				fprintf(cof,"potTest         = %40.20g\n",potTest);
+				if (verbose)
+					printf("potTest         = %40.20g\n",potTest);
+			}
+			fprintf(cof,"f.norm()       = %40.20g\n",f.norm());
+			fprintf(cof,"chiT.norm()    = %40.20g\n",normX);
+			fprintf(cof,"chiX.norm()    = %40.20g\n",normT);
+			fprintf(cof,"coeff_kineticT = %40.20g\n",coeff_kineticT.norm());
+			fprintf(cof,"coeff_kineticS = %40.20g\n",coeff_kineticS.norm());
+			fprintf(cof,"coeff_pot      = %40.20g\n",coeff_pot.norm());
+			fprintf(cof,"coeff_potr     = %40.20g\n",coeff_potr.norm());
+			fprintf(cof,"coeff_kineticT_tnt = %40.20g\n",coeff_kineticT_tnt.norm());
+			fprintf(cof,"coeff_kineticS_tnt = %40.20g\n",coeff_kineticS_tnt.norm());
+			fprintf(cof,"coeff_pot_tnt      = %40.20g\n",coeff_pot_tnt.norm());
+			fprintf(cof,"coeff_potr_tnt     = %40.20g\n",coeff_potr_tnt.norm());
+			if (verbose) {
+				printf("f.norm()        = %40.20g\n",f.norm());
+				printf("chiT.norm()     = %40.20g\n",normX);
+				printf("chiX.norm()     = %40.20g\n",normT);
+				printf("coeff_kineticT = %40.20g\n",coeff_kineticT.norm());
+				printf("coeff_kineticS = %40.20g\n",coeff_kineticS.norm());
+				printf("coeff_pot      = %40.20g\n",coeff_pot.norm());
+				printf("coeff_potr     = %40.20g\n",coeff_potr.norm());
+				printf("coeff_kineticT_tnt = %40.20g\n",coeff_kineticT_tnt.norm());
+				printf("coeff_kineticS_tnt = %40.20g\n",coeff_kineticS_tnt.norm());
+				printf("coeff_pot_tnt      = %40.20g\n",coeff_pot_tnt.norm());
+				printf("coeff_potr_tnt     = %40.20g\n",coeff_potr_tnt.norm());
+			}
 		}
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -894,6 +914,8 @@ for (uint pl=0; pl<Npl; pl++) {
 	- E, N, bound, W
 ----------------------------------------------------------------------------------------------------------------------------*/
 		
+		bool checknan = true;
+		
 		// beginning loop over lattice points
 		for (lint j = 0; j < p.N*p.NT; j++) {
 			//coordinates
@@ -901,6 +923,21 @@ for (uint pl=0; pl<Npl; pl++) {
 			uint x 					= intCoord(j,1,p);
 			comp dt 		= dtFn(t,p);
 			double Dx 		= DxFn(x,p);
+			
+			if (!(potV==potV) && checknan) { // means it's nan
+				cerr << "!(potV==potV), j=" << j << ", x=" << x << ", t=" << t << ", potr=" << potr << endl;
+				cerr << "!(potV==potV), j-1=" << j-1 << ", x=" << intCoord(j-1,1,p) << ", t=" << intCoord(j-1,0,p) << endl;
+				cerr << "comp(f(2*(j-1)),f(2*(j-1)+1)) = " << comp(f[2*(j-1)],f[2*(j-1)+1]) << endl;
+				cerr << "V(comp(f(2*(j-1)),f(2*(j-1)+1))) = " << V(comp(f[2*(j-1)],f[2*(j-1)+1])) << endl;
+				cerr << "Vr(comp(f(2*(j-1)),f(2*(j-1)+1))) = " << Vr(comp(f[2*(j-1)],f[2*(j-1)+1])) << endl;
+				cerr << "coeff_pot[j-1] = " << coeff_pot[j-1] << endl;
+				cerr << "coeff_potr[j-1] = " << coeff_potr[j-1] << endl;
+				cerr << "pow(comp(f(2*(j-1)),f(2*(j-1)+1)),2.0) = " << pow(comp(f(2*(j-1)),f(2*(j-1)+1)),2.0) << endl;
+				cerr << "pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4.0) = " << pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4.0) << endl;
+				cerr << "pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4.0) = " << pow(comp(f(2*(j-1)),f(2*(j-1)+1)),4.0) << endl;
+				cerr << "paramsV.epsi = " << paramsV.epsi << endl;
+				checknan = false;
+			}
 			
 			// assigning parameters
 			if (p.Pot==3) {
@@ -922,9 +959,9 @@ for (uint pl=0; pl<Npl; pl++) {
 				dds.coeffRef(2*p.N*p.NT+1,2*(j+1)) 	+= Dx*chiT(j);
 				dds.coeffRef(2*j,2*p.N*p.NT+1) 		+= -Dx*chiT(j);
 				dds.coeffRef(2*p.N*p.NT+1,2*j) 		+= -Dx*chiT(j);
-	            mds(2*(j+1)) 						+= -Dx*chiT(j)*f(2*p.N*p.NT+1);
-	            mds(2*j) 							+= Dx*chiT(j)*f(2*p.N*p.NT+1);
-	            mds(2*p.N*p.NT+1) 					+= -Dx*chiT(j)*(f(2*(j+1))-f(2*j));
+	            		mds(2*(j+1)) 				+= -Dx*chiT(j)*f(2*p.N*p.NT+1);
+	            		mds(2*j) 				+= Dx*chiT(j)*f(2*p.N*p.NT+1);
+	            		mds(2*p.N*p.NT+1) 			+= -Dx*chiT(j)*(f(2*(j+1))-f(2*j));
 			}
 				
 			// linear energy and particle number

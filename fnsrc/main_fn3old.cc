@@ -877,11 +877,11 @@ for (uint pl=0; pl<Npl; pl++) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//boundaries
-			if (p.Pot==3 && x==(p.N-1)) {
+			if (p.Pot>2 && x==(p.N-1)) {
 				dds.insert(2*j,2*j) 	= 1.0; // f=0 at r=R
 				dds.insert(2*j+1,2*j+1) = 1.0;
 			}
-			else if (p.Pot==3 && x==0) {
+			else if (p.Pot>2 && x==0) {
 				kineticS 				+= 	Dt*pow(Cf(neighPosX),2.0)/dx/2.0;
 				derivErg(t) 			+= 	pow(Cf(neighPosX),2.0)/dx/2.0; //n.b. the Dt/dt difference is ignored for erg(t)
 				erg(t) 					+= 	pow(Cf(neighPosX),2.0)/dx/2.0;

@@ -425,7 +425,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		ddVd_local = &ddV3;
 		epsilon0 = 0.0;										////////// epsilon0
 		epsilon = 0.0;
-		r0 = MIN_NUMBER;									////////// r0
+		r0 = 10.0*MIN_NUMBER;									////////// r0
 	}
 	else {
 		cerr << "Pot option not available, Pot = " << pp.Pot << endl;

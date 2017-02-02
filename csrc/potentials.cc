@@ -95,12 +95,12 @@ void Potential<T>::setParams(const Parameters& p) {
 
 //V1
 template <class T> T V1 (const T& phi, const struct params_for_V& params) {
-	return pow(pow(phi,2)-1.0,2.0)/8.0 - params.epsi*(phi-1.0)/2.0;
+	return pow(pow(phi,2)-1.0,2)/8.0 - params.epsi*(phi-1.0)/2.0;
 }
 
 //Z, for V2
 template <class T> T Z (const T& x) {
-	return exp(-pow(x,2.0))*(x + pow(x,3.0) + pow(x,5.0));
+	return exp(-pow(x,2))*(x + pow(x,3) + pow(x,5));
 }
 	
 //V2
@@ -108,24 +108,24 @@ template <class T> T V2 (const T& x, const struct params_for_V& params) {
 	double epsi = params.epsi;
 	double aa = params.aa;
 	T y = (x-1.0)/aa;
-	return 0.5*pow(x+1.0,2.0)*(1.0-epsi*Z(y));
+	return 0.5*pow(x+1.0,2)*(1.0-epsi*Z(y));
 }
 
 //V3
 template <class T> T V3 (const T& phi, const struct params_for_V& params) {
-	return pow(phi,2.0)/2.0 - pow(phi,4.0)/4.0/pow(params.epsi,2.0); //epsi here takes the role of r
+	return pow(phi,2)/2.0 - pow(phi,4)/4.0/pow(params.epsi,2); //epsi here takes the role of r
 }
 
 //VrFn	
 comp VrFn (const comp & phi, const double & minimaL, const double & minimaR) {
-	return pow(phi-minimaL,4.0)*pow(phi-minimaR,4.0)/4.0;
+	return pow(phi-minimaL,4)*pow(phi-minimaR,4)/4.0;
 }
 
 //Vreg
 template <class T> T Vreg (const T& phi, const struct params_for_V& params) {
 	double minimaL = params.aa;
 	double minimaR = params.epsi;
-	return pow(phi-minimaL,4.0)*pow(phi-minimaR,4.0)/4.0;
+	return pow(phi-minimaL,4)*pow(phi-minimaR,4)/4.0;
 }
 
 
@@ -146,7 +146,7 @@ template <class T> T dV1 (const T& phi, const struct params_for_V& params) {
 
 //dZ for dV2
 template <class T> T dZ (const T& phi) {
-	return exp(-pow(phi,2.0))*( 1.0 + pow(phi,2.0) + 3.0*pow(phi,4.0) - 2.0*pow(phi,6.0) );
+	return exp(-pow(phi,2))*( 1.0 + pow(phi,2) + 3.0*pow(phi,4) - 2.0*pow(phi,6) );
 }
 	
 //dV2
@@ -154,25 +154,25 @@ template <class T> T dV2 (const T& x, const struct params_for_V& params) {
 	double epsi = params.epsi;
 	double aa = params.aa;
 	T y = (x-1.0)/aa;
-	return (x+1.0)*(1.0-epsi*Z(y)) - (epsi/2.0/aa)*pow(x+1.0,2.0)*dZ(y);
+	return (x+1.0)*(1.0-epsi*Z(y)) - (epsi/2.0/aa)*pow(x+1.0,2)*dZ(y);
 }
 
 //dV3
 template <class T> T dV3 (const T& phi, const struct params_for_V& params) {
 	double epsi = params.epsi;
-	return phi - pow(phi,3.0)/pow(epsi,2.0);
+	return phi - pow(phi,3)/pow(epsi,2);
 }
 	
 //dVrFn
 comp dVrFn (const comp & phi, const double & minimaL, const double & minimaR) {
-	return pow(phi-minimaL,3.0)*pow(phi-minimaR,4.0) + pow(phi-minimaL,4.0)*pow(phi-minimaR,3.0);
+	return pow(phi-minimaL,3)*pow(phi-minimaR,4) + pow(phi-minimaL,4)*pow(phi-minimaR,3);
 }
 
 //dVreg
 template <class T> T dVreg (const T& phi, const struct params_for_V& params) {
 	double minimaL = params.aa;
 	double minimaR = params.epsi;
-	return pow(phi-minimaL,3.0)*pow(phi-minimaR,4.0) + pow(phi-minimaL,4.0)*pow(phi-minimaR,3.0);
+	return pow(phi-minimaL,3)*pow(phi-minimaR,4) + pow(phi-minimaL,4)*pow(phi-minimaR,3);
 }
 	
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ template <class T> T ddV1 (const T& phi, const struct params_for_V& params) {
 
 //ddZ for ddV2
 template <class T> T ddZ (const T& x) {
-	return 2.0*pow(x,3.0)*exp(-pow(x,2.0))*(5.0 - 9.0*pow(x,2.0) + 2.0*pow(x,4.0));
+	return 2.0*pow(x,3)*exp(-pow(x,2))*(5.0 - 9.0*pow(x,2) + 2.0*pow(x,4));
 }
 
 //ddV2
@@ -201,26 +201,26 @@ template <class T> T ddV2 (const T& x, const struct params_for_V& params) {
 	double aa = params.aa;
 	T y = (x-1.0)/aa;
 	return 1.0-epsi*Z(y) - (2.0*epsi/aa)*(x+1.0)*dZ(y)\
-					- (epsi/2.0/pow(aa,2.0))*pow(x+1.0,2.0)*ddZ(y);
+					- (epsi/2.0/pow(aa,2))*pow(x+1.0,2)*ddZ(y);
 }
 
 //ddV3
 template <class T> T ddV3 (const T& phi, const struct params_for_V& params) {
-	return 1.0 - 3.0*pow(phi,2.0)/pow(params.epsi,2.0);
+	return 1.0 - 3.0*pow(phi,2)/pow(params.epsi,2);
 }
 
 //ddVrFn	
 comp ddVrFn (const comp & phi, const double & minimaL, const double & minimaR) {
-	return 3.0*pow(phi-minimaL,2.0)*pow(phi-minimaR,4.0) + 8.0*pow(phi-minimaL,3.0)*pow(phi-minimaR,3.0)\
-				+ 3.0*pow(phi-minimaL,4.0)*pow(phi-minimaR,2.0);
+	return 3.0*pow(phi-minimaL,2)*pow(phi-minimaR,4) + 8.0*pow(phi-minimaL,3)*pow(phi-minimaR,3)\
+				+ 3.0*pow(phi-minimaL,4)*pow(phi-minimaR,2);
 }
 
 //ddVreg
 template <class T> T ddVreg (const T& phi, const struct params_for_V& params) {
 	double minimaL = params.aa;
 	double minimaR = params.epsi;
-	return 3.0*pow(phi-minimaL,2.0)*pow(phi-minimaR,4.0) + 8.0*pow(phi-minimaL,3.0)*pow(phi-minimaR,3.0)\
-				+ 3.0*pow(phi-minimaL,4.0)*pow(phi-minimaR,2.0);
+	return 3.0*pow(phi-minimaL,2)*pow(phi-minimaR,4) + 8.0*pow(phi-minimaL,3)*pow(phi-minimaR,3)\
+				+ 3.0*pow(phi-minimaL,4)*pow(phi-minimaR,2);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
@@ -238,7 +238,7 @@ template <class T> T dddV1 (const T& phi, const struct params_for_V& params) {
 
 //dddZ for dddV2
 template <class T> T dddZ (const T& x) {
-	return -2.0*pow(x,2.0)*exp(-pow(x,2.0))*( 4.0*pow(x,6.0) - 32.0*pow(x,4.0) + 55.0*pow(x,2.0) - 15.0 );
+	return -2.0*pow(x,2)*exp(-pow(x,2))*( 4.0*pow(x,6) - 32.0*pow(x,4) + 55.0*pow(x,2) - 15.0 );
 }
 
 //dddV2
@@ -246,8 +246,8 @@ template <class T> T dddV2 (const T& x, const struct params_for_V& params) {
 	double epsi = params.epsi;
 	double aa = params.aa;
 	T y = (x-1.0)/aa;
-	return -3.0*epsi*dZ(y)/aa - 3.0*epsi*(x+1.0)*ddZ(y)/pow(aa,2.0) \
-			- 0.5*epsi*pow(x+1.0,2.0)*dddZ(y)/pow(aa,3.0);
+	return -3.0*epsi*dZ(y)/aa - 3.0*epsi*(x+1.0)*ddZ(y)/pow(aa,2) \
+			- 0.5*epsi*pow(x+1.0,2)*dddZ(y)/pow(aa,3);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------
