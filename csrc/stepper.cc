@@ -126,7 +126,7 @@ static void staticModder(double& a, const StepperOptions& o) {
 
 // distance
 /*static double Distance(const Point2d& p1, const Point2d& p2) {
-	return sqrt(pow(p1.X-p2.X,2.0)+pow(p1.Y-p2.Y,2.0));
+	return sqrt(pow(p1.X-p2.X,2)+pow(p1.Y-p2.Y,2));
 }
 
 // calcAngle
@@ -614,16 +614,16 @@ void Stepper::addResult(const double& f) {
 		}
 		else if (local()==3 && steps()==0) {
 			double tempAngle = angle - PI/2.0;
-			double dx_n = sqrt(pow(opts.epsi_x*cos(tempAngle),2.0)+pow(opts.epsi_y*sin(tempAngle),2.0));
-			double dx_t = sqrt(pow(opts.epsi_x*sin(tempAngle),2.0)+pow(opts.epsi_y*cos(tempAngle),2.0));
+			double dx_n = sqrt(pow(opts.epsi_x*cos(tempAngle),2)+pow(opts.epsi_y*sin(tempAngle),2));
+			double dx_t = sqrt(pow(opts.epsi_x*sin(tempAngle),2)+pow(opts.epsi_y*cos(tempAngle),2));
 			angle = -atan(((f_xy_local[1]).second-(f_xy_steps[0]).second)*dx_t/((f_xy_local[2]).second-(f_xy_steps[0]).second)/dx_n);
 			if (!isBetween(angle,opts.angle0,opts.angle0+PI/2.0))
 				angle +=PI;
 		}
 		else if (local()==3) {
 			double tempAngle = angle - PI/2.0;
-			double dx_n = sqrt(pow(opts.epsi_x*cos(tempAngle),2.0)+pow(opts.epsi_y*sin(tempAngle),2.0));
-			double dx_t = sqrt(pow(opts.epsi_x*sin(tempAngle),2.0)+pow(opts.epsi_y*cos(tempAngle),2.0));
+			double dx_n = sqrt(pow(opts.epsi_x*cos(tempAngle),2)+pow(opts.epsi_y*sin(tempAngle),2));
+			double dx_t = sqrt(pow(opts.epsi_x*sin(tempAngle),2)+pow(opts.epsi_y*cos(tempAngle),2));
 			double angle_n = -atan(((f_xy_steps[steps()]).second-(f_xy_steps[steps()-1]).second)*dx_t \
 									/((f_xy_local[local()-1]).second-(f_xy_steps[steps()]).second)/dx_n);
 			angle = tempAngle + angle_n;

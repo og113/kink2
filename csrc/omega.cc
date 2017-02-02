@@ -32,9 +32,9 @@ CONTENTS
 // hFn
 static mat	hFn(const Parameters& p) {
 	mat xh(p.N,p.N);	xh = Eigen::MatrixXd::Zero(p.N,p.N);
-	double diag = p.mass2 + 2.0/pow(p.a,2.0);
-	double offDiag1 = -1.0/pow(p.a,2.0);
-	double offDiag2 = (p.pot==3? -pow(2.0,0.5)/pow(p.a,2.0): -1.0/pow(p.a,2.0) );
+	double diag = p.mass2 + 2.0/pow(p.a,2);
+	double offDiag1 = -1.0/pow(p.a,2);
+	double offDiag2 = (p.pot==3? -sqrt(2.0)/pow(p.a,2): -1.0/pow(p.a,2) );
 	for (unsigned int l=0; l<p.N; l++) {
 		if (l==0) {
 			if (p.pot==3) 	xh(l,l) = 1.0; 					// taking into account boundary conditions
@@ -67,7 +67,7 @@ static mat	hFn(const Parameters& p) {
 void analyticModes(mat& modes, vec& freqs, vec& freqs_exp, const Parameters& p) {
 	double normalisation = sqrt(2.0/(p.N-1.0));
 	for (unsigned int l=0; l<p.N; l++) {
-		freqs(l) = sqrt(1.0+pow(2.0*sin(PI*l/(p.N-1.0)/2.0)/p.a,2.0));
+		freqs(l) = sqrt(1.0+pow(2.0*sin(PI*l/(p.N-1.0)/2.0)/p.a,2));
 		freqs_exp(l) = (2.0/p.b)*asin(p.b*freqs(l)/2.0);
 		for (unsigned int m=0; m<p.N; m++) {
 			if (p.pot==3) 	modes(l,m) = normalisation*sin(PI*l*m/(p.N-1.0));
@@ -122,10 +122,10 @@ void omegasFn(const bool& analytic, const mat& modes, const vec& freqs, mat& ome
 			for (unsigned int l=0; l<p.N; l++) {
 				if (analytic) 	 djdk = p.a;
 				else 			 djdk = sqrt(DxFn(j,p)*DxFn(k,p));
-				omega_m1(j,k) += djdk*pow(freqs(l),-1.0)*modes(j,l)*modes(k,l);
+				omega_m1(j,k) += djdk*(1.0/freqs(l))*modes(j,l)*modes(k,l);
 				omega_0(j,k)  += djdk*modes(j,l)*modes(k,l);
 				omega_1(j,k)  += djdk*freqs(l)*modes(j,l)*modes(k,l);
-				omega_2(j,k)  += djdk*pow(freqs(l),2.0)*modes(j,l)*modes(k,l);
+				omega_2(j,k)  += djdk*pow(freqs(l),2)*modes(j,l)*modes(k,l);
 			}
 		}
 	}

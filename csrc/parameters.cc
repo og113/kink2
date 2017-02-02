@@ -339,13 +339,13 @@ static double ec (double epsi, void * parameters) {
 //S1 integrand
 static double s1Integrand (double x, void * parameters) {
 	struct params_for_V * params = (struct params_for_V *)parameters;
-	return pow(2.0*Vd_local(x,*params),0.5);
+	return sqrt(2.0*Vd_local(x,*params));
 }
 
 //rho integrand
 double rhoIntegrand (double x, void * parameters) {
 	struct params_for_V * params = (struct params_for_V *)parameters;
-	return pow(2.0*Vd_local(x,*params),-0.5);
+	return 1.0/sqrt(2.0*Vd_local(x,*params));
 }
 
 //program to find epsilon given gsl functions df and DE
@@ -511,7 +511,7 @@ void SecondaryParameters::setSecondaryParameters (const struct PrimaryParameters
 		minima[0] = 0.0; minima[1] = 0.0; 					////////// minima
 		minima0 = minima;									////////// minima0
 		R = 1.0;											////////// R
-		action0 = 8.0*pow(PI,2.0)/3.0;						////////// action0
+		action0 = 8.0*pow(PI,2)/3.0;						////////// action0
 		L = pp.LoR*R;										////////// L
 	}
 	
