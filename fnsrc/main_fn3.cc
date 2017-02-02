@@ -1546,14 +1546,12 @@ for (uint pl=0; pl<Npl; pl++) {
 	fprintf(cof,"%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
 			runsCount,realtime,p.N,p.NT,p.L,p.Tb,p.DE,p.Theta,Num,E,imag(action),W);
 	fprintf(cof,"\n");
-	if (verbose) {
-		printf("\n");
-		printf("%8s%8s%8s%8s%8s%8s%8s%8s%14s%14s%14s%14s\n","runs","time","p.N","NT","L","Tb","dE",\
-			"theta","Num","E","im(action)","W");
-		printf("%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
-			runsCount,realtime,p.N,p.NT,p.L,p.Tb,p.DE,p.Theta,Num,E,imag(action),W);
-		printf("\n");
-	}
+	printf("\n");
+	printf("%8s%8s%8s%8s%8s%8s%8s%8s%14s%14s%14s%14s\n","runs","time","p.N","NT","L","Tb","dE",\
+		"theta","Num","E","im(action)","W");
+	printf("%8i%8g%8i%8i%8g%8g%8g%8g%14.4g%14.4g%14.4g%14.4g\n",\
+		runsCount,realtime,p.N,p.NT,p.L,p.Tb,p.DE,p.Theta,Num,E,imag(action),W);
+	printf("\n");
 	
 	// printing results to file
 	if ((checkDelta.good() && checkSol.good() && checkSolMax.good()) || pass) {
