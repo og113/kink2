@@ -60,7 +60,7 @@ gsl_odeiv2_system sys = {func, jac, 4, &paramsVoid};
 double F = 1.0, dF;
 double aim = 0.0;
 double closeness = 1.0e-8;
-double r0 = 1.0e-16, r1 = 5.0;
+double r0 = 1.0e-15, r1 = 5.0;
 unsigned int N = 1e3;
 unsigned int runsCount = 0;
 
@@ -91,7 +91,7 @@ double dr = r1-r0;
 dr /= (double)N;
 
 Parameters ps;
-ps.pot = 3;
+ps.Pot = 3;
 ps.r0 = r0;
 ps.L = r1;
 ps.N = N+1;
@@ -264,7 +264,7 @@ mat Eomega(N+1,N+1);
 	mat modes(ps.N,ps.N);
 	mat omega_m1(ps.N,ps.N), omega_0(ps.N,ps.N), omega_1(ps.N,ps.N), omega_2(ps.N,ps.N);
 	Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
-	omegaM1F = (string)"data/stable/omegaM1_pot_3_N_"+numberToString<uint>(ps.N)\
+	omegaM1F = (string)"data/stable/omegaM1_Pot_3_N_"+numberToString<uint>(ps.N)\
 					+"_L_"+numberToString<double>(ps.L)+".dat";
 	Folder omegaM1Folder(omegaM1F);
 	omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
@@ -340,7 +340,7 @@ erg = Eigen::VectorXd::Zero(Nt+1);
 
 //getting eigVec from file
 so_simple.paramsOut = ps;
-string eigVecFile = "data/stable/eigVec_pot_3_L_"+numberToString<double>(r1)+".dat";
+string eigVecFile = "data/stable/eigVec_Pot_3_L_"+numberToString<double>(r1)+".dat";
 load(eigVecFile,so_simple,eigVec);
 if (eigVec[0]<0) eigVec *= -1.0;
 
@@ -356,10 +356,10 @@ for (unsigned int x=0;x<(N+1);x++) {
 	unsigned int j = x*(Nt+1);
 	double r = r0 + x*dr, sigma = 1.0;
 	if (x==0 || x==N) sigma = 0.5;
-	nonLinErg(0) += 4.0*pi*pow(r,2.0)*sigma*0.25*pow(phi(j),4.0)*dr;
-	linErgField(0) += 4.0*pi*pow(r,2.0)*sigma*0.5*pow(phi(j),2.0)*dr;
+	nonLinErg(0) += 4.0*PI*pow(r,2.0)*sigma*0.25*pow(phi(j),4.0)*dr;
+	linErgField(0) += 4.0*PI*pow(r,2.0)*sigma*0.5*pow(phi(j),2.0)*dr;
 	if (x<N) {
-		linErgField(0) += 4.0*pi*r*(r+dr)*0.5*pow(phi(j+(Nt+1))-phi(j),2.0)/dr;
+		linErgField(0) += 4.0*PI*r*(r+dr)*0.5*pow(phi(j+(Nt+1))-phi(j),2.0)/dr;
 	}
 	for (unsigned int k=0;k<(N+1);k++) {
 		unsigned int l = k*(Nt+1);
@@ -404,20 +404,20 @@ for (unsigned int u=1; u<(Nt+1); u++) {
     }
     acc(u) = 2.0*(phi(u+Nt+1) - phi(u))/pow(dr,2.0) - phi(u) + pow(phi(u),3.0);
     acc(u) *= sigma;
-    linErgField(u-1) += 4.0*pi*dr*pow(r0,2.0)*0.5*pow(phi(u)-phi(u-1),2.0)/pow(dt,2.0);
-    linErgField(u-1) += 4.0*pi*dr*pow(r1,2.0)*0.5*pow(phi(u+N*(Nt+1))-phi(u+N*(Nt+1)-1),2.0)/pow(dt,2.0);
-    linErgField(u) += 4.0*pi*( r0*(r0+dr)*0.5*pow(phi(u+(Nt+1))-phi(u),2.0)/dr + dr*pow(r0,2.0)*0.5*pow(phi(u),2.0) );
-    linErgField(u) += 4.0*pi*dr*pow(r1,2.0)*0.5*pow(phi(u+N*(Nt+1)),2.0);
-    nonLinErg(u) += 4.0*pi*dr*pow(r0,2.0)*0.25*pow(phi(u),4.0);
-    nonLinErg(u) += 4.0*pi*dr*pow(r1,2.0)*0.25*pow(phi(u+N*(Nt+1)),4.0);
+    linErgField(u-1) += 4.0*PI*dr*pow(r0,2.0)*0.5*pow(phi(u)-phi(u-1),2.0)/pow(dt,2.0);
+    linErgField(u-1) += 4.0*PI*dr*pow(r1,2.0)*0.5*pow(phi(u+N*(Nt+1))-phi(u+N*(Nt+1)-1),2.0)/pow(dt,2.0);
+    linErgField(u) += 4.0*PI*( r0*(r0+dr)*0.5*pow(phi(u+(Nt+1))-phi(u),2.0)/dr + dr*pow(r0,2.0)*0.5*pow(phi(u),2.0) );
+    linErgField(u) += 4.0*PI*dr*pow(r1,2.0)*0.5*pow(phi(u+N*(Nt+1)),2.0);
+    nonLinErg(u) += 4.0*PI*dr*pow(r0,2.0)*0.25*pow(phi(u),4.0);
+    nonLinErg(u) += 4.0*PI*dr*pow(r1,2.0)*0.25*pow(phi(u+N*(Nt+1)),4.0);
     for (unsigned int x=1; x<N; x++) {
         unsigned int m = u+x*(Nt+1);
         double r = r0 + x*dr;
         acc(m) = (phi(m+(Nt+1)) + phi(m-(Nt+1)) - 2.0*phi(m))/pow(dr,2.0) + (phi(m+(Nt+1))-phi(m-(Nt+1)))/r/dr - phi(m) + pow(phi(m),3.0);
         acc(m) *= sigma;
-        linErgField(u-1) +=  4.0*pi*pow(r,2.0)*dr*0.5*pow(phi(m)-phi(m-1),2.0)/pow(dt,2.0);
-		linErgField(u) += 4.0*pi*(r*(r+dr)*0.5*pow(phi(m+(Nt+1))-phi(m),2.0)/dr + pow(r,2.0)*0.5*dr*pow(phi(m),2.0));
-		nonLinErg(u) += 4.0*pi*pow(r,2.0)*0.25*pow(phi(m),4.0)*dr;
+        linErgField(u-1) +=  4.0*PI*pow(r,2.0)*dr*0.5*pow(phi(m)-phi(m-1),2.0)/pow(dt,2.0);
+		linErgField(u) += 4.0*PI*(r*(r+dr)*0.5*pow(phi(m+(Nt+1))-phi(m),2.0)/dr + pow(r,2.0)*0.5*dr*pow(phi(m),2.0));
+		nonLinErg(u) += 4.0*PI*pow(r,2.0)*0.25*pow(phi(m),4.0)*dr;
         for (unsigned int k=0;k<(N+1);k++) {
 			unsigned int j = u+k*(Nt+1);
 			linErg(u) += Eomega(x,k)*phi(m)*phi(j);
@@ -432,7 +432,7 @@ for (unsigned int k=0; k<(Nt+1); k++) {
 	
 double linErgContm = 0.0, linNumContm = 0.0;
 for (unsigned int k=1; k<(N+1); k++) {
-	double momtm = k*pi/(r1-r0);
+	double momtm = k*PI/(r1-r0);
 	double freqSqrd = 1.0+pow(momtm,2.0);
 	double Asqrd, integral1 = 0.0, integral2 = 0.0;
 	for (unsigned int l=0; l<(N+1); l++) {
@@ -442,8 +442,8 @@ for (unsigned int k=1; k<(N+1); k++) {
 		integral2 += dr*r*(phi(m+1)-phi(m))*pow(2.0/(r1-r0),0.5)*sin(momtm*r)/dt;
 	}
 	Asqrd = pow(integral1,2.0) + pow(integral2,2.0)/freqSqrd;
-	linErgContm += 2.0*pi*Asqrd*freqSqrd;
-	linNumContm += 2.0*pi*Asqrd*pow(freqSqrd,0.5);
+	linErgContm += 2.0*PI*Asqrd*freqSqrd;
+	linNumContm += 2.0*PI*Asqrd*pow(freqSqrd,0.5);
 }
 	
 unsigned int N_print = 100, Nt_print = 100;
@@ -502,7 +502,7 @@ datOut.ID = "sphaleronEvo";
 pngOut.ID = datOut.ID;
 
 Parameters ps_print;
-ps.pot = 3;
+ps.Pot = 3;
 ps.N = 300;
 ps.Nb = 300;
 ps.Tb = T;

@@ -522,7 +522,7 @@ for (uint pl=0; pl<Npl; pl++) {
 	// loading negVec
 	vec negVec;
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
-		Filename negVecFile = baseFolder+"data/00"+rank+"eigVec_pot_3_L_"+nts(p.L)+".dat";
+		Filename negVecFile = baseFolder+"data/stable/eigVec_pot_"+nts(p.Pot)+"_L_"+nts(p.L)+".dat";
 		//Filename negVecFile = filenameSpatial(p,baseFolder,"eigenvector","negVec",suffix);
 		fprintf(cof,"%12s%28s\n","negVecFile: ",((string)negVecFile).c_str());
 		if (verbose)

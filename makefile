@@ -90,7 +90,7 @@ piEvolve: $(ODIR)/piEvolve.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named piEvolve has been compiled
 	
-sphaleron: $(ODIR)/sphaleron.o $(FNODIR)/sphaleron_fns.o $(COMMONOBJS)
+sphaleron: $(ODIR)/sphaleron.o $(COMMONOBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES) $(LIBS)
 	@echo Simple compiler named sphaleron has been compiled
 	
