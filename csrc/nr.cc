@@ -78,9 +78,9 @@ void Boundary_nr (const uint& j, const vec& p, const Parameters& pr, const Eigen
 		for (uint k=0;k<pr.N;k++) {
 			if (abs(omega_1(x,k))>MIN_NUMBER) {
 				long unsigned int m=k*pr.NT;
-				result[pos]	+= -(1.0-pr.Gamma)*omega_1(x,k)*(p(2*j)-pr.minima[0])\
+				result[pos]	+= (1.0-pr.Gamma)*omega_1(x,k)*(p(2*j)-pr.minima[0])\
 							*(p(2*m)-pr.minima[0])/(1.0+pr.Gamma)\
-							 + (1.0+pr.Gamma)*omega_1(x,k)*p(2*j+1)*p(2*m+1)/(1.0-pr.Gamma);
+							 - (1.0+pr.Gamma)*omega_1(x,k)*p(2*j+1)*p(2*m+1)/(1.0-pr.Gamma);
 			}
 		}
 	}
@@ -134,9 +134,9 @@ void mdBoundary_nr (const uint& j, const vec& p, const Parameters& pr, const Eig
 			if (abs(omega_1(x,k))>MIN_NUMBER) {
 				long unsigned int m=k*pr.NT;
 				if (opt==Complex_nr::real || opt==Complex_nr::both)
-					mds(2*j) 	+= pr.Theta*p(2*m+1)*omega_1(x,k)*(1.0+pr.Gamma)/(1.0-pr.Gamma); // chose to multiply real equation by Theta
+					mds(2*j) 	-= -pr.Theta*p(2*m+1)*omega_1(x,k)*(1.0+pr.Gamma)/(1.0-pr.Gamma); // chose to multiply real equation by Theta
 				if (opt==Complex_nr::imaginary || opt==Complex_nr::both)
-					mds(2*j+1) 	+= -(1.0-pr.Gamma)*omega_1(x,k)*(p(2*m)-pr.minima[0])/(1.0+pr.Gamma);	
+					mds(2*j+1) 	-= (1.0-pr.Gamma)*omega_1(x,k)*(p(2*m)-pr.minima[0])/(1.0+pr.Gamma);	
 			}
 		}
 	}

@@ -1103,7 +1103,7 @@ for (uint pl=0; pl<Npl; pl++) {
 	    //defining E, Num and W
 		E = real(linErg(0));
 		Num = real(linNum(0));
-		W = - E*2.0*p.Tb - p.Theta*Num - imag(bound) + 2.0*imag(action);
+		W = 2.0*imag(action) + imag(bound) - E*2.0*p.Tb - Num*p.Theta;
 		
 /*----------------------------------------------------------------------------------------------------------------------------
 11. checks
@@ -1265,14 +1265,14 @@ for (uint pl=0; pl<Npl; pl++) {
 		checkLatt.add(momTest);
 		
 		//checking initial boundary conditions satisfied
-		double normP = f.norm();
-		double boundReTest = boundRe.norm()*(Len)/normP/(p.N-2.0);
-		double boundImTest = boundIm.norm()*(Len)/normP/(p.N-2.0);
+		double normf = f.norm();
+		double boundReTest = boundRe.norm()*(Len)/normf/(p.N-2.0);
+		double boundImTest = boundIm.norm()*(Len)/normf/(p.N-2.0);
 		checkBoundRe.add(boundReTest);
 		checkBoundIm.add(boundImTest);
 		
 		// checking chiT orthogonality satisfied
-		double chiTTest = mds(2*p.N*p.NT+1)*(Len)/normP;
+		double chiTTest = mds(2*p.N*p.NT+1)*(Len)/normf;
 		checkChiT.add(chiTTest);
 		
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -1486,11 +1486,11 @@ for (uint pl=0; pl<Npl; pl++) {
 		// adding convergence checks
 		checkAction.add(absDiff(action,action_last));
 		action_last = action;
-		checkSol.add(normDS/normP);
+		checkSol.add(normDS/normf);
 		checkSolMax.add(maxDS/maxP);
 		
 		double normDelta = delta.norm();
-		checkDelta.add(normDelta/normP);
+		checkDelta.add(normDelta/normf);
 
 		// rate of convergence
 		double convergRate = (checkDelta.size()>1? \

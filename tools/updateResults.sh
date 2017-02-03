@@ -73,7 +73,7 @@ fi
 views=""
 if [ "$table" == "nr1" ];
 then
-	views="W_Tb_Num_E_Theta_0_LoR_5_pot_3 W_Tb_Theta_Num_E_LoR_5_pot_3"
+	views="W_Tb_Theta_E_Num_LoR_5_pot_3"
 fi
 	
 echo "updating views:"
