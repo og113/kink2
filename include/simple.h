@@ -18,7 +18,7 @@ using namespace std;
 #define PI 3.14159265359
 #endif
 #ifndef MIN_NUMBER
-#define MIN_NUMBER 1.0e-16
+#define MIN_NUMBER 1.12e-16
 #endif
 
 typedef double number;

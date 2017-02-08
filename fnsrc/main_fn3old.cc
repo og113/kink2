@@ -582,17 +582,23 @@ for (uint pl=0; pl<Npl; pl++) {
 	vec f;
 		
 	// loading f
-	loadVectorBinary(loadFile,f);
+	//loadVectorBinary(loadFile,f);
+	loadVectorAscii(loadFile,f);
 	if ((pold.NT!=p.NT || pold.N!=p.N) && loadFile==stepFile) {
 		f = interpolate(f, pold, p);
 	}
 	if (f.size()<Len) {
+		cout << "f.size() = " << f.size() << endl;
+		cout << "Len = " << Len << endl;
 		f.conservativeResize(Len);
 		for (uint mu=0; mu<2*zm; mu++)
 			f[2*p.N*p.NT+mu] = 1.0e-4;
 	}
-	else if (f.size()>Len)
+	else if (f.size()>Len) {
+		cout << "f.size() = " << f.size() << endl;
+		cout << "Len = " << Len << endl;
 		f.conservativeResize(Len);
+	}
 	// MAY BE WORTH INTRODUCING A STRETCHING HERE IF Tb OR LoR IS BEING CHANGED
 	
 	// printing parameters
@@ -618,6 +624,8 @@ for (uint pl=0; pl<Npl; pl++) {
 		Filename earlyPrintFile = filenameMain(p,baseFolder,"ascii","fMainEarly",".dat");
 		(earlyPrintFile.Extras).push_back(StringPair("run","0"));
 		saveVectorAscii(earlyPrintFile,f);
+		earlyPrintFile = filenameMain(p,baseFolder,"field","fMain",".data");
+		saveVectorBinary(earlyPrintFile,f);
 	}
 	
 /*----------------------------------------------------------------------------------------------------------------------------

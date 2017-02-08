@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------------------------
 	piEvolve
-		- something to compile results to get periodic instanton for pot=3
+		- something to compile results to get periodic instanton for Pot=3
 ---------------------------------------------------------------------------------------------*/
 #include <Eigen/Sparse>
 #include <Eigen/Dense>
@@ -16,6 +16,7 @@
 #include "omega.h"
 #include "parameters.h"
 #include "print.h"
+#include "print3.h"
 
 
 //#define NDEBUG //NDEBUG is to remove error and bounds checking on vectors in SparseLU, for speed - only include once everything works
@@ -64,11 +65,11 @@ double closenessMom = 1.9e-2, momTest;
 
 // getting argv inputs
 string timenumber;
-string timenumberIn = "150112114306";
+string timenumberIn = "000";
 string loopIn = "0";
 if (argc == 2) timenumberIn = argv[1];
 else if (argc % 2 && argc>1) {
-	for (unsigned int j=0; j<(int)(argc/2); j++) {
+	for (unsigned int j=0; j<(unsigned int)(argc/2); j++) {
 		string id = argv[2*j+1];
 		if (id[0]=='-') id = id.substr(1);
 		if (id.compare("tn")==0) timenumberIn = argv[2*j+2];
@@ -114,7 +115,7 @@ if (testLinear) {
 ---------------------------------------------------------------------------------------------*/
 
 // getting inputs corresponding to timenumberIn
-string prefix = "./data/"+timenumberIn;
+string prefix = "data/"+timenumberIn;
 string suffix = "_loop_"+loopIn+".dat";
 Filename inputsFile = (string)(prefix+"inputsP"+suffix);
 inputsFile.Suffix = "";
@@ -122,13 +123,13 @@ ps_in.load(inputsFile);
 
 // chosing p_run
 ps_run = ps_in;
-ps_run.changeParameters("N",(uint)300);
+/*ps_run.changeParameters("N",(uint)300);
 	{
 	double dt = ps_run.a/5.0;
 	ps_run.changeParameters("Na",(uint)(ps_in.Ta/dt));
 	ps_run.changeParameters("Nb",(uint)(ps_in.Tb/dt));
 	ps_run.changeParameters("Nc",(uint)(ps_in.Tc/dt));
-	}
+	}*/
 
 // checking parameters
 if (abs(ps_in.Ta)>1.1*ps_in.L && !testTunnel && !testLinear) {
@@ -164,6 +165,8 @@ so_in.vectorType = SaveOptions::realB; // input is actually complex but imaginar
 so_in.extras = SaveOptions::coords;
 so_in.zeroModes = 1;
 so_in.printMessage = true;
+so_in.printType = SaveOptions::ascii;
+so_in.column = 0;
 
 // phiBC
 vec phiBC;
@@ -188,9 +191,10 @@ ps_in.print();
 	so_simple.vectorType = SaveOptions::simple;
 	so_simple.extras = SaveOptions::none;
 	so_simple.printMessage = false;
+	so_simple.printType = SaveOptions::ascii;
 	{
 		Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
-		omegaM1F = (string)("data/stable/omegaM1_pot_"+numberToString<uint>(ps_run.pot)+"_N_"+numberToString<uint>(ps_run.N)\
+		omegaM1F = (string)("data/stable/omegaM1_Pot_"+numberToString<uint>(ps_run.Pot)+"_N_"+numberToString<uint>(ps_run.N)\
 						+"_L_"+numberToString<double>(ps_run.L)+".dat");
 		Folder omegaM1Folder(omegaM1F);
 		omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
@@ -269,6 +273,12 @@ while(run<2) {
 		direction = -1;
 	}
 	
+	if (Nt==0) {
+		cerr << "Nt==0 on run " << run << endl;
+		run++;
+		continue;
+	}
+	
 	// setting vector sizes and initializing results to zero
 	vec phi((Nt+1)*ps_run.N), vel((Nt+1)*ps_run.N), acc((Nt+1)*ps_run.N);
 	vec nonLinErg(Nt+1), linErgField(Nt+1), erg(Nt+1);
@@ -303,9 +313,9 @@ while(run<2) {
 		lint j = x*(Nt+1);
 		double r = ps_run.r0 + x*ps_run.a, eta;
 		eta = ((x==0 || x==(ps_run.N-1)) ? 0.5 : 1.0);
-		nonLinErg(0) += 4.0*pi*pow(r,2.0)*eta*0.25*pow(phi(j),4.0)*ps_run.a;
-		linErgField(0) += 4.0*pi*pow(r,2.0)*eta*0.5*pow(phi(j),2.0)*ps_run.a;
-		if (x<(ps_run.N-1)) linErgField(0) += 4.0*pi*r*(r+ps_run.a)*0.5*pow(phi(j+(Nt+1))-phi(j),2.0)/ps_run.a;
+		nonLinErg(0) += 4.0*PI*pow(r,2.0)*eta*0.25*pow(phi(j),4.0)*ps_run.a;
+		linErgField(0) += 4.0*PI*pow(r,2.0)*eta*0.5*pow(phi(j),2.0)*ps_run.a;
+		if (x<(ps_run.N-1)) linErgField(0) += 4.0*PI*r*(r+ps_run.a)*0.5*pow(phi(j+(Nt+1))-phi(j),2.0)/ps_run.a;
 	}
 
 	//initial condition 2)
@@ -348,20 +358,20 @@ while(run<2) {
 		}
 		acc(u) = 2.0*(phi(u+Nt+1) - phi(u))/pow(ps_run.a,2.0) - phi(u) + pow(phi(u),3.0);
 		acc(u) *= sigma;
-		linErgField(u-1) += 4.0*pi*ps_run.a*pow(ps_run.r0,2.0)*0.5*pow(phi(u)-phi(u-1),2.0)/pow(ps_run.b,2.0);
-		linErgField(u-1) += 4.0*pi*ps_run.a*pow(ps_run.L,2.0)*0.5*pow(phi(u+(ps_run.N-1)*(Nt+1))-phi(u+(ps_run.N-1)*(Nt+1)-1),2.0)/pow(ps_run.b,2.0);
-		linErgField(u) += 4.0*pi*( ps_run.r0*(ps_run.r0+ps_run.a)*0.5*pow(phi(u+(Nt+1))-phi(u),2.0)/ps_run.a + ps_run.a*pow(ps_run.r0,2.0)*0.5*pow(phi(u),2.0) );
-		linErgField(u) += 4.0*pi*ps_run.a*pow(ps_run.L,2.0)*0.5*pow(phi(u+(ps_run.N-1)*(Nt+1)),2.0);
-		nonLinErg(u) += 4.0*pi*ps_run.a*pow(ps_run.r0,2.0)*0.25*pow(phi(u),4.0);
-		nonLinErg(u) += 4.0*pi*ps_run.a*pow(ps_run.L,2.0)*0.25*pow(phi(u+(ps_run.N-1)*(Nt+1)),4.0);
+		linErgField(u-1) += 4.0*PI*ps_run.a*pow(ps_run.r0,2.0)*0.5*pow(phi(u)-phi(u-1),2.0)/pow(ps_run.b,2.0);
+		linErgField(u-1) += 4.0*PI*ps_run.a*pow(ps_run.L,2.0)*0.5*pow(phi(u+(ps_run.N-1)*(Nt+1))-phi(u+(ps_run.N-1)*(Nt+1)-1),2.0)/pow(ps_run.b,2.0);
+		linErgField(u) += 4.0*PI*( ps_run.r0*(ps_run.r0+ps_run.a)*0.5*pow(phi(u+(Nt+1))-phi(u),2.0)/ps_run.a + ps_run.a*pow(ps_run.r0,2.0)*0.5*pow(phi(u),2.0) );
+		linErgField(u) += 4.0*PI*ps_run.a*pow(ps_run.L,2.0)*0.5*pow(phi(u+(ps_run.N-1)*(Nt+1)),2.0);
+		nonLinErg(u) += 4.0*PI*ps_run.a*pow(ps_run.r0,2.0)*0.25*pow(phi(u),4.0);
+		nonLinErg(u) += 4.0*PI*ps_run.a*pow(ps_run.L,2.0)*0.25*pow(phi(u+(ps_run.N-1)*(Nt+1)),4.0);
 		for (unsigned int x=1; x<(ps_run.N-1); x++) {
 		    unsigned int m = u+x*(Nt+1);
 		    double r = ps_run.r0 + x*ps_run.a;
 		    acc(m) = (phi(m+(Nt+1)) + phi(m-(Nt+1)) - 2.0*phi(m))/pow(ps_run.a,2.0) + (phi(m+(Nt+1))-phi(m-(Nt+1)))/r/ps_run.a - phi(m) + pow(phi(m),3.0);
 		    acc(m) *= sigma;
-		    linErgField(u-1) +=  4.0*pi*pow(r,2.0)*ps_run.a*0.5*pow(phi(m)-phi(m-1),2.0)/pow(ps_run.b,2.0);
-			linErgField(u) += 4.0*pi*(r*(r+ps_run.a)*0.5*pow(phi(m+(Nt+1))-phi(m),2.0)/ps_run.a + pow(r,2.0)*0.5*ps_run.a*pow(phi(m),2.0));
-			nonLinErg(u) += 4.0*pi*pow(r,2.0)*0.25*pow(phi(m),4.0)*ps_run.a;
+		    linErgField(u-1) +=  4.0*PI*pow(r,2.0)*ps_run.a*0.5*pow(phi(m)-phi(m-1),2.0)/pow(ps_run.b,2.0);
+			linErgField(u) += 4.0*PI*(r*(r+ps_run.a)*0.5*pow(phi(m+(Nt+1))-phi(m),2.0)/ps_run.a + pow(r,2.0)*0.5*ps_run.a*pow(phi(m),2.0));
+			nonLinErg(u) += 4.0*PI*pow(r,2.0)*0.25*pow(phi(m),4.0)*ps_run.a;
 		}
 	}
 	
@@ -374,14 +384,14 @@ while(run<2) {
 	for (unsigned int k=0; k<ps_run.N; k++) {
 		lint u = Nt + k*(Nt+1);
 		double r = ps_run.r0 + k*ps_run.a;
-		kineticT += 4.0*pi*ps_run.a*pow(r,2.0)*0.5*pow(phi(u)-phi(u-1),2.0)/pow(ps_run.b,2.0);
-		if (k<(ps_run.N-1)) kineticS += 4.0*pi*r*(r+ps_run.a)*0.5*pow(phi(u+(Nt+1))-phi(u),2.0)/ps_run.a;
-		massTerm += 4.0*pi*ps_run.a*pow(r,2.0)*0.5*pow(phi(u-1),2.0);
+		kineticT += 4.0*PI*ps_run.a*pow(r,2.0)*0.5*pow(phi(u)-phi(u-1),2.0)/pow(ps_run.b,2.0);
+		if (k<(ps_run.N-1)) kineticS += 4.0*PI*r*(r+ps_run.a)*0.5*pow(phi(u+(Nt+1))-phi(u),2.0)/ps_run.a;
+		massTerm += 4.0*PI*ps_run.a*pow(r,2.0)*0.5*pow(phi(u-1),2.0);
 	}
 	
 	// finding contm expression for linErg and linNum
 	for (unsigned int k=1; k<ps_run.N; k++) {
-		double momtm = k*pi/(ps_run.L-ps_run.r0);
+		double momtm = k*PI/(ps_run.L-ps_run.r0);
 		double freqSqrd = 1.0+pow(momtm,2.0);
 		double Asqrd, integral1 = 0.0, integral2 = 0.0;
 		for (unsigned int l=0; l<ps_run.N; l++) {
@@ -391,8 +401,8 @@ while(run<2) {
 			integral2 += ps_run.a*r*(phi(m+1)-phi(m))*pow(2.0/(ps_run.L-ps_run.r0),0.5)*sin(momtm*r)/ps_run.b;
 		}
 		Asqrd = pow(integral1,2.0) + pow(integral2,2.0)/freqSqrd;
-		linErgContm += 2.0*pi*Asqrd*freqSqrd;
-		linNumContm += 2.0*pi*Asqrd*pow(freqSqrd,0.5);
+		linErgContm += 2.0*PI*Asqrd*freqSqrd;
+		linNumContm += 2.0*PI*Asqrd*pow(freqSqrd,0.5);
 	}
 	
 	// assigning phi to phiC or phiA
@@ -475,13 +485,13 @@ if (testLinear) {
 	plot(linFile,po_simple);
 	
 	
-	momTest = linErgA*ps_run.a/linNumA/pi;
+	momTest = linErgA*ps_run.a/linNumA/PI;
 	printf("Tlin(%6.4f)      =     %6.4f\n",closenessLin,Tlin);
 	printf("Redge(%6.4f)     =     %6.4f\n",closenessEdge,Redge);
 	printf("momTest           =   %6.4f\n",momTest);
 	if (changeParams) {
 		Filename inputsOut = (string)"inputsP";
-		uint Nmom = (uint)(linErgA*Redge/pi/linNumA/closenessMom) + 1;
+		uint Nmom = (uint)(linErgA*Redge/PI/linNumA/closenessMom) + 1;
 		uint Nbmom = (uint)(Nmom*4*ps_in.Tb/Redge);
 		uint Nalin = (uint)(Nbmom*Tlin/ps_in.Tb);
 		printf("L changed to :        %6.4g\n",Redge);
@@ -508,8 +518,10 @@ else if (!testTunnel) {
 	ps_run_c.NT = ps_run.Nc+1;
 	ps_in_a.NT = ps_in.Na+1;
 	ps_in_c.NT = ps_in.Nc+1;
-	phiAOut = interpolateReal(phiA,ps_run_a,ps_in_a);
-	phiCOut = interpolateReal(phiC,ps_run_c,ps_in_c);
+	if (ps_in.Na>0)
+		phiAOut = interpolateReal(phiA,ps_run_a,ps_in_a);
+	if (ps_in.Nc>0)
+		phiCOut = interpolateReal(phiC,ps_run_c,ps_in_c);
 	for (unsigned int j=0;j<ps_in.NT;j++) {
 		for (unsigned int k=0; k<ps_in.N; k++) {
 			unsigned int l = j+k*ps_in.NT, m;
@@ -539,7 +551,11 @@ else if (!testTunnel) {
 	so_tp.extras = SaveOptions::coords;
 	so_tp.zeroModes = 0;
 	so_tp.printMessage = true;
+	so_tp.printType = SaveOptions::ascii;
 	save(mainInFile,so_tp,mainIn);
+	mainInFile.ID = "tpnew";
+	saveVectorAscii(mainInFile,mainIn);
+	mainInFile.ID = "tp";
 	
 	PlotOptions po_tp;
 	po_tp.gp = "gp/repi.gp";

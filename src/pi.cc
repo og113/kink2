@@ -367,6 +367,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 										+"_Tb_"+numberToString<double>(ps.Tb)+".dat");
 			so_simple.column = 4;
 			Parameters ps_blank;
+			ps_blank.Pot = ps.Pot;
 			so_simple.paramsIn = ps_blank;
 			so_simple.paramsOut = ps_blank;
 			load(pi3GuessFile,so_simple,tempPhi);
