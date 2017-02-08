@@ -2,7 +2,7 @@ alpha               0.5
 open                1                   
 amp                 0.5                 
 zmx                 nC2                 
-zmt                 dC2                 
+zmt                 nC1                 
 bds                 all                 
 inF                 p                   
 minTimenumberLoad   001                 

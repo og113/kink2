@@ -100,15 +100,15 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	if (opts.loops>1) {
 		if ((opts.loopChoice)[0]=='N') {
 			uint pValue = (uint)opts.loopMin + (uint)(opts.loopMax - opts.loopMin)*loop/(opts.loops-1);
-			bool anythingChanged = ps.changeParameters(opts.loopChoice,pValue);
-			if (loop==0 && anythingChanged) {
+			ps.changeParameters(opts.loopChoice,pValue);
+			if (loop==0) {
 				cout << opts.loopChoice << "changed to " << pValue << " on input" << endl;
 			}
 		}
 		else {
 			double pValue = opts.loopMin + (opts.loopMax - opts.loopMin)*loop/(opts.loops-1.0);
-			bool anythingChanged = ps.changeParameters(opts.loopChoice,pValue);
-			if (loop==0 && anythingChanged) {
+			ps.changeParameters(opts.loopChoice,pValue);
+			if (loop==0) {
 				cout << opts.loopChoice << "changed to " << pValue << " on input" << endl;
 			}
 		}
@@ -147,38 +147,38 @@ for (uint loop=0; loop<opts.loops; loop++) {
 
 	// assigning potential functions
 	Potential<comp> V, dV, ddV;
-	if (ps.pot==1) {
+	if (ps.Pot==1) {
 		V((Potential<comp>::PotentialType)&V1<comp>,ps);
 		dV((Potential<comp>::PotentialType)&dV1<comp>,ps);
 		ddV((Potential<comp>::PotentialType)&ddV1<comp>,ps);
 	}
-	else if (ps.pot==2) {
+	else if (ps.Pot==2) {
 		V((Potential<comp>::PotentialType)&V2<comp>,ps);
 		dV((Potential<comp>::PotentialType)&dV2<comp>,ps);
 		ddV((Potential<comp>::PotentialType)&ddV2<comp>,ps);
 	}
-	else if (ps.pot==3) {
+	else if (ps.Pot==3) {
 		V((Potential<comp>::PotentialType)&V3<comp>,ps);
 		dV((Potential<comp>::PotentialType)&dV3<comp>,ps);
 		ddV((Potential<comp>::PotentialType)&ddV3<comp>,ps);
 		}
 	else {
-		cerr << "pot option not available, pot = " << ps.pot << endl;
+		cerr << "Pot option not available, Pot = " << ps.Pot << endl;
 		return 1;
 	}
 	
 	// assigning preliminary parameter structs
 	params_for_V paramsV  = {ps.epsilon, ps.A}, paramsV0  = {ps.epsilon0, ps.A};
 	
-	//lambda functions for pot_r
+	//lambda functions for Pot_r
 	auto Vr = [&] (const comp& phi) {
-		return -ii*ps.reg*VrFn(phi,ps.minima[0],ps.minima[1]);
+		return -ii*ps.Reg*VrFn(phi,ps.minima[0],ps.minima[1]);
 	};
 	auto dVr = [&] (const comp& phi) {
-		return -ii*ps.reg*dVrFn(phi,ps.minima[0],ps.minima[1]);
+		return -ii*ps.Reg*dVrFn(phi,ps.minima[0],ps.minima[1]);
 	};
 	auto ddVr = [&] (const comp& phi) {
-		return -ii*ps.reg*ddVrFn(phi,ps.minima[0],ps.minima[1]);
+		return -ii*ps.Reg*ddVrFn(phi,ps.minima[0],ps.minima[1]);
 	};
 
 /*----------------------------------------------------------------------------------------------------------------------------
@@ -199,7 +199,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	so_simple.printMessage = false;
 	{
 		Filename omegaM1F, omega0F, omega1F, omega2F, modesF, freqsF, freqsExpF; // Filename works as FilenameAttributes
-		omegaM1F = (string)("data/stable/omegaM1_pot_"+numberToString<uint>(ps.pot)+"_N_"+numberToString<uint>(ps.N)\
+		omegaM1F = (string)("data/stable/omegaM1_Pot_"+numberToString<uint>(ps.Pot)+"_N_"+numberToString<uint>(ps.N)\
 						+"_L_"+numberToString<double>(ps.L)+".dat");
 		Folder omegaM1Folder(omegaM1F);
 		omega0F = omegaM1F; 		omega0F.ID = "omega0"; 		Folder omega0Folder(omega0F);
@@ -241,8 +241,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	vec negVec;
 	double negVal;
 	if (opts.zmt[0]=='n' || opts.zmx[0]=='n') {
-		if (ps.pot==3) {
-			Filename eigVecFile = (string)("data/stable/eigVec_pot_3_L_" + numberToString<double>(ps.L) + ".dat");	
+		if (ps.Pot==3) {
+			Filename eigVecFile = (string)("data/stable/eigVec_Pot_3_L_" + numberToString<double>(ps.L) + ".dat");	
 			load(eigVecFile,so_simple,negVec); // should automatically interpolate
 			negVal = -15.3;
 		}
@@ -250,7 +250,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			Filename eigVecFile;
 			string N_load;
 			string Nb_load;
-			Filename lower = "data/stable/eigVec_pot_" + numberToString<uint>(ps.pot)\
+			Filename lower = "data/stable/eigVec_Pot_" + numberToString<uint>(ps.Pot)\
 								 + "_N_100_Nb_100_L_" + numberToString<double>(ps.L) + ".dat";
 			Filename upper = lower;
 			vector<StringPair> upperExtras = lower.Extras;
@@ -284,7 +284,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			pIn.NT = 1000; // a fudge so that interpolate realises the vector is only on BC
 			load(eigVecFile,eigVecOpts,negVec);
 			
-			string eigValFile = "data/stable/eigVal_pot_"+numberToString<uint>(ps.pot)+".dat";
+			string eigValFile = "data/stable/eigVal_Pot_"+numberToString<uint>(ps.Pot)+".dat";
 			string line, dross;
 			double negError;
 			ifstream isEigVal;
@@ -360,7 +360,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		load(phiFile,so_p,p);
 	}
 	else {
-		if (ps.pot==3) {
+		if (ps.Pot==3) {
 			vec tempPhi, temp2Phi;
 			so_p.printType = SaveOptions::ascii;
 			Filename pi3GuessFile = (string)("data/sphaleronPi_L_"+numberToString<double>(ps.L)\
@@ -391,7 +391,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			vector<double> phiProfile(profileSize);
 			vector<double> rhoProfile(profileSize);
 			double alphaL = opts.alpha, alphaR = opts.alpha;
-			if (ps.pot==2) {
+			if (ps.Pot==2) {
 				double phiL = ps.minima0[1]-1.0e-2;
 				double phiR = ps.minima0[0]+1.0e-2;
 				for (uint j=0;j<profileSize;j++) {
@@ -424,13 +424,13 @@ for (uint loop=0; loop<opts.loops; loop++) {
 				p(2*j+1) = 0.0; //imaginary parts set to zero
 				if ((opts.inF).compare("b")==0 || ((opts.inF).compare("p")==0 && ps.Tb>ps.R)) {
 					double rho = real(sqrt(-pow(t,2.0) + pow(x,2.0))); //should be real even without real()
-					if (ps.pot==1) {
+					if (ps.Pot==1) {
 						if ((rho-ps.R)<-opts.alpha) 		p(2*j) = ps.minima[1];
 						else if ((rho-ps.R)>opts.alpha) 	p(2*j) = ps.minima[0];
 						else							p(2*j) = (ps.minima[1]+ps.minima[0])/2.0\
 														 + (ps.minima[0]-ps.minima[1])*tanh((rho-ps.R)/2.0)/2.0;
 					}
-					else if (ps.pot==2) {
+					else if (ps.Pot==2) {
 						if ((rho-ps.R)<=alphaL) 		p(2*j) = ps.minima[1];
 						else if ((rho-ps.R)>=alphaR) 	p(2*j) = ps.minima[0];
 						else {
@@ -479,7 +479,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	    p(2*((j+1)*ps.Nb-2)+1) = opts.open*p(2*((j+1)*ps.Nb-1)+1) + (1.0-opts.open)*p(2*((j+1)*ps.Nb-2)+1); //final time imag
 	    p(2*((j+1)*ps.Nb-1)+1) = p(2*((j+1)*ps.Nb-2)+1);
 	}
-    if (ps.pot==3) {
+    if (ps.Pot==3) {
 		for (uint j=0;j<ps.Nb;j++) {
 			uint l0 = c(j,0,ps.Nb);
 			uint m = c(j,ps.N-1,ps.Nb);
@@ -511,18 +511,18 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		runs_count++;
 		
 		//defining the zero mode at the final time boundary and the time step before
-		if (runs_count==1 || ps.pot!=2) {
+		if (runs_count==1 || ps.Pot!=2) {
 			chiX = Eigen::VectorXd::Zero(ps.N*ps.Nb);
 			bool chiOnPenultimate = false;
-			if (ps.pot!=3) {
+			if (ps.Pot!=3) {
 				for (uint j=0; j<ps.N; j++){
 					lint pos = c(ps.Nb-1,j,ps.Nb);
-					long int neighPos = neigh(pos,1,1,ps.Nb,ps.N,ps.pot), neighMin = neigh(pos,1,-1,ps.Nb,ps.N,ps.pot); 
+					long int neighPos = neigh(pos,1,1,ps.Nb,ps.N,ps.Pot), neighMin = neigh(pos,1,-1,ps.Nb,ps.N,ps.Pot); 
 					if(neighPos!=-1 && neighMin!=-1) {
 				    	chiX(pos) = (p(2*neighPos)-p(2*neighMin))/2.0/ps.b; //final time slice
 				    }
 				    if (pos>0 && chiOnPenultimate) {
-				    	long int neighPos2 = neigh(pos-1,1,1,ps.Nb,ps.N,ps.pot), neighMin2 = neigh(pos-1,1,-1,ps.Nb,ps.N,ps.pot);
+				    	long int neighPos2 = neigh(pos-1,1,1,ps.Nb,ps.N,ps.Pot), neighMin2 = neigh(pos-1,1,-1,ps.Nb,ps.N,ps.Pot);
 						if (neighPos2!=-1 && neighMin2!=-1) {							
 							chiX(pos-1) = (p(2*neighPos2)-p(2*neighMin2))/2.0/ps.b; //penultimate time slice
 						}
@@ -546,13 +546,13 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		//initializing to zero
 		comp kineticS = 0.0;
 		comp kineticT = 0.0;
-		comp pot_0 = 0.0;
-		comp pot_r = 0.0;
+		comp Pot_0 = 0.0;
+		comp Pot_r = 0.0;
 		erg = Eigen::VectorXcd::Constant(ps.NT,-ergZero);
 		double dtTest = 0.0;
 		
 		//testing that the potential term is working for pot3
-		if (ps.pot==3 && trivialChecks) {
+		if (ps.Pot==3 && trivialChecks) {
 			comp Vtrial = 0.0, Vcontrol = 0.0;
 			for (uint j=0; j<ps.N; j++) {
 				double r = ps.r0 + j*ps.a;
@@ -578,9 +578,9 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		for (lint j = 0; j < ps.N*ps.Nb; j++) {		
 			uint t = intCoord(j,0,ps.Nb); //coordinates
 			uint x = intCoord(j,1,ps.Nb);
-			long int neighPosX = neigh(j,1,1,ps.Nb,ps.N,ps.pot);
+			long int neighPosX = neigh(j,1,1,ps.Nb,ps.N,ps.Pot);
 			
-			if (ps.pot==3) {
+			if (ps.Pot==3) {
 					paramsV.epsi = ps.r0+x*ps.a;
 					V.setParams(paramsV);
 					dV.setParams(paramsV);
@@ -599,11 +599,11 @@ for (uint loop=0; loop<opts.loops; loop++) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//boundaries
-			if (ps.pot==3 && x==(ps.N-1)) {
+			if (ps.Pot==3 && x==(ps.N-1)) {
 				DDS.insert(2*j,2*j) = 1.0; // p=0 at r=R
 				DDS.insert(2*j+1,2*j+1) = 1.0;
 			}
-			else if (ps.pot==3 && x==0) {
+			else if (ps.Pot==3 && x==0) {
 				DDS.insert(2*j,2*j) = 1.0; // p=0 at r=0
 				DDS.insert(2*j+1,2*j+1) = 1.0;
 				double csi = ((t==0 || t==(ps.NT-1))? 0.5: 1.0);
@@ -616,8 +616,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 					kineticS			+= Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
 				}
 				erg(t+ps.Na) 			+= ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
-				pot_0 					+= Dt*ps.a*V(Cp(j));
-				pot_r 					+= Dt*ps.a*Vr(Cp(j));				
+				Pot_0 					+= Dt*ps.a*V(Cp(j));
+				Pot_r 					+= Dt*ps.a*Vr(Cp(j));				
 				
 				DDS.insert(2*j,2*j) 	= 1.0/ps.b; //zero time derivative
 				DDS.insert(2*j,2*(j-1)) = -1.0/ps.b;
@@ -632,8 +632,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 					erg(t+ps.Na) 	+= pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
 				}
 				
-				pot_0 += Dt*ps.a*V(Cp(j));
-				pot_r += Dt*ps.a*Vr(Cp(j));
+				Pot_0 += Dt*ps.a*V(Cp(j));
+				Pot_r += Dt*ps.a*Vr(Cp(j));
 				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
 				
 				if ((opts.inF).compare("b")==0) {
@@ -656,14 +656,14 @@ for (uint loop=0; loop<opts.loops; loop++) {
 					kineticS += Dt*pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
 					erg(t+ps.Na) 	+= pow(Cp(neighPosX)-Cp(j),2.0)/ps.a/2.0;
 				}
-				pot_0 += Dt*ps.a*V(Cp(j));
-				pot_r += Dt*ps.a*Vr(Cp(j));
+				Pot_0 += Dt*ps.a*V(Cp(j));
+				Pot_r += Dt*ps.a*Vr(Cp(j));
 				erg(t+ps.Na) += ps.a*pow(Cp(j+1)-Cp(j),2.0)/pow(dt,2.0)/2.0 + ps.a*V(Cp(j)) + ps.a*Vr(Cp(j));
 				
                 for (uint k=0; k<2*2; k++) {
                     int sign = pow(-1,k);
                     uint direc = (uint)(k/2.0);
-                    long int neighb = neigh(j,direc,sign,ps.Nb,ps.N,ps.pot);
+                    long int neighb = neigh(j,direc,sign,ps.Nb,ps.N,ps.Pot);
                     if (direc == 0) {
                         minusDS(2*j) += real(ps.a*Cp(j+sign)/dt);
                         minusDS(2*j+1) += imag(ps.a*Cp(j+sign)/dt);
@@ -693,8 +693,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	            DDS.insert(2*j+1,2*j+1) = real(-temp2 + temp0);
 	        }
         }
-        action = kineticT - kineticS - pot_0 - pot_r;
-        if (ps.pot==3) {
+        action = kineticT - kineticS - Pot_0 - Pot_r;
+        if (ps.Pot==3) {
         	DDS.insert(2*ps.N*ps.Nb,2*ps.N*ps.Nb) = 1.0;	// redundant lagrange multiplier
         	dtTest /= (double)(ps.Nb-1.0);
         	dtTest = 1.0/dtTest;
@@ -846,8 +846,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		- checkDT
 ----------------------------------------------------------------------------------------------------------------------------*/
 
-		// checking pot_r is much smaller than the other potential terms
-		checkReg.add(abs(pot_r/pot_0));
+		// checking Pot_r is much smaller than the other potential terms
+		checkReg.add(abs(Pot_r/Pot_0));
 		checkReg.checkMessage();
 		
 		// evaluating norms
@@ -897,7 +897,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 ----------------------------------------------------------------------------------------------------------------------------*/
 	
 	//propagating solution back in minkowskian time
-	if (ps.pot!=3) {
+	if (ps.Pot!=3) {
 		//A1. initialize mp==mphi using last point of ephi and zeros- use complex phi
 		cVec ap(ps.N*(ps.Na+1)); //phi on section "a"
 		ap = Eigen::VectorXcd::Zero(ps.N*(ps.Na+1));
@@ -916,8 +916,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		//#pragma omp parallel for
 		for (uint j=0; j<ps.N; j++) {
 			lint l = j*(ps.Na+1);
-			accA(l) = ((Dt0/pow(ps.a,2.0))*(ap(neigh(l,1,1,ps.Na+1,ps.N,ps.pot))\
-												+ap(neigh(l,1,-1,ps.Na+1,ps.N,ps.pot))-2.0*ap(l))-Dt0*(dV(ap(l))+dVr(ap(l))))/dtau;
+			accA(l) = ((Dt0/pow(ps.a,2.0))*(ap(neigh(l,1,1,ps.Na+1,ps.N,ps.Pot))\
+												+ap(neigh(l,1,-1,ps.Na+1,ps.N,ps.Pot))-2.0*ap(l))-Dt0*(dV(ap(l))+dVr(ap(l))))/dtau;
 		}
 			
 		//A4.5 starting the energy and that off
@@ -933,10 +933,10 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		    }
 		    for (uint x=0; x<ps.N; x++) {
 		        uint m = t+x*(ps.Na+1);
-				accA(m) = (1.0/pow(ps.a,2.0))*(ap(neigh(m,1,1,ps.Na+1,ps.N,ps.pot))+ap(neigh(m,1,-1,ps.Na+1,ps.N,ps.pot))-2.0*ap(m)) \
+				accA(m) = (1.0/pow(ps.a,2.0))*(ap(neigh(m,1,1,ps.Na+1,ps.N,ps.Pot))+ap(neigh(m,1,-1,ps.Na+1,ps.N,ps.Pot))-2.0*ap(m)) \
 	        		-dV(ap(m)) - dVr(ap(m));
 	        	erg(ps.Na-t) += ps.a*pow(ap(m-1)-ap(m),2.0)/pow(-dtau,2.0)/2.0\
-	        		 + pow(ap(neigh(m,1,1,ps.Na+1,ps.N,ps.pot))-ap(m),2.0)/ps.a/2.0 + ps.a*V(ap(m)) + ps.a*Vr(ap(m));
+	        		 + pow(ap(neigh(m,1,1,ps.Na+1,ps.N,ps.Pot))-ap(m),2.0)/ps.a/2.0 + ps.a*V(ap(m)) + ps.a*Vr(ap(m));
 		        for (uint y=0; y<ps.N; y++) {
 		        	lint n = t + y*(ps.Na+1);
 				    	linErgA(ps.Na-t) += omega_2(x,y)*(real(ap(m))-ps.minima[0])*(real(ap(n))-ps.minima[0])\
@@ -947,7 +947,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			}
 		}
 		
-		if (ps.pot==3) {
+		if (ps.Pot==3) {
 			linErgA *= 4.0*pi;
 			linNumA *= 4.0*pi;
 		}
@@ -972,7 +972,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 		accC = Eigen::VectorXcd::Zero(ps.N*(ps.Nc+1));
 		for (uint j=0; j<ps.N; j++){
 			lint l = j*(ps.Nc+1);
-			accC(l) = ((Dt0/pow(ps.a,2.0))*(ccp(neigh(l,1,1,ps.Nc+1,ps.N,ps.pot))+ccp(neigh(l,1,-1,ps.Nc+1,ps.N,ps.pot))-2.0*ccp(l))\
+			accC(l) = ((Dt0/pow(ps.a,2.0))*(ccp(neigh(l,1,1,ps.Nc+1,ps.N,ps.Pot))+ccp(neigh(l,1,-1,ps.Nc+1,ps.N,ps.Pot))-2.0*ccp(l))\
 						-Dt0*(dV(ccp(l))+dVr(ccp(l))))/dtau;
 		}
 
@@ -985,10 +985,10 @@ for (uint loop=0; loop<opts.loops; loop++) {
 			}
 			for (uint x=0; x<ps.N; x++) {
 				lint l = t+x*(ps.Nc+1);
-				accC(l) = (1.0/pow(ps.a,2.0))*(ccp(neigh(l,1,1,ps.Nc+1,ps.N,ps.pot))+ccp(neigh(l,1,-1,ps.Nc+1,ps.N,ps.pot))-2.0*ccp(l))\
+				accC(l) = (1.0/pow(ps.a,2.0))*(ccp(neigh(l,1,1,ps.Nc+1,ps.N,ps.Pot))+ccp(neigh(l,1,-1,ps.Nc+1,ps.N,ps.Pot))-2.0*ccp(l))\
 								-dV(ccp(l));		    	
 				erg (ps.Na+ps.Nb-2+t) += ps.a*pow(ccp(l)-ccp(l-1),2.0)/pow(dtau,2.0)/2.0\
-				 	+ pow(ccp(neigh(l-1,1,1,ps.Nc+1,ps.N,ps.pot))-ccp(l-1),2.0)/ps.a/2.0\
+				 	+ pow(ccp(neigh(l-1,1,1,ps.Nc+1,ps.N,ps.Pot))-ccp(l-1),2.0)/ps.a/2.0\
 					+ ps.a*V(ccp(l-1)) + ps.a*Vr(ccp(l-1));
 			}
 		}
@@ -1068,8 +1068,8 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	
 	//printing results to terminal
 	printf("\n");
-	printf("%8s%8s%8s%8s%8s%8s%8s%12s%12s%12s\n","runs","time","N","NT","L","Tb","dE","E","im(S)","W");
-	printf("%8i%8g%8i%8i%8g%8g%8g%12.4g%12.4g%12.4g\n",runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,E,imag(action),W);
+	printf("%8s%8s%8s%8s%8s%8s%8s%12s%12s%12s\n","runs","time","N","NT","L","Tb","DE","E","im(S)","W");
+	printf("%8i%8g%8i%8i%8g%8g%8g%12.4g%12.4g%12.4g\n",runs_count,realtime,ps.N,ps.NT,ps.L,ps.Tb,ps.DE,E,imag(action),W);
 	printf("\n");
 	printf("%60s\n","----------------------------------------------------------------------------------------------------");
 
@@ -1077,7 +1077,7 @@ for (uint loop=0; loop<opts.loops; loop++) {
 	FILE * actionfile;
 	actionfile = fopen("data/action.dat","a");
 	fprintf(actionfile,"%16s%8i%8i%8g%8g%8g%10.4g%10.4g%10.4g%10.4g%10.4g\n",timenumber.c_str()\
-				,ps.N,ps.NT,ps.L,ps.Tb,ps.dE,E,imag(action)\
+				,ps.N,ps.NT,ps.L,ps.Tb,ps.DE,E,imag(action)\
 				,W,checkSoln.back(),checkCon.back());
 	fclose(actionfile);
 	
