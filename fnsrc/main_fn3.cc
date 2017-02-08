@@ -373,17 +373,17 @@ for (uint pl=0; pl<Npl; pl++) {
 	
 	// printing parameters if extraChecks
 	if (extraChecks) {
-		fprintf(cof,"pold:\n");
-		pold.print(cof);
+		//fprintf(cof,"pold:\n");
+		//pold.print(cof);
 		fprintf(cof,"p:\n");
 		p.print(cof);
 		if (verbose) {
-			printf("pold:\n");
+			//printf("pold:\n");
 			//pold.print();
-			cout << pold << endl;
+			//cout << pold << endl;
 			printf("p:\n");
-			//p.print();
-			cout << p << endl;
+			p.print();
+			//cout << p << endl;
 		}
 	}
 	
@@ -639,8 +639,7 @@ for (uint pl=0; pl<Npl; pl++) {
 	Cf = vecComplex(f,p);
 	
 
-	//defining dds and mds
-	spMat dds(Len,Len);
+	//defining mds
 	vec mds(Len);
 	
 	// defining a couple of vectors to test whether the initial boundary conditions are satisfied
@@ -679,7 +678,8 @@ for (uint pl=0; pl<Npl; pl++) {
 		
 		// allocating memory for DS, dds
 		mds = Eigen::VectorXd::Zero(Len); //initializing to zero
-		dds.setZero(); //just making sure
+		spMat dds(Len,Len);
+		//dds.setZero(); //just making sure
 		Eigen::VectorXi dds_to_reserve(Len);//number of non-zero elements per column
 		dds_to_reserve = Eigen::VectorXi::Constant(Len,13);
 		if (abs(p.Theta)<2.0e-16) {
@@ -695,6 +695,18 @@ for (uint pl=0; pl<Npl; pl++) {
 		dds_to_reserve(2*p.N*p.NT) = p.N*((opts.zmx).size()-2);
 		dds_to_reserve(2*p.N*p.NT+1) = 2*p.N*((opts.zmt).size()-2);
 		dds.reserve(dds_to_reserve);
+		
+		// tests to make sure dds has only zeros
+		if (dds.nonZeros()!=0) {
+			ces << "dds has " << dds.nonZeros() << " nonzero components before allocation" << endl;
+			if (verbose)
+				cerr << "dds has " << dds.nonZeros() << " nonzero components before allocation" << endl;
+		}
+		if (dds.norm()>MIN_NUMBER) {
+			ces << "dds has norm " << dds.norm() << " before allocation" << endl;
+			if (verbose)
+				cerr << "dds has norm " << dds.norm() << " before allocation" << endl;
+		}
 		
 		//initializing to zero
 		erg = Eigen::VectorXcd::Constant(p.NT,-ergZero);
@@ -919,8 +931,8 @@ for (uint pl=0; pl<Npl; pl++) {
 		// beginning loop over lattice points
 		for (lint j = 0; j < p.N*p.NT; j++) {
 			//coordinates
-			uint t 					= intCoord(j,0,p); 
-			uint x 					= intCoord(j,1,p);
+			uint t 			= intCoord(j,0,p); 
+			uint x 			= intCoord(j,1,p);
 			comp dt 		= dtFn(t,p);
 			double Dx 		= DxFn(x,p);
 			
@@ -951,17 +963,17 @@ for (uint pl=0; pl<Npl; pl++) {
 			if (abs(chiX(j))>MIN_NUMBER && p.Pot!=3) { //spatial zero mode lagrange constraint
 				dds.insert(2*j,2*p.N*p.NT) 		= Dx*chiX(j); 
 				dds.insert(2*p.N*p.NT,2*j) 		= Dx*chiX(j);
-				mds(2*j) 						+= -Dx*chiX(j)*f(2*p.N*p.NT);
-				mds(2*p.N*p.NT) 				+= -Dx*chiX(j)*f(2*j);
+				mds(2*j) 				-= Dx*chiX(j)*f(2*p.N*p.NT);
+				mds(2*p.N*p.NT) 			-= Dx*chiX(j)*f(2*j);
 			}
 			if (abs(chiT(j))>MIN_NUMBER && t<(p.NT-1) && (p.Pot!=3 || (x>0 && x<(p.N-1)))) {
-				dds.coeffRef(2*(j+1),2*p.N*p.NT+1) 	+= Dx*chiT(j); //chiT should be 0 at t=(p.NT-1) or this line will go wrong
-				dds.coeffRef(2*p.N*p.NT+1,2*(j+1)) 	+= Dx*chiT(j);
-				dds.coeffRef(2*j,2*p.N*p.NT+1) 		+= -Dx*chiT(j);
-				dds.coeffRef(2*p.N*p.NT+1,2*j) 		+= -Dx*chiT(j);
-	            		mds(2*(j+1)) 				+= -Dx*chiT(j)*f(2*p.N*p.NT+1);
-	            		mds(2*j) 				+= Dx*chiT(j)*f(2*p.N*p.NT+1);
-	            		mds(2*p.N*p.NT+1) 			+= -Dx*chiT(j)*(f(2*(j+1))-f(2*j));
+				dds.insert(2*(j+1),2*p.N*p.NT+1) 	= Dx*chiT(j); //chiT should be 0 at t=(p.NT-1) or this line will go wrong
+				dds.insert(2*p.N*p.NT+1,2*(j+1)) 	= Dx*chiT(j);
+				dds.insert(2*j,2*p.N*p.NT+1) 		= -Dx*chiT(j);
+				dds.insert(2*p.N*p.NT+1,2*j) 		= -Dx*chiT(j);
+	            		mds(2*(j+1)) 				-= Dx*chiT(j)*f(2*p.N*p.NT+1);
+	            		mds(2*j) 				-= -Dx*chiT(j)*f(2*p.N*p.NT+1);
+	            		mds(2*p.N*p.NT+1) 			-= Dx*chiT(j)*(f(2*(j+1))-f(2*j));
 			}
 				
 			// linear energy and particle number
